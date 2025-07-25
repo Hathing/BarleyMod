@@ -3,6 +3,7 @@
 
 #include "framework.h"
 #include "MyBoard.hpp"
+#include "MyZombie/MyZombie.hpp"
 
 void init();
 void InitBoardEvents();
