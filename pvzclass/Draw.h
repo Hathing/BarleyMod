@@ -1,7 +1,7 @@
 #pragma once
 #include "PVZ.h"
 
-// ÇëÓëDrawUITopEventÅäºÏÊ¹ÓÃ
+// è¯·ä¸DrawUITopEventé…åˆä½¿ç”¨
 namespace Draw
 {
 	typedef DWORD PString;
@@ -9,43 +9,43 @@ namespace Draw
 	typedef DWORD PImage;
 	extern BYTE color[16];
 
-	// ½«×Ö·ûÊı×é×ª»¯Îª×Ö·û´®
+	// å°†å­—ç¬¦æ•°ç»„è½¬åŒ–ä¸ºå­—ç¬¦ä¸²
 	PString ToString(const char* str);
 
-	// ½«×Ö·û´®×ª»¯Îª×Ö·ûÊı×é
+	// å°†å­—ç¬¦ä¸²è½¬åŒ–ä¸ºå­—ç¬¦æ•°ç»„
 	char* ToChar(PString str);
 
-	// ¼ÓÔØ×ÖÌå£¬ÓÉÓÚºº»¯°æµÄÌØÊâ´¦Àí£¬Õâ¸öº¯ÊıÊµ¼ÊÉÏµ÷ÓÃµÄÊÇ¼ÆËã×Ö·û´®³¤¶È
+	// åŠ è½½å­—ä½“ï¼Œç”±äºæ±‰åŒ–ç‰ˆçš„ç‰¹æ®Šå¤„ç†ï¼Œè¿™ä¸ªå‡½æ•°å®é™…ä¸Šè°ƒç”¨çš„æ˜¯è®¡ç®—å­—ç¬¦ä¸²é•¿åº¦
 	void StringWidth(PString str, DWORD imageFontAddress);
 
-	// ÉèÖÃ×ÖÌåÑÕÉ«
+	// è®¾ç½®å­—ä½“é¢œè‰²
 	void SetColor(DWORD r, DWORD g, DWORD b, DWORD graphics);
 
-	// ´ÓÖ¸¶¨Â·¾¶¼ÓÔØÍ¼ÏñÎÄ¼ş
-	// isnewAddress´æ·ÅÁËÕâ¸öÍ¼ÏñÎÄ¼şÊÇ·ñÒÑ¾­´æÔÚ
+	// ä»æŒ‡å®šè·¯å¾„åŠ è½½å›¾åƒæ–‡ä»¶
+	// isnewAddresså­˜æ”¾äº†è¿™ä¸ªå›¾åƒæ–‡ä»¶æ˜¯å¦å·²ç»å­˜åœ¨
 	PSharedImageRef GetSharedImage(DWORD isnewAddress, PString variant, PString filename);
 
-	// ½«sharedImageRef×ª»»ÎªImage*·µ»Ø
+	// å°†sharedImageRefè½¬æ¢ä¸ºImage*è¿”å›
 	PImage SharedImageRefToImage(PSharedImageRef imageRef);
 
-	// ÊÍ·ÅÍ¼ÏñÎÄ¼ş×ÊÔ´
+	// é‡Šæ”¾å›¾åƒæ–‡ä»¶èµ„æº
 	void FreeImage(PSharedImageRef imageRef);
 
-	// ÔÚÖ¸¶¨Î»ÖÃ»æÖÆ×ÖÌå
+	// åœ¨æŒ‡å®šä½ç½®ç»˜åˆ¶å­—ä½“
 	void DrawString(DWORD x, DWORD y, PString str, DWORD graphics);
 
-	// ÔÚÖ¸¶¨Î»ÖÃ»æÖÆÍ¼Æ¬
+	// åœ¨æŒ‡å®šä½ç½®ç»˜åˆ¶å›¾ç‰‡
 	void DrawImage(DWORD x, DWORD y, PImage image, DWORD graphics);
 
-	// ÔÚÖ¸¶¨Î»ÖÃ»æÖÆÒ»ÌõÏß
+	// åœ¨æŒ‡å®šä½ç½®ç»˜åˆ¶ä¸€æ¡çº¿
 	void DrawLine(int startx, int starty, int endx, int endy, DWORD graphics);
 
-	// »æÖÆ¿ÕĞÄ¾ØĞÎ
+	// ç»˜åˆ¶ç©ºå¿ƒçŸ©å½¢
 	void DrawRect(int x, int y, int width, int height, DWORD graphics);
 
-	// »æÖÆÊµĞÄ¾ØĞÎ
+	// ç»˜åˆ¶å®å¿ƒçŸ©å½¢
 	void FillRect(int x, int y, int width, int height, DWORD graphics);
 
-	// »æÖÆEditµÄ»ÆÉ«ÊäÈë¿ò±³¾°
+	// ç»˜åˆ¶Editçš„é»„è‰²è¾“å…¥æ¡†èƒŒæ™¯
 	void DrawTextBox(DWORD edit, DWORD graphics);
 }
