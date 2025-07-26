@@ -90,6 +90,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="MyBoard.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
+    <ClInclude Include="MyPlant\PlantAbility.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>

@@ -1,18 +1,46 @@
 #include "MyPlant.hpp"
+#include "PlantAbility.hpp"
 
-/*
-namespace PlantPrototype
+namespace PlantAbility
 {
-	PlantPrototype::PrototypePTR pt_factory[] =
+	PlantAbility::PlantPTR pt_factory[] =
 	{
-		new BasePrototype()
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
 	};
 }
 
-PlantPrototype::PrototypePTR PlantPrototype::GetPrototype(SeedType::SeedType type)
+PlantAbility::PlantPTR PlantAbility::GetPrototype(SeedType::SeedType type)
 {
-	return PlantPrototype::pt_factory[type];
-}*/
+	return PlantAbility::pt_factory[type];
+}
 
 void MyPlant::Heal(int val)
 {
