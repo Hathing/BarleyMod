@@ -1,23 +1,21 @@
 #pragma once
 #include "DLLEvent.h"
 
-// Ö²ÎïÖØĞÂ×°ÌîÊÂ¼ş
-// ²ÎÊı£º´¥·¢ÊÂ¼şµÄÖ²Îï£¬ÉúĞ§µ¹¼ÆÊ±
-// ·µ»ØÖµ£ºĞŞ¸ÄºóµÄµ¹¼ÆÊ±
-// ¼àÌıÆ÷Ö®¼ä´®ÁªĞŞ¸Ä
-// ×¢£ºÖ²ÎïÃ¿¸ôÒ»¶ÎÊ±¼ä¾ÍÖØĞÂ×°Ìî£¬´ËÊ±Èç¹û·¢ÏÖ½©Ê¬ÔòÉä»÷
-// ÉúĞ§µ¹¼ÆÊ±Ä¬ÈÏÎªÉúĞ§¼ä¸ô¼õÈ¥Ò»¸ö[0,14]µÄËæ»úÊı
+/// @brief æ¤ç‰©é‡æ–°è£…å¡«äº‹ä»¶
+/// @param è§¦å‘äº‹ä»¶çš„æ¤ç‰©ï¼Œç”Ÿæ•ˆå€’è®¡æ—¶
+/// @return ä¿®æ”¹åçš„å€’è®¡æ—¶
+/// @note æ¤ç‰©æ¯éš”ä¸€æ®µæ—¶é—´å°±é‡æ–°è£…å¡«ï¼Œæ­¤æ—¶å¦‚æœå‘ç°åƒµå°¸åˆ™å°„å‡»\n
+/// ç”Ÿæ•ˆå€’è®¡æ—¶é»˜è®¤ä¸ºç”Ÿæ•ˆé—´éš”å‡å»ä¸€ä¸ª[0,14]çš„éšæœºæ•°
 class PlantReloadEvent : public DLLEvent
 {
 public:
-	PlantReloadEvent();
+	PlantReloadEvent() : PlantReloadEvent("onPlantReload") {};
+	PlantReloadEvent(const char* str) : PlantReloadEvent(PVZ::Memory::GetProcAddress(str)) {};
+	PlantReloadEvent(int address)
+	{
+		hookAddress = 0x45F8C4;
+		rawlen = 6;
+		BYTE code[] = { PUSH_ECX, PUSH_ESI, INVOKE(address), ADD_ESP(8), MOV_PTR_ESP_ADD_V_EUX(0, 24) };
+		start(STRING(code));
+	}
 };
-
-PlantReloadEvent::PlantReloadEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onPlantReload");
-	hookAddress = 0x45F8C4;
-	rawlen = 6;
-	BYTE code[] = { PUSH_ECX, PUSH_ESI, INVOKE(procAddress), ADD_ESP(8), MOV_PTR_ESP_ADD_V_EUX(0, 24) };
-	start(STRING(code));
-}

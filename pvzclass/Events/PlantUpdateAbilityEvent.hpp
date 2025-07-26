@@ -1,38 +1,36 @@
 #pragma once
 #include "DLLEvent.h"
 
-// Ö²ÎïÌØĞÔ¸üĞÂÊÂ¼ş¡£
-// Ê±»úÉÏÏÈÓÚ±£ÁäÇòÌØĞÔ¡£
-/// @param ´¥·¢ÊÂ¼şµÄÖ²Îï¡£
-/// @return ÊÇ·ñ½áËã´ó²¿·ÖÔ­°æÌØĞÔ¡£ÈôÎª¡°·ñ¡±£¬ÔòÖ»½áËãÉäÊÖºÍÒ»´ÎĞÔÖ²ÎïµÄÌØĞÔ¡£
+/// @brief æ¤ç‰©ç‰¹æ€§æ›´æ–°äº‹ä»¶ã€‚
+/// @note æ—¶æœºä¸Šå…ˆäºä¿é¾„çƒç‰¹æ€§ã€‚
+/// @param è§¦å‘äº‹ä»¶çš„æ¤ç‰©ã€‚
+/// @return æ˜¯å¦ç»“ç®—å¤§éƒ¨åˆ†åŸç‰ˆç‰¹æ€§ã€‚è‹¥ä¸ºâ€œå¦â€ï¼Œåˆ™åªç»“ç®—å°„æ‰‹å’Œä¸€æ¬¡æ€§æ¤ç‰©çš„ç‰¹æ€§ã€‚
 class PlantUpdateAbilityEvent : public DLLEvent
 {
 public:
-	PlantUpdateAbilityEvent();
-};
-
-PlantUpdateAbilityEvent::PlantUpdateAbilityEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onPlantUpdateAbility");
-	hookAddress = 0x463254;
-	rawlen = 5;
-	BYTE code[] =
+	PlantUpdateAbilityEvent() : PlantUpdateAbilityEvent("onPlantUpdateAbility") {};
+	PlantUpdateAbilityEvent(const char* str) : PlantUpdateAbilityEvent(PVZ::Memory::GetProcAddress(str)) {};
+	PlantUpdateAbilityEvent(int address)
 	{
-		PUSH_EDI,
-		INVOKE(procAddress),
-		ADD_ESP(4),
-		TEST_AL_AL,
-		JNZ(8),
+		hookAddress = 0x463254;
+		rawlen = 5;
+		BYTE code[] =
+		{
+			PUSH_EDI,
+			INVOKE(address),
+			ADD_ESP(4),
+			TEST_AL_AL,
+			JNZ(8),
 
-		POPAD,
-		MOV_ECX(0x4633EE),
-		JMP_REG32(REG_ECX),
+			POPAD,
+			MOV_ECX(0x4633EE),
+			JMP_REG32(REG_ECX),
 
-		POPAD,
-		INVOKE(0x453840),
-		MOV_ECX(0x463259),
-		JMP_REG32(REG_ECX),
-	};
-	start(STRING(code));
-}
-#pragma once
+			POPAD,
+			INVOKE(0x453840),
+			MOV_ECX(0x463259),
+			JMP_REG32(REG_ECX),
+		};
+		start(STRING(code));
+	}
+};

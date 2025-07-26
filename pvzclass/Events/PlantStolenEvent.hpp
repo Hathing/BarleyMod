@@ -1,24 +1,12 @@
 #pragma once
 #include "DLLEvent.h"
 
-// 植物被偷走事件。
-// 无返回值
-/// @param 依次为：触发事件的植物。
-class PlantStolenEvent : public DLLEvent
+/// @brief 植物被偷走事件。
+/// @param 触发事件的植物。
+class PlantStolenEvent : public DLLEventTemplate<0x5304B6, 7, REG_EAX>
 {
 public:
-	PlantStolenEvent(int address);
+	PlantStolenEvent(const char* str) : DLLEventTemplate() { Init(str); };
+	PlantStolenEvent(int address) : DLLEventTemplate() { Init(address); };
+	PlantStolenEvent() : PlantStolenEvent("onPlantStolen") {};
 };
-
-PlantStolenEvent::PlantStolenEvent(int address)
-{
-	hookAddress = 0x5304B6;
-	rawlen = 7;
-	BYTE code[] =
-	{
-		PUSH_EAX,
-		INVOKE(address),
-		ADD_ESP(4),
-	};
-	start(STRING(code));
-}

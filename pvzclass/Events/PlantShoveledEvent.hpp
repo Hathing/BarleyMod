@@ -1,32 +1,31 @@
 #pragma once
 #include "DLLEvent.h"
 
-// Ö²Îï±»²ù³ıÊÂ¼ş¡£
-/// @param ´¥·¢ÊÂ¼şµÄÖ²Îï
-/// @return Êµ¼Ê±»²ú³öµÄÖ²ÎïµÄ»ùÖ·¡£ÈôÎª¿ÕÖ¸Õë£¬Ôò¸ÃÊÂ¼ş±»È¡Ïû¡£
+/// @brief æ¤ç‰©è¢«é“²é™¤äº‹ä»¶ã€‚
+/// @param è§¦å‘äº‹ä»¶çš„æ¤ç‰©
+/// @return å®é™…è¢«äº§å‡ºçš„æ¤ç‰©çš„åŸºå€ã€‚è‹¥ä¸ºç©ºæŒ‡é’ˆï¼Œåˆ™è¯¥äº‹ä»¶è¢«å–æ¶ˆã€‚
 class PlantShoveledEvent : public DLLEvent
 {
 public:
-	PlantShoveledEvent();
-};
-
-PlantShoveledEvent::PlantShoveledEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onPlantShoveled");
-	hookAddress = 0x4111C8;
-	rawlen = 6;
-	BYTE code[] =
+	PlantShoveledEvent() : PlantShoveledEvent("onPlantShoveled") {};
+	PlantShoveledEvent(const char* str) : PlantShoveledEvent(PVZ::Memory::GetProcAddress(str)) {};
+	PlantShoveledEvent(int address)
 	{
-		PUSH_EBP,
-		INVOKE(procAddress),
-		MOV_EUX_EVX(REG_EBP, REG_EAX),
-		ADD_ESP(4),
+		hookAddress = 0x4111C8;
+		rawlen = 6;
+		BYTE code[] =
+		{
+			PUSH_EBP,
+			INVOKE(procAddress),
+			MOV_EUX_EVX(REG_EBP, REG_EAX),
+			ADD_ESP(4),
 
-		TEST_EUX_EVX(REG_EBP, REG_EBP),
-		JNZ(8),
-		POPAD,
-		MOV_EAX(0x411268),
-		JMP_REG32(REG_EAX)
-	};
-	start(STRING(code));
-}
+			TEST_EUX_EVX(REG_EBP, REG_EBP),
+			JNZ(8),
+			POPAD,
+			MOV_EAX(0x411268),
+			JMP_REG32(REG_EAX)
+		};
+		start(STRING(code));
+	}
+};

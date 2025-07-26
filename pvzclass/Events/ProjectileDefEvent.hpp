@@ -45,7 +45,7 @@ namespace PVZEvent
 					JMP(2),
 					PUSH(DAMAGE_SPLASH_SECONDARY),
 
-					PUSH_PTR_ESP_ADD_V(0x4C),
+					PUSH_ESI,
 					PUSH_EDI,
 					INVOKE(address),
 					ADD_ESP(0x14),

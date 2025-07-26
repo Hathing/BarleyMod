@@ -1,20 +1,12 @@
 #pragma once
 #include "DLLEvent.h"
 
-// Ö²ÎïÉä»÷ÊÂ¼ş
-// ²ÎÊı£º´¥·¢ÊÂ¼şµÄÖ²Îï
-// ÎŞ·µ»ØÖµ
-class PlantShootEvent : public DLLEvent
+/// @brief æ¤ç‰©å°„å‡»äº‹ä»¶
+/// @param è§¦å‘äº‹ä»¶çš„æ¤ç‰©
+class PlantShootEvent : public DLLEventTemplate<0x466E0D, 6, REG_EBP>
 {
 public:
-	PlantShootEvent();
+	PlantShootEvent(const char* str) : DLLEventTemplate() { Init(str); };
+	PlantShootEvent(int address) : DLLEventTemplate() { Init(address); };
+	PlantShootEvent() : PlantShootEvent("onPlantShoot") {};
 };
-
-PlantShootEvent::PlantShootEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onPlantShoot");
-	hookAddress = 0x466E0D;
-	rawlen = 6;
-	BYTE code[] = { PUSH_EBP, INVOKE(procAddress), ADD_ESP(4) };
-	start(STRING(code));
-}
