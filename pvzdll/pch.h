@@ -8,5 +8,6 @@
 
 void init();
 void InitBoardEvents();
+void InitPlantEvents();
 
 #endif //PCH_H

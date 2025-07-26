@@ -53,5 +53,8 @@
     <ClCompile Include="MyPlant\MyPlant.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="PlantEvents.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

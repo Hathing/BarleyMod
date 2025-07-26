@@ -10,6 +10,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	case DLL_PROCESS_ATTACH:
 		init();
 		InitBoardEvents();
+		InitPlantEvents();
 		break;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
