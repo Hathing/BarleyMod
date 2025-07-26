@@ -27,6 +27,9 @@
     <ClInclude Include="MyZombie\MyZombie.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyPlant\MyPlant.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -42,6 +45,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyZombie\MyZombie.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyPlant\MyPlant.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
