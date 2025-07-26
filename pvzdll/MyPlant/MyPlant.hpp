@@ -7,6 +7,11 @@ public:
 	MyPlant(int idoraddress) : PVZ::Plant(idoraddress) {};
 	MyPlant(const PVZ::Plant& plant) : PVZ::Plant(plant.GetBaseAddress()) {};
 
+	/// @brief 减速效果倒计时
+	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
+	/// @brief 当前等级
+	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
+
 	/// @brief 治疗植物
 	/// @note 不会超出生命值上限。
 	/// @param val 治疗量
