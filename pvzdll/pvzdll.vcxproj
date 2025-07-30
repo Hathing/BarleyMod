@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="MyBoard.hpp" />
+    <ClInclude Include="Const.hpp" />
     <ClInclude Include="MyPlant\implement\GoldMagnet.hpp" />
     <ClInclude Include="MyPlant\implement\Index.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />

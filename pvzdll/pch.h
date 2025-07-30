@@ -2,6 +2,7 @@
 #define PCH_H
 
 #include "framework.h"
+#include "Const.hpp"
 #include "MyBoard.hpp"
 #include "MyPlant/MyPlant.hpp"
 #include "MyZombie/MyZombie.hpp"
