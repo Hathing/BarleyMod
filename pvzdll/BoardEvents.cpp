@@ -21,6 +21,8 @@ void onBoardUpdateGameObject(MyBoard board)
 				continue;
 			if (zombie.Type == ZombieType::DrZomboss)
 				continue;
+			if (zombie.Type == ZombieType::NewspaperZombie && zombie.EliteType)
+				continue;
 			zombie.Hit(zombie.PoisonStack, PVZ::DAMAGEF_NOFLASH);
 		}
 	}
