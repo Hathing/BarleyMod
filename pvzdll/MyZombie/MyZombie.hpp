@@ -7,6 +7,8 @@ public:
 	MyZombie(int idoraddress) : PVZ::Zombie(idoraddress) {};
 	MyZombie(const PVZ::Zombie& zombie) : PVZ::Zombie(zombie.GetBaseAddress()) {};
 
+	/// @brief 精英类别
+	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 毒的层数
 	INT_PROPERTY(PoisonStack, __get_PoS, __set_PoS, 0x140);
 	
