@@ -1,6 +1,6 @@
 #pragma once
 #include "MyPlant.hpp"
-#include "../../MyZombie/MyZombie.hpp"
+#include "../MyZombie/MyZombie.hpp"
 
 namespace PlantAbility
 {
