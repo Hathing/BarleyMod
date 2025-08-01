@@ -1,16 +1,89 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ×Óµ¯Åö×²¼ì²éÊÂ¼ş
-// ²ÎÊı£º×Óµ¯µØÖ·
-// ·µ»ØÖµ£º0ÉËº¦½©Ê¬ 1ÉËº¦Ö²Îï£¨Ë®Æ½£© 2ÉËº¦Ö²Îï£¨Í¶ÖÀ£©
-// Õâ¸öÊÂ¼ş¿ÉÒÔ×Ô¶¨Òå×Óµ¯ÊÇ·ñ¿ÉÒÔÃüÖĞÖ²Îï»òÕß½©Ê¬µÄÌõ¼ş
-// ÏëÈÃÔ­±¾²»ÄÜÃüÖĞ½©Ê¬µÄ×Óµ¯ÀàĞÍ³É¹¦ÃüÖĞ½©Ê¬»¹ĞèÒªĞŞ¸ÄDamageAbility
+// å­å¼¹ç¢°æ’æ£€æŸ¥äº‹ä»¶
+// å‚æ•°ï¼šå­å¼¹åœ°å€
+// è¿”å›å€¼ï¼š0ä¼¤å®³åƒµå°¸ 1ä¼¤å®³æ¤ç‰©ï¼ˆæ°´å¹³ï¼‰ 2ä¼¤å®³æ¤ç‰©ï¼ˆæŠ•æ·ï¼‰
+// è¿™ä¸ªäº‹ä»¶å¯ä»¥è‡ªå®šä¹‰å­å¼¹æ˜¯å¦å¯ä»¥å‘½ä¸­æ¤ç‰©æˆ–è€…åƒµå°¸çš„æ¡ä»¶
+// æƒ³è®©åŸæœ¬ä¸èƒ½å‘½ä¸­åƒµå°¸çš„å­å¼¹ç±»å‹æˆåŠŸå‘½ä¸­åƒµå°¸è¿˜éœ€è¦ä¿®æ”¹DamageAbility
 class ProjectileCollisionEvent : public DLLEvent
 {
 public:
-	ProjectileCollisionEvent();
-	void end();
+	ProjectileCollisionEvent()
+	{
+		int procAddress = PVZ::Memory::GetProcAddress("onProjectileCollision");
+
+		// ä¿®æ”¹æ°´å¹³ç¢°æ’æ£€æµ‹æ¡ä»¶åˆ¤æ–­ï¼Œä¸º0å‘½ä¸­åƒµå°¸ï¼Œé0å‘½ä¸­æ¤ç‰©
+		rawlen1 = 10;
+		rawCode1 = new BYTE[rawlen1];
+		newAddress1 = PVZ::Memory::AllocMemory();
+		hookAddress1 = 0x46CFC5;
+		PVZ::Memory::ReadArray<BYTE>(hookAddress1, rawCode1, rawlen1);
+		BYTE jmpto1[] = { JMPFAR(newAddress1 - (hookAddress1 + 5)), NOP, NOP, NOP, NOP, NOP };
+		PVZ::Memory::WriteArray<BYTE>(hookAddress1, STRING(jmpto1));
+		BYTE newcode1[] =
+		{
+			PUSHAD,
+			PUSH_EBP,
+			INVOKE(procAddress),
+			ADD_ESP(4),
+			CMP_EUX(0, 0),
+			POPAD,
+			PUSH_EBP,
+			JEFAR(0x46D058 - (newAddress1 + 29)),
+			JMPFAR(0x46CFCF - (newAddress1 + 34))
+		};
+		PVZ::Memory::WriteArray<BYTE>(newAddress1, STRING(newcode1));
+
+		// ä¿®æ”¹æŠ•æ·ç¢°æ’æ£€æµ‹æ¡ä»¶åˆ¤æ–­ï¼Œä¸º0å‘½ä¸­åƒµå°¸ï¼Œé0å‘½ä¸­æ¤ç‰©
+		rawlen2 = 10;
+		rawCode2 = new BYTE[rawlen2];
+		newAddress2 = newAddress1 + 0x40;
+		hookAddress2 = 0x46D63E;
+		PVZ::Memory::ReadArray<BYTE>(hookAddress2, rawCode2, rawlen2);
+		BYTE jmpto2[] = { JMPFAR(newAddress2 - (hookAddress2 + 5)), NOP, NOP, NOP, NOP, NOP };
+		PVZ::Memory::WriteArray<BYTE>(hookAddress2, STRING(jmpto2));
+		BYTE newcode2[] =
+		{
+			PUSHAD,
+			PUSH_EBP,
+			INVOKE(procAddress),
+			ADD_ESP(4),
+			CMP_EUX(0, 0),
+			POPAD,
+			JNEFAR(0x46D656 - (newAddress2 + 28)),
+			JMPFAR(0x46D648 - (newAddress2 + 33))
+		};
+		PVZ::Memory::WriteArray<BYTE>(newAddress2, STRING(newcode2));
+
+		// ä¿®æ”¹ç¢°æ’æ£€æµ‹æ¤ç‰©ä¼˜å…ˆçº§ï¼Œä¸º1æ˜¯å•ƒé£Ÿé¡ºåºï¼Œä¸º2æ˜¯æŠ•æ·é¡ºåº
+		rawlen3 = 7;
+		rawCode3 = new BYTE[rawlen3];
+		newAddress3 = newAddress2 + 0x40;
+		hookAddress3 = 0x46CB5D;
+		PVZ::Memory::ReadArray<BYTE>(hookAddress3, rawCode3, rawlen3);
+		BYTE jmpto3[] = { JMPFAR(newAddress3 - (hookAddress3 + 5)), NOP, NOP };
+		PVZ::Memory::WriteArray<BYTE>(hookAddress3, STRING(jmpto3));
+		BYTE newcode3[] =
+		{
+			PUSHAD,
+			PUSH_EBP,
+			INVOKE(procAddress),
+			ADD_ESP(4),
+			CMP_EUX(0, 1),
+			POPAD,
+			0x8B, 0x7E, 0x1C,
+			JMPFAR(0x46CB64 - (newAddress3 + 30))
+		};
+		PVZ::Memory::WriteArray<BYTE>(newAddress3, STRING(newcode3));
+	}
+	void end()
+	{
+		PVZ::Memory::WriteArray<BYTE>(hookAddress1, rawCode1, rawlen1);
+		PVZ::Memory::WriteArray<BYTE>(hookAddress2, rawCode2, rawlen2);
+		PVZ::Memory::WriteArray<BYTE>(hookAddress3, rawCode3, rawlen3);
+		PVZ::Memory::FreeMemory(newAddress1);
+	}
 
 private:
 	BYTE *rawCode1, *rawCode2, *rawCode3;
@@ -18,80 +91,3 @@ private:
 	int newAddress2, hookAddress2, rawlen2;
 	int newAddress3, hookAddress3, rawlen3;
 };
-
-ProjectileCollisionEvent::ProjectileCollisionEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onProjectileCollision");
-
-	// ĞŞ¸ÄË®Æ½Åö×²¼ì²âÌõ¼şÅĞ¶Ï£¬Îª0ÃüÖĞ½©Ê¬£¬·Ç0ÃüÖĞÖ²Îï
-	rawlen1 = 10;
-	rawCode1 = new BYTE[rawlen1];
-	newAddress1 = PVZ::Memory::AllocMemory();
-	hookAddress1 = 0x46CFC5;
-	PVZ::Memory::ReadArray<BYTE>(hookAddress1, rawCode1, rawlen1);
-	BYTE jmpto1[] = { JMPFAR(newAddress1 - (hookAddress1 + 5)), NOP, NOP, NOP, NOP, NOP };
-	PVZ::Memory::WriteArray<BYTE>(hookAddress1, STRING(jmpto1));
-	BYTE newcode1[] =
-	{
-		PUSHAD,
-		PUSH_EBP,
-		INVOKE(procAddress),
-		ADD_ESP(4),
-		CMP_EUX(0, 0),
-		POPAD,
-		PUSH_EBP,
-		JEFAR(0x46D058 - (newAddress1 + 29)),
-		JMPFAR(0x46CFCF - (newAddress1 + 34))
-	};
-	PVZ::Memory::WriteArray<BYTE>(newAddress1, STRING(newcode1));
-
-	// ĞŞ¸ÄÍ¶ÖÀÅö×²¼ì²âÌõ¼şÅĞ¶Ï£¬Îª0ÃüÖĞ½©Ê¬£¬·Ç0ÃüÖĞÖ²Îï
-	rawlen2 = 10;
-	rawCode2 = new BYTE[rawlen2];
-	newAddress2 = newAddress1 + 0x40;
-	hookAddress2 = 0x46D63E;
-	PVZ::Memory::ReadArray<BYTE>(hookAddress2, rawCode2, rawlen2);
-	BYTE jmpto2[] = { JMPFAR(newAddress2 - (hookAddress2 + 5)), NOP, NOP, NOP, NOP, NOP };
-	PVZ::Memory::WriteArray<BYTE>(hookAddress2, STRING(jmpto2));
-	BYTE newcode2[] =
-	{
-		PUSHAD,
-		PUSH_EBP,
-		INVOKE(procAddress),
-		ADD_ESP(4),
-		CMP_EUX(0, 0),
-		POPAD,
-		JNEFAR(0x46D656 - (newAddress2 + 28)),
-		JMPFAR(0x46D648 - (newAddress2 + 33))
-	};
-	PVZ::Memory::WriteArray<BYTE>(newAddress2, STRING(newcode2));
-
-	// ĞŞ¸ÄÅö×²¼ì²âÖ²ÎïÓÅÏÈ¼¶£¬Îª1ÊÇ¿ĞÊ³Ë³Ğò£¬Îª2ÊÇÍ¶ÖÀË³Ğò
-	rawlen3 = 7;
-	rawCode3 = new BYTE[rawlen3];
-	newAddress3 = newAddress2 + 0x40;
-	hookAddress3 = 0x46CB5D;
-	PVZ::Memory::ReadArray<BYTE>(hookAddress3, rawCode3, rawlen3);
-	BYTE jmpto3[] = { JMPFAR(newAddress3 - (hookAddress3 + 5)), NOP, NOP };
-	PVZ::Memory::WriteArray<BYTE>(hookAddress3, STRING(jmpto3));
-	BYTE newcode3[] =
-	{
-		PUSHAD,
-		PUSH_EBP,
-		INVOKE(procAddress),
-		ADD_ESP(4),
-		CMP_EUX(0, 1),
-		POPAD,
-		0x8B, 0x7E, 0x1C,
-		JMPFAR(0x46CB64 - (newAddress3 + 30))
-	};
-	PVZ::Memory::WriteArray<BYTE>(newAddress3, STRING(newcode3));
-}
-
-void ProjectileCollisionEvent::end()
-{
-	PVZ::Memory::WriteArray<BYTE>(hookAddress1, rawCode1, rawlen1);
-	PVZ::Memory::WriteArray<BYTE>(hookAddress2, rawCode2, rawlen2);
-	PVZ::Memory::WriteArray<BYTE>(hookAddress3, rawCode3, rawlen3);
-	PVZ::Memory::FreeMemory(newAddress1);
-}

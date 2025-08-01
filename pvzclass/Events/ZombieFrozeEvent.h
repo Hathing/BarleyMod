@@ -1,20 +1,13 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ½©Ê¬±»¶³½áÊÂ¼ş
-// ²ÎÊı£º´¥·¢ÊÂ¼şµÄ½©Ê¬
-// ÎŞ·µ»ØÖµ
-class ZombieFrozeEvent : public DLLEvent
+/// @brief åƒµå°¸è¢«å†»ç»“äº‹ä»¶
+/// @param è§¦å‘äº‹ä»¶çš„åƒµå°¸
+/// @note æ— è®ºæ˜¯å¦è¢«å†»ç»“ï¼Œè¯¥äº‹ä»¶éƒ½ä¼šè¢«è§¦å‘ã€‚
+class ZombieFrozeEvent : public DLLEventTemplate<0x5323C0, 6, REG_EAX>
 {
 public:
-	ZombieFrozeEvent();
+	ZombieFrozeEvent() : DLLEventTemplate() { Init("onZombieFroze"); };
+	ZombieFrozeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+	ZombieFrozeEvent(int address) : DLLEventTemplate() { Init(address); };
 };
-
-ZombieFrozeEvent::ZombieFrozeEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onZombieFroze");
-	hookAddress = 0x5323C0;
-	rawlen = 6;
-	BYTE code[] = { PUSH_EAX, INVOKE(procAddress), ADD_ESP(4) };
-	start(STRING(code));
-}

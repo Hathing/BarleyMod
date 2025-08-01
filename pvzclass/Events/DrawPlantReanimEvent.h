@@ -1,27 +1,26 @@
 #pragma once
 #include "DLLEvent.h"
 
-// »æÖÆÖ²Îï¶¯»­ÊÂ¼ş
-// ²ÎÊı£º»æÖÆµÄÖ²ÎïºÍ¶ÔÓ¦µÄ¶¯»­
-// ÊÂ¼ş´¥·¢ÔÚÑÕÉ«¼ÆËãÖ®ºóºÍ»æÖÆ·¢ÉúÖ®Ç°
+/// @brief ç»˜åˆ¶æ¤ç‰©åŠ¨ç”»äº‹ä»¶
+/// @param ç»˜åˆ¶çš„æ¤ç‰©å’Œå¯¹åº”çš„åŠ¨ç”»
+// äº‹ä»¶è§¦å‘åœ¨é¢œè‰²è®¡ç®—ä¹‹åå’Œç»˜åˆ¶å‘ç”Ÿä¹‹å‰
 class DrawPlantReanimEvent : public DLLEvent
 {
 public:
-	DrawPlantReanimEvent();
+	DrawPlantReanimEvent() : DrawPlantReanimEvent("onDrawPlantReanim") {};
+	DrawPlantReanimEvent(const char* str) : DrawPlantReanimEvent(PVZ::Memory::GetProcAddress(str)) {};
+	DrawPlantReanimEvent(int address)
+	{
+		PVZ::Memory::WriteMemory<BYTE>(0x4638C4, 0xEB);
+		PVZ::Memory::WriteMemory<BYTE>(0x4638C5, 0x15);
+		PVZ::Memory::WriteMemory<BYTE>(0x4638C6, NOP);
+		PVZ::Memory::WriteMemory<BYTE>(0x4638C7, NOP);
+		PVZ::Memory::WriteMemory<BYTE>(0x4638C8, NOP);
+		hookAddress = 0x4638DB;
+		rawlen = 5;
+		BYTE code[] = { PUSH_EBX, PUSH_PTR_ESP_ADD_V(0x2C), INVOKE(address), ADD_ESP(8),
+			POPAD, INVOKE(0x473AE0), JMP(6)
+		};
+		start(STRING(code));
+	}
 };
-
-DrawPlantReanimEvent::DrawPlantReanimEvent()
-{
-	PVZ::Memory::WriteMemory<BYTE>(0x4638C4, 0xEB);
-	PVZ::Memory::WriteMemory<BYTE>(0x4638C5, 0x15);
-	PVZ::Memory::WriteMemory<BYTE>(0x4638C6, NOP);
-	PVZ::Memory::WriteMemory<BYTE>(0x4638C7, NOP);
-	PVZ::Memory::WriteMemory<BYTE>(0x4638C8, NOP);
-	int procAddress = PVZ::Memory::GetProcAddress("onDrawPlantReanim");
-	hookAddress = 0x4638DB;
-	rawlen = 5;
-	BYTE code[] = { PUSH_EBX, PUSH_PTR_ESP_ADD_V(0x2C), INVOKE(procAddress), ADD_ESP(8),
-		POPAD, INVOKE(0x473AE0), JMP(6)
-	};
-	start(STRING(code));
-}
