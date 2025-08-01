@@ -101,6 +101,7 @@
   <ItemGroup>
     <ClCompile Include="BoardEvents.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="LawnmowerEvents.cpp" />
     <ClCompile Include="MyBoard.cpp" />
     <ClCompile Include="MyPlant\MyPlant.cpp" />
     <ClCompile Include="MyZombie\MyZombie.cpp" />

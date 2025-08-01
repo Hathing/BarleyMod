@@ -68,5 +68,8 @@
     <ClCompile Include="PlantEvents.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LawnmowerEvents.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
