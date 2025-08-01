@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
-#include "../pvzclass/Events/PlantUpdateAbilityEvent.hpp"
 
 bool onPlantUpdateAbility(MyPlant plant)
 {

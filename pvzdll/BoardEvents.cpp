@@ -1,6 +1,4 @@
 #include "pch.h"
-#include "../pvzclass/Events/BoardInitAfterEvent.hpp"
-#include "../pvzclass/Events/UpdateGameObjectsEvent.h"
 
 void onBoardInit(MyBoard board)
 {
