@@ -11,6 +11,10 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		virtual bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)
+		{
+			return false;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetPrototype(SeedType::SeedType type);
