@@ -1,22 +1,21 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ×Óµ¯ÃüÖĞ½©Ê¬ÊÂ¼ş
-// ²ÎÊı£º×Óµ¯Óë±»ÃüÖĞµÄ½©Ê¬
-// ·µ»ØÖµ£º±»ÃüÖĞµÄ½©Ê¬µØÖ·£¬0ÎªÅĞ¶¨Î´ÃüÖĞ
-// Èç¹û·µ»ØÆäËü½©Ê¬Ò²¿ÉÒÔ×öµ½Ò»Ğ©ÓĞÒâË¼µÄÊÂÇé
+/// @brief å­å¼¹å‘½ä¸­åƒµå°¸äº‹ä»¶
+/// @param å­å¼¹ä¸è¢«å‘½ä¸­çš„åƒµå°¸
+/// @return è¢«å‘½ä¸­çš„åƒµå°¸åœ°å€ï¼Œ0ä¸ºåˆ¤å®šæœªå‘½ä¸­\n
+// å¦‚æœè¿”å›å…¶å®ƒåƒµå°¸ä¹Ÿå¯ä»¥åšåˆ°ä¸€äº›æœ‰æ„æ€çš„äº‹æƒ…
 class ProjectileHitZombieEvent : public DLLEvent
 {
 public:
-	ProjectileHitZombieEvent();
+	ProjectileHitZombieEvent() : ProjectileHitZombieEvent("onProjectileHitZombie") {};
+	ProjectileHitZombieEvent(const char* name) : ProjectileHitZombieEvent(PVZ::Memory::GetProcAddress(name)) {};
+	ProjectileHitZombieEvent(int address)
+	{
+		hookAddress = 0x46CE74;
+		rawlen = 6;
+		BYTE code[] = { CMP_EAX_DWORD(0), JE(22), PUSH_EAX, PUSH_EBP,
+			INVOKE(address), ADD_ESP(8), MOV_PTR_ESP_ADD_V_EUX(0, 28) };
+		start(STRING(code));
+	}
 };
-
-ProjectileHitZombieEvent::ProjectileHitZombieEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onProjectileHitZombie");
-	hookAddress = 0x46CE74;
-	rawlen = 6;
-	BYTE code[] = { CMP_EAX_DWORD(0), JE(22), PUSH_EAX, PUSH_EBP,
-		INVOKE(procAddress), ADD_ESP(8), MOV_PTR_ESP_ADD_V_EUX(0, 28) };
-	start(STRING(code));
-}

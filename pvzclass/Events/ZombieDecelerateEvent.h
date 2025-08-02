@@ -1,20 +1,13 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ½©Ê¬±»¼õËÙÊÂ¼ş
-// ²ÎÊı£º´¥·¢ÊÂ¼şµÄ½©Ê¬
-// ÎŞ·µ»ØÖµ
-class ZombieDecelerateEvent : public DLLEvent
+/// @brief åƒµå°¸è¢«å‡é€Ÿäº‹ä»¶
+/// @param è§¦å‘äº‹ä»¶çš„åƒµå°¸
+/// @note æ— è®ºæ˜¯å¦å…ç–«å‡é€Ÿï¼Œè¯¥äº‹ä»¶éƒ½ä¼šè¢«è§¦å‘ã€‚
+class ZombieDecelerateEvent : public DLLEventTemplate<0x530950, 5, REG_EAX>
 {
 public:
-	ZombieDecelerateEvent();
+	ZombieDecelerateEvent() : DLLEventTemplate() { Init("onZombieDecelerate"); };
+	ZombieDecelerateEvent(const char* str) : DLLEventTemplate() { Init(str); };
+	ZombieDecelerateEvent(int address) : DLLEventTemplate() { Init(address); };
 };
-
-ZombieDecelerateEvent::ZombieDecelerateEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onZombieDecelerate");
-	hookAddress = 0x530950;
-	rawlen = 5;
-	BYTE code[] = { PUSH_EAX, INVOKE(procAddress), ADD_ESP(4) };
-	start(STRING(code));
-}

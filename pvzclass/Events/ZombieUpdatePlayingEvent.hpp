@@ -1,21 +1,13 @@
 #pragma once
 #include "DLLEvent.h"
 
-// Zombie ½ÇÉ«µÄ¸üĞÂ£¬±»¶³½á¡¢»ÆÓÍ¶¨ÉíÊ±Ò²»á½áËã¡£
-// Ê±»úÉÏÏÈÓÚÔ­°æµÄ¸üĞÂ¡£
-// ²ÎÊı£º¸üĞÂµÄ Zombie
-// ÎŞ·µ»ØÖµ
-class ZombieUpdatePlayingEvent : public DLLEvent
+/// @brief Zombie è§’è‰²çš„æ›´æ–°ï¼Œè¢«å†»ç»“ã€é»„æ²¹å®šèº«æ—¶ä¹Ÿä¼šç»“ç®—ã€‚
+/// @note æ—¶æœºä¸Šå…ˆäºåŸç‰ˆçš„æ›´æ–°ã€‚
+/// @param æ›´æ–°çš„ Zombie
+class ZombieUpdatePlayingEvent : public DLLEventTemplate<0x52B340, 6, REG_EDI>
 {
 public:
-	ZombieUpdatePlayingEvent();
+	ZombieUpdatePlayingEvent() : DLLEventTemplate() { Init("onZombieUpdatePlaying"); };
+	ZombieUpdatePlayingEvent(const char* str) : DLLEventTemplate() { Init(str); };
+	ZombieUpdatePlayingEvent(int address) : DLLEventTemplate() { Init(address); };
 };
-
-ZombieUpdatePlayingEvent::ZombieUpdatePlayingEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onZombieUpdatePlaying");
-	hookAddress = 0x52B340;
-	rawlen = 6;
-	BYTE code[] = { PUSH_EDI, INVOKE(procAddress), ADD_ESP(4) };
-	start(STRING(code));
-}

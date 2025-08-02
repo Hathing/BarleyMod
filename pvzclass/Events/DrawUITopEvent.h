@@ -1,20 +1,18 @@
 #pragma once
 #include "DLLEvent.h"
 
-// »æÖÆ¶¥²ãUIÊÂ¼ş
-// ÎŞ²ÎÊıÓë·µ»ØÖµ
-// ÇëÓëDraw.hÅäºÏÊ¹ÓÃ
+// ç»˜åˆ¶é¡¶å±‚UIäº‹ä»¶
+// æ— å‚æ•°ä¸è¿”å›å€¼
+// è¯·ä¸Draw.hé…åˆä½¿ç”¨
 class DrawUITopEvent : public DLLEvent
 {
 public:
-	DrawUITopEvent();
+	DrawUITopEvent()
+	{
+		int procAddress = PVZ::Memory::GetProcAddress("onDrawUITop");
+		hookAddress = 0x41ACDF;
+		rawlen = 5;
+		BYTE code[] = { PUSH_PTR_ESP_ADD_V(40), INVOKE(procAddress), ADD_ESP(4) };
+		start(STRING(code));
+	}
 };
-
-DrawUITopEvent::DrawUITopEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onDrawUITop");
-	hookAddress = 0x41ACDF;
-	rawlen = 5;
-	BYTE code[] = { PUSH_PTR_ESP_ADD_V(40), INVOKE(procAddress), ADD_ESP(4) };
-	start(STRING(code));
-}

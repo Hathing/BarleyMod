@@ -1,22 +1,21 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ×Óµ¯ÏûÊ§ÊÂ¼ş
-// ²ÎÊı£ºÏûÊ§µÄ×Óµ¯
-// ·µ»ØÖµ£º1È¡Ïû×Óµ¯ÏûÊ§£¬0×Óµ¯Õı³£ÏûÊ§
-// ×Óµ¯ÏûÊ§µÄÔ­Òò¶àÖÖ¶àÑù£ºÃüÖĞ½©Ê¬¡¢Éä³öÆÁÄ»µÈ¶¼»á´¥·¢
-// ¿ª·¢Ê±×¢Òâ²»ÒªÈ¡ÏûÄÇĞ©Éä³öÆÁÄ»±¾¸ÃÒÆ³ıµÄ×Óµ¯µÄÏûÊ§ÊÂ¼ş
+/// @brief å­å¼¹æ¶ˆå¤±äº‹ä»¶
+/// @param æ¶ˆå¤±çš„å­å¼¹
+/// @return 1å–æ¶ˆå­å¼¹æ¶ˆå¤±ï¼Œ0å­å¼¹æ­£å¸¸æ¶ˆå¤±
+/// @note å­å¼¹æ¶ˆå¤±çš„åŸå› å¤šç§å¤šæ ·ï¼šå‘½ä¸­åƒµå°¸ã€å°„å‡ºå±å¹•ç­‰éƒ½ä¼šè§¦å‘\n
+/// å¼€å‘æ—¶æ³¨æ„ä¸è¦å–æ¶ˆé‚£äº›å°„å‡ºå±å¹•æœ¬è¯¥ç§»é™¤çš„å­å¼¹çš„æ¶ˆå¤±äº‹ä»¶
 class ProjectileRemoveEvent : public DLLEvent
 {
 public:
-	ProjectileRemoveEvent();
+	ProjectileRemoveEvent() : ProjectileRemoveEvent("onProjectileRemove") {};
+	ProjectileRemoveEvent(const char* name) : ProjectileRemoveEvent(PVZ::Memory::GetProcAddress(name)) {};
+	ProjectileRemoveEvent(int address)
+	{
+		hookAddress = 0x46EB20;
+		rawlen = 5;
+		BYTE code[] = { PUSH_EAX, INVOKE(address), ADD_ESP(4), TEST_AL_AL, JE(2), POPAD, RET };
+		start(STRING(code));
+	}
 };
-
-ProjectileRemoveEvent::ProjectileRemoveEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onProjectileRemove");
-	hookAddress = 0x46EB20;
-	rawlen = 5;
-	BYTE code[] = { PUSH_EAX, INVOKE(procAddress), ADD_ESP(4), TEST_AL_AL, JE(2), POPAD, RET };
-	start(STRING(code));
-}

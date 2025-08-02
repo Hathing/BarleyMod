@@ -1,20 +1,19 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ½©Ê¬±»÷È»óÊÂ¼ş
-// ²ÎÊı£º´¥·¢ÊÂ¼şµÄ½©Ê¬
-// ·µ»ØÖµ£ºÊÇ·ñ±£Áô¸ÃÊÂ¼ş¡£ÈôÎª¡°·ñ¡±£¬´Ë´Î÷È»ó½«±»È¡Ïû¡£
+/// @brief åƒµå°¸è¢«é­…æƒ‘äº‹ä»¶
+/// @param è§¦å‘äº‹ä»¶çš„åƒµå°¸
+/// @return æ˜¯å¦ä¿ç•™è¯¥äº‹ä»¶ã€‚è‹¥ä¸ºâ€œå¦â€ï¼Œæ­¤æ¬¡é­…æƒ‘å°†è¢«å–æ¶ˆã€‚
 class ZombieHypnotizeEvent : public DLLEvent
 {
 public:
-	ZombieHypnotizeEvent();
+	ZombieHypnotizeEvent() : ZombieHypnotizeEvent("onDrawZombieReanim") {};
+	ZombieHypnotizeEvent(const char* str) : ZombieHypnotizeEvent(PVZ::Memory::GetProcAddress(str)) {};
+	ZombieHypnotizeEvent(int address)
+	{
+		hookAddress = 0x52FA60;
+		rawlen = 10;
+		BYTE code[] = { PUSH_ESI, INVOKE(address), ADD_ESP(4), TEST_AL_AL, JNZ(2), POPAD, RET };
+		start(STRING(code));
+	}
 };
-
-ZombieHypnotizeEvent::ZombieHypnotizeEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onZombieHypnotize");
-	hookAddress = 0x52FA60;
-	rawlen = 10;
-	BYTE code[] = { PUSH_ESI, INVOKE(procAddress), ADD_ESP(4), TEST_AL_AL, JNZ(2), POPAD, RET};
-	start(STRING(code));
-}

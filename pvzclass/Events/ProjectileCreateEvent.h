@@ -1,20 +1,13 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ×Óµ¯´´½¨ÊÂ¼ş
-// ²ÎÊı£º±»´´½¨µÄ×Óµ¯
-// ÎŞ·µ»ØÖµ
-class ProjectileCreateEvent : public DLLEvent
+/// @brief å­å¼¹åˆ›å»ºäº‹ä»¶
+/// @note æ¨æ¡ƒå’ŒæŠ•æ‰‹åƒµå°¸çš„å­å¼¹ä¸è§¦å‘è¿™ä¸ªäº‹ä»¶ã€‚
+/// @param è¢«åˆ›å»ºçš„å­å¼¹
+class ProjectileCreateEvent : public DLLEventTemplate<0x40D652, 5, REG_EAX>
 {
 public:
-	ProjectileCreateEvent();
+	ProjectileCreateEvent(const char* str) : DLLEventTemplate() { Init(str); };
+	ProjectileCreateEvent(int address) : DLLEventTemplate() { Init(address); };
+	ProjectileCreateEvent() : ProjectileCreateEvent("onProjectileCreate") {};
 };
-
-ProjectileCreateEvent::ProjectileCreateEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onProjectileCreate");
-	hookAddress = 0x40D652;
-	rawlen = 5;
-	BYTE code[] = { PUSH_EAX, INVOKE(procAddress), ADD_ESP(4) };
-	start(STRING(code));
-}

@@ -1,26 +1,25 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ¶Ô»°ÖĞµÄ°´Å¥µ¯ÆğÊÂ¼ş£¬¶ÔÓ¦µÄÊÇÍæ¼Òµã»÷°´Å¥²¢ËÉ¿ªµÄ²Ù×÷
-// buttonID£º1000´ú±íÈ·ÈÏ£¬1001´ú±íÈ¡Ïû
-// dialogID£º¶Ô»°¿òµÄid
-// Ô­±¾ÓÎÏ·ÖĞµÄ¶Ô»°¿òÒ²»á´¥·¢Õâ¸öÊÂ¼ş£¬ĞëÈ·±£dialogIDÎ¨Ò»
-// Èç¹û·µ»ØÖµ·Ç0£¬ÔòÈ¡ÏûÔ­±¾ÓÎÏ·µÄºóĞø´¦Àí
+/// @brief å¯¹è¯ä¸­çš„æŒ‰é’®å¼¹èµ·äº‹ä»¶ï¼Œå¯¹åº”çš„æ˜¯ç©å®¶ç‚¹å‡»æŒ‰é’®å¹¶æ¾å¼€çš„æ“ä½œ
+/// @param buttonID 1000ä»£è¡¨ç¡®è®¤ï¼Œ1001ä»£è¡¨å–æ¶ˆ\n
+/// dialogID å¯¹è¯æ¡†çš„id
+/// @note åŸæœ¬æ¸¸æˆä¸­çš„å¯¹è¯æ¡†ä¹Ÿä¼šè§¦å‘è¿™ä¸ªäº‹ä»¶ï¼Œé¡»ç¡®ä¿dialogIDå”¯ä¸€
+/// @return å¦‚æœè¿”å›å€¼é0ï¼Œåˆ™å–æ¶ˆåŸæœ¬æ¸¸æˆçš„åç»­å¤„ç†
 class DialogButtonDepressEvent : public DLLEvent
 {
 public:
-	DialogButtonDepressEvent();
-};
-
-DialogButtonDepressEvent::DialogButtonDepressEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onDialogButtonDepress");
-	hookAddress = 0x5464A0;
-	rawlen = 9;
-	BYTE code[] =
+	DialogButtonDepressEvent() : DialogButtonDepressEvent("onDialogButtonDepress") {};
+	DialogButtonDepressEvent(const char* str) : DialogButtonDepressEvent(PVZ::Memory::GetProcAddress(str)) {};
+	DialogButtonDepressEvent(int address)
 	{
-		PUSH_PTR_ESP_ADD_V(36), PUSH_PTR_ESP_ADD_V(44), INVOKE(procAddress), ADD_ESP(8),
-		TEST_AL_AL, JE(4), POPAD, RETN(8)
-	};
-	start(STRING(code));
-}
+		hookAddress = 0x5464A0;
+		rawlen = 9;
+		BYTE code[] =
+		{
+			PUSH_PTR_ESP_ADD_V(36), PUSH_PTR_ESP_ADD_V(44), INVOKE(address), ADD_ESP(8),
+			TEST_AL_AL, JE(4), POPAD, RETN(8)
+		};
+		start(STRING(code));
+	}
+};

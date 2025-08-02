@@ -1,30 +1,29 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ½©Ê¬Ê§È¥¶ÜÀà·À¾ßÊÂ¼ş¡£
-/// @param ´¥·¢ÊÂ¼şµÄ½©Ê¬
-/// @return ÊÇ·ñ¼ÌĞø½áËãÔ­°æµÄ´¦Àí¹ı³Ì¡£ÈôÎª¡°·ñ¡±£¬ÔòÌø¹ıÕâĞ©¹ı³Ì¡£
+/// @brief åƒµå°¸å¤±å»ç›¾ç±»é˜²å…·äº‹ä»¶ã€‚
+/// @param è§¦å‘äº‹ä»¶çš„åƒµå°¸
+/// @return æ˜¯å¦ç»§ç»­ç»“ç®—åŸç‰ˆçš„å¤„ç†è¿‡ç¨‹ã€‚è‹¥ä¸ºâ€œå¦â€ï¼Œåˆ™è·³è¿‡è¿™äº›è¿‡ç¨‹ã€‚
 class ZombieDetachShieldEvent : public DLLEvent
 {
 public:
-	ZombieDetachShieldEvent();
-};
-
-ZombieDetachShieldEvent::ZombieDetachShieldEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onZombieDetachShield");
-	hookAddress = 0x5330E0;
-	rawlen = 5;
-	BYTE code[] =
+	ZombieDetachShieldEvent() : ZombieDetachShieldEvent("onZombieDetachShield") {};
+	ZombieDetachShieldEvent(const char* str) : ZombieDetachShieldEvent(PVZ::Memory::GetProcAddress(str)) {};
+	ZombieDetachShieldEvent(int address)
 	{
-		PUSH_EAX,
-		INVOKE(procAddress),
-		ADD_ESP(4),
+		hookAddress = 0x5330E0;
+		rawlen = 5;
+		BYTE code[] =
+		{
+			PUSH_EAX,
+			INVOKE(address),
+			ADD_ESP(4),
 
-		TEST_AL_AL,
-		JNZ(2),
-		POPAD,
-		RET
-	};
-	start(STRING(code));
-}
+			TEST_AL_AL,
+			JNZ(2),
+			POPAD,
+			RET
+		};
+		start(STRING(code));
+	}
+};

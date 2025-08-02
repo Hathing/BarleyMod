@@ -10,6 +10,7 @@
 
 void init();
 void InitBoardEvents();
+void InitLawnmowerEvents();
 void InitPlantEvents();
 
 #endif //PCH_H

@@ -1,4 +1,4 @@
-﻿#include "PVZ.h"
+#include "PVZ.h"
 
 PVZ::Image* PVZ::Resource::IMAGE_BLANK = nullptr;
 
@@ -78,7 +78,7 @@ void PVZ::InitPVZNoLock(DWORD pid)
 
 const char* PVZ::PVZutil::__get_Version()
 {
-	return "2.2.1+";
+	return "2.3.250801";
 }
 
 PVZVersion::PVZVersion PVZ::PVZutil::__get_GameVersion()

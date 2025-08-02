@@ -16,7 +16,7 @@ public:
 		BYTE code[] =
 		{
 			PUSH_EBP,
-			INVOKE(procAddress),
+			INVOKE(address),
 			MOV_EUX_EVX(REG_EBP, REG_EAX),
 			ADD_ESP(4),
 

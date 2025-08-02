@@ -1,31 +1,30 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ½©Ê¬µôÍ·ÊÂ¼ş¡£
-/// @param ÊÜµôÍ·ÉËº¦µÄ½©Ê¬µÄ»ùÖ·¡¢ÉËº¦±êÇ©
-/// @return ÊÇ·ñ¼ÌĞø½áËãÖÂÃüÉËº¦
+/// @brief åƒµå°¸æ‰å¤´äº‹ä»¶ã€‚
+/// @param å—æ‰å¤´ä¼¤å®³çš„åƒµå°¸çš„åŸºå€ã€ä¼¤å®³æ ‡ç­¾
+/// @return æ˜¯å¦ç»§ç»­ç»“ç®—è‡´å‘½ä¼¤å®³
 class ZombieDropHeadEvent : public DLLEvent
 {
 public:
-	ZombieDropHeadEvent();
-};
-
-ZombieDropHeadEvent::ZombieDropHeadEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onZombieDropHead");
-	hookAddress = 0x529A30;
-	rawlen = 6;
-	BYTE code[] =
+	ZombieDropHeadEvent() : ZombieDropHeadEvent("onZombieDropHead") {};
+	ZombieDropHeadEvent(const char* str) : ZombieDropHeadEvent(PVZ::Memory::GetProcAddress(str)) {};
+	ZombieDropHeadEvent(int address)
 	{
-		PUSH_PTR_ESP_ADD_V(0x28),
-		PUSH_PTR_ESP_ADD_V(0x28),
-		INVOKE(procAddress),
-		ADD_ESP(8),
+		hookAddress = 0x529A30;
+		rawlen = 6;
+		BYTE code[] =
+		{
+			PUSH_PTR_ESP_ADD_V(0x28),
+			PUSH_PTR_ESP_ADD_V(0x28),
+			INVOKE(address),
+			ADD_ESP(8),
 
-		TEST_AL_AL,
-		JNZ(4),
-		POPAD,
-		RETN(8)
-	};
-	start(STRING(code));
-}
+			TEST_AL_AL,
+			JNZ(4),
+			POPAD,
+			RETN(8)
+		};
+		start(STRING(code));
+	}
+};

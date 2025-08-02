@@ -1,34 +1,14 @@
 #pragma once
 #include "DLLEvent.h"
 
-// ²¥·Å½©Ê¬¿ĞÊ³ÒôĞ§µÄÊÂ¼ş¡£
-// ÷È»ó¹½ºÍ´óËâÔÚ´ËÊ±»ú·¢»Ó×÷ÓÃ¡£
-/// @param ÒÀ´ÎÎª£º´¥·¢ÊÂ¼şµÄ½©Ê¬¡¢±»Æä¿ĞÊ³µÄÖ²Îï¡£
-/// @return Êµ¼Ê±»¿ĞÊ³µÄÖ²ÎïµÄ»ùÖ·¡£ÈôÎª¿ÕÖ¸Õë£¬È¡Ïû¸ÃÊÂ¼şÓëÖ²ÎïµÄ¹ØÏµ¡£
-class ZombieEatSoundEvent : public DLLEvent
+/// @brief æ’­æ”¾åƒµå°¸å•ƒé£ŸéŸ³æ•ˆçš„äº‹ä»¶ã€‚
+/// @note é­…æƒ‘è‡å’Œå¤§è’œåœ¨æ­¤æ—¶æœºå‘æŒ¥ä½œç”¨ã€‚
+/// @param ä¾æ¬¡ä¸ºï¼šè§¦å‘äº‹ä»¶çš„åƒµå°¸ã€è¢«å…¶å•ƒé£Ÿçš„æ¤ç‰©ã€‚
+/// @return æ˜¯å¦æ‰§è¡ŒåŸç‰ˆå¯¹è¯¥äº‹ä»¶çš„ç»“ç®—ã€‚
+class ZombieEatSoundEvent : public DLLEventTemplate<0x52B964, 6, 0x52BAD7, REG_ESI, REG_EDI>
 {
 public:
-	ZombieEatSoundEvent();
+	ZombieEatSoundEvent() : DLLEventTemplate() { Init("onZombieEatSound"); };
+	ZombieEatSoundEvent(const char* str) : DLLEventTemplate() { Init(str); };
+	ZombieEatSoundEvent(int address) : DLLEventTemplate() { Init(address); };
 };
-
-ZombieEatSoundEvent::ZombieEatSoundEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onZombieEatSound");
-	hookAddress = 0x52B964;
-	rawlen = 6;
-	BYTE code[] =
-	{
-		PUSH_ESI,
-		PUSH_EDI,
-		INVOKE(procAddress),
-		MOV_EUX_EVX(REG_ESI, REG_EAX),
-		ADD_ESP(8),
-
-		TEST_EUX_EVX(REG_ESI, REG_ESI),
-		JNZ(8),
-		POPAD,
-		MOV_EAX(0x52BAD7),
-		JMP_REG32(REG_EAX)
-	};
-	start(STRING(code));
-}

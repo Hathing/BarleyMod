@@ -1,20 +1,12 @@
 #pragma once
 #include "DLLEvent.h"
 
-// Íã¶¹´©¹ı»ğ¾æÊ÷×®µÄ×Å»ğÊÂ¼ş
-// ²ÎÊı£º¼´½«±äÎª»ğÇòµÄÍã¶¹
-// ÎŞ·µ»ØÖµ
-class PeaOnFireEvent : public DLLEvent
+/// @brief è±Œè±†ç©¿è¿‡ç«ç‚¬æ ‘æ¡©çš„ç€ç«äº‹ä»¶
+/// @param å³å°†å˜ä¸ºç«çƒçš„è±Œè±†
+class PeaOnFireEvent : public DLLEventTemplate<0x46EBC0, 5, REG_ECX>
 {
 public:
-	PeaOnFireEvent();
+	PeaOnFireEvent(const char* str) : DLLEventTemplate() { Init(str); };
+	PeaOnFireEvent(int address) : DLLEventTemplate() { Init(address); };
+	PeaOnFireEvent() : PeaOnFireEvent("onPeaOnFire") {};
 };
-
-PeaOnFireEvent::PeaOnFireEvent()
-{
-	int procAddress = PVZ::Memory::GetProcAddress("onPeaOnFire");
-	hookAddress = 0x46ECB0;
-	rawlen = 5;
-	BYTE code[] = { PUSH_ECX, INVOKE(procAddress), ADD_ESP(4) };
-	start(STRING(code));
-}
