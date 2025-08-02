@@ -14,7 +14,7 @@ namespace PlantAbility
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new SeaShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
