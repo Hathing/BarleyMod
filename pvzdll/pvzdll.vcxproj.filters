@@ -45,6 +45,15 @@
     <ClInclude Include="MyEvents.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyPlant\implement\PuffShroom.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlant\implement\SeaShroom.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlant\implement\FumeShroom.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
