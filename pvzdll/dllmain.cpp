@@ -9,6 +9,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 		init();
+		InitResourceEvents();
 		InitBoardEvents();
 		InitLawnmowerEvents();
 		InitPlantEvents();

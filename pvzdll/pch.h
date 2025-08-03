@@ -9,6 +9,7 @@
 #include "MyZombie/MyZombie.hpp"
 
 void init();
+void InitResourceEvents();
 void InitBoardEvents();
 void InitLawnmowerEvents();
 void InitPlantEvents();
