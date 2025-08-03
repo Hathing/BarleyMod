@@ -237,7 +237,7 @@ namespace PVZEvent
 		PlantStartBlinkEvent() : PlantStartBlinkEvent("onPlantStartBlink") {};
 	};
 
-	/// @brief 植物开始眨眼事件
+	/// @brief 植物开始攻击动作事件
 	/// @param 触发事件的植物，植物选择的目标僵尸，植物是否使用副武器
 	class NormalPlantAttackStartEvent : public DLLEventTemplate<0x45EF3F, 6, MEM_ESP_ADD(0x3C), MEM_ESP_ADD(0x34), REG_ESI>
 	{
@@ -245,5 +245,16 @@ namespace PVZEvent
 		NormalPlantAttackStartEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		NormalPlantAttackStartEvent(int address) : DLLEventTemplate() { Init(address); };
 		NormalPlantAttackStartEvent() : NormalPlantAttackStartEvent("onNormalPlantAttackStart") {};
+	};
+
+	/// @brief 创建动画图集事件
+	/// @param 触发事件的动画类型，触发事件的动画定义
+	/// @return 是否生成动画图集
+	class CreateAtlasEvent : public BoolDLLEventTemplate<0x471A96, 7, 0x471AFC, REG_ESI, REG_EAX>
+	{
+	public:
+		CreateAtlasEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		CreateAtlasEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		CreateAtlasEvent() : CreateAtlasEvent("onCreateAtlas") {};
 	};
 };
