@@ -15,6 +15,10 @@ namespace PlantAbility
 		{
 			return false;
 		}
+		virtual bool onAnimate(MyPlant plant)
+		{
+			return true;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetPrototype(SeedType::SeedType type);
