@@ -92,6 +92,7 @@
     <ClInclude Include="Const.hpp" />
     <ClInclude Include="MyEvents.hpp" />
     <ClInclude Include="MyPlant\implement\FumeShroom.hpp" />
+    <ClInclude Include="MyPlant\implement\Garlic.hpp" />
     <ClInclude Include="MyPlant\implement\GoldMagnet.hpp" />
     <ClInclude Include="MyPlant\implement\Index.hpp" />
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
