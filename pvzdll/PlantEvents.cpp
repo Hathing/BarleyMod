@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
 
+void onPlantInitAfter(MyPlant plant)
+{
+	PlantAbility::GetPrototype(plant.Type)->onCreated(plant);
+}
+
 bool onPlantUpdateAbility(MyPlant plant)
 {
 	return PlantAbility::GetPrototype(plant.Type)->TickAbility(plant);
@@ -18,6 +23,7 @@ bool onPlantSpecialAnimate(MyPlant plant)
 
 void InitPlantEvents()
 {
+	PlantInitAfterEvent((int)onPlantInitAfter);
 	PlantUpdateAbilityEvent((int)onPlantUpdateAbility);
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);

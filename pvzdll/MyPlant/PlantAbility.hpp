@@ -19,6 +19,10 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		virtual void onCreated(MyPlant plant)
+		{
+			return;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetPrototype(SeedType::SeedType type);
