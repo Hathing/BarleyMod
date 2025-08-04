@@ -2,5 +2,7 @@
 #include "../PlantAbility.hpp"
 #include "PuffShroom.hpp"
 #include "FumeShroom.hpp"
+#include "TallNut.hpp"
 #include "SeaShroom.hpp"
+#include "Garlic.hpp"
 #include "GoldMagnet.hpp"
