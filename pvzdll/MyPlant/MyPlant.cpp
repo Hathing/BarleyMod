@@ -6,21 +6,21 @@ namespace PlantAbility
 	PlantAbility::PlantPTR pt_factory[] =
 	{
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new Repeater(),
 
-		new PuffShroom(), new BasePlant(), new FumeShroom(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
+		new HypnoShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new TallNut(),
+		new BasePlant(), new BasePlant(), new Threepeater(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new MagnetShroom(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new Garlic(),	 new BasePlant(), new BasePlant(), new BasePlant(),
+		new CabbagePult(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new Garlic(),	 new UmbrellaLeaf(), new BasePlant(), new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new Cattail(),
 		new BasePlant(), new GoldMagnet(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
