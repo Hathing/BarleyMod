@@ -96,6 +96,7 @@
     <ClInclude Include="MyPlant\implement\Garlic.hpp" />
     <ClInclude Include="MyPlant\implement\GoldMagnet.hpp" />
     <ClInclude Include="MyPlant\implement\Index.hpp" />
+    <ClInclude Include="MyPlant\implement\MagnetShroom.hpp" />
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
     <ClInclude Include="MyPlant\implement\SeaShroom.hpp" />
     <ClInclude Include="MyPlant\implement\TallNut.hpp" />

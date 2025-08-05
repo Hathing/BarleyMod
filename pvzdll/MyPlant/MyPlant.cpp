@@ -15,7 +15,7 @@ namespace PlantAbility
 		new BasePlant(), new BasePlant(), new BasePlant(), new TallNut(),
 
 		new SeaShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new MagnetShroom(),
 
 		new CabbagePult(), new BasePlant(), new BasePlant(), new BasePlant(),
 		new Garlic(),	 new BasePlant(), new BasePlant(), new BasePlant(),

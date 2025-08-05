@@ -4,6 +4,7 @@
 #include "FumeShroom.hpp"
 #include "TallNut.hpp"
 #include "SeaShroom.hpp"
+#include "MagnetShroom.hpp"
 #include "CabbagePult.hpp"
 #include "Garlic.hpp"
 #include "GoldMagnet.hpp"
