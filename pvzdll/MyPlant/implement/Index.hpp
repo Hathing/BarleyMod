@@ -11,5 +11,6 @@
 #include "MagnetShroom.hpp"
 #include "CabbagePult.hpp"
 #include "Garlic.hpp"
+#include "UmbrellaLeaf.hpp"
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
