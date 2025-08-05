@@ -2,6 +2,7 @@
 #include "../PlantAbility.hpp"
 #include "Repeater.hpp"
 #include "PuffShroom.hpp"
+#include "SunShroom.hpp"
 #include "FumeShroom.hpp"
 #include "Threepeater.hpp"
 #include "TallNut.hpp"

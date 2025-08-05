@@ -101,6 +101,7 @@
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Repeater.hpp" />
     <ClInclude Include="MyPlant\implement\SeaShroom.hpp" />
+    <ClInclude Include="MyPlant\implement\SunShroom.hpp" />
     <ClInclude Include="MyPlant\implement\TallNut.hpp" />
     <ClInclude Include="MyPlant\implement\Threepeater.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />

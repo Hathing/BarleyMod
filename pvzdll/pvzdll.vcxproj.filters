@@ -75,6 +75,9 @@
     <ClInclude Include="MyPlant\implement\Cattail.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyPlant\implement\SunShroom.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
