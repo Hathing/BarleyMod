@@ -12,7 +12,7 @@ namespace PlantAbility
 		new HypnoShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new Threepeater(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new TallNut(),
+		new BasePlant(), new BasePlant(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new BasePlant(), new MagnetShroom(),

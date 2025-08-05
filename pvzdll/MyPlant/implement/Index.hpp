@@ -6,6 +6,7 @@
 #include "FumeShroom.hpp"
 #include "HypnoShroom.hpp"
 #include "Threepeater.hpp"
+#include "Torchwood.hpp"
 #include "TallNut.hpp"
 #include "SeaShroom.hpp"
 #include "MagnetShroom.hpp"

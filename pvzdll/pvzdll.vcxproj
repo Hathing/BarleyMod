@@ -105,6 +105,7 @@
     <ClInclude Include="MyPlant\implement\SunShroom.hpp" />
     <ClInclude Include="MyPlant\implement\TallNut.hpp" />
     <ClInclude Include="MyPlant\implement\Threepeater.hpp" />
+    <ClInclude Include="MyPlant\implement\Torchwood.hpp" />
     <ClInclude Include="MyPlant\implement\UmbrellaLeaf.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
