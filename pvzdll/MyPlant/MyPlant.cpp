@@ -9,7 +9,7 @@ namespace PlantAbility
 		new BasePlant(), new BasePlant(), new BasePlant(), new Repeater(),
 
 		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new HypnoShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new Threepeater(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new BasePlant(), new TallNut(),

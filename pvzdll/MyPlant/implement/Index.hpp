@@ -4,6 +4,7 @@
 #include "PuffShroom.hpp"
 #include "SunShroom.hpp"
 #include "FumeShroom.hpp"
+#include "HypnoShroom.hpp"
 #include "Threepeater.hpp"
 #include "TallNut.hpp"
 #include "SeaShroom.hpp"
