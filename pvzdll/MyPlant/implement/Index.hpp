@@ -1,5 +1,6 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "Repeater.hpp"
 #include "PuffShroom.hpp"
 #include "FumeShroom.hpp"
 #include "Threepeater.hpp"
