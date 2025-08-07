@@ -114,6 +114,7 @@
     <ClInclude Include="MyPlant\implement\UmbrellaLeaf.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
+    <ClInclude Include="MyProjectile\MyProjectile.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -123,6 +124,7 @@
     <ClCompile Include="LawnmowerEvents.cpp" />
     <ClCompile Include="MyBoard.cpp" />
     <ClCompile Include="MyPlant\MyPlant.cpp" />
+    <ClCompile Include="MyProjectile\MyProjectile.cpp" />
     <ClCompile Include="MyZombie\MyZombie.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
