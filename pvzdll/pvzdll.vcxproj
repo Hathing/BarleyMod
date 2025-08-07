@@ -129,6 +129,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PlantEvents.cpp" />
+    <ClCompile Include="ProjectileEvents.cpp" />
     <ClCompile Include="ResourcesEvents.cpp" />
   </ItemGroup>
   <ItemGroup>

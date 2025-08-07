@@ -13,6 +13,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		InitBoardEvents();
 		InitLawnmowerEvents();
 		InitPlantEvents();
+		InitProjectileEvents();
 		break;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
