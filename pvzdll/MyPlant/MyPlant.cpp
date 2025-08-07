@@ -11,7 +11,7 @@ namespace PlantAbility
 		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
 		new HypnoShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new Threepeater(), new BasePlant(),
+		new BasePlant(), new Squash(), new Threepeater(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
@@ -24,7 +24,7 @@ namespace PlantAbility
 		new BasePlant(), new GoldMagnet(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new LeftRepeater(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
@@ -33,7 +33,7 @@ namespace PlantAbility
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new DarkShroom(), new Mangosteen(), new ThymeWarp(),
 	};
 }
 

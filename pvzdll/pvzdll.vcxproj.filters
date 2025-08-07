@@ -87,6 +87,24 @@
     <ClInclude Include="MyPlant\implement\Torchwood.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyPlant\implement\LeftRepeater.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlant\implement\ThymeWarp.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlant\implement\Squash.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlant\implement\Mangosteen.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlant\implement\DarkShroom.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyProjectile\MyProjectile.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -114,6 +132,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ResourcesEvents.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileEvents.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyProjectile\MyProjectile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
