@@ -15,3 +15,4 @@
 #include "UmbrellaLeaf.hpp"
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
+#include "LeftRepeater.hpp"
