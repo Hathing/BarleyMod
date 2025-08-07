@@ -33,7 +33,7 @@ namespace PlantAbility
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new Mangosteen(), new ThymeWarp(),
+		new BasePlant(), new DarkShroom(), new Mangosteen(), new ThymeWarp(),
 	};
 }
 

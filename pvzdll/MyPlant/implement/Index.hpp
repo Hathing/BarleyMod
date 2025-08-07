@@ -17,5 +17,6 @@
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
 #include "LeftRepeater.hpp"
+#include "DarkShroom.hpp"
 #include "Mangosteen.hpp"
 #include "ThymeWarp.hpp"

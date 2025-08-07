@@ -93,6 +93,7 @@
     <ClInclude Include="MyEvents.hpp" />
     <ClInclude Include="MyPlant\implement\CabbagePult.hpp" />
     <ClInclude Include="MyPlant\implement\Cattail.hpp" />
+    <ClInclude Include="MyPlant\implement\DarkShroom.hpp" />
     <ClInclude Include="MyPlant\implement\FumeShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Garlic.hpp" />
     <ClInclude Include="MyPlant\implement\GoldMagnet.hpp" />
