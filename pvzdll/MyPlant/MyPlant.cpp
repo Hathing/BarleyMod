@@ -23,7 +23,7 @@ namespace PlantAbility
 		new BasePlant(), new BasePlant(), new BasePlant(), new Cattail(),
 		new BasePlant(), new GoldMagnet(), new BasePlant(), new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new Endoflame(),
 		new LeftRepeater(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),

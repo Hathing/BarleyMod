@@ -18,6 +18,7 @@
 #include "MelonPult.hpp"
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
+#include "Endoflame.hpp"
 #include "LeftRepeater.hpp"
 #include "SpringEquinoxVine.hpp"
 #include "DarkShroom.hpp"
