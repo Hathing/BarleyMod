@@ -15,6 +15,7 @@
 #include "CabbagePult.hpp"
 #include "Garlic.hpp"
 #include "UmbrellaLeaf.hpp"
+#include "MelonPult.hpp"
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
 #include "LeftRepeater.hpp"
