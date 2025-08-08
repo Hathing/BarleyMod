@@ -20,7 +20,7 @@ namespace PlantAbility
 		new CabbagePult(), new BasePlant(), new BasePlant(), new BasePlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new BasePlant(), new MelonPult(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new Cattail(),
+		new BasePlant(), new BasePlant(), new GloomShroom(), new Cattail(),
 		new BasePlant(), new GoldMagnet(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new Endoflame(),

@@ -16,6 +16,7 @@
 #include "Garlic.hpp"
 #include "UmbrellaLeaf.hpp"
 #include "MelonPult.hpp"
+#include "GloomShroom.hpp"
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
 #include "Endoflame.hpp"
