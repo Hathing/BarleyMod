@@ -7,7 +7,7 @@ namespace PlantAbility
 	{
 		void onCreated(MyPlant plant)
 		{
-			plant.ShootOrProductInterval = 150;
+			plant.ShootOrProductInterval = 130;
 		}
 		bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)
 		{
