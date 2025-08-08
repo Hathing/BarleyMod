@@ -5,6 +5,11 @@ namespace PlantAbility
 {
 	class Garlic : public BasePlant
 	{
+		void onCreated(MyPlant plant)
+		{
+			plant.Hp = 400;
+			plant.MaxHp = 400;
+		}
 		bool onAnimate(MyPlant plant)
 		{
 			if (plant.Level >= MyPlant::MAX_LEVEL)

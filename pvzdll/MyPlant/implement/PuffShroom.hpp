@@ -5,6 +5,10 @@ namespace PlantAbility
 {
 	class PuffShroom : public BasePlant
 	{
+		void onCreated(MyPlant plant)
+		{
+			plant.ShootOrProductInterval = 200;
+		}
 		bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)
 		{
 			rect->X = plant.ImageX + 60;

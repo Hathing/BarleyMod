@@ -11,19 +11,19 @@ namespace PlantAbility
 		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
 		new HypnoShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
 
-		new BasePlant(), new Squash(), new Threepeater(), new BasePlant(),
+		new DiamondShroom(), new Squash(), new Threepeater(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new BasePlant(), new BasePlant(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new BasePlant(), new MagnetShroom(),
 
 		new CabbagePult(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new Garlic(),	 new UmbrellaLeaf(), new BasePlant(), new BasePlant(),
+		new Garlic(),	 new UmbrellaLeaf(), new BasePlant(), new MelonPult(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new Cattail(),
+		new BasePlant(), new BasePlant(), new GloomShroom(), new Cattail(),
 		new BasePlant(), new GoldMagnet(), new BasePlant(), new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(), new BasePlant(), new BasePlant(), new Endoflame(),
 		new LeftRepeater(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
@@ -33,7 +33,7 @@ namespace PlantAbility
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new DarkShroom(), new Mangosteen(), new ThymeWarp(),
+		new SpringEquinoxVine(), new DarkShroom(), new Mangosteen(), new ThymeWarp(),
 	};
 }
 
