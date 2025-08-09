@@ -96,6 +96,7 @@
     <ClInclude Include="MyPlant\implement\DarkShroom.hpp" />
     <ClInclude Include="MyPlant\implement\DiamondShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Endoflame.hpp" />
+    <ClInclude Include="MyPlant\implement\Explode_O_Nut.hpp" />
     <ClInclude Include="MyPlant\implement\FumeShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Garlic.hpp" />
     <ClInclude Include="MyPlant\implement\GloomShroom.hpp" />

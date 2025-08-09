@@ -24,6 +24,7 @@
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
 #include "SpikeRock.hpp"
+#include "Explode_O_Nut.hpp"
 #include "Endoflame.hpp"
 #include "LeftRepeater.hpp"
 #include "SpringEquinoxVine.hpp"

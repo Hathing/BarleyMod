@@ -23,7 +23,7 @@ namespace PlantAbility
 		new BasePlant(), new BasePlant(), new GloomShroom(), new Cattail(),
 		new BasePlant(), new GoldMagnet(), new SpikeRock(), new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new Endoflame(),
+		new BasePlant(), new Explode_O_Nut(), new BasePlant(), new Endoflame(),
 		new LeftRepeater(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
