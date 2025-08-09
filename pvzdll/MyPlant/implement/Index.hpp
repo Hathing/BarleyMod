@@ -1,5 +1,6 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "SnowPea.hpp"
 #include "Repeater.hpp"
 #include "PuffShroom.hpp"
 #include "SunShroom.hpp"
