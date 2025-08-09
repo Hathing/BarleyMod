@@ -14,6 +14,7 @@
 #include "Torchwood.hpp"
 #include "TallNut.hpp"
 #include "SeaShroom.hpp"
+#include "Cactus.hpp"
 #include "MagnetShroom.hpp"
 #include "CabbagePult.hpp"
 #include "Garlic.hpp"
