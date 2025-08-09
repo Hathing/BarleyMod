@@ -121,6 +121,7 @@
     <ClInclude Include="MyPlant\implement\ThymeWarp.hpp" />
     <ClInclude Include="MyPlant\implement\Torchwood.hpp" />
     <ClInclude Include="MyPlant\implement\UmbrellaLeaf.hpp" />
+    <ClInclude Include="MyPlant\implement\WallNut.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
