@@ -146,6 +146,7 @@
     <ClCompile Include="PlantEvents.cpp" />
     <ClCompile Include="ProjectileEvents.cpp" />
     <ClCompile Include="ResourcesEvents.cpp" />
+    <ClCompile Include="ZombieEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\pvzclass\pvzclass.vcxproj">
