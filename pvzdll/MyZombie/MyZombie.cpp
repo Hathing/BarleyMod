@@ -1,21 +1,26 @@
 #include "MyZombie.hpp"
+#include "implement/index.hpp"
 
-/*
-namespace ZombiePrototype
+namespace ZombieAbility
 {
-	PrototypePTR pt_factory[] =
+	ZombiePTR pt_factory[] =
 	{
-		new BasePrototype(), new BasePrototype(), new BasePrototype(), new BasePrototype(), new BasePrototype(),
-		new NewspaperZombie(), new BasePrototype(), new BasePrototype(), new DancerZombie(), new BasePrototype(),
-		new BasePrototype(), new SnorkedZombie(), new BasePrototype(), new BasePrototype(), new BasePrototype(),
-		new BasePrototype(), new BasePrototype(), new DiggerZombie(), new PogoZombie(), new BasePrototype(),
-		new BungeeZombie(), new CatapultZombie(), new BasePrototype(), new BasePrototype(), new BasePrototype(),
-		new BasePrototype(), new PeaZombie(), new BasePrototype(), new JalapenoZombie(), new BasePrototype(),
-		new SquashZombie(), new TallNutZombie(), new BasePrototype(), new BasePrototype(), new BasePrototype(),
-		new BasePrototype(), new BasePrototype(), new BasePrototype(), new BasePrototype(), new BasePrototype(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie()
 	};
 }
 
+ZombieAbility::ZombiePTR ZombieAbility::GetAbility(ZombieType::ZombieType type)
+{
+	return ZombieAbility::pt_factory[type];
+}
+/*
 void MyZombie::onCreated()
 {
 	ZombiePrototype::pt_factory[this->Type]->onCreated(*this);

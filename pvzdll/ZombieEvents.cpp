@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "MyZombie/ZombieAbility.hpp"
 
 void onZombieDropLoot(MyZombie zombie)
 {
@@ -14,7 +15,13 @@ void onZombieDropLoot(MyZombie zombie)
 	}
 }
 
+void onZombieInitAfter(MyZombie zombie)
+{
+	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
+}
+
 void InitZombieEvents()
 {
 	ZombieDropLootEvent((int)onZombieDropLoot);
+	ZombieInitAfterEvent((int)onZombieInitAfter);
 }
