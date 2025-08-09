@@ -110,6 +110,7 @@
     <ClInclude Include="MyPlant\implement\Mangosteen.hpp" />
     <ClInclude Include="MyPlant\implement\Marigold.hpp" />
     <ClInclude Include="MyPlant\implement\MelonPult.hpp" />
+    <ClInclude Include="MyPlant\implement\Plantern.hpp" />
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Repeater.hpp" />
     <ClInclude Include="MyPlant\implement\SeaShroom.hpp" />
