@@ -15,6 +15,7 @@
 #include "CabbagePult.hpp"
 #include "Garlic.hpp"
 #include "UmbrellaLeaf.hpp"
+#include "Marigold.hpp"
 #include "MelonPult.hpp"
 #include "GloomShroom.hpp"
 #include "Cattail.hpp"
