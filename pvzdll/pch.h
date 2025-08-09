@@ -15,5 +15,6 @@ void InitBoardEvents();
 void InitLawnmowerEvents();
 void InitPlantEvents();
 void InitProjectileEvents();
+void InitZombieEvents();
 
 #endif //PCH_H

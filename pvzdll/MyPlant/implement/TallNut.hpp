@@ -5,6 +5,11 @@ namespace PlantAbility
 {
 	class TallNut : public BasePlant
 	{
+		void onCreated(MyPlant plant)
+		{
+			plant.Hp = 1000;
+			plant.MaxHp = 1000;
+		}
 		bool onAnimate(MyPlant plant)
 		{
 			if (plant.Level >= MyPlant::MAX_LEVEL)
