@@ -101,6 +101,7 @@
     <ClInclude Include="MyPlant\implement\GloomShroom.hpp" />
     <ClInclude Include="MyPlant\implement\GoldMagnet.hpp" />
     <ClInclude Include="MyPlant\implement\HypnoShroom.hpp" />
+    <ClInclude Include="MyPlant\implement\IceShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Index.hpp" />
     <ClInclude Include="MyPlant\implement\LeftRepeater.hpp" />
     <ClInclude Include="MyPlant\implement\MagnetShroom.hpp" />

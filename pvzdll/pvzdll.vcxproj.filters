@@ -126,6 +126,9 @@
     <ClInclude Include="MyPlant\implement\SnowPea.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyPlant\implement\IceShroom.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
