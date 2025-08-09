@@ -22,6 +22,7 @@
 #include "GloomShroom.hpp"
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
+#include "SpikeRock.hpp"
 #include "Endoflame.hpp"
 #include "LeftRepeater.hpp"
 #include "SpringEquinoxVine.hpp"
