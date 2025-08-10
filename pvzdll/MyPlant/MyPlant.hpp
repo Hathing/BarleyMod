@@ -27,5 +27,5 @@ public:
 	/// @brief 根据识别 ID 获取对应植物。
 	/// @param id 识别 ID
 	/// @return ID 对应的植物。
-	MyPlant GetByID(int id);
+	static MyPlant GetByID(int id);
 };
