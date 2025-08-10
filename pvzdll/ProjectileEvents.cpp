@@ -9,7 +9,15 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 	return true;
 }
 
+int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
+{
+	if (zombie.NotDying && !zombie.NotExist)
+		zombie.LastDamageSourceID = proj.ParentID;
+	return -1;
+}
+
 void InitProjectileEvents()
 {
 	PlantAddProjectileEvent((int)onPlantAddProjectile);
+	PVZEvent::ProjectileDamageZombieEvent((int)onProjDamageZombie);
 }
