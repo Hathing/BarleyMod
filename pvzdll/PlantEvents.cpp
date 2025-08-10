@@ -3,6 +3,27 @@
 
 void onPlantInitAfter(MyPlant plant)
 {
+	auto model = plant.GetAnimationPart2();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "awake");
+		model.AssignRenderGroupToPrefix(-1, "easter");
+	}
+	
+	model = plant.GetAnimationPart3();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "awake");
+		model.AssignRenderGroupToPrefix(-1, "easter");
+	}
+
+	model = plant.GetAnimationPart4();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "awake");
+		model.AssignRenderGroupToPrefix(-1, "easter");
+	}
+
 	PlantAbility::GetPrototype(plant.Type)->onCreated(plant);
 }
 
