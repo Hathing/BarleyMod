@@ -144,6 +144,12 @@
     <ClInclude Include="MyPlant\implement\Plantern.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyZombie\ZombieAbility.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyZombie\implement\Index.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

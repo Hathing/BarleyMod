@@ -128,7 +128,9 @@
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
+    <ClInclude Include="MyZombie\implement\Index.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />
+    <ClInclude Include="MyZombie\ZombieAbility.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

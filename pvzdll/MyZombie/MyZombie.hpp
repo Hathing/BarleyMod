@@ -14,6 +14,8 @@ public:
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 毒的层数
 	INT_PROPERTY(PoisonStack, __get_PoS, __set_PoS, 0x140);
+	/// @brief 最近受到伤害的来源植物 ID
+	INT_PROPERTY(LastDamageSourceID, __get_LaDSID, __set_LaDSID, 0x148);
 	
 	/// @brief 根据盾的类型设置相应动画轨道的绘制分组。
 	void AttachShield();

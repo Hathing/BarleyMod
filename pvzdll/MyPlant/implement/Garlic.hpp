@@ -10,6 +10,20 @@ namespace PlantAbility
 			plant.Hp = 400;
 			plant.MaxHp = 400;
 		}
+		bool TickAbility(MyPlant plant)
+		{
+			if (plant.Level >= MyPlant::MAX_LEVEL)
+			{
+				plant.HealCounter++;
+				if (plant.HealCounter >= 100)
+				{
+					plant.HealCounter = 0;
+					plant.Heal(1);
+				}
+			}
+
+			return true;
+		}
 		bool onAnimate(MyPlant plant)
 		{
 			if (plant.Level >= MyPlant::MAX_LEVEL)
