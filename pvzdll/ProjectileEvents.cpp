@@ -12,7 +12,16 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
 {
 	if (zombie.NotDying && !zombie.NotExist)
-		zombie.LastDamageSourceID = proj.ParentID;
+	{
+		if (type == PVZEvent::ProjDmgType::DAMAGE_SINGULAR)
+			zombie.LastDamageSourceID = proj.ParentID;
+		else
+		{
+			auto caster = MyPlant::GetByID(proj.ParentID);
+			if (caster.isValid() && caster.Row == zombie.Row)
+				zombie.LastDamageSourceID = proj.ParentID;
+		}
+	}
 	return -1;
 }
 
