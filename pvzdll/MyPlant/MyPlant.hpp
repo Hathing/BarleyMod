@@ -7,6 +7,8 @@ public:
 	MyPlant(int idoraddress) : PVZ::Plant(idoraddress) {};
 	MyPlant(const PVZ::Plant& plant) : PVZ::Plant(plant.GetBaseAddress()) {};
 
+	/// @brief 生命恢复计时器
+	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0D8);
 	/// @brief 路灯花复活植物类型
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 减速效果倒计时
