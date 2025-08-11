@@ -27,6 +27,14 @@ void MyZombie::onCreated()
 }
 */
 
+int MyZombie::GetExperience()
+{
+	if (this->Hypnotized || this->Unknown == 9 || this->Type == ZombieType::ConeheadZombie)
+		return 0;
+	else
+		return this->BodyMaxHealth + this->HelmMaxHealth + this->ShieldMaxHealth;
+}
+
 void MyZombie::AttachShield()
 {
 	PVZ::Memory::Execute(AsmBuilder()
