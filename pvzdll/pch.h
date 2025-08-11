@@ -9,6 +9,8 @@
 #include "MyProjectile/MyProjectile.hpp"
 #include "MyZombie/MyZombie.hpp"
 
+typedef PVZEvent::PlantDamageZombieEvent::PZDamageInfo<MyPlant, MyZombie> PZDamageEvent;
+
 void init();
 void InitResourceEvents();
 void InitBoardEvents();

@@ -42,10 +42,21 @@ bool onPlantSpecialAnimate(MyPlant plant)
 	return PlantAbility::GetPrototype(plant.Type)->onAnimate(plant);
 }
 
+/// @todo 钢地刺技能实装后，处理地刺伤害来源问题
+void onPlantDamageZombie(PZDamageEvent* info)
+{
+	if (info->type == PVZEvent::PLANTDAMAGETYPE_AOE && info->plant.Type != SeedType::Squash)
+	{
+		if (info->zombie.NotDying)
+			info->zombie.LastDamageSourceID = info->plant.Id;
+	}
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
 	PlantUpdateAbilityEvent((int)onPlantUpdateAbility);
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
+	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
 }
