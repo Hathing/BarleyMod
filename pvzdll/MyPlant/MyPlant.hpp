@@ -16,6 +16,10 @@ public:
 	/// @brief 当前等级
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
 
+	/// @brief 判断该植物是否为工具植物
+	/// @return 是否为工具植物
+	bool IsToolPlant();
+
 	/// @brief 治疗植物
 	/// @note 不会超出生命值上限。
 	/// @param val 治疗量

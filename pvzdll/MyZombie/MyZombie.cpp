@@ -5,9 +5,9 @@ namespace ZombieAbility
 {
 	ZombiePTR pt_factory[] =
 	{
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new PoleVaulter(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 
@@ -26,6 +26,14 @@ void MyZombie::onCreated()
 	ZombiePrototype::pt_factory[this->Type]->onCreated(*this);
 }
 */
+
+int MyZombie::GetExperience()
+{
+	if (this->Hypnotized || this->Unknown == 9 || this->Type == ZombieType::ConeheadZombie)
+		return 0;
+	else
+		return this->BodyMaxHealth + this->HelmMaxHealth + this->ShieldMaxHealth;
+}
 
 void MyZombie::AttachShield()
 {
