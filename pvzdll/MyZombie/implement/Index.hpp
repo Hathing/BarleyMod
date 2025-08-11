@@ -1,3 +1,4 @@
 #pragma once
 #include "../ZombieAbility.hpp"
+#include "PoleVaulter.hpp"
 #include "Zomboni.hpp"
