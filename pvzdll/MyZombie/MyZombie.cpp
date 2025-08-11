@@ -7,7 +7,7 @@ namespace ZombieAbility
 	{
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 
