@@ -130,6 +130,7 @@
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
     <ClInclude Include="MyZombie\implement\BungeeZombie.hpp" />
+    <ClInclude Include="MyZombie\implement\CatapultZombie.hpp" />
     <ClInclude Include="MyZombie\implement\Index.hpp" />
     <ClInclude Include="MyZombie\implement\PoleVaulter.hpp" />
     <ClInclude Include="MyZombie\implement\Zomboni.hpp" />
