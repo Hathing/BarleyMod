@@ -8,7 +8,7 @@ namespace ZombieAbility
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new PoleVaulter(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new PogoZombie(), new BaseZombie(),
 		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new BaseZombie(), new BaseZombie(),
 
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),

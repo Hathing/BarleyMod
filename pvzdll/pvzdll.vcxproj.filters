@@ -165,6 +165,9 @@
     <ClInclude Include="MyZombie\implement\CatapultZombie.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyZombie\implement\PogoZombie.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
