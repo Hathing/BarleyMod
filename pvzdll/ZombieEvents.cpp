@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "MyPlant/PlantAbility.hpp"
 #include "MyZombie/ZombieAbility.hpp"
 
 void onZombieDropLoot(MyZombie zombie)
@@ -21,6 +22,7 @@ void onZombieDropLoot(MyZombie zombie)
 
 		if (attacker.isValid())
 		{
+			PlantAbility::GetPrototype(attacker.Type)->onKill(attacker, zombie);
 			attacker.AddExperience(bounty_xp * 4 / 5, true);
 			bounty_xp -= (bounty_xp * 4 / 5);
 		}
