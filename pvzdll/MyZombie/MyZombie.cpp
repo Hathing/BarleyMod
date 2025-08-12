@@ -9,7 +9,7 @@ namespace ZombieAbility
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BungeeZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie()
@@ -20,12 +20,6 @@ ZombieAbility::ZombiePTR ZombieAbility::GetAbility(ZombieType::ZombieType type)
 {
 	return ZombieAbility::pt_factory[type];
 }
-/*
-void MyZombie::onCreated()
-{
-	ZombiePrototype::pt_factory[this->Type]->onCreated(*this);
-}
-*/
 
 int MyZombie::GetBountyXP()
 {
