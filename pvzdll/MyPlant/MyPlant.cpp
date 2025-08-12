@@ -78,6 +78,44 @@ void MyPlant::AddExperience(int val, bool kill_credit)
 		this->Light();
 }
 
+void MyPlant::EnableEasterSkin()
+{
+	this->EasterSkin = true;
+
+	auto model = this->GetAnimationPart1();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "\0");
+		model.AssignRenderGroupToPrefix(0, "easter");
+		model.AssignRenderGroupToPrefix(0, "easter2");
+	}
+
+	model = this->GetAnimationPart2();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "\0");
+		model.AssignRenderGroupToPrefix(0, "easter");
+	}
+
+	model = this->GetAnimationPart3();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "\0");
+		model.AssignRenderGroupToPrefix(0, "easter");
+	}
+
+	model = this->GetAnimationPart4();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "\0");
+		model.AssignRenderGroupToPrefix(0, "easter");
+	}
+
+	model = this->GetAnimationPotatoGlow();
+	if (model.isValid())
+		model.AssignRenderGroupToPrefix(-1, "\0");
+}
+
 MyPlant MyPlant::GetByID(int id)
 {
 	if (id)

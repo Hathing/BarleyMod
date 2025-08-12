@@ -15,6 +15,8 @@ public:
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
 	/// @brief 胆小菇击杀次数
 	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
+	/// @brief 是否启用彩蛋皮
+	T_PROPERTY(mybool, EasterSkin, __get_EaS, __set_EaS, 0x10C);
 	/// @brief 植物的所有者的 ID
 	INT_PROPERTY(OwnerID, __get_SpO, __set_SpO, 0x110);
 	/// @brief 当前等级
@@ -39,6 +41,8 @@ public:
 	/// @param val 获得的经验数值
 	/// @param kill_credit 是否为击杀奖励
 	void AddExperience(int val, bool kill_credit = false);
+	/// @brief 启用彩蛋皮
+	void EnableEasterSkin();
 
 	/// @brief 最大等级
 	static const int MAX_LEVEL = 5;
