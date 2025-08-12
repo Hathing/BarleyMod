@@ -6,7 +6,7 @@ namespace ZombieAbility
 	ZombiePTR pt_factory[] =
 	{
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new PoleVaulter(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new DancingZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new DiggerZombie(), new PogoZombie(), new BaseZombie(),
 		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new BaseZombie(), new BaseZombie(),
