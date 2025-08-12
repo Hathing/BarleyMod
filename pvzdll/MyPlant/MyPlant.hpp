@@ -15,8 +15,17 @@ public:
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
 	/// @brief 胆小菇击杀次数
 	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
+	/// @brief 植物的所有者的 ID
+	INT_PROPERTY(OwnerID, __get_SpO, __set_SpO, 0x110);
 	/// @brief 当前等级
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
+
+	/// @brief 获取植物的所有者。
+	/// @return 植物的所有者
+	MyPlant GetOwner();
+	/// @brief 设置植物的所有者
+	/// @param owner 设置后的所有者 
+	void SetOwner(MyPlant owner);
 
 	/// @brief 判断该植物是否为工具植物
 	/// @return 是否为工具植物

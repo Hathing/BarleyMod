@@ -42,6 +42,19 @@ PlantAbility::PlantPTR PlantAbility::GetPrototype(SeedType::SeedType type)
 	return PlantAbility::pt_factory[type];
 }
 
+MyPlant MyPlant::GetOwner()
+{
+	if (!this->OwnerID)
+		return *this;
+	else
+		return GetByID(this->OwnerID);
+}
+
+void MyPlant::SetOwner(MyPlant plant)
+{
+	this->OwnerID = plant.Id;
+}
+
 bool MyPlant::IsToolPlant()
 {
 	auto type = this->Type;
