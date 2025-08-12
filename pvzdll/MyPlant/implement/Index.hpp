@@ -7,6 +7,7 @@
 #include "SunShroom.hpp"
 #include "FumeShroom.hpp"
 #include "HypnoShroom.hpp"
+#include "ScaredyShroom.hpp"
 #include "IceShroom.hpp"
 #include "DiamondShroom.hpp"
 #include "Squash.hpp"

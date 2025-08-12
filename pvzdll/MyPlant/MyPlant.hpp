@@ -13,6 +13,8 @@ public:
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 减速效果倒计时
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
+	/// @brief 胆小菇击杀次数
+	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
 	/// @brief 当前等级
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
 
