@@ -61,7 +61,8 @@ void MyPlant::Heal(int val)
 
 void MyPlant::AddExperience(int val, bool kill_credit)
 {
-
+	if(kill_credit)
+		this->Light();
 }
 
 MyPlant MyPlant::GetByID(int id)
