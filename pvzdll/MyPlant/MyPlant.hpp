@@ -24,6 +24,10 @@ public:
 	/// @note 不会超出生命值上限。
 	/// @param val 治疗量
 	void Heal(int val);
+	/// @brief 获得经验值
+	/// @param val 获得的经验数值
+	/// @param kill_credit 是否为击杀奖励
+	void AddExperience(int val, bool kill_credit = false);
 
 	/// @brief 最大等级
 	static const int MAX_LEVEL = 5;

@@ -19,7 +19,7 @@ public:
 	
 	/// @brief 获取该僵尸掉落的经验值
 	/// @return 掉落的经验值
-	int GetExperience();
+	int GetBountyXP();
 
 	/// @brief 根据盾的类型设置相应动画轨道的绘制分组。
 	void AttachShield();

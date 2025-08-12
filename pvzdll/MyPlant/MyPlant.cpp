@@ -59,6 +59,11 @@ void MyPlant::Heal(int val)
 		this->Hp = this->MaxHp;
 }
 
+void MyPlant::AddExperience(int val, bool kill_credit)
+{
+
+}
+
 MyPlant MyPlant::GetByID(int id)
 {
 	if (id)

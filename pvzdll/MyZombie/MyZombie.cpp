@@ -27,7 +27,7 @@ void MyZombie::onCreated()
 }
 */
 
-int MyZombie::GetExperience()
+int MyZombie::GetBountyXP()
 {
 	if (this->Hypnotized || this->Unknown == 9 || this->Type == ZombieType::ConeheadZombie)
 		return 0;
