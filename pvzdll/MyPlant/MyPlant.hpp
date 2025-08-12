@@ -13,6 +13,8 @@ public:
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 减速效果倒计时
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
+	/// @brief 胆小菇击杀次数
+	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
 	/// @brief 当前等级
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
 
@@ -24,6 +26,10 @@ public:
 	/// @note 不会超出生命值上限。
 	/// @param val 治疗量
 	void Heal(int val);
+	/// @brief 获得经验值
+	/// @param val 获得的经验数值
+	/// @param kill_credit 是否为击杀奖励
+	void AddExperience(int val, bool kill_credit = false);
 
 	/// @brief 最大等级
 	static const int MAX_LEVEL = 5;

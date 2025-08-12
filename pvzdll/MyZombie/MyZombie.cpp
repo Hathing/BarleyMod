@@ -6,10 +6,10 @@ namespace ZombieAbility
 	ZombiePTR pt_factory[] =
 	{
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new PoleVaulter(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new BaseZombie(), new DancingZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new DiggerZombie(), new PogoZombie(), new BaseZombie(),
+		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new BaseZombie(), new BaseZombie(),
 
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie()
@@ -20,14 +20,8 @@ ZombieAbility::ZombiePTR ZombieAbility::GetAbility(ZombieType::ZombieType type)
 {
 	return ZombieAbility::pt_factory[type];
 }
-/*
-void MyZombie::onCreated()
-{
-	ZombiePrototype::pt_factory[this->Type]->onCreated(*this);
-}
-*/
 
-int MyZombie::GetExperience()
+int MyZombie::GetBountyXP()
 {
 	if (this->Hypnotized || this->Unknown == 9 || this->Type == ZombieType::ConeheadZombie)
 		return 0;

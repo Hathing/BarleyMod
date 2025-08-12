@@ -37,6 +37,13 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 植物击杀僵尸时，先执行此函数。
+		/// @param plant 植物
+		/// @param zombie 僵尸
+		virtual void onKill(MyPlant plant, MyZombie zombie)
+		{
+			return;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetPrototype(SeedType::SeedType type);

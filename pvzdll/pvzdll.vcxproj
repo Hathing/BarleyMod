@@ -113,6 +113,7 @@
     <ClInclude Include="MyPlant\implement\Plantern.hpp" />
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Repeater.hpp" />
+    <ClInclude Include="MyPlant\implement\ScaredyShroom.hpp" />
     <ClInclude Include="MyPlant\implement\SeaShroom.hpp" />
     <ClInclude Include="MyPlant\implement\SnowPea.hpp" />
     <ClInclude Include="MyPlant\implement\SpikeRock.hpp" />
@@ -128,7 +129,12 @@
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
+    <ClInclude Include="MyZombie\implement\BungeeZombie.hpp" />
+    <ClInclude Include="MyZombie\implement\CatapultZombie.hpp" />
+    <ClInclude Include="MyZombie\implement\DancingZombie.hpp" />
+    <ClInclude Include="MyZombie\implement\DiggerZombie.hpp" />
     <ClInclude Include="MyZombie\implement\Index.hpp" />
+    <ClInclude Include="MyZombie\implement\PogoZombie.hpp" />
     <ClInclude Include="MyZombie\implement\PoleVaulter.hpp" />
     <ClInclude Include="MyZombie\implement\Zomboni.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />

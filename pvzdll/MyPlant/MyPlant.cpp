@@ -9,7 +9,7 @@ namespace PlantAbility
 		new BasePlant(), new SnowPea(),	  new BasePlant(), new Repeater(),
 
 		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
-		new HypnoShroom(), new BasePlant(), new IceShroom(), new BasePlant(),
+		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new BasePlant(),
 
 		new DiamondShroom(), new Squash(), new Threepeater(), new BasePlant(),
 		new BasePlant(), new BasePlant(), new Torchwood(), new TallNut(),
@@ -57,6 +57,12 @@ void MyPlant::Heal(int val)
 	this->Hp += val;
 	if (this->Hp > this->MaxHp)
 		this->Hp = this->MaxHp;
+}
+
+void MyPlant::AddExperience(int val, bool kill_credit)
+{
+	if(kill_credit)
+		this->Light();
 }
 
 MyPlant MyPlant::GetByID(int id)
