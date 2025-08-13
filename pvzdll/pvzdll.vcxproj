@@ -137,6 +137,7 @@
     <ClInclude Include="MyZombie\implement\JalapenoZombie.hpp" />
     <ClInclude Include="MyZombie\implement\PogoZombie.hpp" />
     <ClInclude Include="MyZombie\implement\PoleVaulter.hpp" />
+    <ClInclude Include="MyZombie\implement\TallNutZombie.hpp" />
     <ClInclude Include="MyZombie\implement\WallNutZombie.hpp" />
     <ClInclude Include="MyZombie\implement\Zomboni.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />

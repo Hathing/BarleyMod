@@ -9,3 +9,4 @@
 #include "CatapultZombie.hpp"
 #include "WallNutZombie.hpp"
 #include "JalapenoZombie.hpp"
+#include "TallNutZombie.hpp"
