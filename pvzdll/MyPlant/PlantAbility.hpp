@@ -44,6 +44,13 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 植物被移除时，先执行此函数。
+		/// @note 不在 Board 上的植物也会调用此函数。
+		/// @param plant 植物
+		virtual void onDie(MyPlant plant)
+		{
+			return;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetPrototype(SeedType::SeedType type);

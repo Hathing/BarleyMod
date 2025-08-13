@@ -55,6 +55,12 @@ void onPlantDamageZombie(PZDamageEvent* info)
 	}
 }
 
+void onPlantDie(MyPlant plant)
+{
+	PlantAbility::GetPrototype(plant.Type)->onDie(plant);
+	return;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -62,4 +68,5 @@ void InitPlantEvents()
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
+	PlantDieEvent((int)onPlantDie);
 }
