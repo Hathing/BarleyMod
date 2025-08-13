@@ -11,12 +11,27 @@ public:
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0D8);
 	/// @brief 路灯花复活植物类型
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
+	/// @brief 第一个与该植物相关的植物的 ID
+	INT_PROPERTY(RelatedPlantID1, __get_RePID1, __set_RePID1, 0x0E0);
 	/// @brief 减速效果倒计时
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
 	/// @brief 胆小菇击杀次数
 	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
+	/// @brief 是否启用彩蛋皮
+	T_PROPERTY(mybool, EasterSkin, __get_EaS, __set_EaS, 0x10C);
+	/// @brief 植物的所有者的 ID
+	INT_PROPERTY(OwnerID, __get_SpO, __set_SpO, 0x110);
 	/// @brief 当前等级
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
+	/// @brief 是否在 Board 上
+	T_PROPERTY(mybool, OnBoard, __get_OnB, __set_OnB, 0x144);
+
+	/// @brief 获取植物的所有者。
+	/// @return 植物的所有者
+	MyPlant GetOwner();
+	/// @brief 设置植物的所有者
+	/// @param owner 设置后的所有者 
+	void SetOwner(MyPlant owner);
 
 	/// @brief 判断该植物是否为工具植物
 	/// @return 是否为工具植物
@@ -30,6 +45,8 @@ public:
 	/// @param val 获得的经验数值
 	/// @param kill_credit 是否为击杀奖励
 	void AddExperience(int val, bool kill_credit = false);
+	/// @brief 启用彩蛋皮
+	void EnableEasterSkin();
 
 	/// @brief 最大等级
 	static const int MAX_LEVEL = 5;

@@ -3,6 +3,9 @@
 
 void onPlantInitAfter(MyPlant plant)
 {
+	plant.OwnerID = 0;
+	plant.EasterSkin = false;
+
 	auto model = plant.GetAnimationPart2();
 	if (model.isValid())
 	{
@@ -52,6 +55,12 @@ void onPlantDamageZombie(PZDamageEvent* info)
 	}
 }
 
+void onPlantDie(MyPlant plant)
+{
+	PlantAbility::GetPrototype(plant.Type)->onDie(plant);
+	return;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -59,4 +68,5 @@ void InitPlantEvents()
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
+	PlantDieEvent((int)onPlantDie);
 }

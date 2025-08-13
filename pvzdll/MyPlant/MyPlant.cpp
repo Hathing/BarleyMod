@@ -42,6 +42,19 @@ PlantAbility::PlantPTR PlantAbility::GetPrototype(SeedType::SeedType type)
 	return PlantAbility::pt_factory[type];
 }
 
+MyPlant MyPlant::GetOwner()
+{
+	if (!this->OwnerID)
+		return *this;
+	else
+		return GetByID(this->OwnerID);
+}
+
+void MyPlant::SetOwner(MyPlant plant)
+{
+	this->OwnerID = plant.Id;
+}
+
 bool MyPlant::IsToolPlant()
 {
 	auto type = this->Type;
@@ -63,6 +76,44 @@ void MyPlant::AddExperience(int val, bool kill_credit)
 {
 	if(kill_credit)
 		this->Light();
+}
+
+void MyPlant::EnableEasterSkin()
+{
+	this->EasterSkin = true;
+
+	auto model = this->GetAnimationPart1();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "\0");
+		model.AssignRenderGroupToPrefix(0, "easter");
+		model.AssignRenderGroupToPrefix(0, "easter2");
+	}
+
+	model = this->GetAnimationPart2();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "\0");
+		model.AssignRenderGroupToPrefix(0, "easter");
+	}
+
+	model = this->GetAnimationPart3();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "\0");
+		model.AssignRenderGroupToPrefix(0, "easter");
+	}
+
+	model = this->GetAnimationPart4();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "\0");
+		model.AssignRenderGroupToPrefix(0, "easter");
+	}
+
+	model = this->GetAnimationPotatoGlow();
+	if (model.isValid())
+		model.AssignRenderGroupToPrefix(-1, "\0");
 }
 
 MyPlant MyPlant::GetByID(int id)

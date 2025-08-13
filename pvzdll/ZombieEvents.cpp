@@ -5,13 +5,17 @@
 void onZombieDropLoot(MyZombie zombie)
 {
 	zombie.DroppedLoot = 1;
+
+	if (zombie.Type == ZombieType::DrZomboss)
+		return;
 	
 	if (zombie.PoisonStack >= 10)
 	{
 		int spread_stack = zombie.PoisonStack >> 2;
 		auto zombies = zombie.GetBoard().GetAllZombies<MyZombie>();
 		for (auto myzombie : zombies)
-			if (myzombie.Row == zombie.Row && myzombie.X - 80 >= zombie.X && myzombie.X + 80 <= zombie.X)
+			if (myzombie.Row == zombie.Row && myzombie.X - 80 >= zombie.X && myzombie.X + 80 <= zombie.X
+					&& myzombie.Type != ZombieType::DrZomboss)
 				myzombie.PoisonStack += spread_stack;
 	}
 
