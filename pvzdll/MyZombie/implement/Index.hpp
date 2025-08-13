@@ -7,4 +7,5 @@
 #include "PogoZombie.hpp"
 #include "BungeeZombie.hpp"
 #include "CatapultZombie.hpp"
+#include "WallNutZombie.hpp"
 #include "JalapenoZombie.hpp"

@@ -11,7 +11,7 @@ namespace ZombieAbility
 		new BaseZombie(), new BaseZombie(), new DiggerZombie(), new PogoZombie(), new BaseZombie(),
 		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new BaseZombie(), new BaseZombie(),
 
-		new BaseZombie(), new BaseZombie(), new BaseZombie(), new JalapenoZombie(), new BaseZombie(),
+		new BaseZombie(), new BaseZombie(), new WallNutZombie(), new JalapenoZombie(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie()
 	};
 }
