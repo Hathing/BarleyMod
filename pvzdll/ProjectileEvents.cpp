@@ -3,9 +3,8 @@
 bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 {
 	proj.ParentID = plant.Id;
-	if(plant.Type == SeedType::Starfruit)
-	{
-	}
+	if (plant.Type == SeedType::Starfruit)
+		proj.OriginalRow = plant.Row;
 	return true;
 }
 
