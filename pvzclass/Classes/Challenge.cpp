@@ -1,4 +1,4 @@
-﻿#include "..\PVZ.h"
+#include "..\PVZ.h"
 
 PVZ::Challenge::Challenge(int address)
 {
@@ -58,4 +58,16 @@ void PVZ::Challenge::IZSquishBrain(IZBrain brain)
 	SETARG(__asm__IZSquishBrain, 1) = brain.GetBaseAddress();
 	SETARG(__asm__IZSquishBrain, 6) = this->GetBaseAddress();
 	PVZ::Memory::Execute(STRING(__asm__IZSquishBrain));
+}
+
+void PVZ::Challenge::IZPlacePlants(SeedType::SeedType type, int count, int row)
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EAX, row)
+		.push_imm32(count)
+		.push_imm32(type)
+		.push_imm32(this->GetBaseAddress())
+		.invoke(0x42A6C0)
+		.ret()
+	);
 }

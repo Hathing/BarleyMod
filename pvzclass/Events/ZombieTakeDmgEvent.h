@@ -37,3 +37,32 @@ public:
 		start(STRING(code));
 	}
 };
+
+namespace PVZEvent
+{
+	/// @brief 僵尸本体受伤后事件
+	/// @note 时机上后于本体受伤，先于后续所有判别。
+	/// @param 触发事件的僵尸，伤害数值，伤害标签
+	class ZombieTakeBodyDamageAfterEvent : public DLLEventTemplate<0x53131F, 5, MEM_ESP_ADD(0x44), MEM_ESP_ADD(0x44), REG_EBP>
+	{
+	public:
+		ZombieTakeBodyDamageAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieTakeBodyDamageAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieTakeBodyDamageAfterEvent() : ZombieTakeBodyDamageAfterEvent("onZombieTakeBodyDamageAfter") {};
+	};
+	
+	/// @brief 僵尸受到非灰烬爆炸伤害事件
+	/// @param 触发事件的僵尸
+	/// @return 是否受到此次伤害
+	class PotatoDamageZombieEvent : public DLLEventTemplate<0x41D93A, 5, REG_ESI>
+	{
+	public:
+		PotatoDamageZombieEvent(int address) : DLLEventTemplate() { Init(address); };
+		PotatoDamageZombieEvent(const char* name) : DLLEventTemplate() { Init(name); };
+		PotatoDamageZombieEvent() : PotatoDamageZombieEvent("onPotatoDamageZombie") {};
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(10).popad().add_reg_imm(REG_ESP, 4).push_imm32(0x41D93F).ret();
+		}
+	};
+}

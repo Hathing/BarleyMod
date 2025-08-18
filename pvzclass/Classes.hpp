@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Classes/Music.hpp"
 #include "Classes/SaveData.hpp"
 #include "Classes/ZenGarden.hpp"
@@ -10,3 +10,5 @@
 #include "Classes/TodParticleSystem.hpp"
 
 #include "Classes/ResourceManager.hpp"
+
+#include "Widgets/ButtonWidget.hpp"

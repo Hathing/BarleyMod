@@ -73,6 +73,12 @@
     <Filter Include="源文件\Events">
       <UniqueIdentifier>{48b1875c-9a74-4209-962b-04c7e5ca420f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Widgets">
+      <UniqueIdentifier>{26417ca2-9be0-4398-8066-a306dfc4bc48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Events\Dialog">
+      <UniqueIdentifier>{7ed88d71-3ced-4107-b090-081d6251432d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PVZ.cpp">
@@ -768,6 +774,48 @@
       <Filter>头文件\Events\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="Events\BoardInitAfterEvent.hpp">
+      <Filter>头文件\Events\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Widgets\ButtonWidget.hpp">
+      <Filter>头文件\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\ZombieEquipmentEvents.hpp">
+      <Filter>头文件\Events\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\LevelDialogQuitEvent.hpp">
+      <Filter>头文件\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\OverrideSavedataFolderEvent.hpp">
+      <Filter>头文件\Events\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\IZombieEvents.hpp">
+      <Filter>头文件\Events\Challenge</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\LoadStringEvent.hpp">
+      <Filter>头文件\Events\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\LawnDialogEvents.hpp">
+      <Filter>头文件\Events\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Dialog_ButtonDepressEvent.hpp">
+      <Filter>头文件\Events\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\SeedPacketResourceEvents.hpp">
+      <Filter>头文件\Events\SeedPacket</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\PlantFindTargetEvents.hpp">
+      <Filter>头文件\Events\Plant</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\CanPlantAtEvents.hpp">
+      <Filter>头文件\Events\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\ZombieDebuffEvents.hpp">
+      <Filter>头文件\Events\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\ZombieSpeedAlterEvent.hpp">
+      <Filter>头文件\Events\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\BoardCustomTooltipEvent.hpp">
       <Filter>头文件\Events\Board</Filter>
     </ClInclude>
   </ItemGroup>

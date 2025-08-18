@@ -1,4 +1,4 @@
-﻿#include "AsmFunctions.h"
+#include "AsmFunctions.h"
 
 byte __asm__set_MusicVolume[]
 {
@@ -271,8 +271,10 @@ byte __asm__Music__set_Type[]
 
 byte __asm__Zombie__setAnimation[100]
 {
+	PUSHAD,
 	MOV_EDI(0),
 	ZOMBIE_SETANIMATION,
+	POPAD,
 	RET,
 };
 

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "PVZ.h"
 
 /// @brief 代码注入类，可以注入 byte 数组形式的汇编码
@@ -32,7 +32,7 @@ public:
 			RET
 		};
 		PVZ::Memory::WriteArray<byte>(OriPTR, STRING(jmpout));
-		for (register int i = 0, tmpl = OriLen - 6; i < tmpl; i++)
+		for (int i = 0, tmpl = OriLen - 6; i < tmpl; i++)
 			PVZ::Memory::WriteMemory<byte>(OriPTR + i + 6, NOP);
 
 		PVZ::Memory::WriteArray<byte>(InjectPos, ASMCode, CodeLen);

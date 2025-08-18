@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "PVZ.h"
 #include "Extensions.h"
 
@@ -114,7 +114,7 @@ namespace Const
 	/// @return 该关卡的初始场景类型。
 	inline SceneType::SceneType GetLevelScene(PVZLevel::PVZLevel mode)
 	{
-		byte num = MEMREAD_BYTE(0x40AAC0) - 1;
+		byte num = MEMREAD_BYTE(0x40AAC0 + mode) - 1;
 		switch (num)
 		{
 		case 5:

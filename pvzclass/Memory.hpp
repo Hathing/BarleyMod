@@ -1,4 +1,5 @@
 #pragma once
+#include "AsmBuilder.hpp"
 /// @file Memory.hpp
 /// @brief 包含读写 PVZ 本体内存，以及其他内存操作的若干函数和宏定义。
 
@@ -147,8 +148,8 @@ namespace PVZ
 		/// @param size 小于一页部分的内存字节数，默认为 0。
 		/// @return 申请的内存的首地址
 		static int AllocMemory(int pages = 1, int size = 0);
-		/// @brief 在 PVZ 主程序创建一个线程。
-		/// @attention 不要在 dll 中调用此函数。
+		/// @brief 在 PVZ 主程序创建一个线程。\n
+		/// 在 dll 中调用此函数会改为直接执行指定地址的函数。
 		/// @param address 线程的起始地址
 		static void CreateThread(int address);
 		/// @brief 释放指定位置的内存空间

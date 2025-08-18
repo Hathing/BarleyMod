@@ -1,4 +1,4 @@
-﻿#include "../PVZ.h"
+#include "../PVZ.h"
 
 PVZ::Plant::Plant(int indexoraddress)
 {
@@ -212,4 +212,15 @@ PVZ::Plant::MagnetItem::MagnetItem(int address)
 PVZ::Plant::MagnetItem PVZ::Plant::GetMagnetItem(int num)
 {
 	return(PVZ::Plant::MagnetItem(BaseAddress + 0xC8 + num * 0x14));
+}
+
+int PVZ::Plant::GetCost(SeedType::SeedType type, SeedType::SeedType imitater_type)
+{
+	return PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EDX, imitater_type)
+		.mov_reg_imm(REG_EAX, type)
+		.invoke(0x467B00)
+		.mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret()
+	);
 }

@@ -44,20 +44,63 @@ private:
 template<DWORD _Hook_Address, uint8_t _Raw_Len, DWORD ...Params>
 class DLLEventTemplate : public DLLEvent
 {
+private:	
+	template<DWORD param>
+	static constexpr size_t param_size()
+	{
+		if constexpr (param < MEM_ESP_ADD_MASK)
+			return 1;
+		else if constexpr (param < CONST_VAL_MASK)
+			return 4;
+		else
+			return 5;
+	}
+	static constexpr size_t calculate_total_size()
+	{
+		size_t total = 0;
+		((total += param_size<Params>()), ...);
+		return total;
+	}
+	static constexpr auto build_base_bytes() {
+		constexpr size_t total_size = calculate_total_size();
+		std::array<uint8_t, total_size> bytes{};
+		size_t offset = 0;
+
+		// 使用 lambda 处理每个参数
+		auto process = [&](auto param)
+		{
+			if (param < MEM_ESP_ADD_MASK)
+				bytes[offset++] = 0x50 | (param & 0x7);
+			else if (param < CONST_VAL_MASK)
+			{
+				bytes[offset++] = 0xFF;
+				bytes[offset++] = 0x74;
+				bytes[offset++] = 0x24;
+				bytes[offset++] = static_cast<uint8_t>(param);
+			}
+			else 
+			{
+				DWORD value = param - CONST_VAL_MASK;
+				bytes[offset++] = 0x68;
+				bytes[offset++] = static_cast<uint8_t>(value & 0xFF);
+				bytes[offset++] = static_cast<uint8_t>((value >> 8) & 0xFF);
+				bytes[offset++] = static_cast<uint8_t>((value >> 16) & 0xFF);
+				bytes[offset++] = static_cast<uint8_t>((value >> 24) & 0xFF);
+			}
+		};
+
+		// 展开参数包
+		(process(Params), ...);
+
+		return bytes;
+	}
+	static constexpr auto compiled_base_bytes = build_base_bytes();
 protected:
 	void Init(int address)
 	{
 		hookAddress = _Hook_Address;
 		rawlen = _Raw_Len;
-		AsmBuilder builder = AsmBuilder(128);
-
-		for (int i = 0, sz = this->regs.size(); i < sz; i++)
-			if (this->regs[i] < MEM_ESP_ADD_MASK)
-				builder.push_reg((uint8_t)this->regs[i]);
-			else if (this->regs[i] < CONST_VAL_MASK)
-				builder.push_m32_esp_imm8((uint8_t)this->regs[i]);
-			else
-				builder.push_imm32(this->regs[i] - CONST_VAL_MASK);
+		AsmBuilder builder = AsmBuilder(128).add_bytes(compiled_base_bytes.data(), calculate_total_size());
 
 		builder.invoke(address).add_reg_imm(REG_ESP, this->regs.size() << 2);
 		this->InitExtra(builder);
@@ -209,5 +252,41 @@ protected:
 				.mov_mem_reg(_Out_Param, REG_EAX);
 			builder.popad().jmp_rel8(_Raw_Len + 1);
 		}
+	}
+};
+
+/// @brief DLLEvent 的扩展，用于快速设置一个事件，其结算函数的返回值为 bool。根据返回值的类型，将会跳转到不同的地址。
+/// @tparam _Hook_Address 原始代码的首地址
+/// @tparam _Raw_Len 替代的原始代码长度
+/// @tparam _True_Addr 返回值为 true 时跳转的地址
+/// @tparam _False_Addr 返回值为 false 时跳转的地址
+/// @tparam ...Params 结算函数的参数来源。顺序为 push 顺序（即参数列表反序）
+template<DWORD _Hook_Address, uint8_t _Raw_Len, DWORD _True_Addr, DWORD _False_Addr, DWORD ...Params>
+class DiversionEventTemplate : public DLLEventTemplate<_Hook_Address, _Raw_Len, Params...>
+{
+protected:
+	virtual void InitExtra(AsmBuilder& builder)
+	{
+		builder.test_al_al().popad().jz_rel(6)
+			.push_imm32(_True_Addr).ret()
+			.push_imm32(_False_Addr).ret();
+	}
+};
+
+/// @brief DLLEvent 的扩展，用于快速设置一个事件，其结算函数的返回值为 int。根据返回值的正负性，将会跳转到不同的地址。负数不会进行跳转。
+/// @tparam _Hook_Address 原始代码的首地址
+/// @tparam _Raw_Len 替代的原始代码长度
+/// @tparam _Posi_Addr 返回值为正数时跳转的地址
+/// @tparam _Zero_Addr 返回值为 0 时跳转的地址
+/// @tparam ...Params 结算函数的参数来源。顺序为 push 顺序（即参数列表反序）
+template<DWORD _Hook_Address, uint8_t _Raw_Len, DWORD _Posi_Addr, DWORD _Zero_Addr, DWORD ...Params>
+class ThreeStateEventTemplate : public DLLEventTemplate<_Hook_Address, _Raw_Len, Params...>
+{
+protected:
+	virtual void InitExtra(AsmBuilder& builder)
+	{
+		builder.test_al_al().js_rel(19).popad().jz_rel(6)
+			.push_imm32(_Posi_Addr).ret()
+			.push_imm32(_Zero_Addr).ret();
 	}
 };
