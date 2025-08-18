@@ -162,6 +162,15 @@ void PVZ::Zombie::ShowDoorArms(bool shown)
 	PVZ::Memory::Execute(ShowDoorArms_builder);
 }
 
+void PVZ::Zombie::AttachShield()
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EAX, this->GetBaseAddress())
+		.invoke(0x533000)
+		.ret()
+	);
+}
+
 void PVZ::Zombie::GetBodyHp(int* hp, int* maxhp)
 {
 	*hp = Memory::ReadMemory<int>(BaseAddress + 0xC8);
@@ -260,17 +269,17 @@ void PVZ::Zombie::RemoveWithLoot()
 	Memory::Execute(STRING(__asm__Zombie__RemoveWithLoot));
 }
 
-void PVZ::Zombie::SetAnimation(LPCSTR animName, byte animPlayArg)
+void PVZ::Zombie::SetAnimation(LPCSTR animName, byte LoopType, int blend_time, float fps)
 {
 	int Address = PVZ::Memory::AllocMemory();
-	SETARG(__asm__Zombie__setAnimation, 1) = BaseAddress;
-	__asm__Zombie__setAnimation[10] = animPlayArg;
-	SETARG(__asm__Zombie__setAnimation, 12) = Address + 30;
-	lstrcpyA((LPSTR)(__asm__Zombie__setAnimation + 30), animName);
+	SETARG(__asm__Zombie__setAnimation, 2) = BaseAddress;
+	SETARGFLOAT(__asm__Zombie__setAnimation, 7) = fps;
+	SETARGFLOAT(__asm__Zombie__setAnimation, 12) = blend_time;
+	__asm__Zombie__setAnimation[17] = LoopType;
+	SETARG(__asm__Zombie__setAnimation, 19) = Address + 41;
+	lstrcpyA((LPSTR)(__asm__Zombie__setAnimation + 41), animName);
 	PVZ::Memory::WriteArray<byte>(Address, STRING(__asm__Zombie__setAnimation));
-	PVZ::Memory::WriteMemory<byte>(0x552014, 0xFE);
 	PVZ::Memory::CreateThread(Address);
-	PVZ::Memory::WriteMemory<byte>(0x552014, 0xDB);
 	PVZ::Memory::FreeMemory(Address);
 }
 
@@ -426,6 +435,14 @@ bool PVZ::Zombie::EffectedBy(DamageRangeFlags range, bool usepvzfunc)
 
 		return(false);
 	}
+}
+
+void PVZ::Zombie::UpdateAnimSpeed()
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_ESI, this->GetBaseAddress())
+		.invoke(0x52F050)
+		.ret());
 }
 
 AsmBuilder GetActualAttackRect_builder = AsmBuilder();

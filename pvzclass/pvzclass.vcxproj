@@ -94,6 +94,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessToFile>false</PreprocessToFile>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,6 +111,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,6 +130,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,6 +159,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -263,13 +267,16 @@
     <ClInclude Include="Enums\StoreItem.hpp" />
     <ClInclude Include="Enums\ZombieAttackType.hpp" />
     <ClInclude Include="Events\BegTwistFailMoveEvent.hpp" />
+    <ClInclude Include="Events\BoardCustomTooltipEvent.hpp" />
     <ClInclude Include="Events\BoardInitAfterEvent.hpp" />
     <ClInclude Include="Events\BoardKeyDownEvent.hpp" />
     <ClInclude Include="Events\BoardUpdateGameEvent.hpp" />
     <ClInclude Include="Events\CalcSunCostEvent.hpp" />
+    <ClInclude Include="Events\CanPlantAtEvents.hpp" />
     <ClInclude Include="Events\ChallengeInitAfterEvent.hpp" />
     <ClInclude Include="Events\ChallengeUpdateEvent.hpp" />
     <ClInclude Include="Events\CoinMouseDownEvent.hpp" />
+    <ClInclude Include="Events\Dialog_ButtonDepressEvent.hpp" />
     <ClInclude Include="Events\DrawPlantReanimEvent.h" />
     <ClInclude Include="Events\DrawZombieReanimEvent.h" />
     <ClInclude Include="Enums\ChallengePage.hpp" />
@@ -288,15 +295,21 @@
     <ClInclude Include="Events\IZInitAfterBrainEvent.hpp" />
     <ClInclude Include="Events\IZLevelCompleteEvent.hpp" />
     <ClInclude Include="Events\IZLevelStartAfterEvent.hpp" />
+    <ClInclude Include="Events\IZombieEvents.hpp" />
     <ClInclude Include="Events\IZScoreBrainEvent.hpp" />
+    <ClInclude Include="Events\LawnDialogEvents.hpp" />
     <ClInclude Include="Events\LawnmowerStartEvent.hpp" />
     <ClInclude Include="Events\LawnmowerUpdateEvent.hpp" />
+    <ClInclude Include="Events\LevelDialogQuitEvent.hpp" />
+    <ClInclude Include="Events\LoadStringEvent.hpp" />
     <ClInclude Include="Events\NewGameEvent.h" />
+    <ClInclude Include="Events\OverrideSavedataFolderEvent.hpp" />
     <ClInclude Include="Events\ParseResourceEvent.hpp" />
     <ClInclude Include="Events\PlantAddProjectileEvent.hpp" />
     <ClInclude Include="Events\PlantDieLowHealthEvent.hpp" />
     <ClInclude Include="Events\PlantDoSpecialEvent.hpp" />
     <ClInclude Include="Events\PlantEatenEvent.hpp" />
+    <ClInclude Include="Events\PlantFindTargetEvents.hpp" />
     <ClInclude Include="Events\PlantInitAfterEvent.hpp" />
     <ClInclude Include="Events\PlantMouseDownEvent.hpp" />
     <ClInclude Include="Events\PlantProduceEvent.hpp" />
@@ -312,15 +325,19 @@
     <ClInclude Include="Events\SeedPacketMouseDownEvent.hpp" />
     <ClInclude Include="Events\ProjectileCreateEvent.h" />
     <ClInclude Include="Events\PuzzlePhaseCompleteEvent.hpp" />
+    <ClInclude Include="Events\SeedPacketResourceEvents.hpp" />
     <ClInclude Include="Events\SeedPacketUpdateEvent.hpp" />
     <ClInclude Include="Events\UpdateAppEvent.h" />
     <ClInclude Include="Events\VaseBreakerPopulateEvent.hpp" />
     <ClInclude Include="Events\ZombieDetachShieldEvent.hpp" />
+    <ClInclude Include="Events\ZombieDebuffEvents.hpp" />
     <ClInclude Include="Events\ZombieDropHeadEvent.hpp" />
     <ClInclude Include="Events\ZombieDropHeadParticleEvent.hpp" />
     <ClInclude Include="Events\ZombieDropLootEvent.hpp" />
     <ClInclude Include="Events\ZombieEatEvent.h" />
     <ClInclude Include="Events\ZombieEatSoundEvent.hpp" />
+    <ClInclude Include="Events\ZombieEquipmentEvents.hpp" />
+    <ClInclude Include="Events\ZombieSpeedAlterEvent.hpp" />
     <ClInclude Include="Events\ZombieTakeDmgEvent.h" />
     <ClInclude Include="Enums\LawnmoverState.h" />
     <ClInclude Include="Creators.h" />
@@ -398,6 +415,7 @@
     <ClInclude Include="Events\ZombieRemoveEvent.h" />
     <ClInclude Include="Events\DrawUITopEvent.h" />
     <ClInclude Include="Events\VaseOpenEvent.h" />
+    <ClInclude Include="Widgets\ButtonWidget.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

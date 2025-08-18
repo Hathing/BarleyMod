@@ -763,11 +763,15 @@ namespace PVZ
 		/// @brief 是否在吃东西
 		T_READONLY_PROPERTY(BOOLEAN, Eating, __get_Eating, 0x51);
 		void Light(int cs = 100);
+		INT_PROPERTY(JustGotShotCounter, __get_JustGotShotCounter, __set_JustGotShotCounter, 0x54);
+		INT_PROPERTY(ShieldJustGotShotCounter, __get_ShieldJustGotShotCounter, __set_ShieldJustGotShotCounter, 0x58);
 		/// @brief 存在时间
 		INT_READONLY_PROPERTY(ExistedTime, __get_ExistedTime, 0x60);
-		INT_READONLY_PROPERTY(ZombieHeight, __get_ZombieHeight, 0x64);
+		INT_PROPERTY(ZombieHeight, __get_ZombieHeight, __set_ZombieHeight, 0x64);
 		/// @brief 属性倒计时
 		INT_PROPERTY(AttributeCountdown, __get_AttributeCountdown, __set_AttributeCountdown, 0x68);
+		/// @brief 是否生成过掉落物
+		T_PROPERTY(BOOLEAN, DroppedLoot, __get_DroppedLoot, __set_DroppedLoot, 0x70);
 		/// @brief 消失倒计时
 		INT_PROPERTY(DisappearCountdown, __get_DisappearCountdown, __set_DisappearCountdown, 0x74);
 		/// @brief 蹦极僵尸目标列
@@ -824,9 +828,13 @@ namespace PVZ
 		INT_PROPERTY(FlyingMaxHealth, __get_FlyingMaxHealth, __set_FlyingMaxHealth, 0xE8);
 		/// @brief 是否已移除
 		T_PROPERTY(BOOLEAN, NotExist, __get_NotExist, __set_NotExist, 0xEC);
+		/// @brief 关联僵尸的识别 ID
+		INT_PROPERTY(RelatedZombieID, __get_RelatedZombieID, __set_RelatedZombieID, 0x0F0);
 		/// @brief 获取僵尸动画
 		/// @return 僵尸动画
 		PVZ::Animation GetAnimation();
+		/// @brief 僵王召唤僵尸的倒计时。同时也是投手僵尸剩余篮球数。
+		INT_PROPERTY(SummonCounter, __get_SummonCounter, __set_SummonCounter, 0x114);
 		/// @brief 大小
 		T_PROPERTY(FLOAT, Size, __get_Size, __set_Size, 0x11C);
 		//临时变量
@@ -867,8 +875,8 @@ namespace PVZ
 		void Remove();
 		/// @brief 移除僵尸并生成它的掉落物。
 		void RemoveWithLoot();
-		//animPlayArg(APA_XXXXXX)
-		void SetAnimation(LPCSTR animName, byte animPlayArg);
+		//LoopType(APA_XXXXXX)
+		void SetAnimation(LPCSTR animName, byte LoopType, int blend_time = 14, float fps = 24.0f);
 		/// @brief 为僵尸装备铁桶
 		/// @param shield 铁桶生命值
 		void EquipBucket(int shield = 1100);
@@ -891,6 +899,8 @@ namespace PVZ
 		/// @param usepvzfunc 是否调用 pvz 内部函数。默认为 true。
 		/// @return 是否能被搜寻到。
 		bool EffectedBy(DamageRangeFlags range, bool usepvzfunc = true);
+		/// @brief 僵尸运动或状态改变时调用，更新动画速度。
+		void UpdateAnimSpeed();
 
 		/// @brief 获取僵尸的实际可攻击范围。
 		/// @return 僵尸的实际攻击范围
@@ -902,6 +912,8 @@ namespace PVZ
 		/// @brief 设置是否显示铁门僵尸的手臂。
 		/// @param shown 是否显示，默认为 true
 		void ShowDoorArms(bool shown = true);
+		/// @brief 根据盾的类型设置相应动画轨道的绘制分组。
+		void AttachShield();
 
 		/// @deprecated
 		void GetBodyHp(int* hp, int* maxhp);
@@ -1001,9 +1013,11 @@ namespace PVZ
 		/// @brief 植物射击（或产出物品）的基础间隔
 		INT_PROPERTY(ShootOrProductInterval, __get_ShootOrProductInterval, __set_ShootOrProductInterval, 0x5C);
 		/// @brief 目标 X 坐标
-		INT_PROPERTY(mTargetX, __get_mTargetX, __set_mTargetX, 0x88);
+		INT_PROPERTY(mTargetX, __get_mTargetX, __set_mTargetX, 0x80);
 		/// @brief 目标 Y 坐标
-		INT_PROPERTY(mTargetY, __get_mTargetY, __set_mTargetY, 0x8C);
+		INT_PROPERTY(mTargetY, __get_mTargetY, __set_mTargetY, 0x84);
+		/// @brief 粒子效果识别 ID
+		T_PROPERTY(DWORD, ParticleID, __get_ParticleID, __set_ParticleID, 0x8C);
 		/// @brief 射击动作倒计时
 		INT_PROPERTY(ShootingCountdown, __get_ShootingCountdown, __set_ShootingCountdown, 0x90);
 		/// @brief 获取植物的第一个动画
@@ -1081,6 +1095,13 @@ namespace PVZ
 			T_PROPERTY(MagnetItemType::MagnetItemType, Type, __get_Type, __set_Type, 0x10);
 		};
 		MagnetItem GetMagnetItem(int num);
+
+		/// @brief 取得植物种植时的基础阳光消耗。
+		/// @note 对其他类型的卡牌也有效
+		/// @param type 种子卡类型
+		/// @param imitater_type 模仿者模仿的类型
+		/// @return 种植的基础阳光消耗
+		static int GetCost(SeedType::SeedType type, SeedType::SeedType imitater_type = SeedType::None);
 	};
 	class GardenPlant : public BaseClass
 	{
@@ -1490,6 +1511,11 @@ namespace PVZ
 		/// @param brain 将被压扁的脑子
 		/// @see IZBrain
 		void IZSquishBrain(IZBrain brain);
+		/// @brief 在指定行随机种植若干个指定类型的植物，并对其进行 IZ 关卡的特殊调整。
+		/// @param type 植物类型
+		/// @param count 种植数量
+		/// @param row 指定的行。若为 -1，则没有行限制。
+		void IZPlacePlants(SeedType::SeedType type, int count, int row);
 	};
 	using Miscellaneous = Challenge;
 

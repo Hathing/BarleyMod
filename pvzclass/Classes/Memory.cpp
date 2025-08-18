@@ -1,4 +1,4 @@
-﻿#include "../PVZ.h"
+#include "../PVZ.h"
 
 HANDLE PVZ::Memory::hProcess = NULL;
 DWORD PVZ::Memory::processId = 0;
@@ -54,6 +54,12 @@ int PVZ::Memory::AllocMemory(int pages, int size)
 
 void PVZ::Memory::CreateThread(int address)
 {
+	if (localExecute)
+	{
+		void (*func)() = (void (*)())address;
+		func();
+		return;
+	}
 	HANDLE hThread;
 	DWORD ret;
 	hThread = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)address, NULL, 0, NULL);

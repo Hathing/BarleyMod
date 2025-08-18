@@ -1,4 +1,4 @@
-﻿#include "Creators.h"
+#include "Creators.h"
 #include "Classes.hpp"
 #include <iostream>
 
@@ -285,7 +285,9 @@ PVZ::Crater Creator::CreateCrater(int row, int column, int duration)
 	SETARG(__asm__CreateCrater, 6) = row;
 	__asm__CreateCrater[11] = column;
 	SETARG(__asm__CreateCrater, 26) = PVZ::Memory::Variable;;
-	return PVZ::Crater(PVZ::Memory::Execute(STRING(__asm__CreateCrater)));
+	auto crater = PVZ::Crater(PVZ::Memory::Execute(STRING(__asm__CreateCrater)));
+	crater.DisappearCountdown = duration;
+	return crater;
 }
 
 byte __asm__CreateLadder[31]

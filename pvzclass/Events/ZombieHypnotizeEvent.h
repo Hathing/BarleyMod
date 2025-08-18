@@ -7,7 +7,7 @@
 class ZombieHypnotizeEvent : public DLLEvent
 {
 public:
-	ZombieHypnotizeEvent() : ZombieHypnotizeEvent("onDrawZombieReanim") {};
+	ZombieHypnotizeEvent() : ZombieHypnotizeEvent("onZombieHypnotize") {};
 	ZombieHypnotizeEvent(const char* str) : ZombieHypnotizeEvent(PVZ::Memory::GetProcAddress(str)) {};
 	ZombieHypnotizeEvent(int address)
 	{
