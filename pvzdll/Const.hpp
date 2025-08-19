@@ -11,3 +11,9 @@ namespace SeedType
 	const Type2 Mangosteen = (Type2)0x4E;
 	const Type2 ThymeWarp = (Type2)0x4F;
 }
+
+namespace ProjectileType
+{
+	typedef ProjectileType Type2;
+	const Type2 GoldSpike = (Type2)15;
+}

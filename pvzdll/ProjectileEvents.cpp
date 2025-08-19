@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "MyProjectile/ProjectileAbility.hpp"
 
 bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 {
@@ -10,22 +11,37 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
 {
+	int mydamage = ProjectileAbility::GetAbility(proj.Type)->OverrideDamage(proj, zombie, type, subtarget_num, damage);
+	if (mydamage == 0)
+		return 0;
+
 	if (zombie.NotDying && !zombie.NotExist)
 	{
+		auto caster = MyPlant::GetByID(proj.ParentID).GetOwner();
 		if (type == PVZEvent::ProjDmgType::DAMAGE_SINGULAR)
-			zombie.LastDamageSourceID = proj.ParentID;
+			zombie.LastDamageSourceID = caster.Id;
 		else
 		{
-			auto caster = MyPlant::GetByID(proj.ParentID);
 			if (caster.isValid() && caster.Row == zombie.Row)
-				zombie.LastDamageSourceID = proj.ParentID;
+				zombie.LastDamageSourceID = caster.Id;
 		}
 	}
+	ProjectileAbility::GetAbility(proj.Type)->onDamageZombie(proj, zombie, type, subtarget_num, mydamage);
+
 	return -1;
+}
+
+int GetProjectileImage(MyProjectile proj, PVZEvent::ProjectileImgParam param)
+{
+	if (param == PVZEvent::PROJECTILE_IMAGEROW)
+		return 0;
+	else
+		return -1;
 }
 
 void InitProjectileEvents()
 {
 	PlantAddProjectileEvent((int)onPlantAddProjectile);
 	PVZEvent::ProjectileDamageZombieEvent((int)onProjDamageZombie);
+	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);
 }

@@ -10,5 +10,9 @@ namespace PlantAbility
 			plant.ImageY -= 20;
 			plant.ShootOrProductInterval = 300;
 		}
+		void onKill(MyPlant plant, MyZombie zombie)
+		{
+			plant.Heal(25);
+		}
 	};
 }

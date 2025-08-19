@@ -183,6 +183,15 @@
     <ClInclude Include="MyZombie\implement\TallNutZombie.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyProjectile\implement\index.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyProjectile\ProjectileAbility.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyProjectile\implement\GoldSpike.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

@@ -128,7 +128,10 @@
     <ClInclude Include="MyPlant\implement\WallNut.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
+    <ClInclude Include="MyProjectile\implement\GoldSpike.hpp" />
+    <ClInclude Include="MyProjectile\implement\index.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
+    <ClInclude Include="MyProjectile\ProjectileAbility.hpp" />
     <ClInclude Include="MyZombie\implement\BungeeZombie.hpp" />
     <ClInclude Include="MyZombie\implement\CatapultZombie.hpp" />
     <ClInclude Include="MyZombie\implement\DancingZombie.hpp" />
