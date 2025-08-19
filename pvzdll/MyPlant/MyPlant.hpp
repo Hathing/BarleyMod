@@ -7,6 +7,8 @@ public:
 	MyPlant(int idoraddress) : PVZ::Plant(idoraddress) {};
 	MyPlant(const PVZ::Plant& plant) : PVZ::Plant(plant.GetBaseAddress()) {};
 
+	/// @brief 技能计时器
+	INT_PROPERTY(AnotherCounter, __get_AnC, __set_AnC, 0x0DC);
 	/// @brief 路灯花复活植物类型
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 第一个与该植物相关的植物的 ID
