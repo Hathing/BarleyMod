@@ -5,6 +5,7 @@ void onPlantInitAfter(MyPlant plant)
 {
 	plant.OwnerID = 0;
 	plant.EasterSkin = false;
+	plant.HealCounter = 0;
 
 	auto model = plant.GetAnimationPart2();
 	if (model.isValid())
