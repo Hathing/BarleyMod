@@ -8,7 +8,7 @@ namespace ProjectileAbility
 		new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
 		new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
 		new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
-		new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
+		new GoldSpike(),	  new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
 	};
 }
 
