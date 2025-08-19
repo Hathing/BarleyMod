@@ -7,7 +7,14 @@ void onPlantInitAfter(MyPlant plant)
 	plant.EasterSkin = false;
 	plant.HealCounter = 0;
 	plant.AnotherCounter = 0;
+	plant.ChillCountdown = 0;
+	plant.KillCount = 0;
+	plant.Level = 0;
 	plant.RelatedPlantID1 = 0;
+	plant.RelatedPlantID2 = 0;
+	plant.RelatedPlantID3 = 0;
+	plant.RelatedPlantID4 = 0;
+	plant.SubIndex = 0;
 
 	auto model = plant.GetAnimationPart2();
 	if (model.isValid())

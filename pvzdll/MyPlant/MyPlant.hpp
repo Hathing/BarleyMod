@@ -13,6 +13,12 @@ public:
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 第一个与该植物相关的植物的 ID
 	INT_PROPERTY(RelatedPlantID1, __get_RePID1, __set_RePID1, 0x0E0);
+	/// @brief 第二个与该植物相关的植物的 ID
+	INT_PROPERTY(RelatedPlantID2, __get_RePID2, __set_RePID2, 0x0E4);
+	/// @brief 第三个与该植物相关的植物的 ID
+	INT_PROPERTY(RelatedPlantID3, __get_RePID3, __set_RePID3, 0x0E8);
+	/// @brief 第四个与该植物相关的植物的 ID
+	INT_PROPERTY(RelatedPlantID4, __get_RePID4, __set_RePID4, 0x0EC);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 减速效果倒计时
@@ -21,6 +27,8 @@ public:
 	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
 	/// @brief 是否启用彩蛋皮
 	T_PROPERTY(mybool, EasterSkin, __get_EaS, __set_EaS, 0x10C);
+	/// @brief 是否启用彩蛋皮
+	T_PROPERTY(byte, SubIndex, __get_SuI, __set_SuI, 0x10D);
 	/// @brief 植物的所有者的 ID
 	INT_PROPERTY(OwnerID, __get_SpO, __set_SpO, 0x110);
 	/// @brief 当前等级
