@@ -3,17 +3,16 @@
 
 namespace ProjectileAbility
 {
-	class GoldSpike : public BaseProjectile
+	class GoldMelon : public BaseProjectile
 	{
 	public:
 		int OverrideDamage(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
-			return 5;
+			return 1;
 		}
 		void onDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
-			if (zombie.Type != ZombieType::Gargantuar && zombie.Type != ZombieType::Gigagargantuar)
-				zombie.X += 10;
+			zombie.HitBody(999999);
 		}
 	};
 }
