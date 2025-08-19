@@ -129,6 +129,7 @@
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
     <ClInclude Include="MyProjectile\implement\Cabbage.hpp" />
+    <ClInclude Include="MyProjectile\implement\Diamond.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldSpike.hpp" />
     <ClInclude Include="MyProjectile\implement\index.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
