@@ -11,8 +11,8 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
 {
-	int damage = ProjectileAbility::GetAbility(proj.Type)->OverrideDamage(proj, zombie, type, subtarget_num, damage);
-	if (damage == 0)
+	int mydamage = ProjectileAbility::GetAbility(proj.Type)->OverrideDamage(proj, zombie, type, subtarget_num, damage);
+	if (mydamage == 0)
 		return 0;
 
 	if (zombie.NotDying && !zombie.NotExist)
@@ -26,6 +26,7 @@ int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType
 				zombie.LastDamageSourceID = proj.ParentID;
 		}
 	}
+	ProjectileAbility::GetAbility(proj.Type)->onDamageZombie(proj, zombie, type, subtarget_num, mydamage);
 
 	return -1;
 }
