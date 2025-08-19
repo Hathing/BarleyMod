@@ -52,7 +52,7 @@ void onPlantDamageZombie(PZDamageEvent* info)
 	if (info->type == PVZEvent::PLANTDAMAGETYPE_AOE && info->plant.Type != SeedType::Squash)
 	{
 		if (info->zombie.NotDying)
-			info->zombie.LastDamageSourceID = info->plant.Id;
+			info->zombie.LastDamageSourceID = info->plant.GetOwner().Id;
 	}
 }
 
