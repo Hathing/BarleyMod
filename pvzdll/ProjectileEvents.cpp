@@ -24,8 +24,17 @@ int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType
 	return -1;
 }
 
+int GetProjectileImage(MyProjectile proj, PVZEvent::ProjectileImgParam param)
+{
+	if (param == PVZEvent::PROJECTILE_IMAGEROW)
+		return 0;
+	else
+		return -1;
+}
+
 void InitProjectileEvents()
 {
 	PlantAddProjectileEvent((int)onPlantAddProjectile);
 	PVZEvent::ProjectileDamageZombieEvent((int)onProjDamageZombie);
+	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);
 }
