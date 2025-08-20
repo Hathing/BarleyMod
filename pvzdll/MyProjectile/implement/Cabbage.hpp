@@ -13,7 +13,7 @@ namespace ProjectileAbility
 			auto owner = MyPlant::GetByID(proj.ParentID);
 			int lvl = 0;
 			if (owner.isValid())
-				lvl = min(MyPlant::MAX_LEVEL, owner.Level);\
+				lvl = min(MyPlant::MAX_LEVEL, owner.Level);
 
 			return dmg[lvl];
 		}
