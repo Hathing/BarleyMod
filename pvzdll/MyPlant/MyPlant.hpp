@@ -27,10 +27,12 @@ public:
 	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
 	/// @brief 是否启用彩蛋皮
 	T_PROPERTY(mybool, EasterSkin, __get_EaS, __set_EaS, 0x10C);
-	/// @brief 是否启用彩蛋皮
+	/// @brief 海蘑菇子编号
 	T_PROPERTY(byte, SubIndex, __get_SuI, __set_SuI, 0x10D);
 	/// @brief 植物的所有者的 ID
 	INT_PROPERTY(OwnerID, __get_SpO, __set_SpO, 0x110);
+	/// @brief 当前经验值
+	INT_PROPERTY(Experience, __get_XP, __set_XP, 0x114);
 	/// @brief 当前等级
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
 	/// @brief 是否在 Board 上
