@@ -192,6 +192,15 @@
     <ClInclude Include="MyProjectile\implement\GoldSpike.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyProjectile\implement\Cabbage.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyProjectile\implement\Diamond.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyProjectile\implement\GoldMelon.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

@@ -5,10 +5,11 @@ namespace ProjectileAbility
 {
 	ProjectilePTR pt_factory[] =
 	{
+		new BaseProjectile(), new BaseProjectile(), new Cabbage(),		  new BaseProjectile(), new BaseProjectile(),
 		new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
 		new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
-		new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
-		new GoldSpike(),	  new BaseProjectile(), new BaseProjectile(), new BaseProjectile(), new BaseProjectile(),
+		new GoldSpike(),	  new BaseProjectile(), new BaseProjectile(), new Diamond(),		new BaseProjectile(),
+		new BaseProjectile(), new BaseProjectile(), new GoldMelon(),	  new BaseProjectile(),	new BaseProjectile(),
 	};
 }
 

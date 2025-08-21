@@ -7,7 +7,15 @@ void onPlantInitAfter(MyPlant plant)
 	plant.EasterSkin = false;
 	plant.HealCounter = 0;
 	plant.AnotherCounter = 0;
+	plant.ChillCountdown = 0;
+	plant.KillCount = 0;
+	plant.Experience = 0;
+	plant.Level = 0;
 	plant.RelatedPlantID1 = 0;
+	plant.RelatedPlantID2 = 0;
+	plant.RelatedPlantID3 = 0;
+	plant.RelatedPlantID4 = 0;
+	plant.SubIndex = 0;
 
 	auto model = plant.GetAnimationPart2();
 	if (model.isValid())
@@ -48,7 +56,6 @@ bool onPlantSpecialAnimate(MyPlant plant)
 	return PlantAbility::GetPrototype(plant.Type)->onAnimate(plant);
 }
 
-/// @todo 钢地刺技能实装后，处理地刺伤害来源问题
 void onPlantDamageZombie(PZDamageEvent* info)
 {
 	if (info->type == PVZEvent::PLANTDAMAGETYPE_AOE && info->plant.Type != SeedType::Squash)

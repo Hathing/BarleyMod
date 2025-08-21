@@ -16,4 +16,5 @@ namespace ProjectileType
 {
 	typedef ProjectileType Type2;
 	const Type2 GoldSpike = (Type2)15;
+	const Type2 Diamond = (Type2)18;
 }
