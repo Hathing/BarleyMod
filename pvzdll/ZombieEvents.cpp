@@ -60,7 +60,7 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	if (type == 25)type = 26;//僵王换豌豆
 	if (type == 20)type = 27;//蹦极换坚果
 	auto child_zombie = Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), zombie.Row, 0x0f);
-	///6510FA这里需要创建一团雾气
+	PVZ::CreateParticleSystem(zombie.X + 40.0f,zombie.Y + 65.0f,zombie.Layer,EffectType::IMITATER_TRANSFORMING);
 	child_zombie.X = zombie.X;
 	float health_ratio = (float)Creator::Rand(33) / 5.0f;
 	child_zombie.BodyHealth *= health_ratio;
