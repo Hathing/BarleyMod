@@ -1,6 +1,7 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
 #include "MyZombie/ZombieAbility.hpp"
+#include "MyEvents.hpp"
 
 void onZombieDropLoot(MyZombie zombie)
 {
@@ -48,8 +49,23 @@ void onZombieInitAfter(MyZombie zombie)
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
 }
 
+void onRandomZombieDropHelm(MyZombie zombie)
+{
+	if (zombie.Type != ZombieType::ConeheadZombie) {
+		zombie.HelmType = HelmType::None;
+		return;
+	}
+	zombie.NotExist = true;
+	auto child_zombie = Creator::CreateZombie(ZombieType::BucketheadZombie, zombie.Row, 0x0f);
+	///6510FA这里需要创建一团雾气，但是PVZ class好像没有Particle相关的API，先空着吧
+	child_zombie.X = zombie.X;
+	///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
+	return;
+}
+
 void InitZombieEvents()
 {
 	ZombieDropLootEvent((int)onZombieDropLoot);
 	ZombieInitAfterEvent((int)onZombieInitAfter);
+	PVZEvent::RandomZombieDropHelmEvent((int)onRandomZombieDropHelm);
 }

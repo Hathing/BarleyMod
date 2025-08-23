@@ -182,6 +182,19 @@ namespace PVZEvent
 		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
 	};
 
+	class RandomZombieDropHelmEvent : public DLLEventTemplate<0x530FC4, 5, REG_EBX>
+	{
+	public:
+		RandomZombieDropHelmEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		RandomZombieDropHelmEvent(int address) : DLLEventTemplate() { Init(address); };
+		RandomZombieDropHelmEvent() : RandomZombieDropHelmEvent("onRandomZombieTypeProbability") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.popad().push_imm32(0x530FCE).ret();
+		}
+	};
+
 	/// @brief 辣椒烧僵尸事件
 	/// @param 触发事件的植物，植物烧的僵尸
 	class JalapenoBurnEvent : public DLLEventTemplate<0x466528, 5, REG_ESI, REG_EDI>
