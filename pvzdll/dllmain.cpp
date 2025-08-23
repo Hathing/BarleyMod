@@ -15,6 +15,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		InitPlantEvents();
 		InitProjectileEvents();
 		InitZombieEvents();
+		InitCoinEvents();
 		break;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
