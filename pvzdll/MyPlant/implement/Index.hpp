@@ -1,5 +1,6 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "Barley.hpp"
 #include "WallNut.hpp"
 #include "SnowPea.hpp"
 #include "Repeater.hpp"

@@ -93,6 +93,7 @@
     <ClInclude Include="MyBoard.hpp" />
     <ClInclude Include="Const.hpp" />
     <ClInclude Include="MyEvents.hpp" />
+    <ClInclude Include="MyPlant\implement\Barley.hpp" />
     <ClInclude Include="MyPlant\implement\CabbagePult.hpp" />
     <ClInclude Include="MyPlant\implement\Cactus.hpp" />
     <ClInclude Include="MyPlant\implement\Cattail.hpp" />
