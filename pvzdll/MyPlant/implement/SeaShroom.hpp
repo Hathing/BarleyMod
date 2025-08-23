@@ -152,5 +152,27 @@ namespace PlantAbility
 				}
 			}
 		}
+		void onGainXP(MyPlant plant, int val, bool kill_credit)
+		{
+			if (plant.IsPrime())
+			{
+				auto creep = MyPlant::GetByID(plant.RelatedPlantID1);
+				if (creep.isValid())
+					creep.AddExperience(val);
+
+				creep = MyPlant::GetByID(plant.RelatedPlantID2);
+				if (creep.isValid())
+					creep.AddExperience(val);
+
+				creep = MyPlant::GetByID(plant.RelatedPlantID3);
+				if (creep.isValid())
+					creep.AddExperience(val);
+
+				creep = MyPlant::GetByID(plant.RelatedPlantID4);
+				if (creep.isValid())
+					creep.AddExperience(val);
+			}
+			return;
+		}
 	};
 }

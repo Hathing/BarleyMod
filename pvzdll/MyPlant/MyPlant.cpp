@@ -67,7 +67,7 @@ bool MyPlant::IsToolPlant()
 
 bool MyPlant::IsPrime()
 {
-	return this->Id == this->GetOwner().Id;
+	return !this->OwnerID;
 }
 
 bool MyPlant::IsXPRecipient()
@@ -85,8 +85,9 @@ void MyPlant::Heal(int val)
 void MyPlant::AddExperience(int val, bool kill_credit)
 {
 	this->Experience += val;
+	PlantAbility::GetPrototype(this->Type)->onGainXP(*this, val, kill_credit);
 
-	if(kill_credit)
+	if (kill_credit)
 		this->Light();
 }
 
