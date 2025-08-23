@@ -22,9 +22,9 @@ void onZombieDropLoot(MyZombie zombie)
 	if (!zombie.Hypnotized)
 	{
 		int bounty_xp = zombie.GetBountyXP();
-		auto attacker = MyPlant::GetByID(zombie.LastDamageSourceID);
+		auto attacker = MyPlant::GetByID(zombie.LastDamageSourceID).GetOwner();
 
-		if (attacker.isValid())
+		if (attacker.isValid() && attacker.IsXPRecipient())
 		{
 			PlantAbility::GetPrototype(attacker.Type)->onKill(attacker, zombie);
 			attacker.AddExperience(bounty_xp * 4 / 5, true);
@@ -34,11 +34,12 @@ void onZombieDropLoot(MyZombie zombie)
 		auto plants = zombie.GetBoard().GetAllPlants<MyPlant>();
 		int plant_cnt = 0;
 		for (auto plant : plants)
-			if (plant.Row == zombie.Row)
+			if (plant.Row == zombie.Row && plant.IsXPRecipient())
 				plant_cnt++;
+		bounty_xp /= plant_cnt;
 		for (auto plant : plants)
-			if (plant.Row == zombie.Row)
-				plant.AddExperience(bounty_xp / plant_cnt);
+			if (plant.Row == zombie.Row && plant.IsXPRecipient())
+				plant.AddExperience(bounty_xp);
 	}
 }
 

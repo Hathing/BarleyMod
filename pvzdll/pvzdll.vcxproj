@@ -54,6 +54,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,6 +76,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,6 +93,7 @@
     <ClInclude Include="MyBoard.hpp" />
     <ClInclude Include="Const.hpp" />
     <ClInclude Include="MyEvents.hpp" />
+    <ClInclude Include="MyPlant\implement\Barley.hpp" />
     <ClInclude Include="MyPlant\implement\CabbagePult.hpp" />
     <ClInclude Include="MyPlant\implement\Cactus.hpp" />
     <ClInclude Include="MyPlant\implement\Cattail.hpp" />
@@ -110,6 +113,7 @@
     <ClInclude Include="MyPlant\implement\Mangosteen.hpp" />
     <ClInclude Include="MyPlant\implement\Marigold.hpp" />
     <ClInclude Include="MyPlant\implement\MelonPult.hpp" />
+    <ClInclude Include="MyPlant\implement\NoXPPlant.hpp" />
     <ClInclude Include="MyPlant\implement\Plantern.hpp" />
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Repeater.hpp" />

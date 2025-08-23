@@ -1,5 +1,6 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "Barley.hpp"
 #include "WallNut.hpp"
 #include "SnowPea.hpp"
 #include "Repeater.hpp"
@@ -34,3 +35,5 @@
 #include "DarkShroom.hpp"
 #include "Mangosteen.hpp"
 #include "ThymeWarp.hpp"
+
+#include "NoXPPlant.hpp"

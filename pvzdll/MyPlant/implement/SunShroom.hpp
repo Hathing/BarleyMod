@@ -13,5 +13,9 @@ namespace PlantAbility
 			rect->Height = plant.Height;
 			return true;
 		}
+		virtual bool IsXPRecipient(MyPlant plant)
+		{
+			return true;
+		}
 	};
 }
