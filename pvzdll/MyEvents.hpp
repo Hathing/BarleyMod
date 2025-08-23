@@ -182,30 +182,6 @@ namespace PVZEvent
 		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
 	};
 
-	/// @brief 僵尸动画速度随 buff 改变事件
-	/// @param 触发事件的僵尸，僵尸的基础动画速度
-	/// @return 调整后的僵尸动画速度
-	class ZombieSpeedAlterEvent : public DLLEvent
-	{
-	public:
-		ZombieSpeedAlterEvent(int address)
-		{
-			hookAddress = 0x52F026;
-			rawlen = 5;
-			BYTE code[] =
-			{
-				PUSH_PTR_EUX_ADD_V(REG_ESI, 8),
-				PUSH_EAX,
-				INVOKE(address),
-				FSTP_PTR_EUX_ADD_V(REG_ESI, 8),
-				ADD_ESP(8)
-			};
-			start(STRING(code));
-		}
-		ZombieSpeedAlterEvent(const char* str) : ZombieSpeedAlterEvent(PVZ::Memory::GetProcAddress(str)) {};
-		ZombieSpeedAlterEvent() : ZombieSpeedAlterEvent("CalcZombieSpeedAlter") {};
-	};
-
 	/// @brief 辣椒烧僵尸事件
 	/// @param 触发事件的植物，植物烧的僵尸
 	class JalapenoBurnEvent : public DLLEventTemplate<0x466528, 5, REG_ESI, REG_EDI>
