@@ -51,6 +51,15 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 判断植物是否可以获得经验值
+		/// @param plant 植物
+		/// @return 是否可以获得经验值
+		virtual bool IsXPRecipient(MyPlant plant)
+		{
+			if (plant.Type == SeedType::Seashroom && !plant.IsPrime())
+				return false;
+			return plant.Level < MyPlant::MAX_LEVEL || plant.IsToolPlant();
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetPrototype(SeedType::SeedType type);

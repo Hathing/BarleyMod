@@ -65,6 +65,16 @@ bool MyPlant::IsToolPlant()
 		|| type == SeedType::CobCannon;
 }
 
+bool MyPlant::IsPrime()
+{
+	return this->Id == this->GetOwner().Id;
+}
+
+bool MyPlant::IsXPRecipient()
+{
+	return PlantAbility::GetPrototype(this->Type)->IsXPRecipient(*this);
+}
+
 void MyPlant::Heal(int val)
 {
 	this->Hp += val;
@@ -74,6 +84,8 @@ void MyPlant::Heal(int val)
 
 void MyPlant::AddExperience(int val, bool kill_credit)
 {
+	this->Experience += val;
+
 	if(kill_credit)
 		this->Light();
 }
