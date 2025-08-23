@@ -48,12 +48,19 @@ public:
 	/// @brief 判断该植物是否为工具植物
 	/// @return 是否为工具植物
 	bool IsToolPlant();
+
 	/// @brief 判断该植物是否为主植物
 	/// @return 是否为主植物
 	bool IsPrime();
 	/// @brief 判断该植物是否可以获得经验值
 	/// @return 是否可以获得经验值
 	bool IsXPRecipient();
+
+	/// @brief 判断该植物是否可升级
+	/// @return 是否可升级
+	bool CanUpgrade();
+	/// @brief 升级的基本事件,如创建升级动画
+	void Upgrade();
 
 	/// @brief 治疗植物
 	/// @note 不会超出生命值上限。

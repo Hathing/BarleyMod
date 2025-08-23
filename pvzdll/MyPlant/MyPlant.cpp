@@ -67,12 +67,24 @@ bool MyPlant::IsToolPlant()
 
 bool MyPlant::IsPrime()
 {
-	return !this->OwnerID;
+  return !this->OwnerID;
 }
 
 bool MyPlant::IsXPRecipient()
 {
-	return PlantAbility::GetPrototype(this->Type)->IsXPRecipient(*this);
+  return PlantAbility::GetPrototype(this->Type)->IsXPRecipient(*this);
+}
+
+bool MyPlant::CanUpgrade()
+{
+	auto level = this->Level;
+	return level < this->MAX_LEVEL&& PlantAbility::PLANT_LEVEL_EXP[this->Type][level] != 0;
+}
+
+void MyPlant::Upgrade()
+{
+	auto anim = Creator::CreateReanimation(static_cast<AnimationType::AnimationType>(0x96), (float)this->ImageY, (float)this->ImageX, 0x61a80);
+	anim.Play("anim_idle", 0, 2, 30.0);
 }
 
 void MyPlant::Heal(int val)
