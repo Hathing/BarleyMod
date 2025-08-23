@@ -5,22 +5,22 @@ namespace PlantAbility
 {
 	PlantAbility::PlantPTR pt_factory[] =
 	{
-		new BasePlant(), new Barley(),	  new BasePlant(), new WallNut(),
+		new BasePlant(), new Barley(),	  new NoXPPlant(), new WallNut(),
 		new BasePlant(), new SnowPea(),	  new BasePlant(), new Repeater(),
 
 		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
-		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new BasePlant(),
+		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NoXPPlant(),
 
 		new DiamondShroom(), new Squash(), new Threepeater(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new Torchwood(), new TallNut(),
+		new NoXPPlant(), new NoXPPlant(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new BasePlant(),
 		new BasePlant(), new BasePlant(), new BasePlant(), new MagnetShroom(),
 
-		new CabbagePult(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new CabbagePult(), new BasePlant(), new BasePlant(), new NoXPPlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
 
-		new BasePlant(), new BasePlant(), new GloomShroom(), new Cattail(),
+		new BasePlant(), new NoXPPlant(), new GloomShroom(), new Cattail(),
 		new BasePlant(), new GoldMagnet(), new SpikeRock(), new BasePlant(),
 
 		new BasePlant(), new Explode_O_Nut(), new BasePlant(), new Endoflame(),

@@ -35,3 +35,5 @@
 #include "DarkShroom.hpp"
 #include "Mangosteen.hpp"
 #include "ThymeWarp.hpp"
+
+#include "NoXPPlant.hpp"
