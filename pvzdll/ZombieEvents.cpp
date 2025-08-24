@@ -63,7 +63,7 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	auto child_zombie = Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), zombie.Row, 0x0f);
 	PVZ::CreateParticleSystem(zombie.X + 40.0f,zombie.Y + 65.0f,zombie.Layer+100,EffectType::IMITATER_TRANSFORMING);
 	child_zombie.X = zombie.X;
-	float health_ratio = (float)Creator::Rand(33) / 5.0f;
+	float health_ratio = (1 + Creator::Rand(5)) / 5.0f;
 	child_zombie.BodyHealth *= health_ratio;
 	child_zombie.BodyMaxHealth *= health_ratio;
 	child_zombie.HelmHealth *= health_ratio;
