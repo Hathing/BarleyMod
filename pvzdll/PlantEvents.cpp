@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
 
 void onPlantInitAfter(MyPlant plant)
@@ -83,8 +83,8 @@ void onPlantDie(MyPlant plant)
 bool onPlantChangeColor(MyPlant plant, PVZ::Animation anim)
 {
 	/*
-	* ÓÉÓÚºÜ¶àÖ²Îï¶¼Ã»Ğ´£¬ÔİÊ±Î´Êµ×°Êµ¼ÊĞ§¹û
-	* ÒÔÏÂÊÇÒ»¶Î·¶Àı´úÂë£º
+	* ç”±äºå¾ˆå¤šæ¤ç‰©éƒ½æ²¡å†™ï¼Œæš‚æ—¶æœªå®è£…å®é™…æ•ˆæœ
+	* ä»¥ä¸‹æ˜¯ä¸€æ®µèŒƒä¾‹ä»£ç ï¼š
 	* 
 	if (plant.Type == SeedType::Peashooter)
 	{
@@ -93,7 +93,7 @@ bool onPlantChangeColor(MyPlant plant, PVZ::Animation anim)
 	}
 	*/
 
-	//Ä¬ÈÏ²»ĞŞ¸Ä£¬·µ»Øtrue
+	//é»˜è®¤ä¸ä¿®æ”¹ï¼Œè¿”å›true
 	return true;
 }
 
