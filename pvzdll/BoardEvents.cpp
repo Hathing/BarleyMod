@@ -26,8 +26,14 @@ void onBoardUpdateGameObject(MyBoard board)
 	}
 }
 
+bool onBoardDropLootPiece()
+{
+	return false;
+}
+
 void InitBoardEvents()
 {
 	PVZEvent::BoardInitAfterEvent((int)onBoardInit);
 	UpdateGameObjectsEvent((int)onBoardUpdateGameObject);
+	PVZEvent::BoardDropLootPieceEvent((int)onBoardDropLootPiece);
 }

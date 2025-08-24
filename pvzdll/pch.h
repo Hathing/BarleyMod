@@ -18,5 +18,6 @@ void InitLawnmowerEvents();
 void InitPlantEvents();
 void InitProjectileEvents();
 void InitZombieEvents();
+void InitCoinEvents();
 
 #endif //PCH_H
