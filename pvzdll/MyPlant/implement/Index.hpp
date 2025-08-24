@@ -24,6 +24,7 @@
 #include "UmbrellaLeaf.hpp"
 #include "Marigold.hpp"
 #include "MelonPult.hpp"
+#include "RestingBarley.hpp"
 #include "GloomShroom.hpp"
 #include "Cattail.hpp"
 #include "GoldMagnet.hpp"
