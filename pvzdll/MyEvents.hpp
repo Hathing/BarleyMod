@@ -182,6 +182,34 @@ namespace PVZEvent
 		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
 	};
 
+	class RandomZombieDropHelmEvent : public DLLEventTemplate<0x530FC4, 5, REG_EBX>
+	{
+	public:
+		RandomZombieDropHelmEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		RandomZombieDropHelmEvent(int address) : DLLEventTemplate() { Init(address); };
+		RandomZombieDropHelmEvent() : RandomZombieDropHelmEvent("onRandomZombieTypeProbability") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.popad().push_imm32(0x530FCE).ret();
+		}
+	};
+
+	/// @brief 物品自动收集事件，注入功能：存在1秒后自动设置自己为被收集状态
+	/// @param 物品的ID
+	class CoinAutoCollectEvent : public DLLEventTemplate<0x43158B, 6, REG_EBX>
+	{
+	public:
+		CoinAutoCollectEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		CoinAutoCollectEvent(int address) : DLLEventTemplate() { Init(address); };
+		CoinAutoCollectEvent() : CoinAutoCollectEvent("onCoinAutoCollect") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jz_rel(7).popad().push_imm32(0x431599).ret().popad().push_imm32(0x431591).ret();
+		}
+	};
+
 	/// @brief 辣椒烧僵尸事件
 	/// @param 触发事件的植物，植物烧的僵尸
 	class JalapenoBurnEvent : public DLLEventTemplate<0x466528, 5, REG_ESI, REG_EDI>
