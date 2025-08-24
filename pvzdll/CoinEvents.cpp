@@ -1,12 +1,26 @@
 #include "pch.h"
-void onCoinAutoCollect(PVZ::Coin coin)
+
+byte __asm__PlayCollectSound[19]
+{
+	MOV_EDX(0),
+	INVOKE(0x432B00),
+	RET
+};
+
+void PlayCollectSound(PVZ::Coin coin)
+{
+	SETARG(__asm__PlayCollectSound, 1) = coin.Id;
+	PVZ::Memory::Execute(STRING(__asm__PlayCollectSound));
+}
+
+bool onCoinAutoCollect(PVZ::Coin coin)
 {
 	if (coin.ExistedTime > 100 && coin.Collected == false)
 	{
 		coin.Collected = true;
-		//Creator::CreateSound();
+		PlayCollectSound(coin);
 	}
-	return;
+	return coin.Collected;
 }
 
 void InitCoinEvents()
