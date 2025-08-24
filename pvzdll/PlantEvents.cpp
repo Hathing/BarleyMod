@@ -80,6 +80,18 @@ void onPlantDie(MyPlant plant)
 	return;
 }
 
+bool onPlantChangeColor(MyPlant plant, PVZ::Animation anim)
+{
+	if (plant.Type == SeedType::Peashooter)
+	{
+		anim.SetColor({ 20,255,20,255 });
+		return false;
+	}
+
+	//默认不修改，返回true
+	return true;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -88,4 +100,5 @@ void InitPlantEvents()
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
 	PlantDieEvent((int)onPlantDie);
+	PVZEvent::PlantChangeColorEvent((int)onPlantChangeColor);
 }
