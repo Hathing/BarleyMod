@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoardEvents.cpp" />
+    <ClCompile Include="CoinEvents.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="LawnmowerEvents.cpp" />
     <ClCompile Include="MyBoard.cpp" />
