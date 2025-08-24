@@ -37,6 +37,7 @@ void onZombieDropLoot(MyZombie zombie)
 		for (auto plant : plants)
 			if (plant.Row == zombie.Row && plant.IsXPRecipient())
 				plant_cnt++;
+		if (plant_cnt <= 0)plant_cnt = 1;
 		bounty_xp /= plant_cnt;
 		for (auto plant : plants)
 			if (plant.Row == zombie.Row && plant.IsXPRecipient())
