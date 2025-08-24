@@ -67,12 +67,12 @@ bool MyPlant::IsToolPlant()
 
 bool MyPlant::IsPrime()
 {
-  return !this->OwnerID;
+	return !(this->FromBarley || this->OwnerID);
 }
 
 bool MyPlant::IsXPRecipient()
 {
-  return PlantAbility::GetPrototype(this->Type)->IsXPRecipient(*this);
+	return PlantAbility::GetPrototype(this->Type)->IsXPRecipient(*this);
 }
 
 bool MyPlant::CanUpgrade()
