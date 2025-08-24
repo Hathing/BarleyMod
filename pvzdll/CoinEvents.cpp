@@ -17,7 +17,7 @@ bool onCoinAutoCollect(PVZ::Coin coin)
 {
 	if (coin.ExistedTime > 100 && coin.Collected == false && (int)coin.Type <= 3)
 	{
-		coin.Collected = true;
+		coin.Collect();
 		PlayCollectSound(coin);
 	}
 	return coin.Collected;
