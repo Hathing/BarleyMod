@@ -3,6 +3,7 @@
 
 void onPlantInitAfter(MyPlant plant)
 {
+	plant.FromBarley = false;
 	plant.OwnerID = 0;
 	plant.EasterSkin = false;
 	plant.HealCounter = 0;
@@ -16,6 +17,7 @@ void onPlantInitAfter(MyPlant plant)
 	plant.RelatedPlantID3 = 0;
 	plant.RelatedPlantID4 = 0;
 	plant.SubIndex = 0;
+	plant.BarleyCounter = 0;
 
 	auto model = plant.GetAnimationPart2();
 	if (model.isValid())
@@ -43,7 +45,14 @@ void onPlantInitAfter(MyPlant plant)
 
 bool onPlantUpdateAbility(MyPlant plant)
 {
-	return PlantAbility::GetPrototype(plant.Type)->TickAbility(plant);
+	auto tmp = PlantAbility::GetPrototype(plant.Type)->TickAbility(plant);
+	if (plant.FromBarley)
+	{
+		PlantAbility::GetPrototype(SeedType::Barley)->TickAbility(plant);
+		if (plant.NotExist)
+			return false;
+	}
+	return tmp;
 }
 
 bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)

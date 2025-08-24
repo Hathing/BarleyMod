@@ -20,7 +20,7 @@ namespace PlantAbility
 		new CabbagePult(), new BasePlant(), new BasePlant(), new NoXPPlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
 
-		new BasePlant(), new NoXPPlant(), new GloomShroom(), new Cattail(),
+		new BasePlant(), new RestingBarley(), new GloomShroom(), new Cattail(),
 		new BasePlant(), new GoldMagnet(), new SpikeRock(), new BasePlant(),
 
 		new BasePlant(), new Explode_O_Nut(), new BasePlant(), new Endoflame(),
@@ -67,12 +67,12 @@ bool MyPlant::IsToolPlant()
 
 bool MyPlant::IsPrime()
 {
-  return !this->OwnerID;
+	return !(this->FromBarley || this->OwnerID);
 }
 
 bool MyPlant::IsXPRecipient()
 {
-  return PlantAbility::GetPrototype(this->Type)->IsXPRecipient(*this);
+	return PlantAbility::GetPrototype(this->Type)->IsXPRecipient(*this);
 }
 
 bool MyPlant::CanUpgrade()
