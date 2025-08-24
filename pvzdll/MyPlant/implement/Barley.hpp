@@ -15,6 +15,9 @@ namespace PlantAbility
 			if (plant.BarleyCounter == 3010)
 			{
 				plant.Remove();
+				// 移除后，禁用技能
+				plant.SubClass = 0;
+				plant.EffectiveCountdown = 0;
 
 				SeedType::SeedType type;
 				while (true)

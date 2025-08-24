@@ -45,7 +45,14 @@ void onPlantInitAfter(MyPlant plant)
 
 bool onPlantUpdateAbility(MyPlant plant)
 {
-	return PlantAbility::GetPrototype(plant.Type)->TickAbility(plant);
+	auto tmp = PlantAbility::GetPrototype(plant.Type)->TickAbility(plant);
+	if (plant.FromBarley)
+	{
+		PlantAbility::GetPrototype(SeedType::Barley)->TickAbility(plant);
+		if (plant.NotExist)
+			return false;
+	}
+	return tmp;
 }
 
 bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)
