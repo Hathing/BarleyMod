@@ -9,13 +9,13 @@ byte __asm__PlayCollectSound[19]
 
 void PlayCollectSound(PVZ::Coin coin)
 {
-	SETARG(__asm__PlayCollectSound, 1) = coin.Id;
+	SETARG(__asm__PlayCollectSound, 1) = coin.GetBaseAddress();
 	PVZ::Memory::Execute(STRING(__asm__PlayCollectSound));
 }
 
 bool onCoinAutoCollect(PVZ::Coin coin)
 {
-	if (coin.ExistedTime > 100 && coin.Collected == false)
+	if (coin.ExistedTime > 100 && coin.Collected == false && (int)coin.Type <= 3)
 	{
 		coin.Collected = true;
 		PlayCollectSound(coin);
