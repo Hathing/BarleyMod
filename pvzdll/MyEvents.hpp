@@ -195,15 +195,6 @@ namespace PVZEvent
 		}
 	};
 
-	/// @brief 物品掉落事件，仅仅用于僵尸不掉落（跳过掉落），要想实现其他功能请检查注入点是否需要修改
-	class BoardDropLootPieceEvent : public BoolDLLEventTemplate<0x41D025, 6, 0x41D2B2>
-	{
-	public:
-		BoardDropLootPieceEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		BoardDropLootPieceEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-		BoardDropLootPieceEvent() : BoardDropLootPieceEvent("onBoardDropLootPiece") {};
-	};
-
 	/// @brief 物品自动收集事件，注入功能：存在1秒后自动设置自己为被收集状态
 	/// @param 物品的ID
 	class CoinAutoCollectEvent : public DLLEventTemplate<0x43158B, 6, REG_EBX>
@@ -212,6 +203,11 @@ namespace PVZEvent
 		CoinAutoCollectEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		CoinAutoCollectEvent(int address) : DLLEventTemplate() { Init(address); };
 		CoinAutoCollectEvent() : CoinAutoCollectEvent("onCoinAutoCollect") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jz_rel(7).popad().push_imm32(0x431599).ret().popad().push_imm32(0x431591).ret();
+		}
 	};
 
 	/// @brief 辣椒烧僵尸事件
