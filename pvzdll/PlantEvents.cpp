@@ -97,16 +97,6 @@ bool onPlantUpdateColor(MyPlant plant, PVZ::Animation anim)
 	return true;
 }
 
-bool onScardyShroomScared(MyPlant scardy)
-{
-	return true;
-}
-
-bool onScardyShroomGrow(MyPlant scardy)
-{
-	return true;
-}
-
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -116,7 +106,4 @@ void InitPlantEvents()
 	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
 	PlantDieEvent((int)onPlantDie);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
-
-	PVZEvent::ScardyShroomScaredEvent((int)onScardyShroomScared);
-	PVZEvent::ScardyShroomGrowEvent((int)onScardyShroomGrow);
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "../PlantAbility.hpp"
-#include "../../MyBoard.hpp"
 
 namespace PlantAbility
 {
@@ -21,15 +20,6 @@ namespace PlantAbility
 					plant.HealCounter = 0;
 					plant.Heal(1);
 				}
-			}
-
-			const int row = plant.Row;
-			if (MyBoard::GoldMagnetFactors[row] > 2.0f)plant.Remove();
-			if (MyBoard::IceShroomCounts[row])plant.Smash();
-			auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
-			for (auto& zombie : zombies)
-			{
-				if (zombie.Row==row && !zombie.Blowaway) zombie.FlyAway(-2.0);
 			}
 
 			return true;

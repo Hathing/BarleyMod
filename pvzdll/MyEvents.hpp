@@ -251,28 +251,6 @@ namespace PVZEvent
 		NormalPlantAttackStartEvent() : NormalPlantAttackStartEvent("onNormalPlantAttackStart") {};
 	};
 
-	/// @brief 胆小菇下蹲瞬间事件
-	/// @param 胆小菇ID
-	/// @return False则不会蹲下
-	class ScardyShroomScaredEvent : public BoolDLLEventTemplate<0x46051B, 6, 0x4605EE, REG_EDI>
-	{
-	public:
-		ScardyShroomScaredEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		ScardyShroomScaredEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-		ScardyShroomScaredEvent() : ScardyShroomScaredEvent("onScardyShroomScared") {};
-	};
-
-	/// @brief 胆小菇起立瞬间事件
-	/// @param 胆小菇ID
-	/// @return False则不会起立
-	class ScardyShroomGrowEvent : public BoolDLLEventTemplate<0x46057F, 6, 0x4605EE, REG_EDI>
-	{
-	public:
-		ScardyShroomGrowEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		ScardyShroomGrowEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-		ScardyShroomGrowEvent() : ScardyShroomGrowEvent("onScardyShroomGrow") {};
-	};
-
 	/// @brief 修改植物的颜色
 	/// @param 动画ID
 	/// @return True则无颜色修改，与原版相同
@@ -281,7 +259,7 @@ namespace PVZEvent
 	public:
 		PlantUpdateColorEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		PlantUpdateColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-		PlantUpdateColorEvent() : PlantUpdateColorEvent("onPlantUpdateColor") {};
+		PlantUpdateColorEvent() : PlantUpdateColorEvent("onPlantChangeColor") {};
 	};
 
 	/// @brief 创建动画图集事件
