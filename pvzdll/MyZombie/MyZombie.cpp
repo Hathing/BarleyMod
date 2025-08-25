@@ -37,3 +37,12 @@ void MyZombie::AttachShield()
 		.ret()
 	);
 }
+
+void MyZombie::FlyAway(float factor)
+{
+	if (!this->Blowaway)
+	{
+		this->Blowaway = true;
+		this->SetSpeed(this->Speed * factor);
+	}
+}
