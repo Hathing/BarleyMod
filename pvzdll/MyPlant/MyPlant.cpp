@@ -85,6 +85,14 @@ void MyPlant::Upgrade()
 {
 	auto anim = Creator::CreateReanimation(static_cast<AnimationType::AnimationType>(0x96), (float)this->ImageY, (float)this->ImageX, 0x61a80);
 	anim.Play("anim_idle", 0, 2, 30.0);
+
+	if (this->IsToolPlant())
+		this->Level = MyPlant::MAX_LEVEL;
+	else
+		this->Level++;
+	PlantAbility::GetPrototype(this->Type)->onUpgrade(*this);
+
+	this->Heal(this->MaxHp / 5);
 }
 
 void MyPlant::Heal(int val)
