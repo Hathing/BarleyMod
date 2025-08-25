@@ -254,12 +254,12 @@ namespace PVZEvent
 	/// @brief 修改植物的颜色
 	/// @param 动画ID
 	/// @return True则无颜色修改，与原版相同
-	class PlantChangeColorEvent : public BoolDLLEventTemplate<0x463714, 6, 0x463720, REG_EBX, REG_ESI>
+	class PlantUpdateColorEvent : public BoolDLLEventTemplate<0x463714, 6, 0x463720, REG_EBX, REG_ESI>
 	{
 	public:
-		PlantChangeColorEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		PlantChangeColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-		PlantChangeColorEvent() : PlantChangeColorEvent("onPlantChangeColor") {};
+		PlantUpdateColorEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantUpdateColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantUpdateColorEvent() : PlantUpdateColorEvent("onPlantChangeColor") {};
 	};
 
 	/// @brief 创建动画图集事件

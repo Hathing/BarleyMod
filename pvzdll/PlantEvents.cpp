@@ -80,7 +80,7 @@ void onPlantDie(MyPlant plant)
 	return;
 }
 
-bool onPlantChangeColor(MyPlant plant, PVZ::Animation anim)
+bool onPlantUpdateColor(MyPlant plant, PVZ::Animation anim)
 {
 	/*
 	* 由于很多植物都没写，暂时未实装实际效果
@@ -105,5 +105,5 @@ void InitPlantEvents()
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
 	PlantDieEvent((int)onPlantDie);
-	PVZEvent::PlantChangeColorEvent((int)onPlantChangeColor);
+	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
 }
