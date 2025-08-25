@@ -39,9 +39,13 @@ void UpdatePlantExistCount(MyBoard& board)
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
 	{
-		const int row = plant.Row, col = plant.Column;
+		const int row = plant.Row, level = plant.Level;
 		const auto type = plant.Type;
-		if (type == SeedType::GoldMagnet) MyBoard::GoldMagnetFactors[row] *= 1.5f;
+		if (type == SeedType::GoldMagnet)
+		{
+			if (level >= 5)MyBoard::GoldMagnetFactors[row] *= 2.0f;
+			else MyBoard::GoldMagnetFactors[row] *= 1.5f;
+		}
 		if (type == SeedType::Iceshroom) MyBoard::IceShroomCounts[row] = true;
 	}
 }
