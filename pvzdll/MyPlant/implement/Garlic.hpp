@@ -21,7 +21,6 @@ namespace PlantAbility
 					plant.Heal(1);
 				}
 			}
-
 			return true;
 		}
 		bool onAnimate(MyPlant plant)
