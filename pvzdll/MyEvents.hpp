@@ -252,7 +252,7 @@ namespace PVZEvent
 	};
 
 	/// @brief 修改植物的颜色
-	/// @param 动画ID
+	/// @param 植物（ESI）、动画ID（EBX）
 	/// @return True则无颜色修改，与原版相同
 	class PlantUpdateColorEvent : public BoolDLLEventTemplate<0x463714, 6, 0x463720, REG_EBX, REG_ESI>
 	{
