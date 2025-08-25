@@ -55,6 +55,13 @@ void MyPlant::SetOwner(MyPlant plant)
 	this->OwnerID = plant.Id;
 }
 
+void MyPlant::SetMaxHealth(int val)
+{
+	auto ori_val = this->MaxHp;
+	this->MaxHp = val;
+	this->Hp += val - ori_val;
+}
+
 bool MyPlant::IsToolPlant()
 {
 	auto type = this->Type;
