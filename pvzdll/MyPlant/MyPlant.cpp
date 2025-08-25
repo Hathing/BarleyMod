@@ -90,6 +90,42 @@ void MyPlant::Upgrade()
 		this->Level = MyPlant::MAX_LEVEL;
 	else
 		this->Level++;
+	if (this->Level == MyPlant::MAX_LEVEL)
+	{
+		if (Creator::Rand(10))
+			this->EnableEasterSkin();
+		else
+		{
+			auto model = this->GetAnimationPart1();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(-1, "common");
+				model.AssignRenderGroupToPrefix(0, "awake");
+			}
+
+			model = this->GetAnimationPart2();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(-1, "common");
+				model.AssignRenderGroupToPrefix(0, "awake");
+			}
+
+			model = this->GetAnimationPart3();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(-1, "common");
+				model.AssignRenderGroupToPrefix(0, "awake");
+			}
+
+			model = this->GetAnimationPart4();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(-1, "common");
+				model.AssignRenderGroupToPrefix(0, "awake");
+			}	
+		}
+	}
+
 	PlantAbility::GetPrototype(this->Type)->onUpgrade(*this);
 
 	this->Heal(this->MaxHp / 5);
