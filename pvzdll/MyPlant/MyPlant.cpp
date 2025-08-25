@@ -138,15 +138,19 @@ void MyPlant::Heal(int val)
 		this->Hp = this->MaxHp;
 }
 
-void MyPlant::CheckUpgrade()
+bool MyPlant::CheckUpgrade()
 {
 	if (this->IsToolPlant())
 	{
 
 	}
 	else
-		if(this->CanUpgrade() && this->Experience >= PlantAbility::PLANT_LEVEL_EXP[this->Type][this->Level])
+		if (this->CanUpgrade() && this->Experience >= PlantAbility::PLANT_LEVEL_EXP[this->Type][this->Level])
+		{
 			this->Upgrade();
+			return true;
+		}
+	return false;
 }
 
 void MyPlant::AddExperience(int val, bool kill_credit)
@@ -158,7 +162,7 @@ void MyPlant::AddExperience(int val, bool kill_credit)
 		this->Light();
 
 	if (!this->IsToolPlant())
-		this->CheckUpgrade();
+		while (this->CheckUpgrade()) {};
 }
 
 void MyPlant::EnableEasterSkin()
