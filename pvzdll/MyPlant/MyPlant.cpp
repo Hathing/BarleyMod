@@ -85,6 +85,50 @@ void MyPlant::Upgrade()
 {
 	auto anim = Creator::CreateReanimation(static_cast<AnimationType::AnimationType>(0x96), (float)this->ImageY, (float)this->ImageX, 0x61a80);
 	anim.Play("anim_idle", 0, 2, 30.0);
+
+	if (this->IsToolPlant())
+		this->Level = MyPlant::MAX_LEVEL;
+	else
+		this->Level++;
+	if (this->Level == MyPlant::MAX_LEVEL)
+	{
+		if (Creator::Rand(10))
+			this->EnableEasterSkin();
+		else
+		{
+			auto model = this->GetAnimationPart1();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(-1, "common");
+				model.AssignRenderGroupToPrefix(0, "awake");
+			}
+
+			model = this->GetAnimationPart2();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(-1, "common");
+				model.AssignRenderGroupToPrefix(0, "awake");
+			}
+
+			model = this->GetAnimationPart3();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(-1, "common");
+				model.AssignRenderGroupToPrefix(0, "awake");
+			}
+
+			model = this->GetAnimationPart4();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(-1, "common");
+				model.AssignRenderGroupToPrefix(0, "awake");
+			}	
+		}
+	}
+
+	PlantAbility::GetPrototype(this->Type)->onUpgrade(*this);
+
+	this->Heal(this->MaxHp / 5);
 }
 
 void MyPlant::Heal(int val)
@@ -94,6 +138,21 @@ void MyPlant::Heal(int val)
 		this->Hp = this->MaxHp;
 }
 
+bool MyPlant::CheckUpgrade()
+{
+	if (this->IsToolPlant())
+	{
+
+	}
+	else
+		if (this->CanUpgrade() && this->Experience >= PlantAbility::PLANT_LEVEL_EXP[this->Type][this->Level])
+		{
+			this->Upgrade();
+			return true;
+		}
+	return false;
+}
+
 void MyPlant::AddExperience(int val, bool kill_credit)
 {
 	this->Experience += val;
@@ -101,6 +160,9 @@ void MyPlant::AddExperience(int val, bool kill_credit)
 
 	if (kill_credit)
 		this->Light();
+
+	if (!this->IsToolPlant())
+		while (this->CheckUpgrade()) {};
 }
 
 void MyPlant::EnableEasterSkin()

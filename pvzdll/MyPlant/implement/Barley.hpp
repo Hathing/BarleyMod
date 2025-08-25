@@ -83,7 +83,13 @@ namespace PlantAbility
 				else
 				{
 					creep.FromBarley = true;
-					creep.Level = Creator::Rand(1 + MyPlant::MAX_LEVEL);
+					auto tmp = Creator::Rand(1 + MyPlant::MAX_LEVEL);
+
+					while (tmp--)
+					{
+						creep.Level++;
+						PlantAbility::GetPrototype(creep.Type)->onUpgrade(creep);
+					}
 				}
 
 				PVZ::CreateParticleSystem(plant.ImageX + 40.0f, plant.ImageY + 40.0f, 0x618A0, EffectType::IMITATER_TRANSFORMING);

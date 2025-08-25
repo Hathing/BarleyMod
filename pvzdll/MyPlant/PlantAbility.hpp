@@ -75,6 +75,13 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 植物升级时，结算此函数。
+		/// @note 此时植物等级的数值已提升
+		/// @param plant 植物
+		virtual void onUpgrade(MyPlant plant)
+		{
+			return;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetPrototype(SeedType::SeedType type);

@@ -71,6 +71,9 @@ public:
 	/// @note 不会超出生命值上限。
 	/// @param val 治疗量
 	void Heal(int val);
+	/// @brief 检查是否符合升级条件。若符合，则立刻升级。
+	/// @return 是否升级
+	bool CheckUpgrade();
 	/// @brief 获得经验值
 	/// @param val 获得的经验数值
 	/// @param kill_credit 是否为击杀奖励
