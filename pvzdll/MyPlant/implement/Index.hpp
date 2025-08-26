@@ -18,6 +18,7 @@
 #include "SeaShroom.hpp"
 #include "Plantern.hpp"
 #include "Cactus.hpp"
+#include "SplitPea.hpp"
 #include "MagnetShroom.hpp"
 #include "CabbagePult.hpp"
 #include "Garlic.hpp"
