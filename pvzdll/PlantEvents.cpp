@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
 
 void onPlantInitAfter(MyPlant plant)
@@ -80,6 +80,23 @@ void onPlantDie(MyPlant plant)
 	return;
 }
 
+bool onPlantUpdateColor(MyPlant plant, PVZ::Animation anim)
+{
+	/*
+	* 由于很多植物都没写，暂时未实装实际效果
+	* 以下是一段范例代码：
+	* 
+	if (plant.Type == SeedType::Peashooter)
+	{
+		anim.SetColor({ 20,255,20,255 });
+		return false;
+	}
+	*/
+
+	//默认不修改，返回true
+	return true;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -88,4 +105,5 @@ void InitPlantEvents()
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
 	PlantDieEvent((int)onPlantDie);
+	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
 }
