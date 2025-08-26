@@ -9,11 +9,20 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 	if (plant.Type == SeedType::Kernelpult)
 		proj.BounceCount = 5;
 
+	if (plant.Type == SeedType::Threepeater)
+	{
+		//中路的子弹也会被标记，但是标记只有在运动方式=2时才有用
+		proj.SpecialFlags = PSF_THREEPEATER_SLIDE_OUT;
+	}
 	return true;
 }
 
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
 {
+	//这行代码是S6就有的，意义不明，先搬过来
+	if (zombie.State == ZombieState::BALLOON_FLYING)
+		return -1;
+
 	int mydamage = ProjectileAbility::GetAbility(proj.Type)->OverrideDamage(proj, zombie, type, subtarget_num, damage);
 	if (mydamage == 0)
 		return 0;
@@ -44,7 +53,7 @@ int GetProjectileImage(MyProjectile proj, PVZEvent::ProjectileImgParam param)
 
 float GetProjectileImageSize(MyProjectile proj, float original_val)
 {
-	return ProjectileAbility::GetAbility(proj.Type)->GetImageSize(proj);
+	return ProjectileAbility::GetAbility(proj.Type)->GetImageSize(proj,1.0f);
 }
 
 void onProjectileUpdate(MyProjectile proj)
@@ -65,6 +74,37 @@ bool onProjectileRemove(MyProjectile proj)
 	return false;
 }
 
+bool onProjectileSlideMotion(MyProjectile proj)
+{
+	static constexpr int CYCLE_TIME = 50;
+	if (proj.SpecialFlags)
+	{
+		proj.Y += proj.YSpeed;
+		proj.AdjustRow();
+		if (proj.SpecialFlags == PSF_THREEPEATER_SLIDE_OUT)
+		{
+			proj.YSpeed *= 0.97f;
+			if (proj.ExistedTime % CYCLE_TIME == CYCLE_TIME - 1)
+			{
+				proj.YSpeed *= -1.0f;
+				proj.SpecialFlags = PSF_THREEPEATER_SLIDE_IN;
+			}
+		}
+		else if (proj.SpecialFlags == PSF_THREEPEATER_SLIDE_IN)
+		{
+			proj.YSpeed /= 0.97f;
+			if (proj.ExistedTime % CYCLE_TIME == CYCLE_TIME - 1)
+			{
+				proj.YSpeed *= -1.0f;
+				proj.SpecialFlags = PSF_THREEPEATER_SLIDE_OUT;
+			}
+		}
+		proj.ShadowY += proj.YSpeed;
+		return false;
+	}
+	return true;
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -73,4 +113,5 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);
 	PVZEvent::ProjectileImageSizeEvent((int)GetProjectileImageSize);
 	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
+	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
 }

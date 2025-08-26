@@ -11,8 +11,12 @@ public:
 	INT_PROPERTY(DecrementTime, __get_DecrementTime, __set_DecrementTime, 0x64);
 	/// @brief 创建该子弹的植物的 ID
 	INT_PROPERTY(ParentID, __get_PaID, __set_PaID, 0x80);
-	/// @brief 创建该子弹时子弹所在的行
+	/// @brief 杨桃创建该子弹时子弹所在的行
 	T_PROPERTY(byte,OriginalRow, __get_OrR, __set_OrR, 0x84);
+	/// @brief 子弹的特殊标记
+	T_PROPERTY(ProjSpecialFlags, SpecialFlags, __get_SpecialFlags, __set_SpecialFlags, 0x84);
 	/// @brief 抛射子弹的弹跳计数器
 	T_PROPERTY(byte, BounceCount, __get_BounceCount, __set_BounceCount, 0x85);
+	/// @brief 根据子弹坐标调整子弹行数，目前只有三线子弹在用，其余子弹要用的话请注意
+	void AdjustRow();
 };

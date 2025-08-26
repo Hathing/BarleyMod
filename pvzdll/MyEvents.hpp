@@ -172,6 +172,17 @@ namespace PVZEvent
 		ProjectileUpdateEvent() : ProjectileUpdateEvent("onProjectileUpdate") {};
 	};
 
+	/// @brief 三线边路运动方式的子弹的更新事件
+	/// @param 子弹ID
+	/// @return False则跳过原版运动方式更新
+	class ProjectileSlideMotionEvent : public BoolDLLEventTemplate<0x46DBF6, 6, 0x46DC1F, REG_EBX>
+	{
+	public:
+		ProjectileSlideMotionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileSlideMotionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileSlideMotionEvent() : ProjectileSlideMotionEvent("onProjectileSlideMotion") {};
+	};
+
 	/// @brief 大嘴花判定是否秒杀僵尸的事件
 	/// @param 依次为：触发事件的植物，植物攻击的僵尸
 	class ChomperInstantJudgeEvent : public IntDLLEventTemplate<0x461444, 6, 0, 0, 0, REG_EDX, false, REG_ESI, REG_EDI>
