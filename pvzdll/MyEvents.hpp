@@ -162,6 +162,16 @@ namespace PVZEvent
 		ProjectileImpactEvent() : ProjectileImpactEvent("onProjectileImpact") {};
 	};
 
+	/// @brief 子弹总更新事件，发生在计时器与图层更新后、子弹运动前
+	/// @param 子弹ID
+	class ProjectileUpdateEvent : public DLLEventTemplate<0x46E4FE, 6, REG_ESI>
+	{
+	public:
+		ProjectileUpdateEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ProjectileUpdateEvent(int address) : DLLEventTemplate() { Init(address); };
+		ProjectileUpdateEvent() : ProjectileUpdateEvent("onProjectileUpdate") {};
+	};
+
 	/// @brief 大嘴花判定是否秒杀僵尸的事件
 	/// @param 依次为：触发事件的植物，植物攻击的僵尸
 	class ChomperInstantJudgeEvent : public IntDLLEventTemplate<0x461444, 6, 0, 0, 0, REG_EDX, false, REG_ESI, REG_EDI>
@@ -259,7 +269,7 @@ namespace PVZEvent
 	public:
 		PlantUpdateColorEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		PlantUpdateColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-		PlantUpdateColorEvent() : PlantUpdateColorEvent("onPlantChangeColor") {};
+		PlantUpdateColorEvent() : PlantUpdateColorEvent("onPlantUpdateColor") {};
 	};
 
 	/// @brief 创建动画图集事件
