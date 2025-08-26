@@ -36,7 +36,7 @@ int GetProjectileImage(MyProjectile proj, PVZEvent::ProjectileImgParam param)
 	if (param == PVZEvent::PROJECTILE_IMAGEROW)
 		return 0;
 	else
-		return -1;
+		return ProjectileAbility::GetAbility(proj.Type)->GetImage(proj);
 }
 
 void InitProjectileEvents()

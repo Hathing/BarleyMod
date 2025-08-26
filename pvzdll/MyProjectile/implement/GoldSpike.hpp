@@ -15,5 +15,9 @@ namespace ProjectileAbility
 			if (zombie.Type != ZombieType::Gargantuar && zombie.Type != ZombieType::Gigagargantuar)
 				zombie.X += 10;
 		}
+		virtual int GetImage(MyProjectile proj)
+		{
+			return PVZ::Memory::ReadMemory<int>(0x6FF004);
+		}
 	};
 }
