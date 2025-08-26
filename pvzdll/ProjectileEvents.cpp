@@ -39,7 +39,12 @@ int GetProjectileImage(MyProjectile proj, PVZEvent::ProjectileImgParam param)
 	if (param == PVZEvent::PROJECTILE_IMAGEROW)
 		return 0;
 	else
-		return -1;
+		return ProjectileAbility::GetAbility(proj.Type)->GetImage(proj);
+}
+
+float GetProjectileImageSize(MyProjectile proj, float original_val)
+{
+	return ProjectileAbility::GetAbility(proj.Type)->GetImageSize(proj);
 }
 
 void onProjectileUpdate(MyProjectile proj)
@@ -66,5 +71,6 @@ void InitProjectileEvents()
 	PlantAddProjectileEvent((int)onPlantAddProjectile);
 	PVZEvent::ProjectileDamageZombieEvent((int)onProjDamageZombie);
 	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);
+	PVZEvent::ProjectileImageSizeEvent((int)GetProjectileImageSize);
 	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
 }

@@ -49,6 +49,10 @@ public:
 	/// @brief 设置植物的所有者
 	/// @param owner 设置后的所有者 
 	void SetOwner(MyPlant owner);
+	/// @brief 设置植物的最大生命值。
+	/// @note 植物的生命值会发生相同改变量的变化。
+	/// @param val 调整后的最大生命值
+	void SetMaxHealth(int val);
 
 	/// @brief 判断该植物是否为工具植物
 	/// @return 是否为工具植物

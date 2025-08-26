@@ -14,5 +14,9 @@ namespace ProjectileAbility
 		{
 			zombie.HitBody(999999);
 		}
+		virtual int GetImage(MyProjectile proj)
+		{
+			return PVZ::Memory::ReadMemory<int>(0x6FF020);
+		}
 	};
 }

@@ -17,5 +17,9 @@ namespace ProjectileAbility
 
 			return dmg[lvl];
 		}
+		virtual int GetImage(MyProjectile proj)
+		{
+			return PVZ::Memory::ReadMemory<int>(0x6FF010);
+		}
 	};
 }

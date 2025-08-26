@@ -15,7 +15,7 @@ namespace PlantAbility
 		new NoXPPlant(), new NoXPPlant(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new MagnetShroom(),
+		new SplitPea(),  new BasePlant(), new BasePlant(), new MagnetShroom(),
 
 		new CabbagePult(), new BasePlant(), new BasePlant(), new NoXPPlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
@@ -53,6 +53,13 @@ MyPlant MyPlant::GetOwner()
 void MyPlant::SetOwner(MyPlant plant)
 {
 	this->OwnerID = plant.Id;
+}
+
+void MyPlant::SetMaxHealth(int val)
+{
+	auto ori_val = this->MaxHp;
+	this->MaxHp = val;
+	this->Hp += val - ori_val;
 }
 
 bool MyPlant::IsToolPlant()

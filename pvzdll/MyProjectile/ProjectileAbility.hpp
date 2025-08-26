@@ -30,6 +30,21 @@ namespace ProjectileAbility
 		{
 			return;
 		}
+		/// @brief 重载子弹图片的函数
+		/// @param proj 子弹
+		/// @return 子弹图片基址。若返回为负数，表示不重载。
+		virtual int GetImage(MyProjectile proj)
+		{
+			return -1;
+		}
+		/// @brief 重载子弹图片尺寸的函数
+		/// @param proj 子弹
+		/// @param original_val 原始大小
+		/// @return 子弹图片基址。若返回为负数，表示不重载。
+		virtual float GetImageSize(MyProjectile proj, float original_val)
+		{
+			return original_val;
+		}
 	};
 	typedef BaseProjectile* ProjectilePTR;
 	ProjectilePTR GetAbility(ProjectileType::ProjectileType type);
