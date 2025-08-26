@@ -1,4 +1,4 @@
-#include "MyProjectile.hpp"
+ï»¿#include "MyProjectile.hpp"
 #include "implement/index.hpp"
 
 namespace ProjectileAbility
@@ -34,7 +34,7 @@ void MyProjectile::AdjustRow()
 {
 	SETARG(__asm__AdjustRow, 1) = this->GetBaseAddress();
 	SETARG(__asm__AdjustRow, 6) = this->ImageX;
-	SETARG(__asm__AdjustRow, 11) = this->ImageY + 40;//40ÕÕ³­µÄÈýÏßµÄCT
+	SETARG(__asm__AdjustRow, 11) = this->ImageY + 40;//40ç…§æŠ„çš„ä¸‰çº¿çš„CT
 	SETARG(__asm__AdjustRow, 16) = this->GetBoard().GetBaseAddress();
 	PVZ::Memory::Execute(STRING(__asm__AdjustRow));
 }
