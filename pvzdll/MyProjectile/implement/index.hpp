@@ -3,3 +3,4 @@
 #include "GoldSpike.hpp"
 #include "Diamond.hpp"
 #include "GoldMelon.hpp"
+#include "Melon.hpp"

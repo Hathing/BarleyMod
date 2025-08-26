@@ -9,5 +9,13 @@ namespace PlantAbility
 		{
 			plant.ShootOrProductInterval = 300;
 		}
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		{
+			while (Creator::Rand(100) < 90)
+			{
+				proj.SpecialStack += 1;
+			}
+			return true;
+		}
 	};
 }

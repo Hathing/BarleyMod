@@ -17,6 +17,8 @@ public:
 	T_PROPERTY(ProjSpecialFlags, SpecialFlags, __get_SpecialFlags, __set_SpecialFlags, 0x84);
 	/// @brief 抛射子弹的弹跳计数器
 	T_PROPERTY(byte, BounceCount, __get_BounceCount, __set_BounceCount, 0x85);
+	/// @brief 子弹的特殊层数，如西瓜大小
+	T_PROPERTY(byte, SpecialStack, __get_SpecialStack, __SpecialStack, 0x86);
 	/// @brief 根据子弹坐标调整子弹行数，目前只有三线子弹在用，其余子弹要用的话请注意
 	void AdjustRow();
 };

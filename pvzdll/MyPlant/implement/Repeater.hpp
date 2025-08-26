@@ -9,5 +9,10 @@ namespace PlantAbility
 		{
 			plant.ShootOrProductInterval = 120;
 		}
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		{
+			proj.OnFire();
+			return true;
+		}
 	};
 }

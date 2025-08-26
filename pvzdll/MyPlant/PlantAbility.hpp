@@ -1,6 +1,7 @@
 #pragma once
 #include "MyPlant.hpp"
 #include "../MyZombie/MyZombie.hpp"
+#include "../MyProjectile/MyProjectile.hpp"
 
 namespace PlantAbility
 {
@@ -81,6 +82,13 @@ namespace PlantAbility
 		virtual void onUpgrade(MyPlant plant)
 		{
 			return;
+		}
+		/// @brief 植物发射子弹事件。
+		/// @param 依次为：触发事件的植物、生成的子弹、子弹目标僵尸的基址。
+		/// @return 是否进行原版的初始化过程。
+		virtual bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		{
+			return true;
 		}
 	};
 	typedef BasePlant* PlantPTR;

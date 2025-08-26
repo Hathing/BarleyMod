@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "MyProjectile/ProjectileAbility.hpp"
+#include "MyPlant/PlantAbility.hpp"
 
 bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 {
@@ -8,13 +9,7 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 		proj.OriginalRow = (byte)plant.Row;
 	if (plant.Type == SeedType::Kernelpult)
 		proj.BounceCount = 5;
-
-	if (plant.Type == SeedType::Threepeater)
-	{
-		//中路的子弹也会被标记，但是标记只有在运动方式=2时才有用
-		proj.SpecialFlags = PSF_THREEPEATER_SLIDE_OUT;
-	}
-	return true;
+	return PlantAbility::GetPrototype(plant.Type)->onAddProjectile(plant, proj, zombie);
 }
 
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
@@ -40,7 +35,7 @@ int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType
 	}
 	ProjectileAbility::GetAbility(proj.Type)->onDamageZombie(proj, zombie, type, subtarget_num, mydamage);
 
-	return -1;
+	return mydamage;
 }
 
 int GetProjectileImage(MyProjectile proj, PVZEvent::ProjectileImgParam param)
@@ -53,7 +48,7 @@ int GetProjectileImage(MyProjectile proj, PVZEvent::ProjectileImgParam param)
 
 float GetProjectileImageSize(MyProjectile proj, float original_val)
 {
-	return ProjectileAbility::GetAbility(proj.Type)->GetImageSize(proj,1.0f);
+	return ProjectileAbility::GetAbility(proj.Type)->GetImageSize(proj,original_val);
 }
 
 void onProjectileUpdate(MyProjectile proj)
