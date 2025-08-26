@@ -16,19 +16,22 @@ namespace PlantAbility
 			{
 				int partition = plant.Hp * 3 / plant.MaxHp;
 				auto model = plant.GetAnimationPart1();
-				switch (partition)
+				if (model.isValid())
 				{
-				case 0:
-					model.SetImageOverride("awaken_2", *((PVZ::Image*)0x6FF0B8));
-					break;
-				case 1:
-					model.SetImageOverride("awaken_2", *((PVZ::Image*)0x6FF0B8));
-					break;
-				case 2:
-				default:
-					model.SetImageOverride("awaken_2", PVZ::Image(0));
+					switch (partition)
+					{
+					case 0:
+						model.SetImageOverride("awaken_2", *((PVZ::Image*)0x6FF0B8));
+						break;
+					case 1:
+						model.SetImageOverride("awaken_2", *((PVZ::Image*)0x6FF0B8));
+						break;
+					case 2:
+					default:
+						model.SetImageOverride("awaken_2", PVZ::Image(0));
+					}
+					return false;
 				}
-				return false;
 			}
 			return true;
 		}
