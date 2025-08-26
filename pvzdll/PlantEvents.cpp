@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
 
 void onPlantInitAfter(MyPlant plant)
@@ -97,6 +97,11 @@ bool onPlantUpdateColor(MyPlant plant, PVZ::Animation anim)
 	return true;
 }
 
+int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
+{
+	return plant.Row == zombie.Row ? 1 : 0;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -106,4 +111,5 @@ void InitPlantEvents()
 	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
 	PlantDieEvent((int)onPlantDie);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
+	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
 }
