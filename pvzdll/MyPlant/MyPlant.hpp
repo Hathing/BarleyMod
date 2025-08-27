@@ -11,6 +11,8 @@ public:
 
 	/// @brief 是否由大麦生成
 	T_PROPERTY(mybool, FromBarley, __get_FrB, __set_FrB, 0x064);
+	/// @brief 被啃50cs倒计时
+	T_PROPERTY(byte, EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
 	/// @brief 技能计时器
 	INT_PROPERTY(AnotherCounter, __get_AnC, __set_AnC, 0x0DC);
 	/// @brief 路灯花复活植物类型
@@ -41,6 +43,8 @@ public:
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
 	/// @brief 大麦及其派生植物变身倒计时
 	INT_PROPERTY(BarleyCounter, __get_BaC, __set_BaC, 0x120);
+	/// @brief 植物血条显示倒计时
+	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0x130);
 	/// @brief 是否在 Board 上
 	T_PROPERTY(mybool, OnBoard, __get_OnB, __set_OnB, 0x144);
 
