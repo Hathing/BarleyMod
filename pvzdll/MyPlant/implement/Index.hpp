@@ -38,5 +38,6 @@
 #include "DarkShroom.hpp"
 #include "Mangosteen.hpp"
 #include "ThymeWarp.hpp"
+#include "PeaShooter.hpp"
 
 #include "NoXPPlant.hpp"
