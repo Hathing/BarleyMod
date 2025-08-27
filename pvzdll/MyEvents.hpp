@@ -306,4 +306,15 @@ namespace PVZEvent
 		ZombieSquishPlantEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieSquishPlantEvent() : ZombieSquishPlantEvent("onZombieSquishPlant") {};
 	};
+
+	/// @brief 子弹初始化完成事件
+	/// @note 此时 ImageX 和 ImageY 均未初始化
+	/// @param 触发事件的子弹
+	class ProjectileInitAfterEvent : public DLLEventTemplate<0x46CA78, 5, REG_EBP>
+	{
+	public:
+		ProjectileInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ProjectileInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onZombieSquishPlant") {};
+	};
 };
