@@ -110,6 +110,47 @@ void onPlantShootMultiple(MyPlant plant)
 		plant.FindTargetAndFire(0);
 }
 
+bool onPlantPultSkip(MyPlant plant,MyZombie zombie)
+{
+	if (zombie.PultSkip)
+	{
+		if (plant.Type == SeedType::Cabbagepult || plant.Type == SeedType::Kernelpult || plant.Type == SeedType::Melonpult || plant.Type == SeedType::WinterMelon)
+			return false;
+	}
+	return true;
+}
+
+/// @brief 投手同时投出多发子弹
+/// @param plant 植物
+/// @param num 多发数量
+/// @param PlantWeapon 植物副武器
+void PultMultiple(MyPlant plant, int num, int PlantWeapon)
+{
+	for (int i = 0; i < num; i++)
+	{
+		int targetid = plant.FindTargetZombie(PlantWeapon);
+		if (targetid)
+		{
+			MyZombie target{ targetid };
+			plant.Fire(PlantWeapon, targetid);
+			target.PultSkip = 1;
+		}
+	}
+	//清空所有僵尸的PultSkip标记
+	auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
+	for (auto& zombie : zombies)
+	{
+		zombie.PultSkip = 0;
+	}
+}
+
+void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
+{
+	if (plant.Type == SeedType::Cabbagepult)
+		PultMultiple(plant, 3, PlantWeapon);
+	plant.Fire(PlantWeapon,plant.FindTargetZombie(PlantWeapon));
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -121,4 +162,6 @@ void InitPlantEvents()
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
 	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
 	PVZEvent::PlantShootMultipleEvent((int)onPlantShootMultiple);
+	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
+	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
 }

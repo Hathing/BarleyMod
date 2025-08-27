@@ -229,6 +229,44 @@ bool MyPlant::FindTargetAndFire(int PlantWeapon)
 	return (bool)(byte)Memory::Execute(STRING(__asm__FindTargetAndFire));
 }
 
+byte __asm__FindTargetZombie[34]
+{
+	MOV_ECX(0),
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x4675C0),
+	MOV_PTR_ADDR_EAX(0),
+	RET
+};
+
+int MyPlant::FindTargetZombie(int PlantWeapon)
+{
+	SETARG(__asm__FindTargetZombie, 1) = PlantWeapon;
+	SETARG(__asm__FindTargetZombie, 6) = this->Row;
+	SETARG(__asm__FindTargetZombie, 11) = this->GetBaseAddress();
+	SETARG(__asm__FindTargetZombie, 29) = Memory::Variable;
+	return Memory::Execute(STRING(__asm__FindTargetZombie));
+}
+
+byte __asm__Fire[34]
+{
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x466E00),
+	RET
+};
+
+void MyPlant::Fire(int PlantWeapon, int targetid)
+{
+	SETARG(__asm__Fire, 1) = PlantWeapon;
+	SETARG(__asm__Fire, 6) = this->Row;
+	SETARG(__asm__Fire, 11) = targetid;
+	SETARG(__asm__Fire, 16) = this->GetBaseAddress();
+	Memory::Execute(STRING(__asm__Fire));
+}
+
 MyPlant MyPlant::GetByID(int id)
 {
 	if (id)

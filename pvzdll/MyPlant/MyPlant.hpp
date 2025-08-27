@@ -1,6 +1,7 @@
 #pragma once
 #include "../framework.h"
 #include "../Const.hpp"
+#include "../MyZombie/MyZombie.hpp"
 
 class MyPlant : public PVZ::Plant
 {
@@ -88,6 +89,14 @@ public:
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
 	/// @return 返回一个bool，表示植物是否成功索敌
 	bool FindTargetAndFire(int PlantWeapon);
+	/// @brief 植物寻找敌人。
+	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
+	/// @return 僵尸ID，仅仅用于开火的参数
+	int FindTargetZombie(int PlantWeapon);
+	/// @brief 植物开火。PVZClass的Shoot()不知道为什么用了会崩溃，这个函数直接调用原版函数466e00
+	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
+	/// @param targetid 目标僵尸
+	void Fire(int PlantWeapon,int targetid);
 
 	/// @brief 最大等级
 	static const int MAX_LEVEL = 5;

@@ -292,6 +292,30 @@ namespace PVZEvent
 		PlantShootMultipleEvent(int address) : DLLEventTemplate() { Init(address); };
 		PlantShootMultipleEvent() : PlantShootMultipleEvent("onPlantShootMultiple") {};
 	};
+	/// @brief 投手类植物跳过被多投标记的僵尸事件
+	/// @param 植物ID(ECX)，僵尸ID(ESI)
+	/// @return False则跳过该僵尸
+	class PlantPultSkipEvent : public BoolDLLEventTemplate<0x4677E9, 6, 0x467881, REG_ESI, REG_ECX>
+	{
+	public:
+		PlantPultSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantPultSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantPultSkipEvent() : PlantPultSkipEvent("onPlantPultSkip") {};
+	};
+	/// @brief 四个投手的多投事件
+	/// @param 植物ID（EDI） 植物副武器（ESI）
+	class PlantPultMultipleEvent : public DLLEventTemplate<0x464C1C, 5, REG_ESI, REG_EDI>
+	{
+	public:
+		PlantPultMultipleEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantPultMultipleEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantPultMultipleEvent() : PlantPultMultipleEvent("onPlantPultMultiple") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.popad().push_imm32(0x464C34).ret();
+		}
+	};
 
 	/// @brief 创建动画图集事件
 	/// @param 触发事件的动画类型，触发事件的动画定义
