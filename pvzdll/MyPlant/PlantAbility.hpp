@@ -90,6 +90,13 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		/// @brief 获取植物满级时启用彩蛋皮的概率的倒数
+		/// @return 植物满级时启用彩蛋皮的概率的倒数。
+		/// @retval 0 禁用彩蛋皮。
+		virtual int GetEasterProbabilityPartition()
+		{
+			return 10;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetPrototype(SeedType::SeedType type);
