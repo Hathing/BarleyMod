@@ -102,12 +102,14 @@ int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
 	return plant.Row == zombie.Row ? 1 : 0;
 }
 
-void onPlantShootMultiple(MyPlant plant)
+bool onPlantShootMultiple(MyPlant plant)
 {
 	if (plant.Type == SeedType::Cactus && plant.ShootOrProductCountdown == 50)
 		plant.FindTargetAndFire(1);
 	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
 		plant.FindTargetAndFire(0);
+	//如果要跳过原版发射，一定要注意手动重置+58！
+	return true;
 }
 
 bool onPlantPultSkip(MyPlant plant,MyZombie zombie)

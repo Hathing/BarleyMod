@@ -285,11 +285,12 @@ namespace PVZEvent
 
 	/// @brief 攻击型植物多连发事件，机枪的多发不在这里
 	/// @param 植物ID
-	class PlantShootMultipleEvent : public DLLEventTemplate<0x45F8AD, 5, REG_ESI>
+	/// @return False则跳过原版发射（包括+58=0的发射与重置+58、原版双发、猫、裂荚等植物的双发）
+	class PlantShootMultipleEvent : public BoolDLLEventTemplate<0x45F8AD, 5, 0x45F97B,REG_ESI>
 	{
 	public:
-		PlantShootMultipleEvent(const char* str) : DLLEventTemplate() { Init(str); };
-		PlantShootMultipleEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantShootMultipleEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantShootMultipleEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantShootMultipleEvent() : PlantShootMultipleEvent("onPlantShootMultiple") {};
 	};
 	/// @brief 投手类植物跳过被多投标记的僵尸事件
