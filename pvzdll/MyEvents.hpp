@@ -283,6 +283,16 @@ namespace PVZEvent
 		PlantUpdateColorEvent() : PlantUpdateColorEvent("onPlantUpdateColor") {};
 	};
 
+	/// @brief 攻击型植物多连发事件，机枪的多发不在这里
+	/// @param 植物ID
+	class PlantShootMultipleEvent : public DLLEventTemplate<0x45F8AD, 5, REG_ESI>
+	{
+	public:
+		PlantShootMultipleEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantShootMultipleEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantShootMultipleEvent() : PlantShootMultipleEvent("onPlantShootMultiple") {};
+	};
+
 	/// @brief 创建动画图集事件
 	/// @param 触发事件的动画类型，触发事件的动画定义
 	/// @return 是否生成动画图集

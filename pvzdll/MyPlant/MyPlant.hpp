@@ -84,6 +84,10 @@ public:
 	void AddExperience(int val, bool kill_credit = false);
 	/// @brief 启用彩蛋皮
 	void EnableEasterSkin();
+	/// @brief 植物索敌并准备开火。只有除了三线和杨桃的攻击型植物才应当使用这个函数
+	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
+	/// @return 返回一个bool，表示植物是否成功索敌
+	bool FindTargetAndFire(int PlantWeapon);
 
 	/// @brief 最大等级
 	static const int MAX_LEVEL = 5;

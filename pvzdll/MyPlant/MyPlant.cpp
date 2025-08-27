@@ -210,6 +210,25 @@ void MyPlant::EnableEasterSkin()
 		model.AssignRenderGroupToPrefix(-1, "\0");
 }
 
+byte __asm__FindTargetAndFire[34]
+{
+	MOV_EAX(0),
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x45EF10),
+	MOV_PTR_ADDR_EAX(0),
+	RET
+};
+
+bool MyPlant::FindTargetAndFire(int PlantWeapon)
+{
+	SETARG(__asm__FindTargetAndFire, 1) = this->GetBaseAddress();
+	SETARG(__asm__FindTargetAndFire, 6) = PlantWeapon;
+	SETARG(__asm__FindTargetAndFire, 11) = this->Row;
+	SETARG(__asm__FindTargetAndFire, 29) = Memory::Variable;
+	return (bool)(byte)Memory::Execute(STRING(__asm__FindTargetAndFire));
+}
+
 MyPlant MyPlant::GetByID(int id)
 {
 	if (id)

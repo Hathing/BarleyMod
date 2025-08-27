@@ -102,6 +102,14 @@ int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
 	return plant.Row == zombie.Row ? 1 : 0;
 }
 
+void onPlantShootMultiple(MyPlant plant)
+{
+	if (plant.Type == SeedType::Cactus && plant.ShootOrProductCountdown == 50)
+		plant.FindTargetAndFire(1);
+	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
+		plant.FindTargetAndFire(0);
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -112,4 +120,5 @@ void InitPlantEvents()
 	PlantDieEvent((int)onPlantDie);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
 	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
+	PVZEvent::PlantShootMultipleEvent((int)onPlantShootMultiple);
 }
