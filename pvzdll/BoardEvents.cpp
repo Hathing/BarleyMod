@@ -136,12 +136,9 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 			DrawImage(ix, iy, GraphicsID, 0x6FF0A4);
 		}
 		//绘制等级图标
-		if (plant.IsXPRecipient())
-		{
-			ix = x - 20;
-			iy = y + 95;
-			DrawImage(ix, iy, GraphicsID, 0x6FF084 + 4 * plant.Level);
-		}
+		ix = x - 20;
+		iy = y + 95;
+		DrawImage(ix, iy, GraphicsID, 0x6FF084 + 4 * plant.Level);
 	}
 }
 
