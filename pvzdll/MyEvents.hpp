@@ -303,6 +303,31 @@ namespace PVZEvent
 		PlantPultSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantPultSkipEvent() : PlantPultSkipEvent("onPlantPultSkip") {};
 	};
+	/// @brief 狙击豌豆索敌跳过部分僵尸事件
+	/// @param 植物ID(EDI)，僵尸ID(ESI)
+	/// @return 返回值为0则使用原版531a80；返回值为1则跳过索敌该僵尸;返回值为2则以该僵尸继续判断后续（跳过531A80）;返回其他值同0
+	class PeaShooterSkipEvent : public DLLEventTemplate<0x4676CC, 6, REG_ESI, REG_EDI>
+	{
+	public:
+		PeaShooterSkipEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PeaShooterSkipEvent(int address) : DLLEventTemplate() { Init(address); };
+		PeaShooterSkipEvent() : PeaShooterSkipEvent("onPeaShooterSkip") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 2).jne_rel(7).popad().push_imm32(0x4676DA).ret().cmp_reg_imm(REG_EAX, 1).jne_rel(7).popad().push_imm32(0x467884).ret();
+		}
+	};
+	/// @brief 植物更新Shooting事件，发生在更新+90计时前
+	/// @param 植物ID
+	/// @return False则跳过原版更新，注意更新计时也会被跳过
+	class PlantUpdateShootingEvent : public BoolDLLEventTemplate<0x464889, 6, 0x464D9F, REG_EDI>
+	{
+	public:
+		PlantUpdateShootingEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantUpdateShootingEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantUpdateShootingEvent() : PlantUpdateShootingEvent("onPlantUpdateShooting") {};
+	};
 	/// @brief 四个投手的多投事件
 	/// @param 植物ID（EDI） 植物副武器（ESI）
 	class PlantPultMultipleEvent : public DLLEventTemplate<0x464C1C, 5, REG_ESI, REG_EDI>

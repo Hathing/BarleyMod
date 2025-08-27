@@ -153,6 +153,68 @@ void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
 	plant.Fire(PlantWeapon,plant.FindTargetZombie(PlantWeapon));
 }
 
+int onPeaShooterSkip(MyPlant plant, MyZombie zombie)
+{
+	if (plant.Type == SeedType::Peashooter)
+	{
+		ZombieType::ZombieType zombietype = zombie.Type;
+		ZombieState::ZombieState zombiestate = zombie.State;
+		if (zombie.NotExist || zombie.ZombieHeight == 9 || zombie.Hypnotized || zombie.Blowaway || !zombie.NotDying)//这里+64是ZombieHeight？我看指针表是僵尸运动状态
+			return 1;
+		if (zombietype == ZombieType::Zomboin || zombietype == ZombieType::CatapultZombie)
+		{
+			if (zombie.BodyHealth < 30)
+				return 1;
+		}
+		else if (!zombie.NotDying)
+			return 1;
+		if (zombietype == ZombieType::BungeeZombie)
+			return 1;
+		switch (zombiestate)
+		{
+			case ZombieState::DYING:
+			case ZombieState::DYING_FROM_INSTANT_KILL:
+			case ZombieState::DYING_FROM_LAWNMOWER:
+			case ZombieState::NEWSPAPER_DESTORYED:
+			case ZombieState::DIGGER_DIG:
+			case ZombieState::DIGGER_LOST_DIG:
+			case ZombieState::DIGGER_IDLE:
+			case ZombieState::SNORKEL_SWIM:
+				return 1;
+			default:
+				break;
+		}
+		return 2;
+	}
+	return 0;
+}
+
+bool onPlantUpdateShooting(MyPlant plant)
+{
+	if (plant.Type == SeedType::Peashooter)
+	{
+		if (plant.ShootingCountdown == 1)
+		{
+			int targetid = plant.PeashooterTarget;
+			if (targetid != 0)
+			{
+				//MyZombie target{ targetid };
+				//target.Hit(500);
+				//target.LastDamageSourceID = plant.Id;
+				//创建特效
+				//auto particle = PVZ::CreateParticleSystem(target.X + 40.0f, target.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
+				//particle.OverrideImage(PVZ::Image(0x6A76A8));
+				//PVZ::CreateParticleSystem(target.X + 40.0f, target.Y + 65.0f, 0x61A80, EffectType::HAMMER_BANG);
+				Creator::CreateLowerSound(LowerSoundType::CherryExplode);
+				plant.ShootOrProductCountdown = 300;//真正的重置CD
+			}
+		}
+		plant.ShootingCountdown -= 1;
+		return false;
+	}
+	return true;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -166,4 +228,6 @@ void InitPlantEvents()
 	PVZEvent::PlantShootMultipleEvent((int)onPlantShootMultiple);
 	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
 	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
+	PVZEvent::PeaShooterSkipEvent((int)onPeaShooterSkip);
+	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
 }

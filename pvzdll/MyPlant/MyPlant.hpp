@@ -15,6 +15,8 @@ public:
 	T_PROPERTY(byte, EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
 	/// @brief 技能计时器
 	INT_PROPERTY(AnotherCounter, __get_AnC, __set_AnC, 0x0DC);
+	/// @brief 狙击豌豆的目标
+	INT_PROPERTY(PeashooterTarget, __get_PeashooterTarget, __set_PeashooterTarget, 0x0E0);
 	/// @brief 路灯花复活植物类型
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 第一个与该植物相关的植物的 ID
