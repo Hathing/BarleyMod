@@ -5,6 +5,11 @@ namespace PlantAbility
 {
 	class GoldMagnet : public BasePlant
 	{
+		inline static const int max_health[6] = { 300, 600, 600, 1000, 1000, 1000 };
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
+		}
 		bool TickAbility(MyPlant plant)
 		{
 			switch (plant.State)
