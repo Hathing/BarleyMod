@@ -103,7 +103,19 @@ public:
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
 	/// @param targetid 目标僵尸
 	void Fire(int PlantWeapon,int targetid);
-
+	/// @brief 植物对僵尸造成伤害，封装了各种伤害事件。
+	/// @param zombie 僵尸
+	/// @param flags 伤害标记
+	/// @param damage 伤害值
+	/// @param damage_type 伤害类型（用于事件判断）
+	/// @return 实际造成伤害值(伤害<0则失败)
+	int DoDamageToZombie(MyZombie zombie, PVZ::DamageFlags flags, int damage, PVZEvent::PlantDamageType damage_type);
+	/// @brief 植物受到伤害，封装了各种事件。
+	/// @param source 伤害来源
+	/// @param source_type 伤害来源的类型
+	/// @param damage 伤害值
+	/// @return 实际受到伤害值(伤害<0则失败)
+	int TakeDamage(PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
 	/// @brief 最大等级
 	static const int MAX_LEVEL = 5;
 
