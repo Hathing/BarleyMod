@@ -32,7 +32,7 @@ namespace PlantAbility
 					if (threat_z > threat_p)
 					{
 						threat_p = threat_z;
-						targetid = zombie.Id;
+						targetid = zombie.GetBaseAddress();
 					}
 				}
 				plant.PeashooterTarget = targetid;

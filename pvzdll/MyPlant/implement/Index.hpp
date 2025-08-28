@@ -39,6 +39,7 @@
 #include "Mangosteen.hpp"
 #include "ThymeWarp.hpp"
 #include "PeaShooter.hpp"
+#include "GatlingPea.hpp"
 
 #include "NoXPPlant.hpp"
 #include "NoEasterSkinPlant.hpp"

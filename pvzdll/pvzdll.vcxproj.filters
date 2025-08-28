@@ -51,6 +51,9 @@
 	<ClInclude Include="MyPlant\implement\PeaShooter.hpp">
 		<Filter>头文件</Filter>
 	</ClInclude>
+	<ClInclude Include="MyPlant\implement\GatlingPea.hpp">
+		<Filter>头文件</Filter>
+	</ClInclude>
     <ClInclude Include="MyPlant\implement\SeaShroom.hpp">
       <Filter>头文件</Filter>
     </ClInclude>

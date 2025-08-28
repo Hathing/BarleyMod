@@ -149,7 +149,10 @@ void PultMultiple(MyPlant plant, int num, int PlantWeapon)
 void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
 {
 	if (plant.Type == SeedType::Cabbagepult)
+	{
 		PultMultiple(plant, 3, PlantWeapon);
+		return;
+	}
 	plant.Fire(PlantWeapon,plant.FindTargetZombie(PlantWeapon));
 }
 
@@ -189,6 +192,22 @@ int onPeaShooterSkip(MyPlant plant, MyZombie zombie)
 	return 0;
 }
 
+
+byte __asm__StartBlend[24]
+{
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x473310),
+	RET
+};
+void StartBlend(int blendtime,PVZ::Animation anim)
+{
+	SETARG(__asm__StartBlend, 1) = blendtime;
+	SETARG(__asm__StartBlend, 6) = anim.GetBaseAddress();
+	Memory::Execute(STRING(__asm__StartBlend));
+}
+
+
 bool onPlantUpdateShooting(MyPlant plant)
 {
 	if (plant.Type == SeedType::Peashooter)
@@ -198,18 +217,93 @@ bool onPlantUpdateShooting(MyPlant plant)
 			int targetid = plant.PeashooterTarget;
 			if (targetid != 0)
 			{
-				//MyZombie target{ targetid };
-				//target.Hit(500);
-				//target.LastDamageSourceID = plant.Id;
-				//创建特效
-				//auto particle = PVZ::CreateParticleSystem(target.X + 40.0f, target.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
-				//particle.OverrideImage(PVZ::Image(0x6A76A8));
-				//PVZ::CreateParticleSystem(target.X + 40.0f, target.Y + 65.0f, 0x61A80, EffectType::HAMMER_BANG);
-				Creator::CreateLowerSound(LowerSoundType::CherryExplode);
+				plant.Fire(0, targetid);
 				plant.ShootOrProductCountdown = 300;//真正的重置CD
 			}
 		}
 		plant.ShootingCountdown -= 1;
+		if (plant.ShootingCountdown == 0)
+		{
+			auto anim1 = plant.GetAnimationPart1();
+			auto anim2 = plant.GetAnimationPart2();
+			if (anim2.isValid() && plant.ShootOrProductInterval > 0)
+			{
+				StartBlend(20, anim2);
+				anim2.SetFramesForLayer("anim_head_idle");
+				int base_addr = anim2.GetBaseAddress();
+				Memory::WriteMemoryUnsafe<int>((DWORD)base_addr + 0x10, 0);
+				anim2.CycleRate = anim1.CycleRate;
+				anim2.Speed = anim1.Speed;
+			}
+			else if (anim1.isValid() && plant.ShootOrProductInterval > 0)
+			{
+				plant.PlayIdleAnim(anim1.Speed);
+			}
+			else plant.ShootingCountdown = 1;
+		}
+		return false;
+	}
+	if (plant.Type == SeedType::GatlingPea)
+	{
+		if (plant.AnotherCounter > 0)
+		{
+			plant.Fire(0, 0);
+		}
+		else
+		{
+			if (plant.ShootingCountdown == 16 || plant.ShootingCountdown == 30 || plant.ShootingCountdown == 44 || plant.ShootingCountdown == 58 || plant.ShootingCountdown == 72)
+			{
+				plant.Fire(0, 0);
+			}
+
+		}
+		plant.ShootingCountdown -= 1;
+		if (plant.ShootingCountdown == 0)
+		{
+			auto anim1 = plant.GetAnimationPart1();
+			auto anim2 = plant.GetAnimationPart2();
+			if (anim2.isValid() && plant.ShootOrProductInterval > 0)
+			{
+				StartBlend(20, anim2);
+				anim2.SetFramesForLayer("anim_head_idle");
+				int base_addr = anim2.GetBaseAddress();
+				Memory::WriteMemoryUnsafe<int>((DWORD)base_addr + 0x10, 0);
+				anim2.CycleRate = anim1.CycleRate;
+				anim2.Speed = anim1.Speed;
+			}
+			else if (anim1.isValid() && plant.ShootOrProductInterval > 0)
+			{
+				plant.PlayIdleAnim(anim1.Speed);
+			}
+			else plant.ShootingCountdown = 1;
+		}
+		return false;
+	}
+	return true;
+}
+
+//这是一个测试用的函数
+void TakeDamage(int damage, PVZ::DamageFlags flags,int targetid)
+{
+	SETARG(__asm__Hit, 1) = targetid;
+	SETARG(__asm__Hit, 6) = flags;
+	SETARG(__asm__Hit, 11) = damage;
+	Memory::Execute(STRING(__asm__Hit));
+}
+
+bool onPlantAddProjectileBefore(MyPlant plant, ProjectileType::ProjectileType proj_type, int x, int y)
+{
+	if (plant.Type == SeedType::Peashooter)
+	{
+		MyZombie zombie{ plant.PeashooterTarget };
+		//TakeDamage(500, PVZ::DAMAGEF_NONE, plant.PeashooterTarget);
+		//zombie.LastDamageSourceID = plant.GetBaseAddress();//这行代码会崩溃
+		zombie.Hit(500, PVZ::DAMAGEF_NONE);
+		//创建特效
+		auto particle = PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
+		//particle.OverrideImage(PVZ::Image(0x6A76A8));//这行代码会崩溃
+		PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::HAMMER_BANG);
+		Creator::CreateLowerSound(LowerSoundType::CherryExplode);
 		return false;
 	}
 	return true;
@@ -228,6 +322,6 @@ void InitPlantEvents()
 	PVZEvent::PlantShootMultipleEvent((int)onPlantShootMultiple);
 	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
 	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
-	PVZEvent::PeaShooterSkipEvent((int)onPeaShooterSkip);
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
+	PVZEvent::PlantAddProjectileBeforeEvent((int)onPlantAddProjectileBefore);
 }

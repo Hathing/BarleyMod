@@ -56,24 +56,6 @@ void onBoardUpdateGameObject(MyBoard board)
 	UpdatePlantExistCount(board);
 }
 
-inline int GridToPixelX(int row, int col, MyBoard& board)
-{
-	//不适用于禅境花园
-	return (80 * col + 40);
-}
-
-inline int GridToPixelY(int row, int col, MyBoard& board)
-{
-	//不适用于禅境花园、原版废稿高地
-	if (board.LevelScene == SceneType::Pool || board.LevelScene == SceneType::Pool)
-		return row * 85 + 50;
-	else if (board.LevelScene == SceneType::Day || board.LevelScene == SceneType::Night)
-		return row * 100 + 50;
-	else if (board.LevelScene == SceneType::Roof || board.LevelScene == SceneType::MoonNight)
-		return row * 85 + 40 + max(0, 5 - col) * 15;
-	return 0;
-}
-
 byte __asm__DrawImage[35]
 {
 	PUSHDWORD(0),
@@ -124,20 +106,20 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 	{
 		int row = plant.Row, col = plant.Column, hp = plant.Hp, max_hp = plant.MaxHp;
 		float hp_ratio = (float)hp / (float)max_hp;
-		int x = GridToPixelX(row, col, board), y = GridToPixelY(row, col, board);
+		int x = board.GridToXPixel(row, col), y = board.GridToYPixel(row, col);
 		int ix=0, iy=0;
 		//绘制血条
 		if (plant.HpDisplayCounter>0 || plant.EatenCounter>0 || hp_ratio<0.33f)//这里被啃50cs应该可以改一改?
 		{
 			ix = x + 9;
-			iy = y + 100;
+			iy = y + 60;
 			DrawImage(ix, iy, GraphicsID, 0x6FF0A0);
 			TodDrawImageScaledF(hp_ratio, 1.0f, (float)ix, (float)iy, GraphicsID, 0x6FF09C);
 			DrawImage(ix, iy, GraphicsID, 0x6FF0A4);
 		}
 		//绘制等级图标
 		ix = x - 20;
-		iy = y + 95;
+		iy = y + 55;
 		DrawImage(ix, iy, GraphicsID, 0x6FF084 + 4 * plant.Level);
 	}
 }

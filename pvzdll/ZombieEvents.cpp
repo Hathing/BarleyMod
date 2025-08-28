@@ -35,7 +35,7 @@ void onZombieDropLoot(MyZombie zombie)
 		auto plants = zombie.GetBoard().GetAllPlants<MyPlant>();
 		int plant_cnt = 0;
 		for (auto plant : plants)
-			if (plant.Row == zombie.Row && plant.IsXPRecipient())
+			if (plant.Row == zombie.Row && plant.IsXPRecipient())//这里植物平分行数应当优先与击杀者比较（如果有击杀者）
 				plant_cnt++;
 		if (plant_cnt <= 0) return;
 		bounty_xp /= plant_cnt;
@@ -47,6 +47,7 @@ void onZombieDropLoot(MyZombie zombie)
 
 void onZombieInitAfter(MyZombie zombie)
 {
+	zombie.LastDamageSourceID = 0;
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
 }
 

@@ -303,30 +303,35 @@ namespace PVZEvent
 		PlantPultSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantPultSkipEvent() : PlantPultSkipEvent("onPlantPultSkip") {};
 	};
-	/// @brief 狙击豌豆索敌跳过部分僵尸事件
-	/// @param 植物ID(EDI)，僵尸ID(ESI)
-	/// @return 返回值为0则使用原版531a80；返回值为1则跳过索敌该僵尸;返回值为2则以该僵尸继续判断后续（跳过531A80）;返回其他值同0
-	class PeaShooterSkipEvent : public DLLEventTemplate<0x4676CC, 6, REG_ESI, REG_EDI>
-	{
-	public:
-		PeaShooterSkipEvent(const char* str) : DLLEventTemplate() { Init(str); };
-		PeaShooterSkipEvent(int address) : DLLEventTemplate() { Init(address); };
-		PeaShooterSkipEvent() : PeaShooterSkipEvent("onPeaShooterSkip") {};
-	protected:
-		virtual void InitExtra(AsmBuilder& builder)
-		{
-			builder.cmp_reg_imm(REG_EAX, 2).jne_rel(7).popad().push_imm32(0x4676DA).ret().cmp_reg_imm(REG_EAX, 1).jne_rel(7).popad().push_imm32(0x467884).ret();
-		}
-	};
 	/// @brief 植物更新Shooting事件，发生在更新+90计时前
 	/// @param 植物ID
-	/// @return False则跳过原版更新，注意更新计时也会被跳过
+	/// @return False则跳过原版更新，注意更新计时、重置豌豆头部动画等也会被跳过
 	class PlantUpdateShootingEvent : public BoolDLLEventTemplate<0x464889, 6, 0x464D9F, REG_EDI>
 	{
 	public:
 		PlantUpdateShootingEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		PlantUpdateShootingEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantUpdateShootingEvent() : PlantUpdateShootingEvent("onPlantUpdateShooting") {};
+	};
+	/// @brief 植物开火事件。此事件与PVZ Class中的PlantShootEvent注入位置相同，区别在于此事件可以选择跳过原版开火
+	/// @param 触发事件的植物、开火目标僵尸、Weapon类型
+	/// @return False则跳过原版开火
+	class PlantFireEvent : public BoolDLLEventTemplate<0x466E0D, 6, 0x466E7A, REG_EBX, MEM_ESP_ADD(0x2C), REG_EBP>
+	{
+	public:
+		PlantFireEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantFireEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantFireEvent() : PlantFireEvent("onPlantFire") {};
+	};
+	/// @brief 植物开火生成子弹前的事件。
+	/// @param 触发事件的植物、子弹类型、子弹初始化坐标X、Y
+	/// @return False则跳过子弹生成
+	class PlantAddProjectileBeforeEvent : public BoolDLLEventTemplate<0x4672A5, 5, 0x467319, REG_ESI,REG_EDI,REG_EAX,REG_EBP>
+	{
+	public:
+		PlantAddProjectileBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantAddProjectileBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantAddProjectileBeforeEvent() : PlantAddProjectileBeforeEvent("onPlantAddProjectileBefore") {};
 	};
 	/// @brief 四个投手的多投事件
 	/// @param 植物ID（EDI） 植物副武器（ESI）
@@ -383,6 +388,6 @@ namespace PVZEvent
 	public:
 		ProjectileInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		ProjectileInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
-		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onZombieSquishPlant") {};
+		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onProjectileInitAfter") {};
 	};
 };
