@@ -122,7 +122,7 @@ namespace PlantAbility
 			}
 			if (zombie.Row != plant.Row)
 				return false;
-			if (zombie.ImageX < plant.ImageX || zombie.ImageX > 660)
+			if (zombie.ImageX < plant.ImageX || zombie.ImageX > 760)
 				return false;
 			return true;
 		}
