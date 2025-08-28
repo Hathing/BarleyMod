@@ -180,6 +180,15 @@ int onPlantFindTargetRT(MyPlant plant,MyZombie zombie,int row)
 	return PlantAbility::GetPrototype(plant.Type)->onFindTargetRT(plant,zombie,row);
 }
 
+int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)
+{
+	if (plant.Type == SeedType::Peashooter)
+	{
+		PVZ::DamageRangeFlags flags = PVZ::DRF_OFF_GROUND | PVZ::DRF_FLYING | PVZ::DRF_GROUND;
+		return (int)flags;
+	}
+	return -1;
+}
 
 void InitPlantEvents()
 {
@@ -197,4 +206,5 @@ void InitPlantEvents()
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
 	PVZEvent::PlantAddProjectileBeforeEvent((int)onPlantAddProjectileBefore);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
+	PVZEvent::PlantGetDamageRangeFlagsEvent((int)onPlantGetDamageRangeFlags);
 }

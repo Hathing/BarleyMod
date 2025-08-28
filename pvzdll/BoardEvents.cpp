@@ -109,7 +109,7 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 		int x = board.GridToXPixel(row, col), y = board.GridToYPixel(row, col);
 		int ix=0, iy=0;
 		//绘制血条
-		if (plant.HpDisplayCounter>0 || plant.EatenCounter>0 || hp_ratio<0.33f)//这里被啃50cs应该可以改一改?
+		if (plant.HpDisplayCounter>0 || plant.EatenCounter>0 || hp_ratio<0.33f)
 		{
 			ix = x + 9;
 			iy = y + 60;
