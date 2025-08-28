@@ -1,9 +1,10 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "SpecialPlants.hpp"
 
 namespace PlantAbility
 {
-	class Garlic : public BasePlant
+	class Garlic : public NoEasterSkinPlant
 	{
 		void onCreated(MyPlant plant)
 		{

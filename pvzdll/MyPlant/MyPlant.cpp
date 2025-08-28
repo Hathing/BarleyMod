@@ -1,23 +1,23 @@
-﻿#include "MyPlant.hpp"
+#include "MyPlant.hpp"
 #include "implement/Index.hpp"
 
 namespace PlantAbility
 {
 	PlantAbility::PlantPTR pt_factory[] =
 	{
-		new PeaShooter(), new Barley(),	  new NoXPPlant(), new WallNut(),
+		new PeaShooter(), new Barley(),	  new NilPlant(),  new WallNut(),
 		new BasePlant(), new SnowPea(),	  new BasePlant(), new Repeater(),
 
-		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
-		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NoXPPlant(),
+		new PuffShroom(), new SunShroom(), new FumeShroom(), new NilPlant(),
+		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NilPlant(),
 
-		new DiamondShroom(), new Squash(), new Threepeater(), new BasePlant(),
-		new NoXPPlant(), new NoXPPlant(), new Torchwood(), new TallNut(),
+		new DiamondShroom(), new Squash(), new Threepeater(), new NoEasterSkinPlant(),
+		new NilPlant(),  new NoXPPlant(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),
-		new SplitPea(),  new BasePlant(), new BasePlant(), new MagnetShroom(),
+		new SplitPea(),  new BasePlant(), new NilPlant(),  new MagnetShroom(),
 
-		new CabbagePult(), new BasePlant(), new BasePlant(), new NoXPPlant(),
+		new CabbagePult(), new NilPlant(), new BasePlant(), new NilPlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
 
 		new GatlingPea(), new RestingBarley(), new GloomShroom(), new Cattail(),

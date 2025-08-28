@@ -45,15 +45,15 @@
     <ClInclude Include="MyEvents.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-	<ClInclude Include="MyPlant\implement\PuffShroom.hpp">
-		<Filter>头文件</Filter>
-	</ClInclude>
-	<ClInclude Include="MyPlant\implement\PeaShooter.hpp">
-		<Filter>头文件</Filter>
-	</ClInclude>
-	<ClInclude Include="MyPlant\implement\GatlingPea.hpp">
-		<Filter>头文件</Filter>
-	</ClInclude>
+    <ClInclude Include="MyPlant\implement\PuffShroom.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlant\implement\PeaShooter.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPlant\implement\GatlingPea.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="MyPlant\implement\SeaShroom.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -210,7 +210,7 @@
     <ClInclude Include="MyPlant\implement\Barley.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyPlant\implement\NoXPPlant.hpp">
+    <ClInclude Include="MyPlant\implement\SpecialPlants.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyPlant\implement\RestingBarley.hpp">
@@ -226,9 +226,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyProjectile\implement\Melon.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyPlant\implement\NoEasterSkinPlant.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyProjectile\implement\Star.hpp">
