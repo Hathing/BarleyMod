@@ -342,7 +342,15 @@ namespace PVZEvent
 			builder.popad().push_imm32(0x464C34).ret();
 		}
 	};
-
+	/// @brief 总绘制事件，位置在绘制金钱框函数里
+	/// @param Graphics*(REG_EDI)和Board*(REG_EDX)
+	class BoardDrawImageEvent : public DLLEventTemplate<0x41A2B9, 6, REG_EDX, REG_EDI>
+	{
+	public:
+		BoardDrawImageEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		BoardDrawImageEvent(int address) : DLLEventTemplate() { Init(address); };
+		BoardDrawImageEvent() : BoardDrawImageEvent("onBoardDrawImage") {};
+	};
 	/// @brief 创建动画图集事件
 	/// @param 触发事件的动画类型，触发事件的动画定义
 	/// @return 是否生成动画图集
@@ -352,14 +360,5 @@ namespace PVZEvent
 		CreateAtlasEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		CreateAtlasEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		CreateAtlasEvent() : CreateAtlasEvent("onCreateAtlas") {};
-	};
-	/// @brief 总绘制事件，位置在绘制金钱框函数里
-	/// @param Graphics*(REG_EDI)和Board*(REG_EDX)
-	class BoardDrawImageEvent : public DLLEventTemplate<0x41A2B9, 6, REG_EDX, REG_EDI>
-	{
-	public:
-		BoardDrawImageEvent(const char* str) : DLLEventTemplate() { Init(str); };
-		BoardDrawImageEvent(int address) : DLLEventTemplate() { Init(address); };
-		BoardDrawImageEvent() : BoardDrawImageEvent("onBoardDrawImage") {};
 	};
 };
