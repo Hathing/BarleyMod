@@ -86,7 +86,7 @@ namespace PlantAbility
 			zombie.Hit(500, PVZ::DAMAGEF_NONE);
 			//创建特效
 			auto particle = PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
-			//particle.OverrideImage(PVZ::Image(0x6A76A8));//这行代码会崩溃
+			particle.OverrideImage(PVZ::Image(Memory::ReadMemory<DWORD>(0x6A76A8)));
 			PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::HAMMER_BANG);
 			Creator::CreateLowerSound(LowerSoundType::CherryExplode);
 			return false;
