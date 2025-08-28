@@ -81,8 +81,7 @@ namespace PlantAbility
 		bool onAddProjectileBefore(MyPlant plant, ProjectileType::ProjectileType proj_type, int x, int y)
 		{
 			MyZombie zombie{ plant.PeashooterTarget };
-			//TakeDamage(500, PVZ::DAMAGEF_NONE, plant.PeashooterTarget);
-			//zombie.LastDamageSourceID = plant.GetBaseAddress();//这行代码会崩溃
+			zombie.LastDamageSourceID = plant.Id;
 			zombie.Hit(500, PVZ::DAMAGEF_NONE);
 			//创建特效
 			auto particle = PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
