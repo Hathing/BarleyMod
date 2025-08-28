@@ -1,9 +1,10 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "SpecialPlants.hpp"
 
 namespace PlantAbility
 {
-	class SunShroom : public BasePlant
+	class SunShroom : public NoEasterSkinPlant
 	{
 		bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)
 		{

@@ -1,6 +1,6 @@
 #pragma once
 #include "../PlantAbility.hpp"
-#include "NoEasterSkinPlant.hpp"
+#include "SpecialPlants.hpp"
 
 namespace PlantAbility
 {

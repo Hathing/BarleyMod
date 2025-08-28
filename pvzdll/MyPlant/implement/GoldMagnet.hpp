@@ -1,9 +1,10 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "SpecialPlants.hpp"
 
 namespace PlantAbility
 {
-	class GoldMagnet : public BasePlant
+	class GoldMagnet : public NoEasterSkinPlant
 	{
 		inline static const int max_health[6] = { 300, 600, 600, 1000, 1000, 1000 };
 		void onUpgrade(MyPlant plant)

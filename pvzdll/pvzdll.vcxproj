@@ -114,9 +114,8 @@
     <ClInclude Include="MyPlant\implement\Mangosteen.hpp" />
     <ClInclude Include="MyPlant\implement\Marigold.hpp" />
     <ClInclude Include="MyPlant\implement\MelonPult.hpp" />
-    <ClInclude Include="MyPlant\implement\NoEasterSkinPlant.hpp" />
-    <ClInclude Include="MyPlant\implement\NoXPPlant.hpp" />
-	<ClInclude Include="MyPlant\implement\PeaShooter.hpp" />
+    <ClInclude Include="MyPlant\implement\SpecialPlants.hpp" />
+    <ClInclude Include="MyPlant\implement\PeaShooter.hpp" />
     <ClInclude Include="MyPlant\implement\Plantern.hpp" />
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Repeater.hpp" />
@@ -143,6 +142,7 @@
     <ClInclude Include="MyProjectile\implement\GoldMelon.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldSpike.hpp" />
     <ClInclude Include="MyProjectile\implement\index.hpp" />
+    <ClInclude Include="MyProjectile\implement\Kernel.hpp" />
     <ClInclude Include="MyProjectile\implement\Melon.hpp" />
     <ClInclude Include="MyProjectile\implement\Star.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />

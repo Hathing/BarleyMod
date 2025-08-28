@@ -1,9 +1,10 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "SpecialPlants.hpp"
 
 namespace PlantAbility
 {
-	class RestingBarley : public BasePlant
+	class RestingBarley : public NoEasterSkinPlant
 	{
 		bool IsXPRecipient(MyPlant plant)
 		{
