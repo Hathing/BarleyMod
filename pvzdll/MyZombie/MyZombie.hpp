@@ -12,6 +12,8 @@ public:
 	T_PROPERTY(byte, Unknown, __get_Un, __set_Un, 0x71);
 	/// @brief 精英类别
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
+	/// @brief 僵尸被多投索敌过的标记
+	T_PROPERTY(byte, PultSkip, __get_PultSkip, __set_PultSkip, 0x106);
 	/// @brief 毒的层数
 	INT_PROPERTY(PoisonStack, __get_PoS, __set_PoS, 0x140);
 	/// @brief 最近受到伤害的来源植物 ID

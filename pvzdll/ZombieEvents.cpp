@@ -47,6 +47,7 @@ void onZombieDropLoot(MyZombie zombie)
 
 void onZombieInitAfter(MyZombie zombie)
 {
+	zombie.LastDamageSourceID = 0;
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
 }
 

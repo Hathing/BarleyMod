@@ -1,11 +1,11 @@
-#include "MyPlant.hpp"
+﻿#include "MyPlant.hpp"
 #include "implement/Index.hpp"
 
 namespace PlantAbility
 {
 	PlantAbility::PlantPTR pt_factory[] =
 	{
-		new BasePlant(), new Barley(),	  new NoXPPlant(), new WallNut(),
+		new PeaShooter(), new Barley(),	  new NoXPPlant(), new WallNut(),
 		new BasePlant(), new SnowPea(),	  new BasePlant(), new Repeater(),
 
 		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
@@ -20,7 +20,7 @@ namespace PlantAbility
 		new CabbagePult(), new BasePlant(), new BasePlant(), new NoXPPlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
 
-		new BasePlant(), new RestingBarley(), new GloomShroom(), new Cattail(),
+		new GatlingPea(), new RestingBarley(), new GloomShroom(), new Cattail(),
 		new BasePlant(), new GoldMagnet(), new SpikeRock(), new NoEasterSkinPlant(),
 
 		new NoEasterSkinPlant(), new Explode_O_Nut(), new NoEasterSkinPlant(), new Endoflame(),
@@ -211,6 +211,63 @@ void MyPlant::EnableEasterSkin()
 		model.AssignRenderGroupToPrefix(-1, "\0");
 }
 
+byte __asm__FindTargetAndFire[34]
+{
+	MOV_EAX(0),
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x45EF10),
+	MOV_PTR_ADDR_EAX(0),
+	RET
+};
+
+bool MyPlant::FindTargetAndFire(int PlantWeapon)
+{
+	SETARG(__asm__FindTargetAndFire, 1) = this->GetBaseAddress();
+	SETARG(__asm__FindTargetAndFire, 6) = PlantWeapon;
+	SETARG(__asm__FindTargetAndFire, 11) = this->Row;
+	SETARG(__asm__FindTargetAndFire, 29) = Memory::Variable;
+	return (bool)(byte)Memory::Execute(STRING(__asm__FindTargetAndFire));
+}
+
+byte __asm__FindTargetZombie[34]
+{
+	MOV_ECX(0),
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x4675C0),
+	MOV_PTR_ADDR_EAX(0),
+	RET
+};
+
+int MyPlant::FindTargetZombie(int PlantWeapon)
+{
+	SETARG(__asm__FindTargetZombie, 1) = PlantWeapon;
+	SETARG(__asm__FindTargetZombie, 6) = this->Row;
+	SETARG(__asm__FindTargetZombie, 11) = this->GetBaseAddress();
+	SETARG(__asm__FindTargetZombie, 29) = Memory::Variable;
+	return Memory::Execute(STRING(__asm__FindTargetZombie));
+}
+
+byte __asm__Fire[34]
+{
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x466E00),
+	RET
+};
+
+void MyPlant::Fire(int PlantWeapon, int targetid)
+{
+	SETARG(__asm__Fire, 1) = PlantWeapon;
+	SETARG(__asm__Fire, 6) = this->Row;
+	SETARG(__asm__Fire, 11) = targetid;
+	SETARG(__asm__Fire, 16) = this->GetBaseAddress();
+	Memory::Execute(STRING(__asm__Fire));
+}
+
 MyPlant MyPlant::GetByID(int id)
 {
 	if (id)
@@ -223,4 +280,19 @@ MyPlant MyPlant::GetByID(int id)
 	}
 	else
 		return MyPlant(INVALID_BASEADDRESS);
+}
+
+//一些植物重置动画要用，PVZ Class没有相应接口
+byte __asm__StartBlend[24]
+{
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x473310),
+	RET
+};
+void StartBlend(int blendtime, PVZ::Animation anim)
+{
+	SETARG(__asm__StartBlend, 1) = blendtime;
+	SETARG(__asm__StartBlend, 6) = anim.GetBaseAddress();
+	Memory::Execute(STRING(__asm__StartBlend));
 }

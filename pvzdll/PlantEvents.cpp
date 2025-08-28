@@ -102,6 +102,94 @@ int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
 	return plant.Row == zombie.Row ? 1 : 0;
 }
 
+bool onPlantShootMultiple(MyPlant plant)
+{
+	if (plant.Type == SeedType::Cactus && plant.ShootOrProductCountdown == 50)
+		plant.FindTargetAndFire(1);
+	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
+		plant.FindTargetAndFire(0);
+	return PlantAbility::GetPrototype(plant.Type)->onShootMultiple(plant);
+}
+
+bool onPlantPultSkip(MyPlant plant,MyZombie zombie)
+{
+	if (zombie.PultSkip)
+	{
+		if (plant.Type == SeedType::Cabbagepult || plant.Type == SeedType::Kernelpult || plant.Type == SeedType::Melonpult || plant.Type == SeedType::WinterMelon)
+			return false;
+	}
+	return true;
+}
+
+/// @brief 投手同时投出多发子弹
+/// @param plant 植物
+/// @param num 多发数量
+/// @param PlantWeapon 植物副武器
+void PultMultiple(MyPlant plant, int num, int PlantWeapon)
+{
+	for (int i = 0; i < num; i++)
+	{
+		int targetid = plant.FindTargetZombie(PlantWeapon);
+		if (targetid)
+		{
+			MyZombie target{ targetid };
+			plant.Fire(PlantWeapon, targetid);
+			target.PultSkip = 1;
+		}
+	}
+	//清空所有僵尸的PultSkip标记
+	auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
+	for (auto& zombie : zombies)
+	{
+		zombie.PultSkip = 0;
+	}
+}
+
+void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
+{
+	if (plant.Type == SeedType::Cabbagepult)
+	{
+		PultMultiple(plant, 3, PlantWeapon);
+		return;
+	}
+	//默认的原版处理，不可改动
+	plant.Fire(PlantWeapon,plant.FindTargetZombie(PlantWeapon));
+}
+
+bool onPlantUpdateShooting(MyPlant plant)
+{
+	return PlantAbility::GetPrototype(plant.Type)->onUpdateShooting(plant);
+}
+
+//这是一个测试用的函数
+void TakeDamage(int damage, PVZ::DamageFlags flags,int targetid)
+{
+	SETARG(__asm__Hit, 1) = targetid;
+	SETARG(__asm__Hit, 6) = flags;
+	SETARG(__asm__Hit, 11) = damage;
+	Memory::Execute(STRING(__asm__Hit));
+}
+
+bool onPlantAddProjectileBefore(MyPlant plant, ProjectileType::ProjectileType proj_type, int x, int y)
+{
+	return PlantAbility::GetPrototype(plant.Type)->onAddProjectileBefore(plant, proj_type, x, y);
+}
+
+int onPlantFindTargetRT(MyPlant plant,MyZombie zombie,int row)
+{
+	return PlantAbility::GetPrototype(plant.Type)->onFindTargetRT(plant,zombie,row);
+}
+
+int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)
+{
+	if (plant.Type == SeedType::Peashooter)
+	{
+		PVZ::DamageRangeFlags flags = PVZ::DRF_OFF_GROUND | PVZ::DRF_FLYING | PVZ::DRF_GROUND;
+		return (int)flags;
+	}
+	return -1;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -112,4 +200,11 @@ void InitPlantEvents()
 	PlantDieEvent((int)onPlantDie);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
 	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
+	PVZEvent::PlantShootMultipleEvent((int)onPlantShootMultiple);
+	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
+	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
+	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
+	PVZEvent::PlantAddProjectileBeforeEvent((int)onPlantAddProjectileBefore);
+	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
+	PVZEvent::PlantGetDamageRangeFlagsEvent((int)onPlantGetDamageRangeFlags);
 }
