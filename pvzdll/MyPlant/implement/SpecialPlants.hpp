@@ -12,7 +12,14 @@ namespace PlantAbility
 	};
 	class NoEasterSkinPlant : public BasePlant
 	{
-		virtual int GetEasterProbabilityPartition()
+		int GetEasterProbabilityPartition()
+		{
+			return 0;
+		}
+	};
+	class NilPlant : public NoXPPlant
+	{
+		int GetEasterProbabilityPartition()
 		{
 			return 0;
 		}
