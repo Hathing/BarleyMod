@@ -5,13 +5,13 @@ namespace PlantAbility
 {
 	PlantAbility::PlantPTR pt_factory[] =
 	{
-		new PeaShooter(), new Barley(),	  new NoXPPlant(), new WallNut(),
+		new PeaShooter(), new Barley(),	  new NilPlant(),  new WallNut(),
 		new BasePlant(), new SnowPea(),	  new BasePlant(), new Repeater(),
 
-		new PuffShroom(), new SunShroom(), new FumeShroom(), new BasePlant(),
+		new PuffShroom(), new SunShroom(), new FumeShroom(), new NilPlant(),
 		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NilPlant(),
 
-		new DiamondShroom(), new Squash(), new Threepeater(), new BasePlant(),
+		new DiamondShroom(), new Squash(), new Threepeater(), new NoEasterSkinPlant(),
 		new NilPlant(),  new NoXPPlant(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),
