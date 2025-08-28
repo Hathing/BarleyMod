@@ -143,6 +143,7 @@
     <ClInclude Include="MyProjectile\implement\GoldMelon.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldSpike.hpp" />
     <ClInclude Include="MyProjectile\implement\index.hpp" />
+    <ClInclude Include="MyProjectile\implement\Kernel.hpp" />
     <ClInclude Include="MyProjectile\implement\Melon.hpp" />
     <ClInclude Include="MyProjectile\implement\Star.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
