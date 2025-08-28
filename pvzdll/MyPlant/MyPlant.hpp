@@ -112,3 +112,5 @@ public:
 	/// @return ID 对应的植物。
 	static MyPlant GetByID(int id);
 };
+
+inline void StartBlend(int blendtime, PVZ::Animation anim);

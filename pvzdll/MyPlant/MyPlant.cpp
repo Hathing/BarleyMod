@@ -1,4 +1,4 @@
-#include "MyPlant.hpp"
+﻿#include "MyPlant.hpp"
 #include "implement/Index.hpp"
 
 namespace PlantAbility
@@ -280,4 +280,19 @@ MyPlant MyPlant::GetByID(int id)
 	}
 	else
 		return MyPlant(INVALID_BASEADDRESS);
+}
+
+//一些植物重置动画要用，PVZ Class没有相应接口
+byte __asm__StartBlend[24]
+{
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x473310),
+	RET
+};
+void StartBlend(int blendtime, PVZ::Animation anim)
+{
+	SETARG(__asm__StartBlend, 1) = blendtime;
+	SETARG(__asm__StartBlend, 6) = anim.GetBaseAddress();
+	Memory::Execute(STRING(__asm__StartBlend));
 }
