@@ -385,9 +385,10 @@ namespace PVZEvent
 		CreateAtlasEvent() : CreateAtlasEvent("onCreateAtlas") {};
 	};
 
-	/// @brief 僵尸碾压植物事件
+	/// @brief 僵尸碾压植物事件。注意碾压≠植物死亡，而是指植物压成饼这一事件。
 	/// @note 僵王踩踏和砸车暂时不触发此事件。
-	/// @param 触发事件的僵尸，被碾压的行数，被碾压的列数，僵尸攻击类型，被碾压的植物
+	/// @note 原版中的细节：巨人在碾压地刺王时，调用45EC00，并且这里会触发僵尸伤害植物事件；倭瓜头只调用squish()；车类只调用squish，植物的范围伤害函数中，地刺王命中会调用45EC00，地刺会调用Die()，两者均造成1800点伤害；冰火球我没看
+	/// @param 触发事件的僵尸，被碾压的行数，被碾压的列数，僵尸攻击类型（车类、冰火球=1,巨人、倭瓜头=0，原版中前者对地刺、地刺王无效，后者只对地刺王无效），被碾压的植物
 	/// @return 是否继续结算碾压。若取消，碾压不会发生。
 	class ZombieSquishPlantEvent : public BoolDLLEventTemplate<0x52E971, 9, 0x52E980, REG_ECX, MEM_ESP_ADD(0x40),
 		MEM_ESP_ADD(0x3C), MEM_ESP_ADD(0x44), REG_EDI>

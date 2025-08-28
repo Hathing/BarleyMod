@@ -82,6 +82,20 @@ int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::Game
 
 bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, MyPlant plant)
 {
+	auto zombietype = zombie.Type;
+	auto planttype = plant.Type;
+	if (zombietype == ZombieType::Zomboin || zombietype == ZombieType::CatapultZombie)
+	{
+		if (planttype == SeedType::Wallnut || planttype == SeedType::Tallnut)
+		{
+			zombie.X += 50.0f;//击退距离
+			//这里应该将 僵尸伤害植物 和 植物伤害僵尸 和 子弹伤害僵尸 分别封装成一个函数，避免某些原本该触发的事件未触发
+			zombie.Hit(200, PVZ::DAMAGEF_NONE);
+			int damage = onPlantTakeDamage(plant, zombie, GameObjectType::OBJECT_TYPE_NONE, 500);//这里object type没有僵尸？
+			plant.Hp -= damage;//植物碾压受伤
+			return false;
+		}
+	}
 	return true;
 }
 
