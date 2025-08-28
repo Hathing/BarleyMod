@@ -41,3 +41,4 @@
 #include "PeaShooter.hpp"
 
 #include "NoXPPlant.hpp"
+#include "NoEasterSkinPlant.hpp"

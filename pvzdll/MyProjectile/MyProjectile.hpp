@@ -7,6 +7,10 @@ public:
 	MyProjectile(int idoraddress) : PVZ::Projectile(idoraddress) {};
 	MyProjectile(const PVZ::Zombie& zombie) : PVZ::Projectile(zombie.GetBaseAddress()) {};
 
+	/// @brief 子弹生成时，来源植物的等级
+	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x51);
+	/// @brief 子弹生成时，来源植物的类型
+	T_PROPERTY(byte, SourceType, __get_SoT, __set_SoT, 0x52);
 	/// @brief 一个自减倒计时，暂时不清楚会不会影响原版子弹的更新
 	INT_PROPERTY(DecrementTime, __get_DecrementTime, __set_DecrementTime, 0x64);
 	/// @brief 创建该子弹的植物的 ID

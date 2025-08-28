@@ -99,7 +99,8 @@ void MyPlant::Upgrade()
 		this->Level++;
 	if (this->Level == MyPlant::MAX_LEVEL)
 	{
-		if (Creator::Rand(10))
+		int partition = PlantAbility::GetPrototype(this->Type)->GetEasterProbabilityPartition();
+		if (partition && Creator::Rand(partition) == 0)
 			this->EnableEasterSkin();
 		else
 		{

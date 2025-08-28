@@ -361,4 +361,28 @@ namespace PVZEvent
 		CreateAtlasEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		CreateAtlasEvent() : CreateAtlasEvent("onCreateAtlas") {};
 	};
+
+	/// @brief 僵尸碾压植物事件
+	/// @note 僵王踩踏和砸车暂时不触发此事件。
+	/// @param 触发事件的僵尸，被碾压的行数，被碾压的列数，僵尸攻击类型，被碾压的植物
+	/// @return 是否继续结算碾压。若取消，碾压不会发生。
+	class ZombieSquishPlantEvent : public BoolDLLEventTemplate<0x52E971, 9, 0x52E980, REG_ECX, MEM_ESP_ADD(0x40),
+		MEM_ESP_ADD(0x3C), MEM_ESP_ADD(0x44), REG_EDI>
+	{
+	public:
+		ZombieSquishPlantEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieSquishPlantEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieSquishPlantEvent() : ZombieSquishPlantEvent("onZombieSquishPlant") {};
+	};
+
+	/// @brief 子弹初始化完成事件
+	/// @note 此时 ImageX 和 ImageY 均未初始化
+	/// @param 触发事件的子弹
+	class ProjectileInitAfterEvent : public DLLEventTemplate<0x46CA78, 5, REG_EBP>
+	{
+	public:
+		ProjectileInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ProjectileInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onZombieSquishPlant") {};
+	};
 };

@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
 #include "MyZombie/ZombieAbility.hpp"
 #include "MyEvents.hpp"
@@ -74,9 +74,21 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	return;
 }
 
+int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
+{
+	return damage;
+}
+
+bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, MyPlant plant)
+{
+	return true;
+}
+
 void InitZombieEvents()
 {
+	PlantTakeDamageEvent((int)onPlantTakeDamage);
 	ZombieDropLootEvent((int)onZombieDropLoot);
 	ZombieInitAfterEvent((int)onZombieInitAfter);
 	PVZEvent::RandomZombieDropHelmEvent((int)onRandomZombieDropHelm);
+	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
 }

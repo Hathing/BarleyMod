@@ -1,7 +1,6 @@
 #pragma once
 #include "../PlantAbility.hpp"
 
-
 namespace PlantAbility
 {
 	class Mangosteen : public BasePlant
@@ -15,6 +14,10 @@ namespace PlantAbility
 		void onUpgrade(MyPlant plant)
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
+		}
+		int GetEasterProbabilityPartition()
+		{
+			return 1;
 		}
 	};
 }
