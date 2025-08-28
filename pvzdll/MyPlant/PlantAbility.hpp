@@ -90,6 +90,35 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		/// @brief 植物多发
+		/// @param 触发事件的植物
+		/// @return 是否进行原版的发射。如果要跳过原版发射，一定要注意手动重置+58！
+		virtual bool onShootMultiple(MyPlant plant)
+		{
+			return true;
+		}
+		/// @brief 植物在+90>0时尝试开火的更新
+		/// @param 触发事件的植物
+		/// @return 是否进行原版的更新。如果要跳过原版更新，要注意手动减+90、重置动画等处理！
+		virtual bool onUpdateShooting(MyPlant plant)
+		{
+			return true;
+		}
+		/// @brief 植物索敌僵尸事件
+		/// @note 该事件只重载行差判定和类型判定
+		/// @param 触发事件的植物，植物判定的僵尸，索敌行
+		/// @return 若为负数，则按原版处理；若为 0，则为不可选中；若为正数，则为强制可选。
+		virtual int onFindTargetRT(MyPlant plant, MyZombie zombie, int row)
+		{
+			return -1;
+		}
+		/// @brief 植物开火生成子弹前的事件。
+		/// @param 触发事件的植物、子弹类型、子弹初始化坐标X、Y
+		/// @return False则跳过子弹生成
+		virtual bool onAddProjectileBefore(MyPlant plant, ProjectileType::ProjectileType proj_type, int x, int y)
+		{
+			return true;
+		}
 		/// @brief 获取植物满级时启用彩蛋皮的概率的倒数
 		/// @return 植物满级时启用彩蛋皮的概率的倒数。
 		/// @retval 0 禁用彩蛋皮。
@@ -163,4 +192,19 @@ namespace PlantAbility
 		{ 3000,  9000, 15000, 24000,  45000 },  // 山竹
 		{  500,  1500,  2500,  4000,   7500 },  // 草时逆！
 	} };
+}
+
+//一些植物重置动画要用，PVZ Class没有相应接口
+byte __asm__StartBlend[24]
+{
+	PUSHDWORD(0),
+	PUSHDWORD(0),
+	INVOKE(0x473310),
+	RET
+};
+void StartBlend(int blendtime, PVZ::Animation anim)
+{
+	SETARG(__asm__StartBlend, 1) = blendtime;
+	SETARG(__asm__StartBlend, 6) = anim.GetBaseAddress();
+	Memory::Execute(STRING(__asm__StartBlend));
 }
