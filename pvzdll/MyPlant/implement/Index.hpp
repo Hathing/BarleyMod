@@ -40,3 +40,4 @@
 #include "ThymeWarp.hpp"
 
 #include "NoXPPlant.hpp"
+#include "NoEasterSkinPlant.hpp"

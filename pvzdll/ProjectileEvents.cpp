@@ -1,9 +1,11 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "MyProjectile/ProjectileAbility.hpp"
 #include "MyPlant/PlantAbility.hpp"
 
 bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 {
+	proj.SourceType = plant.Type & 0xFF;
+	proj.SourceLevel = plant.Level;
 	proj.ParentID = plant.Id;
 	if (plant.Type == SeedType::Starfruit)
 		proj.OriginalRow = (byte)plant.Row;
@@ -100,6 +102,14 @@ bool onProjectileSlideMotion(MyProjectile proj)
 	return true;
 }
 
+void onProjectileInitAfter(MyProjectile proj)
+{
+	proj.ParentID = 0;
+	proj.SpecialFlags = 0;
+	proj.SourceLevel = 0;
+	proj.SourceType = 0;
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -109,4 +119,5 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileImageSizeEvent((int)GetProjectileImageSize);
 	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
 	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
+	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 }

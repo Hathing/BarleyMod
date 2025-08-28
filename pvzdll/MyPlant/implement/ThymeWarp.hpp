@@ -1,10 +1,10 @@
 #pragma once
 #include "../PlantAbility.hpp"
-
+#include "NoEasterSkinPlant.hpp"
 
 namespace PlantAbility
 {
-	class ThymeWarp : public BasePlant
+	class ThymeWarp : public NoEasterSkinPlant
 	{
 	public:
 		inline static const int interval[6] = { 4000, 3500, 3500, 3000, 3000, 3000 };

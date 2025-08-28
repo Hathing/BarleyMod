@@ -10,5 +10,9 @@ namespace PlantAbility
 			plant.ShootOrProductCountdown = 0;
 			plant.ShootOrProductInterval = 0;
 		}
+		int GetEasterProbabilityPartition()
+		{
+			return 1;
+		}
 	};
 }
