@@ -315,6 +315,6 @@ namespace PVZEvent
 	public:
 		ProjectileInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		ProjectileInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
-		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onZombieSquishPlant") {};
+		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onProjectileInitAfter") {};
 	};
 };

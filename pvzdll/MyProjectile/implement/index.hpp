@@ -1,6 +1,7 @@
 #include "../ProjectileAbility.hpp"
 #include "Cabbage.hpp"
 #include "Star.hpp"
+#include "Kernel.hpp"
 #include "GoldSpike.hpp"
 #include "Diamond.hpp"
 #include "GoldMelon.hpp"
