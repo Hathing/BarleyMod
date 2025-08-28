@@ -116,6 +116,7 @@
     <ClInclude Include="MyPlant\implement\MelonPult.hpp" />
     <ClInclude Include="MyPlant\implement\NoEasterSkinPlant.hpp" />
     <ClInclude Include="MyPlant\implement\NoXPPlant.hpp" />
+	<ClInclude Include="MyPlant\implement\PeaShooter.hpp" />
     <ClInclude Include="MyPlant\implement\Plantern.hpp" />
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Repeater.hpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="MyPlant\implement\Torchwood.hpp" />
     <ClInclude Include="MyPlant\implement\UmbrellaLeaf.hpp" />
     <ClInclude Include="MyPlant\implement\WallNut.hpp" />
+    <ClInclude Include="MyPlant\implement\GatlingPea.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
     <ClInclude Include="MyProjectile\implement\Cabbage.hpp" />

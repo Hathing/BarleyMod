@@ -60,6 +60,24 @@ namespace PVZEvent
 		ProjectileDmgFlagEvent() : ProjectileDmgFlagEvent("GetProjectileDmgFlag") {};
 	};
 
+	/// @brief 植物获取伤害范围标签事件
+	/// @param 植物、PlantWeapon
+	/// @return 伤害标签，负值会回到原版更新，非零值会跳过原版直接返回
+	class PlantGetDamageRangeFlagsEvent : public DLLEventTemplate<0x45EB10, 6, MEM_ESP_ADD(0x4), REG_EAX>
+	{
+	public:
+		PlantGetDamageRangeFlagsEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantGetDamageRangeFlagsEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantGetDamageRangeFlagsEvent() : PlantGetDamageRangeFlagsEvent("onPlantGetDamageRangeFlags") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(8);
+			builder.mov_mem_esp_add_imm8_reg(0x1C - ((REG_EAX & 7) << 2), REG_EAX).popad();
+			builder.retn(0x4);
+		}
+	};
+
 	/// @brief 辣椒僵尸爆炸事件
 	/// @param 触发事件的僵尸
 	/// @return 是否执行烧毁植物的部分。
@@ -208,7 +226,7 @@ namespace PVZEvent
 	public:
 		RandomZombieDropHelmEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		RandomZombieDropHelmEvent(int address) : DLLEventTemplate() { Init(address); };
-		RandomZombieDropHelmEvent() : RandomZombieDropHelmEvent("onRandomZombieTypeProbability") {};
+		RandomZombieDropHelmEvent() : RandomZombieDropHelmEvent("onRandomZombieDropHelm") {};
 	protected:
 		virtual void InitExtra(AsmBuilder& builder)
 		{
@@ -283,6 +301,79 @@ namespace PVZEvent
 		PlantUpdateColorEvent() : PlantUpdateColorEvent("onPlantUpdateColor") {};
 	};
 
+	/// @brief 攻击型植物多连发事件，机枪的多发不在这里
+	/// @param 植物ID
+	/// @return False则跳过原版发射（包括+58=0的发射与重置+58、原版双发、猫、裂荚等植物的双发）
+	class PlantShootMultipleEvent : public BoolDLLEventTemplate<0x45F8AD, 5, 0x45F97B,REG_ESI>
+	{
+	public:
+		PlantShootMultipleEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantShootMultipleEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantShootMultipleEvent() : PlantShootMultipleEvent("onPlantShootMultiple") {};
+	};
+	/// @brief 投手类植物跳过被多投标记的僵尸事件
+	/// @param 植物ID(ECX)，僵尸ID(ESI)
+	/// @return False则跳过该僵尸
+	class PlantPultSkipEvent : public BoolDLLEventTemplate<0x4677E9, 6, 0x467881, REG_ESI, REG_ECX>
+	{
+	public:
+		PlantPultSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantPultSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantPultSkipEvent() : PlantPultSkipEvent("onPlantPultSkip") {};
+	};
+	/// @brief 植物更新Shooting事件，发生在更新+90计时前
+	/// @param 植物ID
+	/// @return False则跳过原版更新，注意更新计时、重置豌豆头部动画等也会被跳过
+	class PlantUpdateShootingEvent : public BoolDLLEventTemplate<0x464889, 6, 0x464D9F, REG_EDI>
+	{
+	public:
+		PlantUpdateShootingEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantUpdateShootingEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantUpdateShootingEvent() : PlantUpdateShootingEvent("onPlantUpdateShooting") {};
+	};
+	/// @brief 植物开火事件。此事件与PVZ Class中的PlantShootEvent注入位置相同，区别在于此事件可以选择跳过原版开火
+	/// @param 触发事件的植物、开火目标僵尸、Weapon类型
+	/// @return False则跳过原版开火
+	class PlantFireEvent : public BoolDLLEventTemplate<0x466E0D, 6, 0x466E7A, REG_EBX, MEM_ESP_ADD(0x2C), REG_EBP>
+	{
+	public:
+		PlantFireEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantFireEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantFireEvent() : PlantFireEvent("onPlantFire") {};
+	};
+	/// @brief 植物开火生成子弹前的事件。
+	/// @param 触发事件的植物、子弹类型、子弹初始化坐标X、Y
+	/// @return False则跳过子弹生成
+	class PlantAddProjectileBeforeEvent : public BoolDLLEventTemplate<0x4672A5, 5, 0x467319, REG_ESI,REG_EDI,REG_EAX,REG_EBP>
+	{
+	public:
+		PlantAddProjectileBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantAddProjectileBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantAddProjectileBeforeEvent() : PlantAddProjectileBeforeEvent("onPlantAddProjectileBefore") {};
+	};
+	/// @brief 四个投手的多投事件
+	/// @param 植物ID（EDI） 植物副武器（ESI）
+	class PlantPultMultipleEvent : public DLLEventTemplate<0x464C1C, 5, REG_ESI, REG_EDI>
+	{
+	public:
+		PlantPultMultipleEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantPultMultipleEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantPultMultipleEvent() : PlantPultMultipleEvent("onPlantPultMultiple") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.popad().push_imm32(0x464C34).ret();
+		}
+	};
+	/// @brief 总绘制事件，位置在绘制金钱框函数里
+	/// @param Graphics*(REG_EDI)和Board*(REG_EDX)
+	class BoardDrawImageEvent : public DLLEventTemplate<0x41A2B9, 6, REG_EDX, REG_EDI>
+	{
+	public:
+		BoardDrawImageEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		BoardDrawImageEvent(int address) : DLLEventTemplate() { Init(address); };
+		BoardDrawImageEvent() : BoardDrawImageEvent("onBoardDrawImage") {};
+	};
 	/// @brief 创建动画图集事件
 	/// @param 触发事件的动画类型，触发事件的动画定义
 	/// @return 是否生成动画图集
@@ -315,6 +406,6 @@ namespace PVZEvent
 	public:
 		ProjectileInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		ProjectileInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
-		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onZombieSquishPlant") {};
+		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onProjectileInitAfter") {};
 	};
 };
