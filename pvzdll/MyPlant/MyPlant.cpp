@@ -1,4 +1,4 @@
-﻿#include "MyPlant.hpp"
+#include "MyPlant.hpp"
 #include "implement/Index.hpp"
 
 namespace PlantAbility

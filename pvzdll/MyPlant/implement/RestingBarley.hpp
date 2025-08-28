@@ -3,7 +3,7 @@
 
 namespace PlantAbility
 {
-	class RestingBarley : public BasePlant
+	class RestingBarley : public NoEasterSkinPlant
 	{
 		bool IsXPRecipient(MyPlant plant)
 		{

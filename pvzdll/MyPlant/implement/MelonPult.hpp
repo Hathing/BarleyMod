@@ -3,7 +3,7 @@
 
 namespace PlantAbility
 {
-	class MelonPult : public BasePlant
+	class MelonPult : public NoEasterSkinPlant
 	{
 		void onCreated(MyPlant plant)
 		{

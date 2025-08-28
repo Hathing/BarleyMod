@@ -3,7 +3,7 @@
 
 namespace PlantAbility
 {
-	class UmbrellaLeaf : public BasePlant
+	class UmbrellaLeaf : public NoEasterSkinPlant
 	{
 		void onCreated(MyPlant plant)
 		{
