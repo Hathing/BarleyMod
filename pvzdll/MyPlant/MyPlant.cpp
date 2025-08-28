@@ -21,9 +21,9 @@ namespace PlantAbility
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
 
 		new BasePlant(), new RestingBarley(), new GloomShroom(), new Cattail(),
-		new BasePlant(), new GoldMagnet(), new SpikeRock(), new BasePlant(),
+		new BasePlant(), new GoldMagnet(), new SpikeRock(), new NoEasterSkinPlant(),
 
-		new BasePlant(), new Explode_O_Nut(), new BasePlant(), new Endoflame(),
+		new NoEasterSkinPlant(), new Explode_O_Nut(), new NoEasterSkinPlant(), new Endoflame(),
 		new LeftRepeater(), new BasePlant(), new BasePlant(), new BasePlant(),
 
 		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
