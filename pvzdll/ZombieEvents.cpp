@@ -122,4 +122,6 @@ void InitZombieEvents()
 	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 	PVZEvent::ZombieUpdateWalkingSpeedEvent((int)onZombieUpdateWalkingSpeed);
+	//修改冰道持续时间
+	PVZ::Memory::WriteMemoryUnsafe<int>(0x52A8B6, 1000);
 }
