@@ -334,7 +334,7 @@ namespace PVZEvent
 	/// @brief 植物开火事件。此事件与PVZ Class中的PlantShootEvent注入位置相同，区别在于此事件可以选择跳过原版开火
 	/// @param 触发事件的植物、开火目标僵尸、Weapon类型
 	/// @return False则跳过原版开火
-	class PlantFireEvent : public BoolDLLEventTemplate<0x466E0D, 6, 0x466E7A, REG_EBX, MEM_ESP_ADD(0x2C), REG_EBP>
+	class PlantFireEvent : public BoolDLLEventTemplate<0x466E0D, 6, 0x466E7A, REG_EBX, MEM_ESP_ADD(0x4C), REG_EBP>
 	{
 	public:
 		PlantFireEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
@@ -407,7 +407,22 @@ namespace PVZEvent
 		ZombieSquishPlantEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieSquishPlantEvent() : ZombieSquishPlantEvent("onZombieSquishPlant") {};
 	};
-
+	/// @brief 僵尸移动速度/瞬时位移修改事件，不涉及动画速度，因此修改后会有“滑行”的观感
+	/// @param 僵尸，已经计算好的瞬时位移（浮点数）
+	/// @return 修改后的瞬时位移
+	class ZombieUpdateWalkingSpeedEvent : public DLLEventTemplate<0x52AB18,5, MEM_ESP_ADD(0x28), REG_ESI>
+	{
+	public:
+		ZombieUpdateWalkingSpeedEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieUpdateWalkingSpeedEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieUpdateWalkingSpeedEvent() : ZombieUpdateWalkingSpeedEvent("onZombieUpdateWalkingSpeed") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			//builder.mov_mem_esp_add_imm8_reg(0x28, REG_EAX);
+			builder.fstp_m32_esp_imm8(0x28);
+		}
+	};
 	/// @brief 子弹初始化完成事件
 	/// @note 此时 ImageX 和 ImageY 均未初始化
 	/// @param 触发事件的子弹

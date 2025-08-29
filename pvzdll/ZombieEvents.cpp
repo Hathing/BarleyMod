@@ -106,6 +106,13 @@ void onLoadPlainZombieReanimBefore(MyZombie zombie)
 	zombie.ReanimShowPrefix("wenhao", -1);
 }
 
+float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
+{
+	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40)
+		return velocity * 2.0f;
+	return velocity;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -114,4 +121,5 @@ void InitZombieEvents()
 	PVZEvent::RandomZombieDropHelmEvent((int)onRandomZombieDropHelm);
 	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
+	PVZEvent::ZombieUpdateWalkingSpeedEvent((int)onZombieUpdateWalkingSpeed);
 }
