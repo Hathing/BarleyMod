@@ -374,6 +374,15 @@ namespace PVZEvent
 		BoardDrawImageEvent(int address) : DLLEventTemplate() { Init(address); };
 		BoardDrawImageEvent() : BoardDrawImageEvent("onBoardDrawImage") {};
 	};
+	/// @brief 加载以普僵为基础模型的动画时最开头的事件
+	/// @param 僵尸
+	class LoadPlainZombieReanimBeforeEvent : public DLLEventTemplate<0x524370, 5, REG_EDI>
+	{
+	public:
+		LoadPlainZombieReanimBeforeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		LoadPlainZombieReanimBeforeEvent(int address) : DLLEventTemplate() { Init(address); };
+		LoadPlainZombieReanimBeforeEvent() : LoadPlainZombieReanimBeforeEvent("onLoadPlainZombieReanimBefore") {};
+	};
 	/// @brief 创建动画图集事件
 	/// @param 触发事件的动画类型，触发事件的动画定义
 	/// @return 是否生成动画图集

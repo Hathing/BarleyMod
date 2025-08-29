@@ -99,6 +99,13 @@ bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, 
 	return true;
 }
 
+void onLoadPlainZombieReanimBefore(MyZombie zombie)
+{
+	//隐藏鬼火
+	zombie.ReanimShowPrefix("guih", -1);
+	zombie.ReanimShowPrefix("wenhao", -1);
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -106,4 +113,5 @@ void InitZombieEvents()
 	ZombieInitAfterEvent((int)onZombieInitAfter);
 	PVZEvent::RandomZombieDropHelmEvent((int)onRandomZombieDropHelm);
 	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
+	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 }
