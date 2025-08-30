@@ -475,4 +475,14 @@ namespace PVZEvent
 		ProjectileInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
 		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onProjectileInitAfter") {};
 	};
+	/// @brief 火球初始化动画时根据SpecialType设置颜色的事件
+	/// @note 由于直接获取火球动画的方式过于复杂，就直接在过火初始化动画时就设置颜色了。
+	/// @param 触发事件的子弹 动画
+	class FireballInitColorEvent : public DLLEventTemplate<0x46ED91, 6, REG_EBP,REG_EDI>
+	{
+	public:
+		FireballInitColorEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		FireballInitColorEvent(int address) : DLLEventTemplate() { Init(address); };
+		FireballInitColorEvent() : FireballInitColorEvent("onFireballInitColor") {};
+	};
 };

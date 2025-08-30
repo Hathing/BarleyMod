@@ -106,8 +106,31 @@ void onProjectileInitAfter(MyProjectile proj)
 {
 	proj.ParentID = 0;
 	proj.SpecialFlags = 0;
+	proj.SpecialStack = 0;
+	proj.SpecialType = PST_NONE;
 	proj.SourceLevel = 0;
 	proj.SourceType = 0;
+}
+
+void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
+{
+	switch (proj.SpecialType)
+	{
+	case PST_ORANGE_FIREBALL:
+		anim.SetColor({ 0xFF,0x70,0x20,0xFF });
+		break;
+	case PST_RED_FIREBALL:
+		anim.SetColor({ 0xFF,0x10,0x10,0xFF });
+		break;
+	case PST_BLUE_FIREBALL:
+		anim.SetColor({ 0x20,0x20,0xFF,0xFF });
+		break;
+	case PST_PURPLE_FIREBALL:
+		anim.SetColor({ 0xD0,0x00,0xD0,0xFF });
+		break;
+	default:
+		break;
+	}
 }
 
 void InitProjectileEvents()
@@ -120,4 +143,5 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
 	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
 	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
+	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
 }
