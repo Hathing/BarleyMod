@@ -46,3 +46,29 @@ void MyZombie::FlyAway(float factor)
 		this->SetSpeed(this->Speed * factor);
 	}
 }
+
+void MyZombie::AddFrost(int num)
+{
+	this->FrostStack += num;
+	if (this->FrostStack > 30)
+	{
+		this->FrostStack = 30;
+	}
+	this->UpdateAnimSpeed();
+	if (!this->ColorFlag)
+		this->ColorFlag = 2;
+}
+
+void MyZombie::AddPoison(int num)
+{
+	this->PoisonStack += num;
+	if (!this->ColorFlag)
+		this->ColorFlag = 1;
+}
+
+void MyZombie::AddFlame(int num)
+{
+	this->FlameStack += num;
+	if (!this->ColorFlag)
+		this->ColorFlag = 3;
+}

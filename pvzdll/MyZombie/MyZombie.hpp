@@ -35,6 +35,17 @@ public:
 	void AttachShield();
 
 	/// @brief 僵尸飞到屏幕右侧外
-	/// @param factor 被击飞后水平速度的倍数，取负数让僵尸反向飞出屏幕
+	/// @param factor 被击飞后水平速度的因子，取负数让僵尸反向飞出屏幕，但是这个参数理论来说没啥用？
 	void FlyAway(float factor);
+	// @brief 增加寒意值
+	// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！
+	// @param num 增加的数值
+	void AddFrost(int num);
+	// @brief 增加剧毒值
+	// @param num 增加的数值
+	void AddPoison(int num);
+	// @brief 增加燃烬值
+	// @param num 增加的数值
+	void AddFlame(int num);
+
 };
