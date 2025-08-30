@@ -334,7 +334,7 @@ namespace PVZEvent
 	/// @brief 植物开火事件。此事件与PVZ Class中的PlantShootEvent注入位置相同，区别在于此事件可以选择跳过原版开火
 	/// @param 触发事件的植物、开火目标僵尸、Weapon类型
 	/// @return False则跳过原版开火
-	class PlantFireEvent : public BoolDLLEventTemplate<0x466E0D, 6, 0x466E7A, REG_EBX, MEM_ESP_ADD(0x4C), REG_EBP>
+	class PlantFireEvent : public BoolDLLEventTemplate<0x466E0D, 6, 0x466E7A, REG_EBX, MEM_ESP_ADD(0x50), REG_EBP>
 	{
 	public:
 		PlantFireEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
