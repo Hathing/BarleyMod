@@ -48,8 +48,13 @@ void onZombieDropLoot(MyZombie zombie)
 void onZombieInitAfter(MyZombie zombie)
 {
 	zombie.IsWalkingBackwards = 0;
+	
+	zombie.ColorFlag = 0;
+
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
+	zombie.FlameStack = 0;
+
 	zombie.LastDamageSourceID = 0;
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
 }
@@ -141,7 +146,56 @@ float onZombieApplyAnimSpeed(MyZombie zombie, PVZ::Animation anim, float rate)
 }
 void onZombieUpdatePlaying(MyZombie zombie)
 {
+	//zombie.FrostStack += 1;
+	//zombie.PoisonStack += 1;
+	//zombie.FlameStack += 1;
+	//僵尸的总更新
+	if (!zombie.Hypnotized)
+	{
+		//燃烬效果
+		if (zombie.ShieldType == ShieldType::ZombieAccessoriesType2None && zombie.FlameStack > zombie.BodyHealth + zombie.HelmHealth)
+		{
+			zombie.Blast();
+		}
+	}
+}
 
+bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,int blue,int alpha)
+{
+	auto colorflag = zombie.ColorFlag;
+	if (colorflag)
+	{
+		int num = 0;
+		switch (colorflag)
+		{
+		case 1:
+			num = 4 * min(zombie.PoisonStack, 45);
+			red -= num;
+			blue -= num;
+			break;
+		case 2:
+			num = 6 * zombie.FrostStack;
+			red -= num;
+			green -= num;
+			break;
+		case 3:
+			num = 4 * min(zombie.FlameStack / 20, 45);
+			green -= num;
+			blue -= num;
+			break;
+		default:
+			break;
+		}
+		PVZ::Color color{ red,green,blue,alpha };
+		anim.SetColor(color);
+		anim.SetAdditiveColor(color);
+		if (num > 120)
+			anim.DrawAdditiveColor = true;
+		else
+			anim.DrawAdditiveColor = false;
+		return false;
+	}
+	return true;
 }
 
 void InitZombieEvents()
@@ -156,6 +210,8 @@ void InitZombieEvents()
 	PVZEvent::ZombieIsWalkingBackwardsEvent((int)onZombieIsWalkingBackwards);
 	PVZEvent::ZombieApplyAnimSpeedEvent((int)onZombieApplyAnimSpeed);
 	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
+	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
+
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemoryUnsafe<int>(0x52A8B6, 1000);
 }
