@@ -170,9 +170,9 @@ void TakeDamage(int damage, PVZ::DamageFlags flags,int targetid)
 	Memory::Execute(STRING(__asm__Hit));
 }
 
-bool onPlantAddProjectileBefore(MyPlant plant, ProjectileType::ProjectileType proj_type, int x, int y)
+bool onPlantFire(MyPlant plant, MyZombie target, int weapon_type)
 {
-	return PlantAbility::GetPrototype(plant.Type)->onAddProjectileBefore(plant, proj_type, x, y);
+	return PlantAbility::GetPrototype(plant.Type)->onFire(plant, target, weapon_type);
 }
 
 int onPlantFindTargetRT(MyPlant plant,MyZombie zombie,int row)
@@ -204,7 +204,7 @@ void InitPlantEvents()
 	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
 	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
-	PVZEvent::PlantAddProjectileBeforeEvent((int)onPlantAddProjectileBefore);
+	PVZEvent::PlantFireEvent((int)onPlantFire);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)onPlantGetDamageRangeFlags);
 }
