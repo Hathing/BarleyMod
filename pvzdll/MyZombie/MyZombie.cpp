@@ -1,4 +1,4 @@
-#include "MyZombie.hpp"
+﻿#include "MyZombie.hpp"
 #include "implement/index.hpp"
 
 namespace ZombieAbility
@@ -69,6 +69,13 @@ void MyZombie::AddPoison(int num)
 void MyZombie::AddFlame(int num)
 {
 	this->FlameStack += num;
+	//燃烬效果
+	if (this->ShieldType == ShieldType::ZombieAccessoriesType2None && this->FlameStack > this->BodyHealth + this->HelmHealth)
+	{
+		if (this->BodyHealth >= 1800)
+			this->BodyHealth = 1799;
+		this->Blast();
+	}
 	if (!this->ColorFlag)
 		this->ColorFlag = 3;
 }

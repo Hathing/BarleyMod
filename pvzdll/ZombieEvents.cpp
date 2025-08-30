@@ -145,18 +145,12 @@ float onZombieApplyAnimSpeed(MyZombie zombie, PVZ::Animation anim, float rate)
 }
 void onZombieUpdatePlaying(MyZombie zombie)
 {
-	//zombie.FrostStack += 1;
-	//zombie.PoisonStack += 1;
-	//zombie.FlameStack += 1;
 	//僵尸的总更新
 	if (!zombie.Hypnotized)
 	{
-		//燃烬效果
-		if (zombie.ShieldType == ShieldType::ZombieAccessoriesType2None && zombie.FlameStack > zombie.BodyHealth + zombie.HelmHealth)
-		{
-			zombie.Blast();
-		}
+		return;
 	}
+	return;
 }
 
 bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,int blue,int alpha)
@@ -164,23 +158,23 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	auto colorflag = zombie.ColorFlag;
 	if (colorflag)
 	{
-		int num = 0;
+		float ratio = 0.8;
 		switch (colorflag)
 		{
 		case 1:
-			num = 4 * min(zombie.PoisonStack, 45);
-			red -= num;
-			blue -= num;
+			ratio -= 0.015f * min(zombie.PoisonStack, 40);
+			red *= ratio;
+			blue *= ratio;
 			break;
 		case 2:
-			num = 6 * zombie.FrostStack;
-			red -= num;
-			green -= num;
+			ratio -= 0.02f * zombie.FrostStack;
+			red *= ratio;
+			green *= ratio;
 			break;
 		case 3:
-			num = 4 * min(zombie.FlameStack / 20, 45);
-			green -= num;
-			blue -= num;
+			ratio -= 0.001f * min(zombie.FlameStack, 600);
+			green *= ratio;
+			blue *= ratio;
 			break;
 		default:
 			break;
@@ -188,10 +182,7 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 		PVZ::Color color{ red,green,blue,alpha };
 		anim.SetColor(color);
 		anim.SetAdditiveColor(color);
-		if (num > 120)
-			anim.DrawAdditiveColor = true;
-		else
-			anim.DrawAdditiveColor = false;
+		//anim.DrawAdditiveColor = false;
 		return false;
 	}
 	return true;
