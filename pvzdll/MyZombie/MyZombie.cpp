@@ -12,7 +12,7 @@ namespace ZombieAbility
 		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new BaseZombie(), new BaseZombie(),
 
 		new BaseZombie(), new PeaZombie(),  new WallNutZombie(), new JalapenoZombie(), new BaseZombie(),
-		new BaseZombie(), new TallNutZombie(), new BaseZombie()
+		new SquashZombie(), new TallNutZombie(), new BaseZombie()
 	};
 }
 

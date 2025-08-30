@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <windows.h>
 #include "../pvzclass/pvzclass.h"
@@ -13,3 +13,5 @@ typedef unsigned char ProjSpecialFlags;
 constexpr ProjSpecialFlags PSF_THREEPEATER_SLIDE_OUT = 51;
 /// @brief 三线发射子弹的标记，向中路运动
 constexpr ProjSpecialFlags PSF_THREEPEATER_SLIDE_IN = 52;
+
+constexpr int WAVE_ELITE1 = 5001;
