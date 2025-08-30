@@ -180,7 +180,6 @@
     <ClCompile Include="ProjectileEvents.cpp" />
     <ClCompile Include="ResourcesEvents.cpp" />
     <ClCompile Include="ZombieEvents.cpp" />
-	<ClCompile Include="EventFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\pvzclass\pvzclass.vcxproj">
