@@ -91,4 +91,7 @@ void InitZombieEvents()
 	ZombieInitAfterEvent((int)onZombieInitAfter);
 	PVZEvent::ZombieDropHelmByDamageEvent((int)onRandomZombieDropHelm);
 	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
+
+	static constexpr byte asm_revert[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0D0, 0)};
+	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert));
 }
