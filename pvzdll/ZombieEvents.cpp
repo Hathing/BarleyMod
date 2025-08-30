@@ -3,6 +3,8 @@
 #include "MyZombie/ZombieAbility.hpp"
 #include "MyEvents.hpp"
 
+bool CLOWN_ZOMBIE_POP_FLAG = false;
+
 void onZombieDropLoot(MyZombie zombie)
 {
 	zombie.DroppedLoot = 1;
@@ -50,6 +52,7 @@ void onZombieInitAfter(MyZombie zombie)
 	zombie.IsWalkingBackwards = 0;
 	
 	zombie.ColorFlag = 0;
+	zombie.HpPoint = 0;
 
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
@@ -68,10 +71,16 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	int type = Creator::Rand(33);
 	if (type == 25)type = 26;//僵王换豌豆
 	if (type == 20)type = 27;//蹦极换坚果
-	auto child_zombie = Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), zombie.Row, 0x0f);
+	MyZombie child_zombie{ Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), zombie.Row, 0x0f) };
 	PVZ::CreateParticleSystem(zombie.X + 40.0f,zombie.Y + 65.0f,zombie.Layer+100,EffectType::IMITATER_TRANSFORMING);
 	child_zombie.X = zombie.X;
-	float health_ratio = (1 + Creator::Rand(5)) / 5.0f;
+
+	int HpPoint = 1 + Creator::Rand(5);
+	if (CLOWN_ZOMBIE_POP_FLAG)
+		HpPoint = 5;
+	child_zombie.HpPoint = HpPoint;
+	float health_ratio = (HpPoint) / 5.0f;
+	
 	child_zombie.BodyHealth *= health_ratio;
 	child_zombie.BodyMaxHealth *= health_ratio;
 	child_zombie.HelmHealth *= health_ratio;
@@ -145,7 +154,7 @@ float onZombieApplyAnimSpeed(MyZombie zombie, PVZ::Animation anim, float rate)
 }
 void onZombieUpdatePlaying(MyZombie zombie)
 {
-	//僵尸的总更新
+	//僵尸的总更新，无视黄油和冻结
 	if (!zombie.Hypnotized)
 	{
 		return;
@@ -155,6 +164,14 @@ void onZombieUpdatePlaying(MyZombie zombie)
 
 bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,int blue,int alpha)
 {
+	if (zombie.HpPoint == 5)
+	{
+		PVZ::Color color{ 248,255,0,alpha };
+		anim.SetColor(color);
+		anim.SetAdditiveColor(color);
+		anim.DrawAdditiveColor = true;
+		return false;
+	}
 	auto colorflag = zombie.ColorFlag;
 	if (colorflag)
 	{
@@ -187,6 +204,28 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	}
 	return true;
 }
+void onZombieUpdateAction(MyZombie zombie)
+{
+	//这里是所有僵尸在未定身时必经的更新
+	//小丑僵尸爆炸
+	if (zombie.Type == ZombieType::JackintheboxZombie && zombie.IsWalkingBackwards == 0 && zombie.State == ZombieState::JACKBOX_WALKING)
+	{
+		zombie.AttributeCountdown = 0;
+	}
+	return;
+}
+
+bool onClownZombiePop(MyZombie zombie, int x, int y)
+{
+	CLOWN_ZOMBIE_POP_FLAG = true;
+	auto zombies = zombie.GetBoard().GetAllZombies<MyZombie>();
+	for (auto myzombie : zombies)
+		if (myzombie.Row == zombie.Row && myzombie.X + 115 >= zombie.X && myzombie.X - 115 <= zombie.X
+			&& myzombie.Type == ZombieType::ConeheadZombie)
+			myzombie.Hit(myzombie.HelmMaxHealth + 1, PVZ::DAMAGEF_NOLEAVEBODY);
+	CLOWN_ZOMBIE_POP_FLAG = false;
+	return false;
+}
 
 void InitZombieEvents()
 {
@@ -201,6 +240,8 @@ void InitZombieEvents()
 	PVZEvent::ZombieApplyAnimSpeedEvent((int)onZombieApplyAnimSpeed);
 	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
+	ZombieUpdateActionEvent((int)onZombieUpdateAction);
+	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemoryUnsafe<int>(0x52A8B6, 1000);

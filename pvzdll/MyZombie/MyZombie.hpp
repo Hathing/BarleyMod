@@ -22,6 +22,8 @@ public:
 	T_PROPERTY(byte, FrostStack, __get_FrostStack, __set_FrostStack, 0x13D);
 	/// @brief 僵尸显示颜色标记，0为不显示，1为毒，2为冰，3为火
 	T_PROPERTY(byte, ColorFlag, __get_ColorFlag, __set_ColorFlag, 0x13E);
+	/// @brief 僵尸血量点数标记，非盲盒开出的僵尸该值为0
+	T_PROPERTY(byte, HpPoint, __get_HpPoint, __set_HpPoint, 0x13F);
 	/// @brief 毒的层数
 	INT_PROPERTY(PoisonStack, __get_PoS, __set_PoS, 0x140);
 	/// @brief 燃烬层数

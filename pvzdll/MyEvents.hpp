@@ -100,6 +100,17 @@ namespace PVZEvent
 		ZomboniUpdateIceEvent() : ZomboniUpdateIceEvent("onZomboniUpdateIce") {};
 	};
 
+	/// @brief 小丑僵尸正常关卡爆炸时事件
+	/// @param 僵尸、爆炸的X、爆炸的Y
+	/// @return False则不经过原版爆炸。原版有个意义不明且看不出效果的炸僵尸？不知道有没有影响
+	class ClownZombiePopEvent : public BoolDLLEventTemplate<0x526C67, 5, 0x526C84, REG_EDI,REG_EAX,REG_ESI>
+	{
+	public:
+		ClownZombiePopEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ClownZombiePopEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ClownZombiePopEvent() : ClownZombiePopEvent("onClownZombiePop") {};
+	};
+
 	/// @brief 僵尸发射子弹事件（复合事件）
 	/// @param 触发事件的僵尸，僵尸发射的子弹
 	class ZombieAddProjectileEvent
