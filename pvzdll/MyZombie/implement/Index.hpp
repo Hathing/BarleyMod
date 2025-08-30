@@ -11,3 +11,4 @@
 #include "WallNutZombie.hpp"
 #include "JalapenoZombie.hpp"
 #include "TallNutZombie.hpp"
+#include "SquashZombie.hpp"

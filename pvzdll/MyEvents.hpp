@@ -221,17 +221,12 @@ namespace PVZEvent
 		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
 	};
 
-	class RandomZombieDropHelmEvent : public DLLEventTemplate<0x530FC4, 5, REG_EBX>
+	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x53106B, 5, REG_EAX>
 	{
 	public:
-		RandomZombieDropHelmEvent(const char* str) : DLLEventTemplate() { Init(str); };
-		RandomZombieDropHelmEvent(int address) : DLLEventTemplate() { Init(address); };
-		RandomZombieDropHelmEvent() : RandomZombieDropHelmEvent("onRandomZombieDropHelm") {};
-	protected:
-		virtual void InitExtra(AsmBuilder& builder)
-		{
-			builder.popad().push_imm32(0x530FCE).ret();
-		}
+		ZombieDropHelmByDamageEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieDropHelmByDamageEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieDropHelmByDamageEvent() : ZombieDropHelmByDamageEvent("onZombieDropHelmByDamage") {};
 	};
 
 	/// @brief 物品自动收集事件，注入功能：存在1秒后自动设置自己为被收集状态
@@ -331,10 +326,11 @@ namespace PVZEvent
 		PlantUpdateShootingEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantUpdateShootingEvent() : PlantUpdateShootingEvent("onPlantUpdateShooting") {};
 	};
-	/// @brief 植物开火事件。此事件与PVZ Class中的PlantShootEvent注入位置相同，区别在于此事件可以选择跳过原版开火
+	/// @brief 植物开火事件。
+	/// @note 此事件与 PlantShootEvent 注入位置相同，区别在于此事件可以选择跳过原版开火
 	/// @param 触发事件的植物、开火目标僵尸、Weapon类型
 	/// @return False则跳过原版开火
-	class PlantFireEvent : public BoolDLLEventTemplate<0x466E0D, 6, 0x466E7A, REG_EBX, MEM_ESP_ADD(0x2C), REG_EBP>
+	class PlantFireEvent : public BoolDLLEventTemplate<0x466E0D, 6, 0x466E7A, REG_EBX, MEM_ESP_ADD(0x50), REG_EBP>
 	{
 	public:
 		PlantFireEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
@@ -344,6 +340,7 @@ namespace PVZEvent
 	/// @brief 植物开火生成子弹前的事件。
 	/// @param 触发事件的植物、子弹类型、子弹初始化坐标X、Y
 	/// @return False则跳过子弹生成
+	/// @deprecated 请使用 PVZEvent::PlantFireEvent
 	class PlantAddProjectileBeforeEvent : public BoolDLLEventTemplate<0x4672A5, 5, 0x467319, REG_ESI,REG_EDI,REG_EAX,REG_EBP>
 	{
 	public:
