@@ -221,17 +221,12 @@ namespace PVZEvent
 		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
 	};
 
-	class RandomZombieDropHelmEvent : public DLLEventTemplate<0x530FC4, 5, REG_EBX>
+	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x53106B, 5, REG_EAX>
 	{
 	public:
-		RandomZombieDropHelmEvent(const char* str) : DLLEventTemplate() { Init(str); };
-		RandomZombieDropHelmEvent(int address) : DLLEventTemplate() { Init(address); };
-		RandomZombieDropHelmEvent() : RandomZombieDropHelmEvent("onRandomZombieDropHelm") {};
-	protected:
-		virtual void InitExtra(AsmBuilder& builder)
-		{
-			builder.popad().push_imm32(0x530FCE).ret();
-		}
+		ZombieDropHelmByDamageEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieDropHelmByDamageEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieDropHelmByDamageEvent() : ZombieDropHelmByDamageEvent("onZombieDropHelmByDamage") {};
 	};
 
 	/// @brief 物品自动收集事件，注入功能：存在1秒后自动设置自己为被收集状态
