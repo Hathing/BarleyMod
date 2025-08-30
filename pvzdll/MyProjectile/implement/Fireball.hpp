@@ -21,7 +21,7 @@ namespace ProjectileAbility
 			if (proj.SpecialType == PST_BLUE_FIREBALL)
 				zombie.AddFrost(10);
 			if (proj.SpecialType == PST_PURPLE_FIREBALL)
-				zombie.AddPoison(10);
+				zombie.AddPoison(1);
 		}
 	};
 }

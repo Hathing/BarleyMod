@@ -52,6 +52,8 @@ void MyZombie::AddFrost(int num)
 	this->FrostStack += num;
 	if (this->FrostStack > 30)
 	{
+		int damage = (this->FrostStack - 30) * 0.01f * (this->BodyHealth + this->HelmHealth + this->ShieldHealth);//溢出层数*1%*当前生命值转化为伤害
+		this->Hit(damage, PVZ::DAMAGEF_NOFLASH);
 		this->FrostStack = 30;
 	}
 	this->UpdateAnimSpeed();
