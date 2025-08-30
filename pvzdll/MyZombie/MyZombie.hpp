@@ -14,6 +14,10 @@ public:
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 僵尸被多投索敌过的标记
 	T_PROPERTY(byte, PultSkip, __get_PultSkip, __set_PultSkip, 0x106);
+	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
+	T_PROPERTY(byte, IsWalkingBackwards, __get_IsWalkingBackwards, __set_IsWalkingBackwards, 0x13C);
+	/// @brief 僵尸寒意层数，上限30层，每层减速2%
+	T_PROPERTY(byte, FrostStack, __get_FrostStack, __set_FrostStack, 0x13D);
 	/// @brief 毒的层数
 	INT_PROPERTY(PoisonStack, __get_PoS, __set_PoS, 0x140);
 	/// @brief 最近受到伤害的来源植物 ID

@@ -419,8 +419,38 @@ namespace PVZEvent
 	protected:
 		virtual void InitExtra(AsmBuilder& builder)
 		{
-			//builder.mov_mem_esp_add_imm8_reg(0x28, REG_EAX);
 			builder.fstp_m32_esp_imm8(0x28);
+		}
+	};
+	/// @brief 判断僵尸是否反向事件
+	/// @param 僵尸
+	/// @return 负数则调用原版函数，0则返回false，1则返回true
+	class ZombieIsWalkingBackwardsEvent : public DLLEventTemplate<0x52BEE0, 7, REG_ECX>
+	{
+	public:
+		ZombieIsWalkingBackwardsEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieIsWalkingBackwardsEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieIsWalkingBackwardsEvent() : ZombieIsWalkingBackwardsEvent("onZombieIsWalkingBackwards") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX,0).jl_rel(6);
+			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX).popad().ret();
+		}
+	};
+	/// @brief 僵尸施加动画速度事件，主要是处理减速相关
+	/// @param 僵尸、动画、原速率
+	/// @return 修改后的动画速率（浮点数）
+	class ZombieApplyAnimSpeedEvent : public DLLEventTemplate<0x52F01F, 7, MEM_ESP_ADD(0x2C), REG_ESI, REG_EAX>
+	{
+	public:
+		ZombieApplyAnimSpeedEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieApplyAnimSpeedEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieApplyAnimSpeedEvent() : ZombieApplyAnimSpeedEvent("onZombieApplyAnimSpeed") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.fstp_m32_esp_imm8(0x2C);
 		}
 	};
 	/// @brief 子弹初始化完成事件

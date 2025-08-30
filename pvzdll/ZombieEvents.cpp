@@ -47,6 +47,9 @@ void onZombieDropLoot(MyZombie zombie)
 
 void onZombieInitAfter(MyZombie zombie)
 {
+	zombie.IsWalkingBackwards = 0;
+	zombie.FrostStack = 0;
+	zombie.PoisonStack = 0;
 	zombie.LastDamageSourceID = 0;
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
 }
@@ -113,6 +116,34 @@ float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
 	return velocity;
 }
 
+int onZombieIsWalkingBackwards(MyZombie zombie)
+{
+	if (zombie.IsWalkingBackwards == 2)
+		return 1;
+	if (zombie.IsWalkingBackwards == 1)
+	{
+		if (zombie.X > 725.0)
+		{
+			zombie.IsWalkingBackwards = 0;
+			return 0;
+		}
+		return 1;
+	}
+	return -1;
+}
+float onZombieApplyAnimSpeed(MyZombie zombie, PVZ::Animation anim, float rate)
+{
+	if (zombie.FrostStack && zombie.FrostStack !=0xFF)//在InitAfter之前会调用一次AnimSpeed，此时僵尸的FrostStack还没有初始化，初始值为0xFF
+	{
+		rate *= max(1.0f - zombie.FrostStack * 0.02f,0.4f);
+	}
+	return rate;
+}
+void onZombieUpdatePlaying(MyZombie zombie)
+{
+
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -122,6 +153,9 @@ void InitZombieEvents()
 	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 	PVZEvent::ZombieUpdateWalkingSpeedEvent((int)onZombieUpdateWalkingSpeed);
+	PVZEvent::ZombieIsWalkingBackwardsEvent((int)onZombieIsWalkingBackwards);
+	PVZEvent::ZombieApplyAnimSpeedEvent((int)onZombieApplyAnimSpeed);
+	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemoryUnsafe<int>(0x52A8B6, 1000);
 }
