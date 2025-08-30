@@ -21,4 +21,10 @@ public:
 	/// @brief 对指定行的所有僵尸造成灰烬伤害
 	/// @param row 行
 	void BurnRow(int row);
+	/// @brief 在指定行右侧生成一只指定类型的僵尸
+	/// @param type 僵尸类型
+	/// @param row 行
+	/// @param from_wave 僵尸所在的波数
+	/// @return 生成的僵尸
+	PVZ::Zombie AddZombieInRow(ZombieType::ZombieType type, int row, int from_wave);
 };

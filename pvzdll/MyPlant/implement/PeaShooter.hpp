@@ -79,7 +79,7 @@ namespace PlantAbility
 			return CanTargetZombie(plant, zombie) ? 1 : 0;
 		}
 
-		bool onAddProjectileBefore(MyPlant plant, ProjectileType::ProjectileType proj_type, int x, int y)
+		bool onFire(MyPlant plant, MyZombie target, int weapon_type)
 		{
 			MyZombie zombie{ plant.PeashooterTarget };
 			zombie.LastDamageSourceID = plant.Id;

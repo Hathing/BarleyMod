@@ -61,10 +61,9 @@ void onZombieInitAfter(MyZombie zombie)
 
 void onRandomZombieDropHelm(MyZombie zombie)
 {
-	if (zombie.Type != ZombieType::ConeheadZombie) {
-		zombie.HelmType = HelmType::None;
+	if (zombie.Type != ZombieType::ConeheadZombie)
 		return;
-	}
+
 	zombie.Remove();
 	int type = Creator::Rand(33);
 	if (type == 25)type = 26;//僵王换豌豆
@@ -203,7 +202,7 @@ void InitZombieEvents()
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
 	ZombieDropLootEvent((int)onZombieDropLoot);
 	ZombieInitAfterEvent((int)onZombieInitAfter);
-	PVZEvent::RandomZombieDropHelmEvent((int)onRandomZombieDropHelm);
+	PVZEvent::ZombieDropHelmByDamageEvent((int)onRandomZombieDropHelm);
 	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 	PVZEvent::ZombieUpdateWalkingSpeedEvent((int)onZombieUpdateWalkingSpeed);

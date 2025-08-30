@@ -234,6 +234,9 @@
     <ClInclude Include="MyProjectile\implement\Kernel.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyZombie\implement\SquashZombie.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

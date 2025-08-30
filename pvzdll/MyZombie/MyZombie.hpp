@@ -7,6 +7,8 @@ public:
 	MyZombie(int idoraddress) : PVZ::Zombie(idoraddress) {};
 	MyZombie(const PVZ::Zombie& zombie) : PVZ::Zombie(zombie.GetBaseAddress()) {};
 
+	/// @brief 生成的波数
+	INT_PROPERTY(FromWave, __get_FrW, __set_FrW, 0x6C);
 	/// @brief 是否掉落过掉落物
 	T_PROPERTY(byte, DroppedLoot, __get_DrL, __set_DrL, 0x70);
 	T_PROPERTY(byte, Unknown, __get_Un, __set_Un, 0x71);

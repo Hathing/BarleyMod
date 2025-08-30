@@ -113,9 +113,11 @@ namespace PlantAbility
 			return -1;
 		}
 		/// @brief 植物开火生成子弹前的事件。
-		/// @param 触发事件的植物、子弹类型、子弹初始化坐标X、Y
+		/// @param plant 植物
+		/// @param target 目标僵尸
+		/// @param weapon_type 武器类型
 		/// @return False则跳过子弹生成
-		virtual bool onAddProjectileBefore(MyPlant plant, ProjectileType::ProjectileType proj_type, int x, int y)
+		virtual bool onFire(MyPlant plant, MyZombie target, int weapon_type)
 		{
 			return true;
 		}
