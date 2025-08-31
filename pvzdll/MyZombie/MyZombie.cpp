@@ -49,7 +49,7 @@ void MyZombie::FlyAway(float factor)
 
 void MyZombie::AddFrost(int num)
 {
-	int add_frost_num = this->FrostStack + num
+	int add_frost_num = this->FrostStack + num;
 	this->FrostStack = add_frost_num;
 	if (this->FrostStack > 30)
 	{
