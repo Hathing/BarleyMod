@@ -65,4 +65,15 @@ namespace PVZEvent
 			builder.test_al_al().jnz_rel(10).popad().add_reg_imm(REG_ESP, 4).push_imm32(0x41D93F).ret();
 		}
 	};
+
+	/// @brief 僵尸掉头后，持续受到伤害事件
+	/// @param 触发事件的僵尸
+	/// @return 僵尸是否受到伤害
+	class ZombieWitherEvent : public DiversionEventTemplate<0x52B536, 5, 0x52B544, 0x52B551, REG_EDI>
+	{
+	public:
+		ZombieWitherEvent(int address) : DiversionEventTemplate() { Init(address); };
+		ZombieWitherEvent(const char* name) : DiversionEventTemplate() { Init(name); };
+		ZombieWitherEvent() : ZombieWitherEvent("onZombieWither") {};
+	};
 }

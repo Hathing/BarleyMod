@@ -818,5 +818,20 @@
     <ClInclude Include="Events\BoardCustomTooltipEvent.hpp">
       <Filter>头文件\Events\Board</Filter>
     </ClInclude>
+    <ClInclude Include="Events\ProjectileUpdateEvents.hpp">
+      <Filter>头文件\Events\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\PoleVaulterEvents.hpp">
+      <Filter>头文件\Events\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\BungeeEvents.hpp">
+      <Filter>头文件\Events\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\ZombieAbilityEvents.hpp">
+      <Filter>头文件\Events\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\PlantPassiveEvents.hpp">
+      <Filter>头文件\Events\Plant</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

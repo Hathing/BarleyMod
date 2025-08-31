@@ -222,16 +222,6 @@ namespace PVZEvent
 		ChomperInstantJudgeEvent() : ChomperInstantJudgeEvent("onChomperInstantJudge") {};
 	};
 
-	/// @brief 大嘴花判定是否秒杀僵尸的事件
-	/// @param 依次为：触发事件的植物，植物攻击的僵尸
-	class ZombieCanBeChilledEvent : public IntDLLEventTemplate<0x531990, 6, 0, 0, 0, REG_EDX, true, REG_ESI>
-	{
-	public:
-		ZombieCanBeChilledEvent(const char* str) : IntDLLEventTemplate() { Init(str); };
-		ZombieCanBeChilledEvent(int address) : IntDLLEventTemplate() { Init(address); };
-		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
-	};
-
 	/// @brief 磁力菇修改吸收半径的事件
 	/// @param 植物，当前遍历的僵尸
 	/// @return 负数则使用原版半径（270，啃咬320）,否则使用返回值作为半径

@@ -6,7 +6,7 @@ namespace PVZEvent
 	/// @brief 僵尸动画速度随 buff 改变事件
 	/// @param 触发事件的僵尸，僵尸的基础动画速度
 	/// @return 调整后的僵尸动画速度
-	class ZombieSpeedAlterEvent : public DLLEventTemplate<0x452976, 6>
+	class ZombieSpeedAlterEvent : public DLLEvent
 	{
 	public:
 		ZombieSpeedAlterEvent(int address)
