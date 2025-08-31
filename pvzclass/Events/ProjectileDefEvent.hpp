@@ -16,7 +16,7 @@ namespace PVZEvent
 
 	/// @brief 子弹对僵尸造成伤害事件
 	/// @param 依次为：子弹基址、受伤僵尸基址、伤害类型、溅射僵尸次级目标数、溅射伤害数值（非溅射时固定为 0）
-	/// @return 调整后的伤害。非负值会被忽略。
+	/// @return 调整后的伤害。负值会被忽略。
 	class ProjectileDamageZombieEvent
 	{
 	private:

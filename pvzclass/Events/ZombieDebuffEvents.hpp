@@ -35,4 +35,16 @@ namespace PVZEvent
 		ZombieChillEvent(int address) : DLLEventTemplate() { Init(address); };
 		ZombieChillEvent() : ZombieChillEvent("onZombieChill") {};
 	};
+
+	/// @brief 僵尸是否可被减速事件
+	/// @note 不可被减速的僵尸，一定不可被冻结或被黄油定身
+	/// @param 触发事件的僵尸
+	/// @return 若为负数，与原版一致；若为 0，则不可被减速；若为正数，则强制可被减速。
+	class ZombieCanBeChilledEvent : public IntDLLEventTemplate<0x531990, 7, 0, 0, 0, REG_EAX, true, REG_ESI>
+	{
+	public:
+		ZombieCanBeChilledEvent(const char* str) : IntDLLEventTemplate() { Init(str); };
+		ZombieCanBeChilledEvent(int address) : IntDLLEventTemplate() { Init(address); };
+		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
+	};
 }

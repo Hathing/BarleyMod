@@ -34,3 +34,18 @@ public:
 		start(STRING(code));
 	}
 };
+
+namespace PVZEvent
+{
+	/// @brief 判断植物是否应该发动技能的事件
+	/// @note 时机上后于压扁判断和消失判断，但先于蹦极是否抱住的判断。
+	/// @param 触发事件的植物
+	/// @return 是否继续判定是否应该发动技能。若为否，则不发动技能。
+	class JudgetPlantUpdateAbilityEvent : public BoolDLLEventTemplate<0x463217, 7, 0x463410, REG_EDI>
+	{
+	public:
+		JudgetPlantUpdateAbilityEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		JudgetPlantUpdateAbilityEvent(const char* name) : BoolDLLEventTemplate() { Init(name); };
+		JudgetPlantUpdateAbilityEvent() : JudgetPlantUpdateAbilityEvent("onZombieDropHelm") {};
+	};
+}

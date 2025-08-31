@@ -8,7 +8,7 @@
 class AsmBuilder
 {
 private:
-	byte *code;
+	byte* code;
 	int ptr;  // 指向最后一条指令的下一字节
 
 public:
@@ -25,6 +25,7 @@ public:
 	~AsmBuilder()
 	{
 		delete[](code);
+		code = nullptr;
 	}
 
 	// 返回当前生成的机器码

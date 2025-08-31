@@ -63,6 +63,7 @@
 #include "PlantFindTargetEvents.hpp"
 #include "PlantInitAfterEvent.hpp"
 #include "PlantMouseDownEvent.hpp"
+#include "PlantPassiveEvents.hpp"
 #include "PlantProduceEvent.hpp"
 #include "PlantRectEvents.hpp"
 #include "PlantShoveledEvent.hpp"
@@ -73,6 +74,7 @@
 
 #include "ProjectileDefEvent.hpp"
 #include "ProjectileImageEvent.hpp"
+#include "ProjectileUpdateEvents.hpp"
 
 #include "LawnmowerUpdateEvent.hpp"
 #include "SeedPacketMouseDownEvent.hpp"
@@ -82,6 +84,10 @@
 #include "GriditemUpdateEvent.hpp"
 #include "ZombieInitAfterEvent.hpp"
 #include "IZInitAfterBrainEvent.hpp"
+
+#include "BungeeEvents.hpp"
+#include "PoleVaulterEvents.hpp"
+#include "ZombieAbilityEvents.hpp"
 #include "ZombieDebuffEvents.hpp"
 #include "ZombieDetachShieldEvent.hpp"
 #include "ZombieDropHeadEvent.hpp"

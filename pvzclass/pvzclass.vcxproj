@@ -271,6 +271,7 @@
     <ClInclude Include="Events\BoardInitAfterEvent.hpp" />
     <ClInclude Include="Events\BoardKeyDownEvent.hpp" />
     <ClInclude Include="Events\BoardUpdateGameEvent.hpp" />
+    <ClInclude Include="Events\BungeeEvents.hpp" />
     <ClInclude Include="Events\CalcSunCostEvent.hpp" />
     <ClInclude Include="Events\CanPlantAtEvents.hpp" />
     <ClInclude Include="Events\ChallengeInitAfterEvent.hpp" />
@@ -312,6 +313,7 @@
     <ClInclude Include="Events\PlantFindTargetEvents.hpp" />
     <ClInclude Include="Events\PlantInitAfterEvent.hpp" />
     <ClInclude Include="Events\PlantMouseDownEvent.hpp" />
+    <ClInclude Include="Events\PlantPassiveEvents.hpp" />
     <ClInclude Include="Events\PlantProduceEvent.hpp" />
     <ClInclude Include="Events\PlantRectEvents.hpp" />
     <ClInclude Include="Events\PlantShoveledEvent.hpp" />
@@ -320,8 +322,10 @@
     <ClInclude Include="Events\PlantTakeDamageEvent.hpp" />
     <ClInclude Include="Events\PlantUpdateAbilityEvent.hpp" />
     <ClInclude Include="Events\PlantUpdateEvent.hpp" />
+    <ClInclude Include="Events\PoleVaulterEvents.hpp" />
     <ClInclude Include="Events\ProjectileDefEvent.hpp" />
     <ClInclude Include="Events\ProjectileImageEvent.hpp" />
+    <ClInclude Include="Events\ProjectileUpdateEvents.hpp" />
     <ClInclude Include="Events\SeedPacketMouseDownEvent.hpp" />
     <ClInclude Include="Events\ProjectileCreateEvent.h" />
     <ClInclude Include="Events\PuzzlePhaseCompleteEvent.hpp" />
@@ -337,6 +341,7 @@
     <ClInclude Include="Events\ZombieEatEvent.h" />
     <ClInclude Include="Events\ZombieEatSoundEvent.hpp" />
     <ClInclude Include="Events\ZombieEquipmentEvents.hpp" />
+    <ClInclude Include="Events\ZombieAbilityEvents.hpp" />
     <ClInclude Include="Events\ZombieSpeedAlterEvent.hpp" />
     <ClInclude Include="Events\ZombieTakeDmgEvent.h" />
     <ClInclude Include="Enums\LawnmoverState.h" />
