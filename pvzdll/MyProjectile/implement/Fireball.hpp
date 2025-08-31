@@ -12,16 +12,24 @@ namespace ProjectileAbility
 		}
 		void onDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
-			if(proj.SpecialType==PST_NONE)
-				zombie.AddFlame(20);
-			if (proj.SpecialType == PST_ORANGE_FIREBALL)
+			switch (proj.SpecialType)
+			{
+			case PST_ORANGE_FIREBALL:
 				zombie.AddFlame(40);
-			if (proj.SpecialType == PST_RED_FIREBALL)
+				break;
+			case PST_RED_FIREBALL:
 				zombie.AddFlame(60);
-			if (proj.SpecialType == PST_BLUE_FIREBALL)
+				break;
+			case PST_BLUE_FIREBALL:
 				zombie.AddFrost(10);
-			if (proj.SpecialType == PST_PURPLE_FIREBALL)
-				zombie.AddPoison(1);
+				break;
+			case PST_PURPLE_FIREBALL:
+				zombie.AddPoison(20);
+				break;
+			default:
+				zombie.AddFlame(20);
+				break;
+			}
 		}
 	};
 }

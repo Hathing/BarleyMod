@@ -49,7 +49,8 @@ void MyZombie::FlyAway(float factor)
 
 void MyZombie::AddFrost(int num)
 {
-	this->FrostStack += num;
+	int add_frost_num = this->FrostStack + num
+	this->FrostStack = add_frost_num;
 	if (this->FrostStack > 30)
 	{
 		int damage = (this->FrostStack - 30) * 0.01f * (this->BodyHealth + this->HelmHealth + this->ShieldHealth);//溢出层数*1%*当前生命值转化为伤害

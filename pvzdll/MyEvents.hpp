@@ -402,7 +402,8 @@ namespace PVZEvent
 		CreateAtlasEvent() : CreateAtlasEvent("onCreateAtlas") {};
 	};
 
-	/// @brief 僵尸碾压植物事件。注意碾压≠植物死亡，而是指植物压成饼这一事件。
+	/// @brief 僵尸碾压植物事件。
+	/// @attention 注意碾压≠植物死亡，而是指植物压成饼这一事件。
 	/// @note 僵王踩踏和砸车暂时不触发此事件。
 	/// @note 原版中的细节：巨人在碾压地刺王时，调用45EC00，并且这里会触发僵尸伤害植物事件；倭瓜头只调用squish()；车类只调用squish，植物的范围伤害函数中，地刺王命中会调用45EC00，地刺会调用Die()，两者均造成1800点伤害；冰火球我没看
 	/// @param 触发事件的僵尸，被碾压的行数，被碾压的列数，僵尸攻击类型（车类、冰火球=1,巨人、倭瓜头=0，原版中前者对地刺、地刺王无效，后者只对地刺王无效），被碾压的植物
@@ -461,20 +462,16 @@ namespace PVZEvent
 			builder.fstp_m32_esp_imm8(0x2C);
 		}
 	};
-	/// @brief 僵尸修改绘制颜色事件，注意不是所有状态的僵尸都会经过这个位置，这个位置适用于新增绘制
+	/// @brief 僵尸修改绘制颜色事件
+	/// @attention 注意不是所有状态的僵尸都会经过这个位置，这个位置适用于新增绘制
 	/// @param 僵尸、动画，原R,G,B,A（均为int，0~255）
 	/// @return True则使用原版颜色，False则跳过原版颜色。
-	class ZombieUpdateColorEvent : public DLLEventTemplate<0x52D3F6, 7, MEM_ESP_ADD(0x4C), REG_EDX, REG_ECX, REG_EAX, REG_EBX, REG_ESI>
+	class ZombieUpdateColorEvent : public BoolDLLEventTemplate<0x52D3F6, 7, 0x52D429, MEM_ESP_ADD(0x4C), REG_EDX, REG_ECX, REG_EAX, REG_EBX, REG_ESI>
 	{
 	public:
-		ZombieUpdateColorEvent(const char* str) : DLLEventTemplate() { Init(str); };
-		ZombieUpdateColorEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieUpdateColorEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieUpdateColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieUpdateColorEvent() : ZombieUpdateColorEvent("onZombieUpdateColor") {};
-	protected:
-		virtual void InitExtra(AsmBuilder& builder)
-		{
-			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x52D429).ret();
-		}
 	};
 	/// @brief 子弹初始化完成事件
 	/// @note 此时 ImageX 和 ImageY 均未初始化
