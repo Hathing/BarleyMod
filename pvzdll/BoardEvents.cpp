@@ -9,6 +9,7 @@ void InitPlantExistCount(MyBoard& board)
 void onBoardInit(MyBoard board)
 {
 	board.PoisonCounter = 1;
+	board.ZombieColorShiftCounter = 1;
 	InitPlantExistCount(board);
 }
 
@@ -29,6 +30,54 @@ inline void UpdatePoisonApply(MyBoard& board)
 			if (zombie.Type == ZombieType::NewspaperZombie && zombie.EliteType)
 				continue;
 			zombie.Hit(zombie.PoisonStack, PVZ::DAMAGEF_NOFLASH);
+		}
+	}
+	board.ZombieColorShiftCounter++;
+	if (board.ZombieColorShiftCounter == 100)
+	{
+		board.ZombieColorShiftCounter = 0;
+		auto zombies = board.GetAllZombies<MyZombie>();
+		for (auto& zombie : zombies)
+		{
+			switch (zombie.ColorFlag)
+			{
+			case 1:
+				{
+				if (zombie.FrostStack)
+					zombie.ColorFlag = 2;
+				else if (zombie.FlameStack)
+					zombie.ColorFlag = 3;
+				break;
+				}
+			case 2:
+				{
+				if (zombie.FlameStack)
+					zombie.ColorFlag = 3;
+				else if (zombie.PoisonStack)
+					zombie.ColorFlag = 1;
+				break;
+				}
+			case 3:
+				{
+				if (zombie.PoisonStack)
+					zombie.ColorFlag = 1;
+				else if (zombie.FrostStack)
+					zombie.ColorFlag = 2;
+				break;
+				}
+			default:
+				{
+				if (zombie.PoisonStack)
+					zombie.ColorFlag = 1;
+				else if (zombie.FrostStack)
+					zombie.ColorFlag = 2;
+				else if (zombie.FlameStack)
+					zombie.ColorFlag = 3;
+				else
+					zombie.ColorFlag = 0;
+				break;
+				}
+			}
 		}
 	}
 }

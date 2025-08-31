@@ -12,3 +12,4 @@
 #include "JalapenoZombie.hpp"
 #include "TallNutZombie.hpp"
 #include "SquashZombie.hpp"
+#include "ClownZombie.hpp"

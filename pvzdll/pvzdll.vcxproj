@@ -145,6 +145,7 @@
     <ClInclude Include="MyProjectile\implement\Kernel.hpp" />
     <ClInclude Include="MyProjectile\implement\Melon.hpp" />
     <ClInclude Include="MyProjectile\implement\Star.hpp" />
+	<ClInclude Include="MyProjectile\implement\Fireball.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
     <ClInclude Include="MyProjectile\ProjectileAbility.hpp" />
     <ClInclude Include="MyZombie\implement\BungeeZombie.hpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="MyZombie\implement\TallNutZombie.hpp" />
     <ClInclude Include="MyZombie\implement\WallNutZombie.hpp" />
     <ClInclude Include="MyZombie\implement\Zomboni.hpp" />
+	<ClInclude Include="MyZombie\implement\ClownZombie.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />
     <ClInclude Include="MyZombie\ZombieAbility.hpp" />
     <ClInclude Include="pch.h" />
