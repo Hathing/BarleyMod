@@ -100,6 +100,17 @@ namespace PVZEvent
 		ZomboniUpdateIceEvent() : ZomboniUpdateIceEvent("onZomboniUpdateIce") {};
 	};
 
+	/// @brief 小丑僵尸正常关卡爆炸时事件
+	/// @param 僵尸、爆炸的X、爆炸的Y
+	/// @return False则不经过原版爆炸。原版有个意义不明且看不出效果的炸僵尸？不知道有没有影响
+	class ClownZombiePopEvent : public BoolDLLEventTemplate<0x526C67, 5, 0x526C84, REG_EDI,REG_EAX,REG_ESI>
+	{
+	public:
+		ClownZombiePopEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ClownZombiePopEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ClownZombiePopEvent() : ClownZombiePopEvent("onClownZombiePop") {};
+	};
+
 	/// @brief 僵尸发射子弹事件（复合事件）
 	/// @param 触发事件的僵尸，僵尸发射的子弹
 	class ZombieAddProjectileEvent
@@ -219,6 +230,54 @@ namespace PVZEvent
 		ZombieCanBeChilledEvent(const char* str) : IntDLLEventTemplate() { Init(str); };
 		ZombieCanBeChilledEvent(int address) : IntDLLEventTemplate() { Init(address); };
 		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
+	};
+
+	/// @brief 磁力菇修改吸收半径的事件
+	/// @param 植物，当前遍历的僵尸
+	/// @return 负数则使用原版半径（270，啃咬320）,否则使用返回值作为半径
+	class MagnetShroomAttractRadiusEvent : public DLLEventTemplate<0x4620F4, 9, REG_EBX, REG_EDI>
+	{
+	public:
+		MagnetShroomAttractRadiusEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		MagnetShroomAttractRadiusEvent(int address) : DLLEventTemplate() { Init(address); };
+		MagnetShroomAttractRadiusEvent() : MagnetShroomAttractRadiusEvent("onMagnetShroomAttractRadius") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(11);
+			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX).popad().push_imm32(0x462104).ret();
+		}
+	};
+
+	/// @brief 磁力菇控制吸引的物体运动的事件
+	/// @param 植物
+	/// @return True则使用原版运动
+	class MagnetShroomMoveItemEvent : public BoolDLLEventTemplate<0x461DB6, 6, 0x461E1F, REG_EBX>
+	{
+	public:
+		MagnetShroomMoveItemEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		MagnetShroomMoveItemEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		MagnetShroomMoveItemEvent() : MagnetShroomMoveItemEvent("onMagnetShroomMoveItem") {};
+	};
+	/// @brief 磁力菇吸引物体时初始化物体的事件，也可以用于吸取时加生命值等
+	/// @note 发生在重置+54和+3C之后，其余事件前
+	/// @param 植物，目标僵尸
+	class MagnetShroomAttractItemEvent : public DLLEventTemplate<0x461646, 7, REG_EBX, REG_EBP>
+	{
+	public:
+		MagnetShroomAttractItemEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		MagnetShroomAttractItemEvent(int address) : DLLEventTemplate() { Init(address); };
+		MagnetShroomAttractItemEvent() : MagnetShroomAttractItemEvent("onMagnetShroomAttractItem") {};
+	};
+	/// @brief 磁力菇清空物体恢复Idle的事件
+	/// @note 发生在播放动画后，重置+D8前
+	/// @param 植物
+	class MagnetShroomClearItemEvent : public DLLEventTemplate<0x461E6E, 5, REG_EAX>
+	{
+	public:
+		MagnetShroomClearItemEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		MagnetShroomClearItemEvent(int address) : DLLEventTemplate() { Init(address); };
+		MagnetShroomClearItemEvent() : MagnetShroomClearItemEvent("onMagnetShroomClearItem") {};
 	};
 
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x53106B, 5, REG_EAX>
@@ -371,6 +430,15 @@ namespace PVZEvent
 		BoardDrawImageEvent(int address) : DLLEventTemplate() { Init(address); };
 		BoardDrawImageEvent() : BoardDrawImageEvent("onBoardDrawImage") {};
 	};
+	/// @brief 加载以普僵为基础模型的动画时最开头的事件
+	/// @param 僵尸
+	class LoadPlainZombieReanimBeforeEvent : public DLLEventTemplate<0x524370, 5, REG_EDI>
+	{
+	public:
+		LoadPlainZombieReanimBeforeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		LoadPlainZombieReanimBeforeEvent(int address) : DLLEventTemplate() { Init(address); };
+		LoadPlainZombieReanimBeforeEvent() : LoadPlainZombieReanimBeforeEvent("onLoadPlainZombieReanimBefore") {};
+	};
 	/// @brief 创建动画图集事件
 	/// @param 触发事件的动画类型，触发事件的动画定义
 	/// @return 是否生成动画图集
@@ -382,9 +450,11 @@ namespace PVZEvent
 		CreateAtlasEvent() : CreateAtlasEvent("onCreateAtlas") {};
 	};
 
-	/// @brief 僵尸碾压植物事件
+	/// @brief 僵尸碾压植物事件。
+	/// @attention 注意碾压≠植物死亡，而是指植物压成饼这一事件。
 	/// @note 僵王踩踏和砸车暂时不触发此事件。
-	/// @param 触发事件的僵尸，被碾压的行数，被碾压的列数，僵尸攻击类型，被碾压的植物
+	/// @note 原版中的细节：巨人在碾压地刺王时，调用45EC00，并且这里会触发僵尸伤害植物事件；倭瓜头只调用squish()；车类只调用squish，植物的范围伤害函数中，地刺王命中会调用45EC00，地刺会调用Die()，两者均造成1800点伤害；冰火球我没看
+	/// @param 触发事件的僵尸，被碾压的行数，被碾压的列数，僵尸攻击类型（车类、冰火球=1,巨人、倭瓜头=0，原版中前者对地刺、地刺王无效，后者只对地刺王无效），被碾压的植物
 	/// @return 是否继续结算碾压。若取消，碾压不会发生。
 	class ZombieSquishPlantEvent : public BoolDLLEventTemplate<0x52E971, 9, 0x52E980, REG_ECX, MEM_ESP_ADD(0x40),
 		MEM_ESP_ADD(0x3C), MEM_ESP_ADD(0x44), REG_EDI>
@@ -394,7 +464,63 @@ namespace PVZEvent
 		ZombieSquishPlantEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieSquishPlantEvent() : ZombieSquishPlantEvent("onZombieSquishPlant") {};
 	};
-
+	/// @brief 僵尸移动速度/瞬时位移修改事件，不涉及动画速度，因此修改后会有“滑行”的观感
+	/// @param 僵尸，已经计算好的瞬时位移（浮点数）
+	/// @return 修改后的瞬时位移
+	class ZombieUpdateWalkingSpeedEvent : public DLLEventTemplate<0x52AB18,5, MEM_ESP_ADD(0x28), REG_ESI>
+	{
+	public:
+		ZombieUpdateWalkingSpeedEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieUpdateWalkingSpeedEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieUpdateWalkingSpeedEvent() : ZombieUpdateWalkingSpeedEvent("onZombieUpdateWalkingSpeed") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.fstp_m32_esp_imm8(0x28);
+		}
+	};
+	/// @brief 判断僵尸是否反向事件
+	/// @param 僵尸
+	/// @return 负数则调用原版函数，0则返回false，1则返回true
+	class ZombieIsWalkingBackwardsEvent : public DLLEventTemplate<0x52BEE0, 7, REG_ECX>
+	{
+	public:
+		ZombieIsWalkingBackwardsEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieIsWalkingBackwardsEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieIsWalkingBackwardsEvent() : ZombieIsWalkingBackwardsEvent("onZombieIsWalkingBackwards") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX,0).jl_rel(6);
+			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX).popad().ret();
+		}
+	};
+	/// @brief 僵尸施加动画速度事件，主要是处理减速相关
+	/// @param 僵尸、动画、原速率
+	/// @return 修改后的动画速率（浮点数）
+	class ZombieApplyAnimSpeedEvent : public DLLEventTemplate<0x52F01F, 7, MEM_ESP_ADD(0x2C), REG_ESI, REG_EAX>
+	{
+	public:
+		ZombieApplyAnimSpeedEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieApplyAnimSpeedEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieApplyAnimSpeedEvent() : ZombieApplyAnimSpeedEvent("onZombieApplyAnimSpeed") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.fstp_m32_esp_imm8(0x2C);
+		}
+	};
+	/// @brief 僵尸修改绘制颜色事件
+	/// @attention 注意不是所有状态的僵尸都会经过这个位置，这个位置适用于新增绘制
+	/// @param 僵尸、动画，原R,G,B,A（均为int，0~255）
+	/// @return True则使用原版颜色，False则跳过原版颜色。
+	class ZombieUpdateColorEvent : public BoolDLLEventTemplate<0x52D3F6, 7, 0x52D429, MEM_ESP_ADD(0x4C), REG_EDX, REG_ECX, REG_EAX, REG_EBX, REG_ESI>
+	{
+	public:
+		ZombieUpdateColorEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieUpdateColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieUpdateColorEvent() : ZombieUpdateColorEvent("onZombieUpdateColor") {};
+	};
 	/// @brief 子弹初始化完成事件
 	/// @note 此时 ImageX 和 ImageY 均未初始化
 	/// @param 触发事件的子弹
@@ -404,5 +530,15 @@ namespace PVZEvent
 		ProjectileInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		ProjectileInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
 		ProjectileInitAfterEvent() : ProjectileInitAfterEvent("onProjectileInitAfter") {};
+	};
+	/// @brief 火球初始化动画时根据SpecialType设置颜色的事件
+	/// @note 由于直接获取火球动画的方式过于复杂，就直接在过火初始化动画时就设置颜色了。
+	/// @param 触发事件的子弹 动画
+	class FireballInitColorEvent : public DLLEventTemplate<0x46ED91, 6, REG_EBP,REG_EDI>
+	{
+	public:
+		FireballInitColorEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		FireballInitColorEvent(int address) : DLLEventTemplate() { Init(address); };
+		FireballInitColorEvent() : FireballInitColorEvent("onFireballInitColor") {};
 	};
 };

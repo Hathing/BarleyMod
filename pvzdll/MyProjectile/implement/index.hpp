@@ -6,3 +6,4 @@
 #include "Diamond.hpp"
 #include "GoldMelon.hpp"
 #include "Melon.hpp"
+#include "Fireball.hpp"

@@ -15,6 +15,10 @@ public:
 	T_PROPERTY(byte, EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
 	/// @brief 技能计时器
 	INT_PROPERTY(AnotherCounter, __get_AnC, __set_AnC, 0x0DC);
+	/// @brief 磁力菇吸取物品的vx
+	T_PROPERTY(float, MagnetItemXSpeed, __get_MagnetItemXSpeed, __set_MagnetItemXSpeed, 0xE0);
+	/// @brief 磁力菇吸取物品的vy
+	T_PROPERTY(float, MagnetItemYSpeed, __get_MagnetItemYSpeed, __set_MagnetItemYSpeed, 0xE4);
 	/// @brief 狙击豌豆的目标
 	INT_PROPERTY(PeashooterTarget, __get_PeashooterTarget, __set_PeashooterTarget, 0x0E0);
 	/// @brief 路灯花复活植物类型
@@ -103,7 +107,19 @@ public:
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
 	/// @param targetid 目标僵尸
 	void Fire(int PlantWeapon,int targetid);
-
+	/// @brief 植物对僵尸造成伤害，封装了各种伤害事件。
+	/// @param zombie 僵尸
+	/// @param flags 伤害标记
+	/// @param damage 伤害值
+	/// @param damage_type 伤害类型（用于事件判断）
+	/// @return 实际造成伤害值(伤害<0则失败)
+	int DoDamageToZombie(MyZombie zombie, PVZ::DamageFlags flags, int damage, PVZEvent::PlantDamageType damage_type);
+	/// @brief 植物受到伤害，封装了各种事件。
+	/// @param source 伤害来源
+	/// @param source_type 伤害来源的类型
+	/// @param damage 伤害值
+	/// @return 实际受到伤害值(伤害<0则失败)
+	int TakeDamage(PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
 	/// @brief 最大等级
 	static const int MAX_LEVEL = 5;
 
