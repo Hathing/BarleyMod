@@ -73,11 +73,14 @@ bool onProjectileRemove(MyProjectile proj)
 
 bool onProjectileSlideMotion(MyProjectile proj)
 {
-	static constexpr int CYCLE_TIME = 50;
+	//static constexpr int CYCLE_TIME = 50;
 	if (proj.SpecialFlags)
 	{
+		proj.YSpeed -= 0.001f * (proj.Y - proj.OriginalY);//简谐运动，对于a = kx,周期T= 2*pi/sqrt(k)
 		proj.Y += proj.YSpeed;
 		proj.AdjustRow();
+		//之前的伪正弦运动，本质上是两段指数运动
+		/*
 		if (proj.SpecialFlags == PSF_THREEPEATER_SLIDE_OUT)
 		{
 			proj.YSpeed *= 0.97f;
@@ -96,6 +99,7 @@ bool onProjectileSlideMotion(MyProjectile proj)
 				proj.SpecialFlags = PSF_THREEPEATER_SLIDE_OUT;
 			}
 		}
+		*/
 		proj.ShadowY += proj.YSpeed;
 		return false;
 	}

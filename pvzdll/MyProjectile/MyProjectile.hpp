@@ -19,6 +19,8 @@ public:
 	T_PROPERTY(byte,OriginalRow, __get_OrR, __set_OrR, 0x84);
 	/// @brief 子弹的特殊标记
 	T_PROPERTY(ProjSpecialFlags, SpecialFlags, __get_SpecialFlags, __set_SpecialFlags, 0x84);
+	/// @brief 三线创建子弹时子弹的初始Y坐标，使用了子弹的Z加速度，因此注意其他运动方式对该参数的影响
+	T_PROPERTY(float, OriginalY, __get_OriginalY, __set_OriginalY, 0x48);
 	/// @brief 抛射子弹的弹跳计数器
 	T_PROPERTY(byte, BounceCount, __get_BounceCount, __set_BounceCount, 0x85);
 	/// @brief 子弹的特殊层数，如西瓜大小

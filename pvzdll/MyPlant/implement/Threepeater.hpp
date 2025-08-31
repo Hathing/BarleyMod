@@ -13,6 +13,8 @@ namespace PlantAbility
 		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 		{
 			proj.SpecialFlags = PSF_THREEPEATER_SLIDE_OUT;
+			//新正弦运动的标记
+			proj.OriginalY = proj.Y;
 			return true;
 		}
 	};
