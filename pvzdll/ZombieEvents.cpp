@@ -245,4 +245,7 @@ void InitZombieEvents()
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemoryUnsafe<int>(0x52A8B6, 1000);
+
+	static constexpr byte asm_revert[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0D0, 0)};
+	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert));
 }
