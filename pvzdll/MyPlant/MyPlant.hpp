@@ -15,6 +15,10 @@ public:
 	T_PROPERTY(byte, EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
 	/// @brief 技能计时器
 	INT_PROPERTY(AnotherCounter, __get_AnC, __set_AnC, 0x0DC);
+	/// @brief 磁力菇吸取物品的vx
+	T_PROPERTY(float, MagnetItemXSpeed, __get_MagnetItemXSpeed, __set_MagnetItemXSpeed, 0xE0);
+	/// @brief 磁力菇吸取物品的vy
+	T_PROPERTY(float, MagnetItemYSpeed, __get_MagnetItemYSpeed, __set_MagnetItemYSpeed, 0xE4);
 	/// @brief 狙击豌豆的目标
 	INT_PROPERTY(PeashooterTarget, __get_PeashooterTarget, __set_PeashooterTarget, 0x0E0);
 	/// @brief 路灯花复活植物类型

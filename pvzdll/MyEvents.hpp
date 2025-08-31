@@ -232,6 +232,54 @@ namespace PVZEvent
 		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
 	};
 
+	/// @brief 磁力菇修改吸收半径的事件
+	/// @param 植物，当前遍历的僵尸
+	/// @return 负数则使用原版半径（270，啃咬320）,否则使用返回值作为半径
+	class MagnetShroomAttractRadiusEvent : public DLLEventTemplate<0x4620F4, 9, REG_EBX, REG_EDI>
+	{
+	public:
+		MagnetShroomAttractRadiusEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		MagnetShroomAttractRadiusEvent(int address) : DLLEventTemplate() { Init(address); };
+		MagnetShroomAttractRadiusEvent() : MagnetShroomAttractRadiusEvent("onMagnetShroomAttractRadius") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(11);
+			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX).popad().push_imm32(0x462104).ret();
+		}
+	};
+
+	/// @brief 磁力菇控制吸引的物体运动的事件
+	/// @param 植物
+	/// @return True则使用原版运动
+	class MagnetShroomMoveItemEvent : public BoolDLLEventTemplate<0x461DB6, 6, 0x461E1F, REG_EBX>
+	{
+	public:
+		MagnetShroomMoveItemEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		MagnetShroomMoveItemEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		MagnetShroomMoveItemEvent() : MagnetShroomMoveItemEvent("onMagnetShroomMoveItem") {};
+	};
+	/// @brief 磁力菇吸引物体时初始化物体的事件，也可以用于吸取时加生命值等
+	/// @note 发生在重置+54和+3C之后，其余事件前
+	/// @param 植物，目标僵尸
+	class MagnetShroomAttractItemEvent : public DLLEventTemplate<0x461646, 7, REG_EBX, REG_EBP>
+	{
+	public:
+		MagnetShroomAttractItemEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		MagnetShroomAttractItemEvent(int address) : DLLEventTemplate() { Init(address); };
+		MagnetShroomAttractItemEvent() : MagnetShroomAttractItemEvent("onMagnetShroomAttractItem") {};
+	};
+	/// @brief 磁力菇清空物体恢复Idle的事件
+	/// @note 发生在播放动画后，重置+D8前
+	/// @param 植物
+	class MagnetShroomClearItemEvent : public DLLEventTemplate<0x461E6E, 5, REG_EAX>
+	{
+	public:
+		MagnetShroomClearItemEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		MagnetShroomClearItemEvent(int address) : DLLEventTemplate() { Init(address); };
+		MagnetShroomClearItemEvent() : MagnetShroomClearItemEvent("onMagnetShroomClearItem") {};
+	};
+
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x53106B, 5, REG_EAX>
 	{
 	public:

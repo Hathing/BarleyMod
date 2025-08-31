@@ -190,6 +190,50 @@ int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)
 	return -1;
 }
 
+int onMagnetShroomAttractRadius(MyPlant plant,MyZombie zombie)
+{
+	return -1;
+}
+
+bool onMagnetShroomMoveItem(MyPlant plant)
+{
+	static constexpr float G_constant = -10.0f;
+	auto item = plant.GetMagnetItem(0);
+	float dx = item.X - plant.ImageX, dy = item.Y - plant.ImageY;
+	float radius_square = dx * dx + dy * dy;
+	float radius = sqrtf(radius_square);
+	//椭圆运动
+	//float ax = dx * G_constant / (radius * radius_square), ay = dy * G_constant / (radius * radius_square);
+	//圆周运动
+	float a = -1.0f;
+	float ax = a * dx / radius, ay = a * dy / radius;
+	plant.MagnetItemXSpeed += ax;
+	plant.MagnetItemYSpeed += ay;
+	item.X += plant.MagnetItemXSpeed;
+	item.Y += plant.MagnetItemYSpeed;
+	return false;
+}
+
+void onMagnetShroomAttractItem(MyPlant plant, MyZombie zombie)
+{
+	auto item = plant.GetMagnetItem(0);
+	float dx = item.X - plant.ImageX, dy = item.Y - plant.ImageY;
+	float radius_square = dx * dx + dy * dy;
+	float radius = sqrtf(radius_square);
+	float a = 1.0f;
+	float v = sqrtf(a * radius);
+	plant.MagnetItemXSpeed = v * dy / radius;
+	plant.MagnetItemYSpeed = v * dx * -1.0f / radius;
+	plant.AttributeCountdown = 10000;
+	return;
+}
+void onMagnetShroomClearItem(MyPlant plant)
+{
+	plant.MagnetItemXSpeed = 0.0f;
+	plant.MagnetItemYSpeed = 0.0f;
+	return;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -207,4 +251,13 @@ void InitPlantEvents()
 	PVZEvent::PlantFireEvent((int)onPlantFire);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)onPlantGetDamageRangeFlags);
+
+	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
+	PVZEvent::MagnetShroomMoveItemEvent((int)onMagnetShroomMoveItem);
+	PVZEvent::MagnetShroomAttractItemEvent((int)onMagnetShroomAttractItem);
+	PVZEvent::MagnetShroomClearItemEvent((int)onMagnetShroomClearItem);
+
+	//磁力菇只访问+C8 ~ +D8
+	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);
+	PVZ::Memory::WriteMemory<int>(0x46549C, 1);
 }
