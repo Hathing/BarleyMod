@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
+#include <cmath>
 
 void onPlantInitAfter(MyPlant plant)
 {
@@ -192,39 +193,72 @@ int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)
 
 int onMagnetShroomAttractRadius(MyPlant plant,MyZombie zombie)
 {
-	return -1;
+	return 800;
 }
 
 bool onMagnetShroomMoveItem(MyPlant plant)
 {
-	static constexpr float G_constant = -10.0f;
+	//以下内容抄CT
+	if (plant.AnotherCounter > 0)
+	{
+		plant.AnotherCounter -= 1;
+	}
+	else if (plant.MagnetTarget)
+	{
+		plant.MagnetState = 1;
+		//设置初速度
+		//plant.MagnetItemXSpeed
+	}
+	else
+		plant.MagnetState = 0;
+
 	auto item = plant.GetMagnetItem(0);
-	float dx = item.X - plant.ImageX, dy = item.Y - plant.ImageY;
-	float radius_square = dx * dx + dy * dy;
-	float radius = sqrtf(radius_square);
-	//椭圆运动
-	//float ax = dx * G_constant / (radius * radius_square), ay = dy * G_constant / (radius * radius_square);
-	//圆周运动
-	float a = -1.0f;
-	float ax = a * dx / radius, ay = a * dy / radius;
-	plant.MagnetItemXSpeed += ax;
-	plant.MagnetItemYSpeed += ay;
-	item.X += plant.MagnetItemXSpeed;
-	item.Y += plant.MagnetItemYSpeed;
+	if (item.Type != MagnetItemType::None)
+	{
+		int targetid = plant.MagnetTarget;
+		float dx = item.X - plant.ImageX, dy = item.Y - plant.ImageY, vx = plant.MagnetItemXSpeed, vy = plant.MagnetItemYSpeed;
+		if (targetid != 0 && plant.MagnetState != 0)
+		{
+			MyZombie target{ targetid };
+			dx = item.X - target.X; 
+			dy = item.Y - target.Y;
+			if ((dx > 0 && target.X > plant.ImageX) || (dx < 0 && target.X < plant.ImageX))
+			{
+				//音效
+				Creator::CreateLowerSound(LowerSoundType::IronAccessoryHit);
+				Creator::CreateLowerSound(LowerSoundType::HammerHit);
+				//击退
+				if (target.X > plant.ImageX)
+					target.X += 20;
+				else
+					target.X -= 20;
+				plant.MagnetItemXSpeed *= -1;
+				plant.MagnetItemYSpeed *= -1;
+				plant.MagnetState = 0;
+				plant.AnotherCounter = 150;//重置CD
+			}
+		}
+		float ax = -0.004f * dx;
+		float ay = -0.004f * dy;
+		//y坐标阻尼
+		if (dy > 40.0f || dy < -40.0f)
+			ay += -0.05f * vy;
+		//x坐标阻尼
+		if (dx > 50.0f || dx < -50.0f)
+			ax += -0.05f * vx;
+		plant.MagnetItemXSpeed += ax;
+		plant.MagnetItemYSpeed += ay;
+		item.X += plant.MagnetItemXSpeed;
+		item.Y += plant.MagnetItemYSpeed;
+	}
 	return false;
 }
 
 void onMagnetShroomAttractItem(MyPlant plant, MyZombie zombie)
-{
-	auto item = plant.GetMagnetItem(0);
-	float dx = item.X - plant.ImageX, dy = item.Y - plant.ImageY;
-	float radius_square = dx * dx + dy * dy;
-	float radius = sqrtf(radius_square);
-	float a = 1.0f;
-	float v = sqrtf(a * radius);
-	plant.MagnetItemXSpeed = v * dy / radius;
-	plant.MagnetItemYSpeed = v * dx * -1.0f / radius;
+{	
 	plant.AttributeCountdown = 10000;
+	plant.MagnetState = 0;
+	plant.AnotherCounter = 100;//重置CD
 	return;
 }
 void onMagnetShroomClearItem(MyPlant plant)

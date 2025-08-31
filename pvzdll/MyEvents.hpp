@@ -259,10 +259,9 @@ namespace PVZEvent
 		MagnetShroomMoveItemEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		MagnetShroomMoveItemEvent() : MagnetShroomMoveItemEvent("onMagnetShroomMoveItem") {};
 	};
-	/// @brief 磁力菇吸引物体时初始化物体的事件，也可以用于吸取时加生命值等
-	/// @note 发生在重置+54和+3C之后，其余事件前
+	/// @brief 磁力菇吸引物体后瞬间的事件，可以修改铁器的属性，也可以用于吸取时加生命值等
 	/// @param 植物，目标僵尸
-	class MagnetShroomAttractItemEvent : public DLLEventTemplate<0x461646, 7, REG_EBX, REG_EBP>
+	class MagnetShroomAttractItemEvent : public DLLEventTemplate<0x4621B3, 5, REG_EBX, REG_EDI>
 	{
 	public:
 		MagnetShroomAttractItemEvent(const char* str) : DLLEventTemplate() { Init(str); };

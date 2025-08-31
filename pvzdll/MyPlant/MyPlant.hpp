@@ -19,6 +19,10 @@ public:
 	T_PROPERTY(float, MagnetItemXSpeed, __get_MagnetItemXSpeed, __set_MagnetItemXSpeed, 0xE0);
 	/// @brief 磁力菇吸取物品的vy
 	T_PROPERTY(float, MagnetItemYSpeed, __get_MagnetItemYSpeed, __set_MagnetItemYSpeed, 0xE4);
+	/// @brief 磁力菇目标僵尸
+	INT_PROPERTY(MagnetTarget, __get_MagnetTarget, __set_MagnetTarget, 0xE8);
+	/// @brief 磁力菇当前状态，0表示不攻击，1表示攻击
+	T_PROPERTY(byte, MagnetState, __get_MagnetState, __set_MagnetState, 0xEC);
 	/// @brief 狙击豌豆的目标
 	INT_PROPERTY(PeashooterTarget, __get_PeashooterTarget, __set_PeashooterTarget, 0x0E0);
 	/// @brief 路灯花复活植物类型
