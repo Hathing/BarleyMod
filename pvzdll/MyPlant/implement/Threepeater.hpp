@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "../PlantAbility.hpp"
 #include "SpecialPlants.hpp"
 
@@ -13,7 +13,7 @@ namespace PlantAbility
 		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 		{
 			proj.SpecialFlags = PSF_THREEPEATER_SLIDE_OUT;
-			//ĞÂÕıÏÒÔË¶¯µÄ±ê¼Ç
+			//æ–°æ­£å¼¦è¿åŠ¨çš„æ ‡è®°
 			proj.OriginalY = proj.Y;
 			return true;
 		}
