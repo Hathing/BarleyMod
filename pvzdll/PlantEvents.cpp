@@ -294,4 +294,9 @@ void InitPlantEvents()
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);
 	PVZ::Memory::WriteMemory<int>(0x46549C, 1);
+	//三线边路不丢豆
+	static constexpr byte asm_revert_threepeater1[] = { 0xEB,0x24,0x90};
+	PVZ::Memory::WriteArray<const byte>(0x45F40C, STRING(asm_revert_threepeater1));
+	static constexpr byte asm_revert_threepeater2[] = { 0xEB,0x21,0x90 };
+	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
 }
