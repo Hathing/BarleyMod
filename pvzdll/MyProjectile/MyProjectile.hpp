@@ -5,7 +5,7 @@ class MyProjectile : public PVZ::Projectile
 {
 public:
 	MyProjectile(int idoraddress) : PVZ::Projectile(idoraddress) {};
-	MyProjectile(const PVZ::Zombie& zombie) : PVZ::Projectile(zombie.GetBaseAddress()) {};
+	MyProjectile(const PVZ::Projectile& proj) : PVZ::Projectile(proj.GetBaseAddress()) {};
 
 	/// @brief 子弹生成时，来源植物的等级
 	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x51);

@@ -109,6 +109,8 @@ bool onPlantShootMultiple(MyPlant plant)
 		plant.FindTargetAndFire(1);
 	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
 		plant.FindTargetAndFire(0);
+	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35 || plant.ShootOrProductCountdown == 70))
+		plant.LaunchThreepeater();
 	return PlantAbility::GetPrototype(plant.Type)->onShootMultiple(plant);
 }
 
@@ -268,6 +270,21 @@ void onMagnetShroomClearItem(MyPlant plant)
 	return;
 }
 
+bool onThreepeaterLaunch(MyPlant plant)
+{
+	//概率开大，三线是每发判定概率，而不是每轮（三发）。
+	if (plant.ThreepeaterUltraCount==0 && Creator::Rand(3) == 0)
+	{
+		plant.ThreepeaterUltraCount = 3;
+		Creator::CreateUpperSound(UpperSoundType::CoffeeBeanVanish);
+
+		plant.ShootingCountdown = 111 * plant.ThreepeaterUltraCount;
+		plant.ShootOrProductCountdown = plant.ShootingCountdown + plant.ShootOrProductInterval;
+		return false;
+	}
+	return true;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -290,6 +307,8 @@ void InitPlantEvents()
 	PVZEvent::MagnetShroomMoveItemEvent((int)onMagnetShroomMoveItem);
 	PVZEvent::MagnetShroomAttractItemEvent((int)onMagnetShroomAttractItem);
 	PVZEvent::MagnetShroomClearItemEvent((int)onMagnetShroomClearItem);
+
+	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);

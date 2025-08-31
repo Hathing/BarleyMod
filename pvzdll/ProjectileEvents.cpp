@@ -4,9 +4,7 @@
 
 bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 {
-	proj.SourceType = plant.Type & 0xFF;
-	proj.SourceLevel = plant.Level;
-	proj.ParentID = plant.Id;
+	plant.InitAddProjectile(proj);
 	if (plant.Type == SeedType::Starfruit)
 		proj.OriginalRow = (byte)plant.Row;
 	if (plant.Type == SeedType::Kernelpult)
@@ -74,7 +72,7 @@ bool onProjectileRemove(MyProjectile proj)
 bool onProjectileSlideMotion(MyProjectile proj)
 {
 	//static constexpr int CYCLE_TIME = 50;
-	if (proj.SpecialFlags)
+	if (proj.SourceType == 18)//三线射手
 	{
 		proj.YSpeed -= 0.001f * (proj.Y - proj.OriginalY);//简谐运动，对于a = kx,周期T= 2*pi/sqrt(k)
 		proj.Y += proj.YSpeed;

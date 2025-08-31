@@ -211,6 +211,16 @@ namespace PVZEvent
 		ProjectileSlideMotionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ProjectileSlideMotionEvent() : ProjectileSlideMotionEvent("onProjectileSlideMotion") {};
 	};
+	/// @brief 三线成功索敌并准备开火的事件
+	/// @param 植物
+	/// @return True则会重置+90为35！
+	class ThreepeaterLaunchEvent : public BoolDLLEventTemplate<0x45F452, 10, 0x45F45C, REG_EDI>
+	{
+	public:
+		ThreepeaterLaunchEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ThreepeaterLaunchEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ThreepeaterLaunchEvent() : ThreepeaterLaunchEvent("onThreepeaterLaunch") {};
+	};
 
 	/// @brief 大嘴花判定是否秒杀僵尸的事件
 	/// @param 依次为：触发事件的植物，植物攻击的僵尸
