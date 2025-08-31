@@ -44,7 +44,7 @@ private:
 template<DWORD _Hook_Address, uint8_t _Raw_Len, DWORD ...Params>
 class DLLEventTemplate : public DLLEvent
 {
-private:	
+private:
 	template<DWORD param>
 	static constexpr size_t param_size()
 	{
@@ -68,26 +68,26 @@ private:
 
 		// 使用 lambda 处理每个参数
 		auto process = [&](auto param)
-		{
-			if (param < MEM_ESP_ADD_MASK)
-				bytes[offset++] = 0x50 | (param & 0x7);
-			else if (param < CONST_VAL_MASK)
 			{
-				bytes[offset++] = 0xFF;
-				bytes[offset++] = 0x74;
-				bytes[offset++] = 0x24;
-				bytes[offset++] = static_cast<uint8_t>(param);
-			}
-			else 
-			{
-				DWORD value = param - CONST_VAL_MASK;
-				bytes[offset++] = 0x68;
-				bytes[offset++] = static_cast<uint8_t>(value & 0xFF);
-				bytes[offset++] = static_cast<uint8_t>((value >> 8) & 0xFF);
-				bytes[offset++] = static_cast<uint8_t>((value >> 16) & 0xFF);
-				bytes[offset++] = static_cast<uint8_t>((value >> 24) & 0xFF);
-			}
-		};
+				if (param < MEM_ESP_ADD_MASK)
+					bytes[offset++] = 0x50 | (param & 0x7);
+				else if (param < CONST_VAL_MASK)
+				{
+					bytes[offset++] = 0xFF;
+					bytes[offset++] = 0x74;
+					bytes[offset++] = 0x24;
+					bytes[offset++] = static_cast<uint8_t>(param);
+				}
+				else
+				{
+					DWORD value = param - CONST_VAL_MASK;
+					bytes[offset++] = 0x68;
+					bytes[offset++] = static_cast<uint8_t>(value & 0xFF);
+					bytes[offset++] = static_cast<uint8_t>((value >> 8) & 0xFF);
+					bytes[offset++] = static_cast<uint8_t>((value >> 16) & 0xFF);
+					bytes[offset++] = static_cast<uint8_t>((value >> 24) & 0xFF);
+				}
+			};
 
 		// 展开参数包
 		(process(Params), ...);
@@ -100,7 +100,8 @@ protected:
 	{
 		hookAddress = _Hook_Address;
 		rawlen = _Raw_Len;
-		AsmBuilder builder = AsmBuilder(128).add_bytes(compiled_base_bytes.data(), calculate_total_size());
+		AsmBuilder builder(128);
+		builder.add_bytes(compiled_base_bytes.data(), calculate_total_size());
 
 		builder.invoke(address).add_reg_imm(REG_ESP, this->regs.size() << 2);
 		this->InitExtra(builder);

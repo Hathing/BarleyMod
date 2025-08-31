@@ -211,16 +211,6 @@ namespace PVZEvent
 		ChomperInstantJudgeEvent() : ChomperInstantJudgeEvent("onChomperInstantJudge") {};
 	};
 
-	/// @brief 大嘴花判定是否秒杀僵尸的事件
-	/// @param 依次为：触发事件的植物，植物攻击的僵尸
-	class ZombieCanBeChilledEvent : public IntDLLEventTemplate<0x531990, 6, 0, 0, 0, REG_EDX, true, REG_ESI>
-	{
-	public:
-		ZombieCanBeChilledEvent(const char* str) : IntDLLEventTemplate() { Init(str); };
-		ZombieCanBeChilledEvent(int address) : IntDLLEventTemplate() { Init(address); };
-		ZombieCanBeChilledEvent() : ZombieCanBeChilledEvent("IsZombieCanBeChilled") {};
-	};
-
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x53106B, 5, REG_EAX>
 	{
 	public:
