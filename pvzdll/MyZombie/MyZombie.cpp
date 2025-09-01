@@ -47,6 +47,12 @@ void MyZombie::FlyAway(float factor)
 	}
 }
 
+MyZombie MyZombie::FindZombieTarget()
+{
+	int targetaddr = PVZ::Memory::Execute(AsmBuilder().push_imm32(this->GetBaseAddress()).invoke(0x52E840).mov_mem_reg(Memory::Variable, REG_EAX).ret());
+	return MyZombie{ targetaddr };
+}
+
 void MyZombie::AddFrost(int num)
 {
 	int add_frost_num = this->FrostStack + num;

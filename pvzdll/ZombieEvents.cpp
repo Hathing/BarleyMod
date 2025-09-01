@@ -175,7 +175,7 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	auto colorflag = zombie.ColorFlag;
 	if (colorflag)
 	{
-		float ratio = 0.8;
+		float ratio = 0.8f;
 		switch (colorflag)
 		{
 		case 1:

@@ -289,6 +289,17 @@ namespace PVZEvent
 		MagnetShroomClearItemEvent() : MagnetShroomClearItemEvent("onMagnetShroomClearItem") {};
 	};
 
+	/// @brief 魅惑菇被啃的事件
+	/// @param 触发事件的僵尸、魅惑菇
+	/// @return True则魅惑菇正常死亡
+	class HypnoShroomEatenEvent : public BoolDLLEventTemplate<0x52B9D1, 6, 0x52B9D7, REG_ESI, REG_EDI>
+	{
+	public:
+		HypnoShroomEatenEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		HypnoShroomEatenEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		HypnoShroomEatenEvent() : HypnoShroomEatenEvent("onHypnoShroomEaten") {};
+	};
+
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x53106B, 5, REG_EAX>
 	{
 	public:
