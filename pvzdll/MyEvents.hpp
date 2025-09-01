@@ -441,6 +441,20 @@ namespace PVZEvent
 			builder.popad().push_imm32(0x464C34).ret();
 		}
 	};
+	/// @brief 一次性植物在+50>0时更新的事件
+	/// @note 正常植物在+50>0时也会经过这里，并且原版中也会调用DoSpecial事件，但是无事发生
+	/// @note 不调用DoSpecial并不妨碍灰烬植物消失！灰烬消失取决于状态是否为2（灰烬生效），当状态=2或者自身被碾压，且+4C倒计时为0时,自身死亡
+	/// @note 寒冰菇会一直更新自己的状态为2，其余灰烬植物似乎没有这种情况，设置寒冰菇tick ability返回false可以解决该问题
+	/// @param 触发事件的植物
+	/// @return False则不DoSpecial
+	class SingleUsePlantUpdateEvent : public BoolDLLEventTemplate<0x463402, 6, 0x463410, REG_EDI>
+	{
+	public:
+		SingleUsePlantUpdateEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		SingleUsePlantUpdateEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		SingleUsePlantUpdateEvent() : SingleUsePlantUpdateEvent("onSingleUsePlantUpdate") {};
+	};
+
 	/// @brief 总绘制事件，位置在绘制金钱框函数里
 	/// @param Graphics*(REG_EDI)和Board*(REG_EDX)
 	class BoardDrawImageEvent : public DLLEventTemplate<0x41A2B9, 6, REG_EDX, REG_EDI>

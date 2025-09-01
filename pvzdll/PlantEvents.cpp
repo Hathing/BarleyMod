@@ -193,6 +193,15 @@ int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)
 	return -1;
 }
 
+bool onSingleUsePlantUpdate(MyPlant plant)
+{
+	if (plant.CanWork > 0)
+	{
+		return false;
+	}
+	return true;
+}
+
 int onMagnetShroomAttractRadius(MyPlant plant,MyZombie zombie)
 {
 	return 800;
@@ -315,6 +324,7 @@ void InitPlantEvents()
 	PVZEvent::PlantFireEvent((int)onPlantFire);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)onPlantGetDamageRangeFlags);
+	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
 
 	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
 	PVZEvent::MagnetShroomMoveItemEvent((int)onMagnetShroomMoveItem);

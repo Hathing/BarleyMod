@@ -9,6 +9,11 @@ namespace PlantAbility
 		{
 			plant.Hp = 600;
 			plant.MaxHp = 600;
+			plant.CanWork = 2;
+		}
+		bool TickAbility(MyPlant plant)
+		{
+			return false;
 		}
 	};
 }

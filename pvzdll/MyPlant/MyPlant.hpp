@@ -10,6 +10,9 @@ public:
 	MyPlant(int idoraddress) : PVZ::Plant(idoraddress) {};
 	MyPlant(const PVZ::Plant& plant) : PVZ::Plant(plant.GetBaseAddress()) {};
 
+	/// @brief 是否可攻击。对于射手来说，恰好为1才能UpdateShooter，可用于设计沉默技能；S7新增特性：灰烬植物只有该值为0才能正常进行原版更新（+50=0后直接爆炸）,如果为2，正常拥有S7特性
+	/// @attention 非射手不能为1！为1会UpdateShooter然后崩溃
+	INT_PROPERTY(CanWork, __get_CanWork, __set_CanWork, 0x48);
 	/// @brief 是否由大麦生成
 	T_PROPERTY(mybool, FromBarley, __get_FrB, __set_FrB, 0x064);
 	/// @brief 被啃50cs倒计时
