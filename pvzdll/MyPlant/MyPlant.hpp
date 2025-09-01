@@ -2,6 +2,7 @@
 #include "../framework.h"
 #include "../Const.hpp"
 #include "../MyZombie/MyZombie.hpp"
+#include "../MyProjectile/MyProjectile.hpp"
 
 class MyPlant : public PVZ::Plant
 {
@@ -9,18 +10,31 @@ public:
 	MyPlant(int idoraddress) : PVZ::Plant(idoraddress) {};
 	MyPlant(const PVZ::Plant& plant) : PVZ::Plant(plant.GetBaseAddress()) {};
 
+	/// @brief 是否可攻击。对于射手来说，恰好为1才能UpdateShooter，可用于设计沉默技能；S7新增特性：灰烬植物只有该值为0才能正常进行原版更新（+50=0后直接爆炸）,如果为2，正常拥有S7特性
+	/// @attention 非射手不能为1！为1会UpdateShooter然后崩溃
+	INT_PROPERTY(CanWork, __get_CanWork, __set_CanWork, 0x48);
 	/// @brief 是否由大麦生成
 	T_PROPERTY(mybool, FromBarley, __get_FrB, __set_FrB, 0x064);
 	/// @brief 被啃50cs倒计时
-	T_PROPERTY(byte, EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
+	INT_PROPERTY(EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
+	/// @brief 发光倒计时
+	INT_PROPERTY(LightCounter, __get_LightCounter, __set_LightCounter, 0x0B8);
+	/// @brief 闪光倒计时
+	INT_PROPERTY(FlashCounter, __get_FlashCounter, __set_FlashCounter, 0x0BC);
 	/// @brief 技能计时器
 	INT_PROPERTY(AnotherCounter, __get_AnC, __set_AnC, 0x0DC);
 	/// @brief 磁力菇吸取物品的vx
 	T_PROPERTY(float, MagnetItemXSpeed, __get_MagnetItemXSpeed, __set_MagnetItemXSpeed, 0xE0);
 	/// @brief 磁力菇吸取物品的vy
 	T_PROPERTY(float, MagnetItemYSpeed, __get_MagnetItemYSpeed, __set_MagnetItemYSpeed, 0xE4);
+	/// @brief 磁力菇目标僵尸
+	INT_PROPERTY(MagnetTarget, __get_MagnetTarget, __set_MagnetTarget, 0xE8);
+	/// @brief 磁力菇当前状态，0表示不攻击，1表示攻击
+	T_PROPERTY(byte, MagnetState, __get_MagnetState, __set_MagnetState, 0xEC);
 	/// @brief 狙击豌豆的目标
 	INT_PROPERTY(PeashooterTarget, __get_PeashooterTarget, __set_PeashooterTarget, 0x0E0);
+	/// @brief 三线射手大招波次，0则表示不开大
+	T_PROPERTY(byte, ThreepeaterUltraCount, __get_ThreepeaterUltraCount, __set_ThreepeaterUltraCount, 0xEC);
 	/// @brief 路灯花复活植物类型
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 第一个与该植物相关的植物的 ID
@@ -107,6 +121,12 @@ public:
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
 	/// @param targetid 目标僵尸
 	void Fire(int PlantWeapon,int targetid);
+	/// @brief 三线射手调用此函数
+	void LaunchThreepeater();
+	/// @brief 所有植物通用的初始化标记一个子弹的属性
+	/// @param proj 子弹
+	void InitAddProjectile(MyProjectile proj);
+
 	/// @brief 植物对僵尸造成伤害，封装了各种伤害事件。
 	/// @param zombie 僵尸
 	/// @param flags 伤害标记
@@ -121,6 +141,7 @@ public:
 	/// @return 实际受到伤害值(伤害<0则失败)
 	int TakeDamage(PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
 	/// @brief 最大等级
+
 	static const int MAX_LEVEL = 5;
 
 	/// @brief 根据识别 ID 获取对应植物。

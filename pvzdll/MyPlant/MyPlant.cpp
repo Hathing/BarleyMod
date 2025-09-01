@@ -230,6 +230,19 @@ bool MyPlant::FindTargetAndFire(int PlantWeapon)
 	return (bool)(byte)Memory::Execute(STRING(__asm__FindTargetAndFire));
 }
 
+byte __asm__LaunchThreepeater[19]
+{
+	MOV_EDI(0),
+	INVOKE(0x45F2A0),
+	RET
+};
+
+void MyPlant::LaunchThreepeater()
+{
+	SETARG(__asm__LaunchThreepeater, 1) = this->GetBaseAddress();
+	Memory::Execute(STRING(__asm__LaunchThreepeater));
+}
+
 byte __asm__FindTargetZombie[34]
 {
 	MOV_ECX(0),
@@ -266,6 +279,13 @@ void MyPlant::Fire(int PlantWeapon, int targetid)
 	SETARG(__asm__Fire, 11) = targetid;
 	SETARG(__asm__Fire, 16) = this->GetBaseAddress();
 	Memory::Execute(STRING(__asm__Fire));
+}
+
+void MyPlant::InitAddProjectile(MyProjectile proj)
+{
+	proj.SourceType = this->Type & 0xFF;
+	proj.SourceLevel = this->Level;
+	proj.ParentID = this->Id;
 }
 
 MyPlant MyPlant::GetByID(int id)

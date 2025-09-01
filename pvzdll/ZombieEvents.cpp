@@ -175,7 +175,7 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	auto colorflag = zombie.ColorFlag;
 	if (colorflag)
 	{
-		float ratio = 0.8;
+		float ratio = 0.8f;
 		switch (colorflag)
 		{
 		case 1:
@@ -208,7 +208,7 @@ void onZombieUpdateAction(MyZombie zombie)
 {
 	//这里是所有僵尸在未定身时必经的更新
 	//小丑僵尸爆炸
-	if (zombie.Type == ZombieType::JackintheboxZombie && zombie.IsWalkingBackwards == 0 && zombie.State == ZombieState::JACKBOX_WALKING)
+	if (zombie.Type == ZombieType::JackintheboxZombie && zombie.State == ZombieState::JACKBOX_WALKING && ((!zombie.Hypnotized && zombie.IsWalkingBackwards == 0) || (zombie.Hypnotized && zombie.X > 725.0f)))
 	{
 		zombie.AttributeCountdown = 0;
 	}
@@ -220,9 +220,25 @@ bool onClownZombiePop(MyZombie zombie, int x, int y)
 	CLOWN_ZOMBIE_POP_FLAG = true;
 	auto zombies = zombie.GetBoard().GetAllZombies<MyZombie>();
 	for (auto myzombie : zombies)
-		if (myzombie.Row == zombie.Row && myzombie.X + 115 >= zombie.X && myzombie.X - 115 <= zombie.X
-			&& myzombie.Type == ZombieType::ConeheadZombie)
+		if (myzombie.Row == zombie.Row && myzombie.X + 115 >= zombie.X && myzombie.X - 115 <= zombie.X && myzombie.Type == ZombieType::ConeheadZombie)
 			myzombie.Hit(myzombie.HelmMaxHealth + 1, PVZ::DAMAGEF_NOLEAVEBODY);
+		
+	CLOWN_ZOMBIE_POP_FLAG = false;
+	return false;
+}
+
+bool onHypnotizedClownZombiePop(MyZombie zombie, int x, int y)
+{
+	CLOWN_ZOMBIE_POP_FLAG = true;
+	auto zombies = zombie.GetBoard().GetAllZombies<MyZombie>();
+	for (auto myzombie : zombies)
+		if (myzombie.X + 115 >= zombie.X && myzombie.X - 115 <= zombie.X)
+		{
+			if (myzombie.Row == zombie.Row)
+				myzombie.Blast();
+			else if ((myzombie.Row == zombie.Row + 1 || myzombie.Row == zombie.Row - 1) && myzombie.Type == ZombieType::ConeheadZombie)
+				myzombie.Hit(myzombie.HelmMaxHealth + 1, PVZ::DAMAGEF_NOLEAVEBODY);
+		}
 	CLOWN_ZOMBIE_POP_FLAG = false;
 	return false;
 }
@@ -242,6 +258,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
 	ZombieUpdateActionEvent((int)onZombieUpdateAction);
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
+	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

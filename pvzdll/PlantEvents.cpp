@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
+#include <cmath>
 
 void onPlantInitAfter(MyPlant plant)
 {
@@ -108,6 +109,8 @@ bool onPlantShootMultiple(MyPlant plant)
 		plant.FindTargetAndFire(1);
 	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
 		plant.FindTargetAndFire(0);
+	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35 || plant.ShootOrProductCountdown == 70))
+		plant.LaunchThreepeater();
 	return PlantAbility::GetPrototype(plant.Type)->onShootMultiple(plant);
 }
 
@@ -190,41 +193,83 @@ int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)
 	return -1;
 }
 
+bool onSingleUsePlantUpdate(MyPlant plant)
+{
+	if (plant.CanWork > 0)
+	{
+		return false;
+	}
+	return true;
+}
+
 int onMagnetShroomAttractRadius(MyPlant plant,MyZombie zombie)
 {
-	return -1;
+	return 800;
 }
 
 bool onMagnetShroomMoveItem(MyPlant plant)
 {
-	static constexpr float G_constant = -10.0f;
+	//以下内容抄CT
+	if (plant.AnotherCounter > 0)
+	{
+		plant.AnotherCounter -= 1;
+	}
+	else if (plant.MagnetTarget)
+	{
+		plant.MagnetState = 1;
+		//设置初速度
+		//plant.MagnetItemXSpeed
+	}
+	else
+		plant.MagnetState = 0;
+
 	auto item = plant.GetMagnetItem(0);
-	float dx = item.X - plant.ImageX, dy = item.Y - plant.ImageY;
-	float radius_square = dx * dx + dy * dy;
-	float radius = sqrtf(radius_square);
-	//椭圆运动
-	//float ax = dx * G_constant / (radius * radius_square), ay = dy * G_constant / (radius * radius_square);
-	//圆周运动
-	float a = -1.0f;
-	float ax = a * dx / radius, ay = a * dy / radius;
-	plant.MagnetItemXSpeed += ax;
-	plant.MagnetItemYSpeed += ay;
-	item.X += plant.MagnetItemXSpeed;
-	item.Y += plant.MagnetItemYSpeed;
+	if (item.Type != MagnetItemType::None)
+	{
+		int targetid = plant.MagnetTarget;
+		float dx = item.X - plant.ImageX, dy = item.Y - plant.ImageY, vx = plant.MagnetItemXSpeed, vy = plant.MagnetItemYSpeed;
+		if (targetid != 0 && plant.MagnetState != 0)
+		{
+			MyZombie target{ targetid };
+			dx = item.X - target.X; 
+			dy = item.Y - target.Y;
+			if ((dx > 0 && target.X > plant.ImageX) || (dx < 0 && target.X < plant.ImageX))
+			{
+				//音效
+				Creator::CreateLowerSound(LowerSoundType::IronAccessoryHit);
+				Creator::CreateLowerSound(LowerSoundType::HammerHit);
+				//击退
+				if (target.X > plant.ImageX)
+					target.X += 20;
+				else
+					target.X -= 20;
+				plant.MagnetItemXSpeed *= -1;
+				plant.MagnetItemYSpeed *= -1;
+				plant.MagnetState = 0;
+				plant.AnotherCounter = 150;//重置CD
+			}
+		}
+		float ax = -0.004f * dx;
+		float ay = -0.004f * dy;
+		//y坐标阻尼
+		if (dy > 40.0f || dy < -40.0f)
+			ay += -0.05f * vy;
+		//x坐标阻尼
+		if (dx > 50.0f || dx < -50.0f)
+			ax += -0.05f * vx;
+		plant.MagnetItemXSpeed += ax;
+		plant.MagnetItemYSpeed += ay;
+		item.X += plant.MagnetItemXSpeed;
+		item.Y += plant.MagnetItemYSpeed;
+	}
 	return false;
 }
 
 void onMagnetShroomAttractItem(MyPlant plant, MyZombie zombie)
-{
-	auto item = plant.GetMagnetItem(0);
-	float dx = item.X - plant.ImageX, dy = item.Y - plant.ImageY;
-	float radius_square = dx * dx + dy * dy;
-	float radius = sqrtf(radius_square);
-	float a = 1.0f;
-	float v = sqrtf(a * radius);
-	plant.MagnetItemXSpeed = v * dy / radius;
-	plant.MagnetItemYSpeed = v * dx * -1.0f / radius;
+{	
 	plant.AttributeCountdown = 10000;
+	plant.MagnetState = 0;
+	plant.AnotherCounter = 100;//重置CD
 	return;
 }
 void onMagnetShroomClearItem(MyPlant plant)
@@ -232,6 +277,34 @@ void onMagnetShroomClearItem(MyPlant plant)
 	plant.MagnetItemXSpeed = 0.0f;
 	plant.MagnetItemYSpeed = 0.0f;
 	return;
+}
+
+bool onThreepeaterLaunch(MyPlant plant)
+{
+	//概率开大，三线是每发判定概率，而不是每轮（三发）。
+	if (plant.ThreepeaterUltraCount==0 && Creator::Rand(3) == 0)
+	{
+		plant.ThreepeaterUltraCount = 3;
+		Creator::CreateUpperSound(UpperSoundType::CoffeeBeanVanish);
+
+		plant.ShootingCountdown = 111 * plant.ThreepeaterUltraCount;
+		plant.ShootOrProductCountdown = plant.ShootingCountdown + plant.ShootOrProductInterval;
+		return false;
+	}
+	return true;
+}
+
+bool onHypnoShroomEaten(MyZombie zombie, MyPlant plant)
+{
+	//魅惑菇被啃后掉血
+	//这个判断方式，能防止两个僵尸在魅惑菇面前一格互啃的时候扣魅惑的血
+	//但是这个判断方式，会导致两个僵尸直接在魅惑菇本格内互啃的时候不扣魅惑的血，有待修复，或者直接当特性也行
+	if (zombie.FindZombieTarget().isValid() == false)
+	{
+		plant.Hp -= 100;
+		plant.HpDisplayCounter = 100;
+	}
+	return false;
 }
 
 void InitPlantEvents()
@@ -251,13 +324,23 @@ void InitPlantEvents()
 	PVZEvent::PlantFireEvent((int)onPlantFire);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)onPlantGetDamageRangeFlags);
+	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
 
 	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
 	PVZEvent::MagnetShroomMoveItemEvent((int)onMagnetShroomMoveItem);
 	PVZEvent::MagnetShroomAttractItemEvent((int)onMagnetShroomAttractItem);
 	PVZEvent::MagnetShroomClearItemEvent((int)onMagnetShroomClearItem);
 
+	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
+
+	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
+
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);
 	PVZ::Memory::WriteMemory<int>(0x46549C, 1);
+	//三线边路不丢豆
+	static constexpr byte asm_revert_threepeater1[] = { 0xEB,0x24,0x90};
+	PVZ::Memory::WriteArray<const byte>(0x45F40C, STRING(asm_revert_threepeater1));
+	static constexpr byte asm_revert_threepeater2[] = { 0xEB,0x21,0x90 };
+	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
 }

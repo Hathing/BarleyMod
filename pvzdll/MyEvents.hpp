@@ -103,12 +103,22 @@ namespace PVZEvent
 	/// @brief 小丑僵尸正常关卡爆炸时事件
 	/// @param 僵尸、爆炸的X、爆炸的Y
 	/// @return False则不经过原版爆炸。原版有个意义不明且看不出效果的炸僵尸？不知道有没有影响
-	class ClownZombiePopEvent : public BoolDLLEventTemplate<0x526C67, 5, 0x526C84, REG_EDI,REG_EAX,REG_ESI>
+	class ClownZombiePopEvent : public BoolDLLEventTemplate<0x526C67, 5, 0x526C84, REG_EBX, REG_EDI, REG_ESI>
 	{
 	public:
 		ClownZombiePopEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ClownZombiePopEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ClownZombiePopEvent() : ClownZombiePopEvent("onClownZombiePop") {};
+	};
+	/// @brief 魅惑小丑僵尸爆炸时事件
+	/// @param 僵尸、爆炸的X、爆炸的Y
+	/// @return False则不经过原版爆炸。
+	class HypnotizedClownZombiePopEvent : public BoolDLLEventTemplate<0x526C4E, 6, 0x526C84, REG_EBX, REG_EDI, REG_ESI>
+	{
+	public:
+		HypnotizedClownZombiePopEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		HypnotizedClownZombiePopEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		HypnotizedClownZombiePopEvent() : HypnotizedClownZombiePopEvent("onHypnotizedClownZombiePop") {};
 	};
 
 	/// @brief 僵尸发射子弹事件（复合事件）
@@ -211,6 +221,16 @@ namespace PVZEvent
 		ProjectileSlideMotionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ProjectileSlideMotionEvent() : ProjectileSlideMotionEvent("onProjectileSlideMotion") {};
 	};
+	/// @brief 三线成功索敌并准备开火的事件
+	/// @param 植物
+	/// @return True则会重置+90为35！
+	class ThreepeaterLaunchEvent : public BoolDLLEventTemplate<0x45F452, 10, 0x45F45C, REG_EDI>
+	{
+	public:
+		ThreepeaterLaunchEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ThreepeaterLaunchEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ThreepeaterLaunchEvent() : ThreepeaterLaunchEvent("onThreepeaterLaunch") {};
+	};
 
 	/// @brief 大嘴花判定是否秒杀僵尸的事件
 	/// @param 依次为：触发事件的植物，植物攻击的僵尸
@@ -249,10 +269,9 @@ namespace PVZEvent
 		MagnetShroomMoveItemEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		MagnetShroomMoveItemEvent() : MagnetShroomMoveItemEvent("onMagnetShroomMoveItem") {};
 	};
-	/// @brief 磁力菇吸引物体时初始化物体的事件，也可以用于吸取时加生命值等
-	/// @note 发生在重置+54和+3C之后，其余事件前
+	/// @brief 磁力菇吸引物体后瞬间的事件，可以修改铁器的属性，也可以用于吸取时加生命值等
 	/// @param 植物，目标僵尸
-	class MagnetShroomAttractItemEvent : public DLLEventTemplate<0x461646, 7, REG_EBX, REG_EBP>
+	class MagnetShroomAttractItemEvent : public DLLEventTemplate<0x4621B3, 5, REG_EBX, REG_EDI>
 	{
 	public:
 		MagnetShroomAttractItemEvent(const char* str) : DLLEventTemplate() { Init(str); };
@@ -268,6 +287,17 @@ namespace PVZEvent
 		MagnetShroomClearItemEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		MagnetShroomClearItemEvent(int address) : DLLEventTemplate() { Init(address); };
 		MagnetShroomClearItemEvent() : MagnetShroomClearItemEvent("onMagnetShroomClearItem") {};
+	};
+
+	/// @brief 魅惑菇被啃的事件
+	/// @param 触发事件的僵尸、魅惑菇
+	/// @return True则魅惑菇正常死亡
+	class HypnoShroomEatenEvent : public BoolDLLEventTemplate<0x52B9D1, 6, 0x52B9D7, REG_ESI, REG_EDI>
+	{
+	public:
+		HypnoShroomEatenEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		HypnoShroomEatenEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		HypnoShroomEatenEvent() : HypnoShroomEatenEvent("onHypnoShroomEaten") {};
 	};
 
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x53106B, 5, REG_EAX>
@@ -411,6 +441,20 @@ namespace PVZEvent
 			builder.popad().push_imm32(0x464C34).ret();
 		}
 	};
+	/// @brief 一次性植物在+50>0时更新的事件
+	/// @note 正常植物在+50>0时也会经过这里，并且原版中也会调用DoSpecial事件，但是无事发生
+	/// @note 不调用DoSpecial并不妨碍灰烬植物消失！灰烬消失取决于状态是否为2（灰烬生效），当状态=2或者自身被碾压，且+4C倒计时为0时,自身死亡
+	/// @note 寒冰菇会一直更新自己的状态为2，其余灰烬植物似乎没有这种情况，设置寒冰菇tick ability返回false可以解决该问题
+	/// @param 触发事件的植物
+	/// @return False则不DoSpecial
+	class SingleUsePlantUpdateEvent : public BoolDLLEventTemplate<0x463402, 6, 0x463410, REG_EDI>
+	{
+	public:
+		SingleUsePlantUpdateEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		SingleUsePlantUpdateEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		SingleUsePlantUpdateEvent() : SingleUsePlantUpdateEvent("onSingleUsePlantUpdate") {};
+	};
+
 	/// @brief 总绘制事件，位置在绘制金钱框函数里
 	/// @param Graphics*(REG_EDI)和Board*(REG_EDX)
 	class BoardDrawImageEvent : public DLLEventTemplate<0x41A2B9, 6, REG_EDX, REG_EDI>

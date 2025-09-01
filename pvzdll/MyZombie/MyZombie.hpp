@@ -41,6 +41,10 @@ public:
 	/// @brief 僵尸飞到屏幕右侧外
 	/// @param factor 被击飞后水平速度的因子，取负数让僵尸反向飞出屏幕，但是这个参数理论来说没啥用？
 	void FlyAway(float factor);
+	/// @brief 寻找可攻击的僵尸目标，封装的原版函数
+	/// return 可攻击的僵尸
+	MyZombie FindZombieTarget();
+
 	// @brief 增加寒意值
 	// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！
 	// @param num 增加的数值
