@@ -103,12 +103,22 @@ namespace PVZEvent
 	/// @brief 小丑僵尸正常关卡爆炸时事件
 	/// @param 僵尸、爆炸的X、爆炸的Y
 	/// @return False则不经过原版爆炸。原版有个意义不明且看不出效果的炸僵尸？不知道有没有影响
-	class ClownZombiePopEvent : public BoolDLLEventTemplate<0x526C67, 5, 0x526C84, REG_EDI,REG_EAX,REG_ESI>
+	class ClownZombiePopEvent : public BoolDLLEventTemplate<0x526C67, 5, 0x526C84, REG_EBX, REG_EDI, REG_ESI>
 	{
 	public:
 		ClownZombiePopEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ClownZombiePopEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ClownZombiePopEvent() : ClownZombiePopEvent("onClownZombiePop") {};
+	};
+	/// @brief 魅惑小丑僵尸爆炸时事件
+	/// @param 僵尸、爆炸的X、爆炸的Y
+	/// @return False则不经过原版爆炸。
+	class HypnotizedClownZombiePopEvent : public BoolDLLEventTemplate<0x526C4E, 6, 0x526C84, REG_EBX, REG_EDI, REG_ESI>
+	{
+	public:
+		HypnotizedClownZombiePopEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		HypnotizedClownZombiePopEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		HypnotizedClownZombiePopEvent() : HypnotizedClownZombiePopEvent("onHypnotizedClownZombiePop") {};
 	};
 
 	/// @brief 僵尸发射子弹事件（复合事件）
