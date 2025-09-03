@@ -15,7 +15,7 @@ namespace PlantAbility
 		new NilPlant(),  new Spikeweed(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),
-		new SplitPea(),  new BasePlant(), new NilPlant(),  new MagnetShroom(),
+		new SplitPea(),  new Starfruit(), new NilPlant(),  new MagnetShroom(),
 
 		new CabbagePult(), new NilPlant(), new BasePlant(), new NilPlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),

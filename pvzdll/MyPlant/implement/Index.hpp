@@ -21,6 +21,7 @@
 #include "Cactus.hpp"
 #include "Blover.hpp"
 #include "SplitPea.hpp"
+#include "Starfruit.hpp"
 #include "MagnetShroom.hpp"
 #include "CabbagePult.hpp"
 #include "Garlic.hpp"

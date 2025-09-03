@@ -129,6 +129,7 @@
     <ClInclude Include="MyPlant\implement\SplitPea.hpp" />
     <ClInclude Include="MyPlant\implement\SpringEquinoxVine.hpp" />
     <ClInclude Include="MyPlant\implement\Squash.hpp" />
+    <ClInclude Include="MyPlant\implement\Starfruit.hpp" />
     <ClInclude Include="MyPlant\implement\SunShroom.hpp" />
     <ClInclude Include="MyPlant\implement\TallNut.hpp" />
     <ClInclude Include="MyPlant\implement\Threepeater.hpp" />
