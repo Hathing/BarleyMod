@@ -130,7 +130,7 @@ namespace PlantAbility
 		}
 	};
 	typedef BasePlant* PlantPTR;
-	PlantPTR GetPrototype(SeedType::SeedType type);
+	PlantPTR GetAbility(SeedType::SeedType type);
 	/// @brief 经验表包含的植物的数量
 	const int PLANT_LEVEL_EXP_LENGTH = 80;
 	/// @brief 经验表，升级所需经验,index为当前等级,最大为4

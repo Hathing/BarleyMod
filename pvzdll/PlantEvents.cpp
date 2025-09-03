@@ -41,15 +41,15 @@ void onPlantInitAfter(MyPlant plant)
 		model.AssignRenderGroupToPrefix(-1, "easter");
 	}
 
-	PlantAbility::GetPrototype(plant.Type)->onCreated(plant);
+	PlantAbility::GetAbility(plant.Type)->onCreated(plant);
 }
 
 bool onPlantUpdateAbility(MyPlant plant)
 {
-	auto tmp = PlantAbility::GetPrototype(plant.Type)->TickAbility(plant);
+	auto tmp = PlantAbility::GetAbility(plant.Type)->TickAbility(plant);
 	if (plant.FromBarley)
 	{
-		PlantAbility::GetPrototype(SeedType::Barley)->TickAbility(plant);
+		PlantAbility::GetAbility(SeedType::Barley)->TickAbility(plant);
 		if (plant.NotExist)
 			return false;
 	}
@@ -58,12 +58,12 @@ bool onPlantUpdateAbility(MyPlant plant)
 
 bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)
 {
-	return PlantAbility::GetPrototype(plant.Type)->OverwritePlantAttackRect(plant, secondary, rect);
+	return PlantAbility::GetAbility(plant.Type)->OverwritePlantAttackRect(plant, secondary, rect);
 }
 
 bool onPlantSpecialAnimate(MyPlant plant)
 {
-	return PlantAbility::GetPrototype(plant.Type)->onAnimate(plant);
+	return PlantAbility::GetAbility(plant.Type)->onAnimate(plant);
 }
 
 void onPlantDamageZombie(PZDamageEvent* info)
@@ -77,7 +77,7 @@ void onPlantDamageZombie(PZDamageEvent* info)
 
 void onPlantDie(MyPlant plant)
 {
-	PlantAbility::GetPrototype(plant.Type)->onDie(plant);
+	PlantAbility::GetAbility(plant.Type)->onDie(plant);
 	return;
 }
 
@@ -111,7 +111,7 @@ bool onPlantShootMultiple(MyPlant plant)
 		plant.FindTargetAndFire(0);
 	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35 || plant.ShootOrProductCountdown == 70))
 		plant.LaunchThreepeater();
-	return PlantAbility::GetPrototype(plant.Type)->onShootMultiple(plant);
+	return PlantAbility::GetAbility(plant.Type)->onShootMultiple(plant);
 }
 
 bool onPlantPultSkip(MyPlant plant,MyZombie zombie)
@@ -161,7 +161,7 @@ void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
 
 bool onPlantUpdateShooting(MyPlant plant)
 {
-	return PlantAbility::GetPrototype(plant.Type)->onUpdateShooting(plant);
+	return PlantAbility::GetAbility(plant.Type)->onUpdateShooting(plant);
 }
 
 //这是一个测试用的函数
@@ -175,12 +175,12 @@ void TakeDamage(int damage, PVZ::DamageFlags flags,int targetid)
 
 bool onPlantFire(MyPlant plant, MyZombie target, int weapon_type)
 {
-	return PlantAbility::GetPrototype(plant.Type)->onFire(plant, target, weapon_type);
+	return PlantAbility::GetAbility(plant.Type)->onFire(plant, target, weapon_type);
 }
 
 int onPlantFindTargetRT(MyPlant plant,MyZombie zombie,int row)
 {
-	return PlantAbility::GetPrototype(plant.Type)->onFindTargetRT(plant,zombie,row);
+	return PlantAbility::GetAbility(plant.Type)->onFindTargetRT(plant,zombie,row);
 }
 
 int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)

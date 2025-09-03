@@ -9,7 +9,7 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 		proj.OriginalRow = (byte)plant.Row;
 	if (plant.Type == SeedType::Kernelpult)
 		proj.BounceCount = 5;
-	return PlantAbility::GetPrototype(plant.Type)->onAddProjectile(plant, proj, zombie);
+	return PlantAbility::GetAbility(plant.Type)->onAddProjectile(plant, proj, zombie);
 }
 
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
