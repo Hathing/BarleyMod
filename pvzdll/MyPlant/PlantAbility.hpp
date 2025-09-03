@@ -130,6 +130,12 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 植物对僵尸直接造成伤害时，先执行此函数
+		/// @param info 伤害信息
+		virtual void OverwritePZDamage(PZDamageEvent* info)
+		{
+			return;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetAbility(SeedType::SeedType type);

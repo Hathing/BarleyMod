@@ -12,7 +12,7 @@ namespace PlantAbility
 		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NilPlant(),
 
 		new DiamondShroom(), new Squash(), new Threepeater(), new NoEasterSkinPlant(),
-		new NilPlant(),  new NoXPPlant(), new Torchwood(), new TallNut(),
+		new NilPlant(),  new Spikeweed(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),
 		new SplitPea(),  new BasePlant(), new NilPlant(),  new MagnetShroom(),

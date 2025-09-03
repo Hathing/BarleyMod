@@ -68,6 +68,7 @@ bool onPlantSpecialAnimate(MyPlant plant)
 
 void onPlantDamageZombie(PZDamageEvent* info)
 {
+	PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
 	if (info->type == PVZEvent::PLANTDAMAGETYPE_AOE && info->plant.Type != SeedType::Squash)
 	{
 		if (info->zombie.NotDying)
