@@ -300,7 +300,7 @@ namespace PVZEvent
 		HypnoShroomEatenEvent() : HypnoShroomEatenEvent("onHypnoShroomEaten") {};
 	};
 
-	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x53106B, 5, REG_EAX>
+	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x531070, 5, REG_EBP>
 	{
 	public:
 		ZombieDropHelmByDamageEvent(const char* str) : DLLEventTemplate() { Init(str); };
