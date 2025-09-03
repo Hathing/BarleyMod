@@ -237,9 +237,15 @@
     <ClInclude Include="MyZombie\implement\SquashZombie.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-	<ClInclude Include="MyZombie\implement\ClownZombie.hpp">
-		<Filter>头文件</Filter>
-	</ClInclude>
+    <ClInclude Include="MyZombie\implement\ClownZombie.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyProjectile\implement\Fireball.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyClasses.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
