@@ -128,6 +128,10 @@ namespace PlantAbility
 		{
 			return 10;
 		}
+		virtual void onEnableEasterSkin(MyPlant plant)
+		{
+			return;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetAbility(SeedType::SeedType type);

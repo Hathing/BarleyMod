@@ -209,6 +209,8 @@ void MyPlant::EnableEasterSkin()
 	model = this->GetAnimationPotatoGlow();
 	if (model.isValid())
 		model.AssignRenderGroupToPrefix(-1, "\0");
+
+	PlantAbility::GetAbility(this->Type)->onEnableEasterSkin(*this);
 }
 
 byte __asm__FindTargetAndFire[34]
