@@ -11,5 +11,9 @@ namespace ProjectileAbility
 			static const int dmg[6] = {40, 60, 60, 80, 80, 80};
 			return dmg[min(MyPlant::MAX_LEVEL, proj.SourceLevel)];
 		}
+		int GetImage(MyProjectile proj)
+		{
+			return proj.SourceLevel == MyPlant::MAX_LEVEL ? PVZ::Memory::ReadMemory<int>(0x6FF040) : -1;
+		}
 	};
 }
