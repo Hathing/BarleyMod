@@ -51,6 +51,7 @@ namespace PlantAbility
 		}
 		/// @brief 植物被移除时，先执行此函数。
 		/// @note 不在 Board 上的植物也会调用此函数。
+		/// @attention 这个函数只应该负责清理技能衍生物，不用于也不该用于结算亡语。
 		/// @param plant 植物
 		virtual void onDie(MyPlant plant)
 		{

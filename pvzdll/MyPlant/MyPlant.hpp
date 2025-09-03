@@ -15,6 +15,10 @@ public:
 	INT_PROPERTY(CanWork, __get_CanWork, __set_CanWork, 0x48);
 	/// @brief 是否由大麦生成
 	T_PROPERTY(mybool, FromBarley, __get_FrB, __set_FrB, 0x064);
+	/// @brief 第一个与该植物相关的场地物件的 ID
+	INT_PROPERTY(RelatedGriditemID1, __get_ReGID1, __set_ReGID1, 0x068);
+	/// @brief 第二个与该植物相关的场地物件的 ID
+	INT_PROPERTY(RelatedGriditemID2, __get_ReGID2, __set_ReGID2, 0x06C);
 	/// @brief 被啃50cs倒计时
 	INT_PROPERTY(EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
 	/// @brief 发光倒计时
