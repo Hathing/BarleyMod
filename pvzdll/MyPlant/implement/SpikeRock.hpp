@@ -46,7 +46,8 @@ namespace PlantAbility
 					MyPlant creep = Creator::CreatePlant(SeedType::Spickweed, plant.Row, plant.Column);
 					plant.AnotherCounter = 800;
 					plant.RelatedPlantID1 = creep.Id;
-					creep.OwnerID = plant.Id;
+					creep.SetOwner(plant);
+					creep.Level = plant.Level;
 					if (plant.EasterSkin)
 						creep.EnableEasterSkin();
 				}

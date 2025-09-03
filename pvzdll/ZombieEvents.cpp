@@ -29,7 +29,7 @@ void onZombieDropLoot(MyZombie zombie)
 
 		if (attacker.isValid() && attacker.IsXPRecipient())
 		{
-			PlantAbility::GetPrototype(attacker.Type)->onKill(attacker, zombie);
+			PlantAbility::GetAbility(attacker.Type)->onKill(attacker, zombie);
 			attacker.AddExperience(bounty_xp * 4 / 5, true);
 			bounty_xp -= (bounty_xp * 4 / 5);
 		}

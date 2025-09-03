@@ -12,7 +12,7 @@ namespace PlantAbility
 		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NilPlant(),
 
 		new DiamondShroom(), new Squash(), new Threepeater(), new NoEasterSkinPlant(),
-		new NilPlant(),  new NoXPPlant(), new Torchwood(), new TallNut(),
+		new NilPlant(),  new Spikeweed(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),
 		new SplitPea(),  new BasePlant(), new NilPlant(),  new MagnetShroom(),
@@ -37,7 +37,7 @@ namespace PlantAbility
 	};
 }
 
-PlantAbility::PlantPTR PlantAbility::GetPrototype(SeedType::SeedType type)
+PlantAbility::PlantPTR PlantAbility::GetAbility(SeedType::SeedType type)
 {
 	return PlantAbility::pt_factory[type];
 }
@@ -79,7 +79,7 @@ bool MyPlant::IsPrime()
 
 bool MyPlant::IsXPRecipient()
 {
-	return PlantAbility::GetPrototype(this->Type)->IsXPRecipient(*this);
+	return PlantAbility::GetAbility(this->Type)->IsXPRecipient(*this);
 }
 
 bool MyPlant::CanUpgrade()
@@ -99,7 +99,7 @@ void MyPlant::Upgrade()
 		this->Level++;
 	if (this->Level == MyPlant::MAX_LEVEL)
 	{
-		int partition = PlantAbility::GetPrototype(this->Type)->GetEasterProbabilityPartition();
+		int partition = PlantAbility::GetAbility(this->Type)->GetEasterProbabilityPartition();
 		if (partition && Creator::Rand(partition) == 0)
 			this->EnableEasterSkin();
 		else
@@ -134,7 +134,7 @@ void MyPlant::Upgrade()
 		}
 	}
 
-	PlantAbility::GetPrototype(this->Type)->onUpgrade(*this);
+	PlantAbility::GetAbility(this->Type)->onUpgrade(*this);
 
 	this->Heal(this->MaxHp / 5);
 }
@@ -164,7 +164,7 @@ bool MyPlant::CheckUpgrade()
 void MyPlant::AddExperience(int val, bool kill_credit)
 {
 	this->Experience += val;
-	PlantAbility::GetPrototype(this->Type)->onGainXP(*this, val, kill_credit);
+	PlantAbility::GetAbility(this->Type)->onGainXP(*this, val, kill_credit);
 
 	if (kill_credit)
 		this->Light();
@@ -209,6 +209,8 @@ void MyPlant::EnableEasterSkin()
 	model = this->GetAnimationPotatoGlow();
 	if (model.isValid())
 		model.AssignRenderGroupToPrefix(-1, "\0");
+
+	PlantAbility::GetAbility(this->Type)->onEnableEasterSkin(*this);
 }
 
 byte __asm__FindTargetAndFire[34]

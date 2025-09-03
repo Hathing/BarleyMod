@@ -88,7 +88,7 @@ namespace PlantAbility
 					while (tmp--)
 					{
 						creep.Level++;
-						PlantAbility::GetPrototype(creep.Type)->onUpgrade(creep);
+						PlantAbility::GetAbility(creep.Type)->onUpgrade(creep);
 					}
 				}
 

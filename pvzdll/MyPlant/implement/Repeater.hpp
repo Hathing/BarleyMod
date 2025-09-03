@@ -35,5 +35,14 @@ namespace PlantAbility
 			}
 			return true;
 		}
+		void onEnableEasterSkin(MyPlant plant)
+		{
+			auto model = plant.GetAnimationPart1();
+			if (model.isValid())
+			{
+				model.AssignRenderGroupToPrefix(1, "backleaf");
+				model.AssignRenderGroupToPrefix(4, "awaken_3");
+			}
+		}
 	};
 }

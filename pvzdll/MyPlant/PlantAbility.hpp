@@ -1,7 +1,5 @@
 #pragma once
-#include "MyPlant.hpp"
-#include "../MyZombie/MyZombie.hpp"
-#include "../MyProjectile/MyProjectile.hpp"
+#include "../MyClasses.hpp"
 
 namespace PlantAbility
 {
@@ -128,9 +126,19 @@ namespace PlantAbility
 		{
 			return 10;
 		}
+		virtual void onEnableEasterSkin(MyPlant plant)
+		{
+			return;
+		}
+		/// @brief 植物对僵尸直接造成伤害时，先执行此函数
+		/// @param info 伤害信息
+		virtual void OverwritePZDamage(PZDamageEvent* info)
+		{
+			return;
+		}
 	};
 	typedef BasePlant* PlantPTR;
-	PlantPTR GetPrototype(SeedType::SeedType type);
+	PlantPTR GetAbility(SeedType::SeedType type);
 	/// @brief 经验表包含的植物的数量
 	const int PLANT_LEVEL_EXP_LENGTH = 80;
 	/// @brief 经验表，升级所需经验,index为当前等级,最大为4

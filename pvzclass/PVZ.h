@@ -999,7 +999,7 @@ namespace PVZ
 		/// @brief 最大生命值
 		INT_PROPERTY(MaxHp, __get_MaxHp, __set_MaxHp, 0x44);
 		/// @brief 植物子类别
-		INT_PROPERTY(SubClass, __get_SubClass, __set_SubClass, 0x44);
+		INT_PROPERTY(SubClass, __get_SubClass, __set_SubClass, 0x48);
 		/// @deprecated
 		T_PROPERTY(BOOLEAN, Aggressive, __get_Aggressive, __set_Aggressive, 0x48);
 		/// @brief 消失倒计时
@@ -1163,7 +1163,7 @@ namespace PVZ
 		/// @brief 是否有光环视觉效果
 		T_PROPERTY(BOOLEAN, HasHalo, __get_HasHalo, __set_HasHalo, 0xC8);
 		/// @brief 识别 ID.
-		INT_READONLY_PROPERTY(Id, __get_Id, 0xD0);
+		INT_READONLY_PROPERTY(Id, __get_Id, 0xD4);
 		READONLY_PROPERTY_BINDING(int, __get_Index, Id & 0xFFFF) Index;
 		void Collect();
 		void Die();
