@@ -5,10 +5,29 @@ namespace PlantAbility
 {
 	class WallNut : public BasePlant
 	{
+		inline static const int max_health[6] = { 2000, 3500, 4500, 6000, 8000, 8000 };
+
+		/// @brief 为植物所在行的所有未被碾压的主植物施加护盾
+		/// @param plant 触发该效果的植物
+		static void ApplyDamageAbsorption(MyPlant plant)
+		{
+			PVZ::CreateParticleSystem(plant.ImageX + 40.0, plant.ImageY + 40.0, plant.Layer + 1,
+				EffectType::COB_CANNON_EXPLODED2).OverrideImage(*((PVZ::Image*)0x6FF118));
+			auto plants = plant.GetBoard().GetAllPlants<MyPlant>();
+			for (auto& myplant : plants)
+				if (myplant.Row == plant.Row && myplant.IsPrime() && !myplant.Squash)
+					myplant.DamageAbsorption = 200;
+		}
+
 		void onCreated(MyPlant plant)
 		{
-			plant.Hp = 2000;
-			plant.MaxHp = 2000;
+			plant.SetMaxHealth(max_health[0]);
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
+			if (plant.Level == MyPlant::MAX_LEVEL)
+				ApplyDamageAbsorption(plant);
 		}
 		bool onAnimate(MyPlant plant)
 		{

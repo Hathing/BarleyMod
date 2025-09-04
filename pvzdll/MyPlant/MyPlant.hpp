@@ -65,6 +65,8 @@ public:
 	INT_PROPERTY(Experience, __get_XP, __set_XP, 0x114);
 	/// @brief 当前等级
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
+	/// @brief 护盾点数
+	INT_PROPERTY(DamageAbsorption, __get_DaA, __set_DaA, 0x11C);
 	/// @brief 大麦及其派生植物变身倒计时
 	INT_PROPERTY(BarleyCounter, __get_BaC, __set_BaC, 0x120);
 	/// @brief 植物血条显示倒计时
