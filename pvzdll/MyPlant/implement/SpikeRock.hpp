@@ -5,11 +5,15 @@ namespace PlantAbility
 {
 	class SpikeRock : public BasePlant
 	{
+		inline static const int max_health[6] = { 500, 1000, 1000, 1500, 1500, 1500 };
 		void onCreated(MyPlant plant)
 		{
-			plant.Hp = 500;
-			plant.MaxHp = 500;
+			plant.SetMaxHealth(max_health[plant.Level]);
 			plant.RelatedPlantID1 = 0;
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
 		}
 		bool TickAbility(MyPlant plant)
 		{
