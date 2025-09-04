@@ -9,6 +9,13 @@ namespace PlantAbility
 		{
 			plant.ShootOrProductCountdown = 0;
 			plant.ShootOrProductInterval = 0;
+
+			if (plant.OnBoard)
+			{
+				MyBoard board = plant.GetBoard();
+				plant.RelatedGriditemID1 = board.AddGriditem(GriditemType::SpringEquinoxFireGrid, plant.Row, plant.Column).Id;
+				plant.RelatedGriditemID2 = board.AddGriditem(GriditemType::SpringEquinoxIceGrid, plant.Row, plant.Column).Id;
+			}
 		}
 		int GetEasterProbabilityPartition()
 		{

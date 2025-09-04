@@ -21,3 +21,10 @@ namespace ProjectileType
 	const Type2 Diamond = (Type2)18;
 	const Type2 GoldMelon = (Type2)22;
 }
+
+namespace GriditemType
+{
+	typedef GriditemType Type2;
+	constexpr Type2 SpringEquinoxFireGrid = (Type2)14;
+	constexpr Type2 SpringEquinoxIceGrid = (Type2)15;
+}
