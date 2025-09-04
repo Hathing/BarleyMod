@@ -255,6 +255,9 @@
     <ClInclude Include="MyPlant\implement\CornPult.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyPlant\implement\WinterMelon.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

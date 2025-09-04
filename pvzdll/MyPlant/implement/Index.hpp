@@ -32,6 +32,7 @@
 #include "RestingBarley.hpp"
 #include "GloomShroom.hpp"
 #include "Cattail.hpp"
+#include "WinterMelon.hpp"
 #include "GoldMagnet.hpp"
 #include "SpikeRock.hpp"
 #include "Explode_O_Nut.hpp"

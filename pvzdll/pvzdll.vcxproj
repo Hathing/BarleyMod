@@ -139,6 +139,7 @@
     <ClInclude Include="MyPlant\implement\UmbrellaLeaf.hpp" />
     <ClInclude Include="MyPlant\implement\WallNut.hpp" />
     <ClInclude Include="MyPlant\implement\GatlingPea.hpp" />
+    <ClInclude Include="MyPlant\implement\WinterMelon.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
     <ClInclude Include="MyProjectile\implement\Cabbage.hpp" />
