@@ -6,10 +6,14 @@ namespace PlantAbility
 {
 	class Garlic : public NoEasterSkinPlant
 	{
+		inline static const int max_health[6] = { 400, 450, 500, 550, 600, 600 };
 		void onCreated(MyPlant plant)
 		{
-			plant.Hp = 400;
-			plant.MaxHp = 400;
+			plant.SetMaxHealth(max_health[0]);
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
 		}
 		bool TickAbility(MyPlant plant)
 		{
