@@ -5,6 +5,8 @@
 void onPlantInitAfter(MyPlant plant)
 {
 	plant.FromBarley = false;
+	plant.RelatedGriditemID1 = 0;
+	plant.RelatedGriditemID2 = 0;
 	plant.OwnerID = 0;
 	plant.EasterSkin = false;
 	plant.HealCounter = 0;

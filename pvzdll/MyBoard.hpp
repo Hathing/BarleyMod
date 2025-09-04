@@ -27,4 +27,6 @@ public:
 	/// @param from_wave 僵尸所在的波数
 	/// @return 生成的僵尸
 	PVZ::Zombie AddZombieInRow(ZombieType::ZombieType type, int row, int from_wave);
+
+	PVZ::Griditem AddGriditem(GriditemType::GriditemType type, int row, int column);
 };

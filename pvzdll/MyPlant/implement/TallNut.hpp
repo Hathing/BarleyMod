@@ -5,10 +5,14 @@ namespace PlantAbility
 {
 	class TallNut : public BasePlant
 	{
+		inline static const int max_health[6] = { 1000, 1500, 2000, 3000, 4000, 4000 };
 		void onCreated(MyPlant plant)
 		{
-			plant.Hp = 1000;
-			plant.MaxHp = 1000;
+			plant.SetMaxHealth(max_health[plant.Level]);
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
 		}
 		bool onAnimate(MyPlant plant)
 		{

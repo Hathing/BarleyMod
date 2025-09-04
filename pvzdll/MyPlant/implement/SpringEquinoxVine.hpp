@@ -14,5 +14,15 @@ namespace PlantAbility
 		{
 			return 1;
 		}
+		void onDie(MyPlant plant)
+		{
+			auto griditem = PVZ::GetByID<PVZ::Griditem>(plant.RelatedGriditemID1);
+			if (griditem.isValid())
+				griditem.Remove();
+
+			griditem = PVZ::GetByID<PVZ::Griditem>(plant.RelatedGriditemID2);
+			if (griditem.isValid())
+				griditem.Remove();
+		}
 	};
 }
