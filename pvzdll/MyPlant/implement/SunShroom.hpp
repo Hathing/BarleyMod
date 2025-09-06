@@ -16,7 +16,7 @@ namespace PlantAbility
 		}
 		virtual bool IsXPRecipient(MyPlant plant)
 		{
-			return true;
+			return !plant.Squash;
 		}
 	};
 }
