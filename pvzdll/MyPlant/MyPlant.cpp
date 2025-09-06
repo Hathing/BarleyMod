@@ -17,11 +17,11 @@ namespace PlantAbility
 		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),
 		new SplitPea(),  new Starfruit(), new NilPlant(),  new MagnetShroom(),
 
-		new CabbagePult(), new NilPlant(), new BasePlant(), new NilPlant(),
+		new CabbagePult(), new NilPlant(), new CornPult(), new NilPlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
 
 		new GatlingPea(), new RestingBarley(), new GloomShroom(), new Cattail(),
-		new BasePlant(), new GoldMagnet(), new SpikeRock(), new NoEasterSkinPlant(),
+		new WinterMelon(), new GoldMagnet(), new SpikeRock(), new NoEasterSkinPlant(),
 
 		new NoEasterSkinPlant(), new Explode_O_Nut(), new NoEasterSkinPlant(), new Endoflame(),
 		new LeftRepeater(), new BasePlant(), new BasePlant(), new BasePlant(),

@@ -29,4 +29,5 @@ PVZ::Griditem MyBoard::AddGriditem(GriditemType::GriditemType type, int row, int
 	griditem.Layer = 200001 + 10000 * row;
 	griditem.Row = row;
 	griditem.Column = column;
+	return griditem;
 }

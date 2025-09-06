@@ -62,6 +62,8 @@ namespace PlantAbility
 		/// @return 是否可以获得经验值
 		virtual bool IsXPRecipient(MyPlant plant)
 		{
+			if (plant.Squash)
+				return false;
 			if (plant.Type == SeedType::Seashroom && !plant.IsPrime())
 				return false;
 			return plant.Level < MyPlant::MAX_LEVEL || plant.IsToolPlant();
