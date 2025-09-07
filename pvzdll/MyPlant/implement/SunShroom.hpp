@@ -18,5 +18,10 @@ namespace PlantAbility
 		{
 			return !plant.Squash;
 		}
+		void onUpgrade(MyPlant plant)
+		{
+			if (plant.Level == MyPlant::MAX_LEVEL)
+				plant.Experience = 0;
+		}
 	};
 }

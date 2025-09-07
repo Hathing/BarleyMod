@@ -6,9 +6,14 @@ namespace PlantAbility
 {
 	class PeaShooter : public NoEasterSkinPlant
 	{
+		inline static const int max_health[6] = { 300, 500, 500, 800, 800, 800 };
 		void onCreated(MyPlant plant)
 		{
 			plant.ShootOrProductInterval = 50;//这是索敌的间隔，不是实际用于重置攻击的间隔
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
 		}
 
 		bool TickAbility(MyPlant plant)
