@@ -139,6 +139,14 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 获取植物索敌标签
+		/// @param plant 植物
+		/// @param weapon_type 武器类型
+		/// @return 植物索敌标签。若为负数，则改为使用原版数值。
+		virtual int GetDamageRangeFlags(MyPlant plant, int weapon_type)
+		{
+			return -1;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetAbility(SeedType::SeedType type);

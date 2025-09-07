@@ -132,5 +132,9 @@ namespace PlantAbility
 				return false;
 			return true;
 		}
+		int GetDamageRangeFlags(MyPlant plant, int weapon_type)
+		{
+			return int(PVZ::DRF_OFF_GROUND | PVZ::DRF_FLYING | PVZ::DRF_GROUND);
+		}
 	};
 }

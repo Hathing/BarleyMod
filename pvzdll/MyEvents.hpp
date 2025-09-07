@@ -63,7 +63,7 @@ namespace PVZEvent
 	/// @brief 植物获取伤害范围标签事件
 	/// @param 植物、PlantWeapon
 	/// @return 伤害标签，负值会回到原版更新，非零值会跳过原版直接返回
-	class PlantGetDamageRangeFlagsEvent : public DLLEventTemplate<0x45EB10, 6, MEM_ESP_ADD(0x4), REG_EAX>
+	class PlantGetDamageRangeFlagsEvent : public DLLEventTemplate<0x45EB10, 6, MEM_ESP_ADD(0x24), REG_EAX>
 	{
 	public:
 		PlantGetDamageRangeFlagsEvent(const char* str) : DLLEventTemplate() { Init(str); };
