@@ -111,7 +111,7 @@ namespace PlantAbility
 		/// @return 若为负数，则按原版处理；若为 0，则为不可选中；若为正数，则为强制可选。
 		virtual int onFindTargetRT(MyPlant plant, MyZombie zombie, int row)
 		{
-			return -1;
+			return ThreeState::None;
 		}
 		/// @brief 植物开火生成子弹前的事件。
 		/// @param plant 植物
