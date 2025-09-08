@@ -1,14 +1,11 @@
 #pragma once
 #include "../PlantAbility.hpp"
+#include "SpecialPlants.hpp"
 
 namespace PlantAbility
 {
-	class Barley : public BasePlant
+	class Barley : public NoXPPlant
 	{
-		bool IsXPRecipient(MyPlant plant)
-		{
-			return false;
-		}
 		bool TickAbility(MyPlant plant)
 		{
 			plant.BarleyCounter++;

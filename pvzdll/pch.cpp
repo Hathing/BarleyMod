@@ -14,4 +14,6 @@ void init()
 	PVZ::Memory::Variable = PVZ::Memory::AllocMemory(4);
 
 	Creator::AsmInit();
+
+	EnableBackgroundRunning();
 }

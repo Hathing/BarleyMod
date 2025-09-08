@@ -135,6 +135,11 @@ void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
 	}
 }
 
+bool IsProjExpire(MyProjectile proj)
+{
+	return proj.Motion == MotionType::ShortDirect && proj.ExistedTime >= 175;
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -146,4 +151,5 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
 	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
+	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire)
 }

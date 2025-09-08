@@ -111,7 +111,7 @@ namespace PlantAbility
 		/// @return 若为负数，则按原版处理；若为 0，则为不可选中；若为正数，则为强制可选。
 		virtual int onFindTargetRT(MyPlant plant, MyZombie zombie, int row)
 		{
-			return -1;
+			return ThreeState::None;
 		}
 		/// @brief 植物开火生成子弹前的事件。
 		/// @param plant 植物
@@ -138,6 +138,14 @@ namespace PlantAbility
 		virtual void OverwritePZDamage(PZDamageEvent* info)
 		{
 			return;
+		}
+		/// @brief 获取植物索敌标签
+		/// @param plant 植物
+		/// @param weapon_type 武器类型
+		/// @return 植物索敌标签。若为负数，则改为使用原版数值。
+		virtual int GetDamageRangeFlags(MyPlant plant, int weapon_type)
+		{
+			return -1;
 		}
 	};
 	typedef BasePlant* PlantPTR;

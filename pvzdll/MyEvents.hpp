@@ -63,7 +63,7 @@ namespace PVZEvent
 	/// @brief 植物获取伤害范围标签事件
 	/// @param 植物、PlantWeapon
 	/// @return 伤害标签，负值会回到原版更新，非零值会跳过原版直接返回
-	class PlantGetDamageRangeFlagsEvent : public DLLEventTemplate<0x45EB10, 6, MEM_ESP_ADD(0x4), REG_EAX>
+	class PlantGetDamageRangeFlagsEvent : public DLLEventTemplate<0x45EB10, 6, MEM_ESP_ADD(0x24), REG_EAX>
 	{
 	public:
 		PlantGetDamageRangeFlagsEvent(const char* str) : DLLEventTemplate() { Init(str); };
@@ -574,5 +574,17 @@ namespace PVZEvent
 		FireballInitColorEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		FireballInitColorEvent(int address) : DLLEventTemplate() { Init(address); };
 		FireballInitColorEvent() : FireballInitColorEvent("onFireballInitColor") {};
+	};
+
+	/// @brief 检查子弹是否应该过期事件
+	/// @note 构造后，原版的判定条件会失效
+	/// @param 触发事件的子弹
+	/// @return 子弹是否过期
+	class ProjectileCheckExpireEvent : public DiversionEventTemplate<0x46CE91, 6, 0x46D047, 0x46CE9D, REG_EBP>
+	{
+	public:
+		ProjectileCheckExpireEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		ProjectileCheckExpireEvent(int address) : DiversionEventTemplate() { Init(address); };
+		ProjectileCheckExpireEvent() : ProjectileCheckExpireEvent("onProjectileCheckExpire") {};
 	};
 };

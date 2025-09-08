@@ -186,14 +186,9 @@ int onPlantFindTargetRT(MyPlant plant,MyZombie zombie,int row)
 	return PlantAbility::GetAbility(plant.Type)->onFindTargetRT(plant,zombie,row);
 }
 
-int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)
+int GetPlantDamageRangeFlags(MyPlant plant, int weapon)
 {
-	if (plant.Type == SeedType::Peashooter)
-	{
-		PVZ::DamageRangeFlags flags = PVZ::DRF_OFF_GROUND | PVZ::DRF_FLYING | PVZ::DRF_GROUND;
-		return (int)flags;
-	}
-	return -1;
+	return PlantAbility::GetAbility(plant.Type)->GetDamageRangeFlags(plant, weapon);
 }
 
 bool onSingleUsePlantUpdate(MyPlant plant)
@@ -326,7 +321,7 @@ void InitPlantEvents()
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
 	PVZEvent::PlantFireEvent((int)onPlantFire);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
-	PVZEvent::PlantGetDamageRangeFlagsEvent((int)onPlantGetDamageRangeFlags);
+	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
 
 	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
