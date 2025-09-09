@@ -28,3 +28,9 @@ namespace GriditemType
 	constexpr Type2 SpringEquinoxFireGrid = (Type2)14;
 	constexpr Type2 SpringEquinoxIceGrid = (Type2)15;
 }
+
+namespace PVZEvent
+{
+	typedef PlantDamageType Type2;
+	constexpr Type2 PLANTDAMAGETYPE_CUSTOM = (Type2)16;
+}
