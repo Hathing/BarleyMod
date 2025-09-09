@@ -1,7 +1,6 @@
 #pragma once
 #include "../framework.h"
 #include "../Const.hpp"
-#include "../MyZombie/MyZombie.hpp"
 #include "../MyProjectile/MyProjectile.hpp"
 
 class MyPlant : public PVZ::Plant
@@ -133,13 +132,6 @@ public:
 	/// @param proj 子弹
 	void InitAddProjectile(MyProjectile proj);
 
-	/// @brief 植物对僵尸造成伤害，封装了各种伤害事件。
-	/// @param zombie 僵尸
-	/// @param flags 伤害标记
-	/// @param damage 伤害值
-	/// @param damage_type 伤害类型（用于事件判断）
-	/// @return 实际造成伤害值(伤害<0则失败)
-	int DoDamageToZombie(MyZombie zombie, PVZ::DamageFlags flags, int damage, PVZEvent::PlantDamageType damage_type);
 	/// @brief 植物受到伤害，封装了各种事件。
 	/// @param source 伤害来源
 	/// @param source_type 伤害来源的类型

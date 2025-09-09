@@ -54,8 +54,7 @@ namespace PlantAbility
 
 			if (zombie.isValid())
 			{
-				zombie.LastDamageSourceID = plant.Id;
-				zombie.Hit(500, PVZ::DAMAGEF_BYPASSES_SHIELD);
+				PVZ::ApplyPZDamage(plant, zombie, 500, PVZ::DAMAGEF_BYPASSES_SHIELD);
 				//创建特效
 				auto particle = PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
 				particle.OverrideImage(PVZ::Image(Memory::ReadMemory<DWORD>(0x6A76A8)));
