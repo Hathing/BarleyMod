@@ -87,5 +87,9 @@ namespace PlantAbility
 		{
 			return int(PVZ::DRF_OFF_GROUND | PVZ::DRF_FLYING | PVZ::DRF_GROUND);
 		}
+		int GetTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
+		{
+			return original_priority + (zombie.FromWave > WAVE_ELITE_MASK ? 6000 : 0);
+		}
 	};
 }

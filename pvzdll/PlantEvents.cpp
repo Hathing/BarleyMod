@@ -306,6 +306,11 @@ bool onHypnoShroomEaten(MyZombie zombie, MyPlant plant)
 	return false;
 }
 
+int GetPlantFindTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
+{
+	return PlantAbility::GetAbility(plant.Type)->GetTargetZombiePriority(plant, zombie, original_priority);
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -333,6 +338,7 @@ void InitPlantEvents()
 	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
 
 	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
+	PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);

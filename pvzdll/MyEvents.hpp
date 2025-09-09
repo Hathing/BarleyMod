@@ -587,4 +587,16 @@ namespace PVZEvent
 		ProjectileCheckExpireEvent(int address) : DiversionEventTemplate() { Init(address); };
 		ProjectileCheckExpireEvent() : ProjectileCheckExpireEvent("onProjectileCheckExpire") {};
 	};
+
+	/// @brief 植物索敌优先级重载函数
+	/// @note 返回值越高，优先级越高
+	/// @param 触发事件的植物，植物当前索敌的僵尸，原始优先级
+	/// @return 重载后的优先级
+	class PlantFindTargetZombiePriorityEvent : public IntDLLEventTemplate<0x46786C, 5, 0, 0, INT32_MIN, REG_EAX, false, REG_EAX, REG_ESI, REG_EDI>
+	{
+	public:
+		PlantFindTargetZombiePriorityEvent(const char* str) : IntDLLEventTemplate() { Init(str); };
+		PlantFindTargetZombiePriorityEvent(int address) : IntDLLEventTemplate() { Init(address); };
+		PlantFindTargetZombiePriorityEvent() : PlantFindTargetZombiePriorityEvent("GetPlantFindTargetZombiePriority") {};
+	};
 };

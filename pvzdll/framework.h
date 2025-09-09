@@ -30,5 +30,5 @@ constexpr ProjSpecialType PST_CRACK_PEA = 5;
 /// @brief 冰瓜的大炮
 constexpr ProjSpecialType PST_CANNON_MELON = 1;
 
-
-constexpr int WAVE_ELITE1 = 5001;
+constexpr int WAVE_ELITE_MASK = 5000;
+constexpr int WAVE_ELITE1 = WAVE_ELITE_MASK + 1;
