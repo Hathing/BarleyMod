@@ -7,10 +7,10 @@ namespace PlantAbility
 	class PeaShooter : public NoEasterSkinPlant
 	{
 		inline static const int max_health[6] = { 300, 500, 500, 800, 800, 800 };
+		inline static const int base_damage[6] = { 200, 200, 300, 300, 400, 400 };
 		void onCreated(MyPlant plant)
 		{
 			plant.ShootOrProductInterval = 700;
-			plant.AttributeCountdown = 1;
 		}
 		void onUpgrade(MyPlant plant)
 		{
@@ -21,10 +21,10 @@ namespace PlantAbility
 		{
 			if (!plant.AttributeCountdown)
 			{
-				plant.AttributeCountdown = 50;
+				plant.AttributeCountdown = 1;
 				MyZombie zombie = plant.FindTargetZombie(0);
 				if (zombie.isValid())
-					plant.mTargetZombieID = zombie.Id;
+				plant.mTargetZombieID = zombie.Id;
 			}
 			return false;
 		}
@@ -49,12 +49,20 @@ namespace PlantAbility
 		bool onFire(MyPlant plant, MyZombie target, int weapon_type)
 		{
 			MyZombie zombie = PVZ::GetByID<MyZombie>((unsigned int)plant.mTargetZombieID);
-			zombie.LastDamageSourceID = plant.Id;
-			zombie.Hit(500, PVZ::DAMAGEF_BYPASSES_SHIELD);
-			//创建特效
-			auto particle = PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
-			particle.OverrideImage(PVZ::Image(Memory::ReadMemory<DWORD>(0x6A76A8)));
-			PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::HAMMER_BANG);
+			if(!zombie.isValid())
+				zombie = plant.FindTargetZombie(0);
+
+			if (zombie.isValid())
+			{
+				zombie.LastDamageSourceID = plant.Id;
+				zombie.Hit(500, PVZ::DAMAGEF_BYPASSES_SHIELD);
+				//创建特效
+				auto particle = PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
+				particle.OverrideImage(PVZ::Image(Memory::ReadMemory<DWORD>(0x6A76A8)));
+				PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::HAMMER_BANG);
+				plant.AttributeCountdown = 50;
+				plant.mTargetZombieID = 0;
+			}
 			Creator::CreateLowerSound(LowerSoundType::CherryExplode);
 			return false;
 		}
