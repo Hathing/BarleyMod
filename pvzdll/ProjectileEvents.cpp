@@ -151,5 +151,5 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
 	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
-	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire)
+	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 }
