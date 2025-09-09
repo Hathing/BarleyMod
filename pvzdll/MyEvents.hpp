@@ -290,14 +290,18 @@ namespace PVZEvent
 	};
 
 	/// @brief 魅惑菇被啃的事件
-	/// @param 触发事件的僵尸、魅惑菇
+	/// @param 触发事件的魅惑菇，啃食魅惑菇的僵尸
 	/// @return True则魅惑菇正常死亡
-	class HypnoShroomEatenEvent : public BoolDLLEventTemplate<0x52B9D1, 6, 0x52B9D7, REG_ESI, REG_EDI>
+	class HypnoShroomEatenEvent : public DLLEventTemplate<0x52B9D2, 5, REG_EDI, REG_ESI>
 	{
 	public:
-		HypnoShroomEatenEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		HypnoShroomEatenEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		HypnoShroomEatenEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		HypnoShroomEatenEvent(int address) : DLLEventTemplate() { Init(address); };
 		HypnoShroomEatenEvent() : HypnoShroomEatenEvent("onHypnoShroomEaten") {};
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(10).popad().add_reg_imm(REG_ESP, 4).push_imm32(0x52B9D7).ret().add_reg_imm(REG_ESP, 4);
+		}
 	};
 
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x531070, 5, REG_EBP>
@@ -586,5 +590,17 @@ namespace PVZEvent
 		ProjectileCheckExpireEvent(const char* str) : DiversionEventTemplate() { Init(str); };
 		ProjectileCheckExpireEvent(int address) : DiversionEventTemplate() { Init(address); };
 		ProjectileCheckExpireEvent() : ProjectileCheckExpireEvent("onProjectileCheckExpire") {};
+	};
+
+	/// @brief 植物索敌优先级重载函数
+	/// @note 返回值越高，优先级越高
+	/// @param 触发事件的植物，植物当前索敌的僵尸，原始优先级
+	/// @return 重载后的优先级
+	class PlantFindTargetZombiePriorityEvent : public IntDLLEventTemplate<0x46786C, 5, 0, 0, INT32_MIN, REG_EAX, false, REG_EAX, REG_ESI, REG_EDI>
+	{
+	public:
+		PlantFindTargetZombiePriorityEvent(const char* str) : IntDLLEventTemplate() { Init(str); };
+		PlantFindTargetZombiePriorityEvent(int address) : IntDLLEventTemplate() { Init(address); };
+		PlantFindTargetZombiePriorityEvent() : PlantFindTargetZombiePriorityEvent("GetPlantFindTargetZombiePriority") {};
 	};
 };

@@ -6,6 +6,8 @@
 
 typedef PVZEvent::PlantDamageZombieEvent::PZDamageInfo<MyPlant, MyZombie> PZDamageEvent;
 
+void onPlantDamageZombie(PZDamageEvent* info);
+
 namespace PVZ
 {
 	template<typename T>
@@ -36,4 +38,6 @@ namespace PVZ
 		else
 			return T(INVALID_BASEADDRESS);
 	}
+
+	void ApplyPZDamage(MyPlant plant, MyZombie zombie, int damage, PVZ::DamageFlags flags = PVZ::DAMAGEF_NONE);
 }

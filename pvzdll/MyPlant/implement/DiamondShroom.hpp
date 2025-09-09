@@ -21,9 +21,5 @@ namespace PlantAbility
 		{
 			plant.Heal(25);
 		}
-		void onUpgrade(MyPlant plant)
-		{
-			plant.SetMaxHealth(max_health[plant.Level]);
-		}
 	};
 }

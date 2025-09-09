@@ -147,6 +147,15 @@ namespace PlantAbility
 		{
 			return -1;
 		}
+		/// @brief 获取植物索敌优先级
+		/// @param plant 植物
+		/// @param zombie 目标僵尸
+		/// @param original_priority 原始优先级
+		/// @return 索敌优先级
+		virtual int GetTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
+		{
+			return original_priority;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetAbility(SeedType::SeedType type);

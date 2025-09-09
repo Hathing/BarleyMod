@@ -299,5 +299,8 @@
     <ClCompile Include="CoinEvents.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MyClasses.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

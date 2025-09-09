@@ -70,7 +70,8 @@ bool onPlantSpecialAnimate(MyPlant plant)
 
 void onPlantDamageZombie(PZDamageEvent* info)
 {
-	PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
+	if(info->type != PVZEvent::PLANTDAMAGETYPE_CUSTOM)
+		PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
 	if (info->type == PVZEvent::PLANTDAMAGETYPE_AOE && info->plant.Type != SeedType::Squash)
 	{
 		if (info->zombie.NotDying)
@@ -292,17 +293,16 @@ bool onThreepeaterLaunch(MyPlant plant)
 	return true;
 }
 
-bool onHypnoShroomEaten(MyZombie zombie, MyPlant plant)
+bool onHypnoShroomEaten(MyPlant plant, MyZombie zombie)
 {
-	//魅惑菇被啃后掉血
-	//这个判断方式，能防止两个僵尸在魅惑菇面前一格互啃的时候扣魅惑的血
-	//但是这个判断方式，会导致两个僵尸直接在魅惑菇本格内互啃的时候不扣魅惑的血，有待修复，或者直接当特性也行
-	if (zombie.FindZombieTarget().isValid() == false)
-	{
-		plant.Hp -= 100;
-		plant.HpDisplayCounter = 100;
-	}
+	plant.Hp -= 100;
+	plant.HpDisplayCounter = 100;
 	return false;
+}
+
+int GetPlantFindTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
+{
+	return PlantAbility::GetAbility(plant.Type)->GetTargetZombiePriority(plant, zombie, original_priority);
 }
 
 void InitPlantEvents()
@@ -332,6 +332,7 @@ void InitPlantEvents()
 	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
 
 	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
+	PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);
