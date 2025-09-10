@@ -247,6 +247,7 @@ bool onZombieEatSound(MyZombie zombie, MyPlant plant)
 {
 	if (zombie.Hypnotized)
 		return false;
+	return true;
 }
 
 void InitZombieEvents()
