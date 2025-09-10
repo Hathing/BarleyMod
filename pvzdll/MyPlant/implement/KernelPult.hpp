@@ -10,5 +10,17 @@ namespace PlantAbility
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
 		}
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		{
+			if (proj.Type == ProjectileType::Butter && plant.Level == MyPlant::MAX_LEVEL && plant.Hp >= 800)
+			{
+				plant.Hp -= 50;
+				proj.SpecialStack = 1;
+			}
+			else
+				proj.BounceCount = 5;
+
+			return true;
+		}
 	};
 }
