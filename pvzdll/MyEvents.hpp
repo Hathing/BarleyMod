@@ -603,4 +603,19 @@ namespace PVZEvent
 		PlantFindTargetZombiePriorityEvent(int address) : IntDLLEventTemplate() { Init(address); };
 		PlantFindTargetZombiePriorityEvent() : PlantFindTargetZombiePriorityEvent("GetPlantFindTargetZombiePriority") {};
 	};
+
+	namespace KernelPult
+	{
+		/// @brief 玉米投手判定是否投掷黄油事件
+		/// @note 若启用该事件，原版的判定条件将被废弃
+		/// @param 触发事件的植物
+		/// @return 是否投掷黄油
+		class JudgeButterEvent : public DiversionEventTemplate<0x45F1E5, 5, 0x45F1EE, 0x45F22D, REG_ESI>
+		{
+		public:
+			JudgeButterEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+			JudgeButterEvent(int address) : DiversionEventTemplate() { Init(address); };
+			JudgeButterEvent() : JudgeButterEvent("onKernelPultJudgeButter") {};
+		};
+	}
 };
