@@ -13,7 +13,13 @@ bool onLanwmowerUpdate(PVZ::LawnMower mower)
 	return true;
 }
 
+void onLawnmowerMowZombie(PVZ::LawnMower mower, MyZombie zombie)
+{
+	zombie.LastDamageSourceID = 0;
+}
+
 void InitLawnmowerEvents()
 {
 	LawnmowerUpdateEvent((int)onLanwmowerUpdate);
+	PVZEvent::LawnmowerMowZombieEvent((int)onLawnmowerMowZombie);
 }

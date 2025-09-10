@@ -99,7 +99,7 @@
     <ClInclude Include="MyPlant\implement\CabbagePult.hpp" />
     <ClInclude Include="MyPlant\implement\Cactus.hpp" />
     <ClInclude Include="MyPlant\implement\Cattail.hpp" />
-    <ClInclude Include="MyPlant\implement\CornPult.hpp" />
+    <ClInclude Include="MyPlant\implement\KernelPult.hpp" />
     <ClInclude Include="MyPlant\implement\DarkShroom.hpp" />
     <ClInclude Include="MyPlant\implement\DiamondShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Endoflame.hpp" />
@@ -142,6 +142,7 @@
     <ClInclude Include="MyPlant\implement\WinterMelon.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
+    <ClInclude Include="MyProjectile\implement\Butter.hpp" />
     <ClInclude Include="MyProjectile\implement\Cabbage.hpp" />
     <ClInclude Include="MyProjectile\implement\Diamond.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldMelon.hpp" />

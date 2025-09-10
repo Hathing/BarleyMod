@@ -2,6 +2,7 @@
 #include "Cabbage.hpp"
 #include "Star.hpp"
 #include "Kernel.hpp"
+#include "Butter.hpp"
 #include "GoldSpike.hpp"
 #include "Diamond.hpp"
 #include "GoldMelon.hpp"

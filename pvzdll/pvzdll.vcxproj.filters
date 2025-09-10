@@ -252,10 +252,13 @@
     <ClInclude Include="MyPlant\implement\Starfruit.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyPlant\implement\CornPult.hpp">
+    <ClInclude Include="MyPlant\implement\KernelPult.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyPlant\implement\WinterMelon.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyProjectile\implement\Butter.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

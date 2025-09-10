@@ -22,7 +22,15 @@ void onPlantInitAfter(MyPlant plant)
 	plant.SubIndex = 0;
 	plant.BarleyCounter = 0;
 
-	auto model = plant.GetAnimationPart2();
+	auto model = plant.GetAnimationPart1();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "awake");
+		model.AssignRenderGroupToPrefix(-1, "easter");
+		model.AssignRenderGroupToPrefix(-1, "special");
+	}
+	
+	model = plant.GetAnimationPart2();
 	if (model.isValid())
 	{
 		model.AssignRenderGroupToPrefix(-1, "awake");
@@ -305,6 +313,12 @@ int GetPlantFindTargetZombiePriority(MyPlant plant, MyZombie zombie, int origina
 	return PlantAbility::GetAbility(plant.Type)->GetTargetZombiePriority(plant, zombie, original_priority);
 }
 
+static const int KernelPultProcPartition[6] = {5, 5, 4, 4, 3, 3};
+bool IsKernelPultCastButter(MyPlant plant)
+{
+	return Creator::Rand(KernelPultProcPartition[plant.Level]) == 0;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -333,6 +347,8 @@ void InitPlantEvents()
 
 	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
 	PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
+
+	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);
