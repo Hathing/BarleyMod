@@ -24,7 +24,7 @@
 #include "Starfruit.hpp"
 #include "MagnetShroom.hpp"
 #include "CabbagePult.hpp"
-#include "CornPult.hpp"
+#include "KernelPult.hpp"
 #include "Garlic.hpp"
 #include "UmbrellaLeaf.hpp"
 #include "Marigold.hpp"
