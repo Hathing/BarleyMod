@@ -22,7 +22,15 @@ void onPlantInitAfter(MyPlant plant)
 	plant.SubIndex = 0;
 	plant.BarleyCounter = 0;
 
-	auto model = plant.GetAnimationPart2();
+	auto model = plant.GetAnimationPart1();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "awake");
+		model.AssignRenderGroupToPrefix(-1, "easter");
+		model.AssignRenderGroupToPrefix(-1, "special");
+	}
+	
+	model = plant.GetAnimationPart2();
 	if (model.isValid())
 	{
 		model.AssignRenderGroupToPrefix(-1, "awake");
