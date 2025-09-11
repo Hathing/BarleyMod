@@ -98,10 +98,10 @@ namespace PlantAbility
 		{
 			return true;
 		}
-		/// @brief 植物多发
+		/// @brief 植物更新原版射击过程前，先执行此函数
 		/// @param 触发事件的植物
-		/// @return 是否进行原版的发射。如果要跳过原版发射，一定要注意手动重置+58！
-		virtual bool onShootMultiple(MyPlant plant)
+		/// @return 是否进行原版的发射。
+		virtual bool onUpdateShooter(MyPlant plant)
 		{
 			return true;
 		}

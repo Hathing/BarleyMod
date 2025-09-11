@@ -18,5 +18,9 @@ namespace PlantAbility
 		{
 			return 1;
 		}
+		bool onUpdateShooter(MyPlant plant)
+		{
+			return true;
+		}
 	};
 }
