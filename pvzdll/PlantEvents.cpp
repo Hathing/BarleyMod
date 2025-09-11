@@ -118,9 +118,9 @@ int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
 bool onPlantUpdateShooter(MyPlant plant)
 {
 	if (plant.Type == SeedType::Cactus && plant.ShootOrProductCountdown == 50)
-		plant.FindTargetAndFire(1);
+		plant.FindTargetAndFire(plant.Row, plant.State == PlantState::CACTUS_SHORT_IDLE ? 1 : 0);
 	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
-		plant.FindTargetAndFire(0);
+		plant.FindTargetAndFire(plant.Row, 0);
 	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35 || plant.ShootOrProductCountdown == 70))
 		plant.LaunchThreepeater();
 	return PlantAbility::GetAbility(plant.Type)->onUpdateShooter(plant);

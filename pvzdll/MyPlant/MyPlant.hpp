@@ -115,9 +115,10 @@ public:
 	/// @brief 启用彩蛋皮
 	void EnableEasterSkin();
 	/// @brief 植物索敌并准备开火。只有除了三线和杨桃的攻击型植物才应当使用这个函数
+	/// @param row 索敌行
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
 	/// @return 返回一个bool，表示植物是否成功索敌
-	bool FindTargetAndFire(int PlantWeapon);
+	bool FindTargetAndFire(int row, int PlantWeapon);
 	/// @brief 植物寻找敌人。
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
 	/// @return 僵尸ID，仅仅用于开火的参数
