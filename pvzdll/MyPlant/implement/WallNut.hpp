@@ -33,6 +33,18 @@ namespace PlantAbility
 				plant.AttributeCountdown = shield_cooldown;
 			}
 		}
+		void TickPassive(MyPlant plant)
+		{
+			if (plant.Level >= MyPlant::MAX_LEVEL)
+			{
+				plant.HealCounter++;
+				if (plant.HealCounter >= 100)
+				{
+					plant.HealCounter = 0;
+					plant.Heal(plant.Hp * 3 < plant.MaxHp ? 300 : 150);
+				}
+			}
+		}
 		bool TickAbility(MyPlant plant)
 		{
 			if (plant.AttributeCountdown == 0)
