@@ -15,11 +15,8 @@ namespace PlantAbility
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
 		}
-		bool TickAbility(MyPlant plant)
+		void TickPassive(MyPlant plant)
 		{
-			if (plant.Squash || plant.NotExist || plant.Sleeping)
-				return true;
-
 			if (plant.Level >= MyPlant::MAX_LEVEL)
 			{
 				plant.HealCounter++;
@@ -29,6 +26,11 @@ namespace PlantAbility
 					plant.Heal(1);
 				}
 			}
+		}
+		bool TickAbility(MyPlant plant)
+		{
+			if (plant.Squash || plant.NotExist || plant.Sleeping)
+				return true;
 
 			plant.AnotherCounter--;
 			auto creep = MyPlant::GetByID(plant.RelatedPlantID1);
