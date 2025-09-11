@@ -7,7 +7,7 @@ namespace ProjectileAbility
 	{
 		new BaseProjectile(), new BaseProjectile(), new Cabbage(),		  new Melon(), new BaseProjectile(),
 		new BaseProjectile(), new Fireball(), new Star(),			  new BaseProjectile(), new BaseProjectile(),
-		new Kernel(),		  new BaseProjectile(), new Butter(),		  new BaseProjectile(), new BaseProjectile(),
+		new Kernel(),		  new Cobbig(),			new Butter(),		  new BaseProjectile(), new BaseProjectile(),
 		new GoldSpike(),	  new BaseProjectile(), new BaseProjectile(), new Diamond(),		new BaseProjectile(),
 		new BaseProjectile(), new BaseProjectile(), new GoldMelon(),	  new BaseProjectile(),	new BaseProjectile(),
 	};
@@ -17,7 +17,6 @@ ProjectileAbility::ProjectilePTR ProjectileAbility::GetAbility(ProjectileType::P
 {
 	return ProjectileAbility::pt_factory[type];
 }
-
 
 byte __asm__AdjustRow[37]
 {
