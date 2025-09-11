@@ -15,7 +15,7 @@ namespace PlantAbility
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
 		}
-		bool TickAbility(MyPlant plant)
+		void TickPassive(MyPlant plant)
 		{
 			if (plant.Level >= MyPlant::MAX_LEVEL)
 			{
@@ -26,7 +26,6 @@ namespace PlantAbility
 					plant.Heal(1);
 				}
 			}
-			return true;
 		}
 		bool onAnimate(MyPlant plant)
 		{

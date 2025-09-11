@@ -115,15 +115,15 @@ int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
 	return plant.Row == zombie.Row ? 1 : 0;
 }
 
-bool onPlantShootMultiple(MyPlant plant)
+bool onPlantUpdateShooter(MyPlant plant)
 {
 	if (plant.Type == SeedType::Cactus && plant.ShootOrProductCountdown == 50)
-		plant.FindTargetAndFire(1);
+		plant.FindTargetAndFire(plant.Row, plant.State == PlantState::CACTUS_SHORT_IDLE ? 1 : 0);
 	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
-		plant.FindTargetAndFire(0);
+		plant.FindTargetAndFire(plant.Row, 0);
 	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35 || plant.ShootOrProductCountdown == 70))
 		plant.LaunchThreepeater();
-	return PlantAbility::GetAbility(plant.Type)->onShootMultiple(plant);
+	return PlantAbility::GetAbility(plant.Type)->onUpdateShooter(plant);
 }
 
 bool onPlantPultSkip(MyPlant plant,MyZombie zombie)
@@ -329,7 +329,7 @@ void InitPlantEvents()
 	PlantDieEvent((int)onPlantDie);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
 	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
-	PVZEvent::PlantShootMultipleEvent((int)onPlantShootMultiple);
+	PVZEvent::PlantUpdateShooterEvent((int)onPlantUpdateShooter);
 	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
 	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);

@@ -379,15 +379,16 @@ namespace PVZEvent
 		PlantUpdateColorEvent() : PlantUpdateColorEvent("onPlantUpdateColor") {};
 	};
 
-	/// @brief 攻击型植物多连发事件，机枪的多发不在这里
-	/// @param 植物ID
-	/// @return False则跳过原版发射（包括+58=0的发射与重置+58、原版双发、猫、裂荚等植物的双发）
-	class PlantShootMultipleEvent : public BoolDLLEventTemplate<0x45F8AD, 5, 0x45F97B,REG_ESI>
+	/// @brief 射手植物更新射击事件
+	/// @param 触发事件的植物
+	/// @return 是否进行更新
+	/// @retval 跳过本次更新
+	class PlantUpdateShooterEvent : public BoolDLLEventTemplate<0x45F8A3, 6, 0x45F97C, REG_EAX>
 	{
 	public:
-		PlantShootMultipleEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		PlantShootMultipleEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-		PlantShootMultipleEvent() : PlantShootMultipleEvent("onPlantShootMultiple") {};
+		PlantUpdateShooterEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantUpdateShooterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantUpdateShooterEvent() : PlantUpdateShooterEvent("onPlantUpdateShooter") {};
 	};
 	/// @brief 投手类植物跳过被多投标记的僵尸事件
 	/// @param 植物ID(ECX)，僵尸ID(ESI)

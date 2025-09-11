@@ -223,11 +223,11 @@ byte __asm__FindTargetAndFire[34]
 	RET
 };
 
-bool MyPlant::FindTargetAndFire(int PlantWeapon)
+bool MyPlant::FindTargetAndFire(int row, int PlantWeapon)
 {
 	SETARG(__asm__FindTargetAndFire, 1) = this->GetBaseAddress();
 	SETARG(__asm__FindTargetAndFire, 6) = PlantWeapon;
-	SETARG(__asm__FindTargetAndFire, 11) = this->Row;
+	SETARG(__asm__FindTargetAndFire, 11) = row;
 	SETARG(__asm__FindTargetAndFire, 29) = Memory::Variable;
 	return (bool)(byte)Memory::Execute(STRING(__asm__FindTargetAndFire));
 }
