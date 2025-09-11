@@ -20,6 +20,8 @@ namespace PlantAbility
 		}
 		bool onUpdateShooter(MyPlant plant)
 		{
+			if (plant.ShootOrProductCountdown == 31 || plant.ShootOrProductCountdown == 16)
+				plant.FindTargetAndFire(plant.Row, 0);
 			return true;
 		}
 	};
