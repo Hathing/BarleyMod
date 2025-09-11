@@ -20,6 +20,13 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		/// @brief 结算一次植物的被动技能更新
+		/// @note 此函数的调用不受植物加速减速的影响。
+		/// @param plant 植物
+		virtual void TickPassive(MyPlant plant)
+		{
+			return;
+		}
 		/// @brief 重载植物的攻击范围
 		/// @param plant 植物
 		/// @param secondary 是否使用副武器（裂荚射手左向、仙人掌对空等） 

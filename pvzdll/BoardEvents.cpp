@@ -1,4 +1,5 @@
-﻿#include "pch.h"
+#include "pch.h"
+#include "MyPlant/PlantAbility.hpp"
 
 void InitPlantExistCount(MyBoard& board)
 {
@@ -103,6 +104,11 @@ void onBoardUpdateGameObject(MyBoard board)
 {
 	UpdatePoisonApply(board);
 	UpdatePlantExistCount(board);
+	
+	auto plants = board.GetAllPlants<MyPlant>();
+	for (auto& plant : plants)
+		if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)
+			PlantAbility::GetAbility(plant.Type)->TickPassive(plant);
 }
 
 byte __asm__DrawImage[35]
