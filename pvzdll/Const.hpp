@@ -34,3 +34,9 @@ namespace PVZEvent
 	typedef PlantDamageType Type2;
 	constexpr Type2 PLANTDAMAGETYPE_CUSTOM = (Type2)16;
 }
+
+namespace PlantState
+{
+	typedef PlantState Type2;
+	constexpr Type2 HYPNOSHROOM_SUMMONING = (Type2)50;
+}

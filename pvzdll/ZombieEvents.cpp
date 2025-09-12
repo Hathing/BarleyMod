@@ -53,6 +53,10 @@ void onZombieInitAfter(MyZombie zombie)
 	
 	zombie.ColorFlag = 0;
 	zombie.HpPoint = 0;
+	if (zombie.Type != ZombieType::BalloonZombie)
+		zombie.SourceID = 0;
+	zombie.SourceLevel = 0;
+	zombie.GhostFlameMark = 0;
 
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;

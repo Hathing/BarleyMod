@@ -14,8 +14,15 @@ public:
 	T_PROPERTY(byte, Unknown, __get_Un, __set_Un, 0x71);
 	/// @brief 精英类别
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
+	/// @brief 召唤该僵尸的植物的 ID
+	/// @note 由于适配问题，这里暂时直接存基址
+	INT_PROPERTY(SourceID, __get_SoID, __set_SoID, 0x0E8);
 	/// @brief 僵尸被多投索敌过的标记
 	T_PROPERTY(byte, PultSkip, __get_PultSkip, __set_PultSkip, 0x106);
+	/// @brief 魅惑菇鬼火标记
+	T_PROPERTY(byte, GhostFlameMark, __get_GhFM, __set_GhFM, 0x106);
+	/// @brief 被魅惑菇召唤时，魅惑菇的等级
+	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x107);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
 	T_PROPERTY(byte, IsWalkingBackwards, __get_IsWalkingBackwards, __set_IsWalkingBackwards, 0x13C);
 	/// @brief 僵尸寒意层数，上限30层，每层减速2%
