@@ -100,6 +100,18 @@ void UpdatePlantExistCount(MyBoard& board)
 	}
 }
 
+void UpdateMatch(MyBoard& board)
+{
+	MyBoard::MatchTimer += 1;
+	if (MyBoard::MatchTimer % 500 == 10)
+	{
+		for (int row = 0; row < 5; row++)
+		{
+			board.AddZombieInRow(ZombieType::ConeheadZombie, row, 0);
+		}
+	}
+}
+
 void onBoardUpdateGameObject(MyBoard board)
 {
 	UpdatePoisonApply(board);
@@ -109,6 +121,9 @@ void onBoardUpdateGameObject(MyBoard board)
 	for (auto& plant : plants)
 		if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)
 			PlantAbility::GetAbility(plant.Type)->TickPassive(plant);
+
+	if (MyBoard::MatchRunning)
+		UpdateMatch(board);
 }
 
 byte __asm__DrawImage[35]
@@ -187,7 +202,7 @@ void onTyping(MyBoard board, char key)
 		switch (key)
 		{
 		case 'P':
-			board.MatchRunning = !board.MatchRunning;
+			MyBoard::MatchRunning = !MyBoard::MatchRunning;
 			break;
 		default:
 			break;
