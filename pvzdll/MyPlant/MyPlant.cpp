@@ -15,13 +15,13 @@ namespace PlantAbility
 		new NilPlant(),  new Spikeweed(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),
-		new SplitPea(),  new BasePlant(), new NilPlant(),  new MagnetShroom(),
+		new SplitPea(),  new Starfruit(), new NilPlant(),  new MagnetShroom(),
 
-		new CabbagePult(), new NilPlant(), new BasePlant(), new NilPlant(),
+		new CabbagePult(), new NilPlant(), new KernelPult(), new NilPlant(),
 		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
 
 		new GatlingPea(), new RestingBarley(), new GloomShroom(), new Cattail(),
-		new BasePlant(), new GoldMagnet(), new SpikeRock(), new NoEasterSkinPlant(),
+		new WinterMelon(), new GoldMagnet(), new SpikeRock(), new NoEasterSkinPlant(),
 
 		new NoEasterSkinPlant(), new Explode_O_Nut(), new NoEasterSkinPlant(), new Endoflame(),
 		new LeftRepeater(), new BasePlant(), new BasePlant(), new BasePlant(),
@@ -223,11 +223,11 @@ byte __asm__FindTargetAndFire[34]
 	RET
 };
 
-bool MyPlant::FindTargetAndFire(int PlantWeapon)
+bool MyPlant::FindTargetAndFire(int row, int PlantWeapon)
 {
 	SETARG(__asm__FindTargetAndFire, 1) = this->GetBaseAddress();
 	SETARG(__asm__FindTargetAndFire, 6) = PlantWeapon;
-	SETARG(__asm__FindTargetAndFire, 11) = this->Row;
+	SETARG(__asm__FindTargetAndFire, 11) = row;
 	SETARG(__asm__FindTargetAndFire, 29) = Memory::Variable;
 	return (bool)(byte)Memory::Execute(STRING(__asm__FindTargetAndFire));
 }

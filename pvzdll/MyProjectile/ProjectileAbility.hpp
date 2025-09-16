@@ -40,7 +40,7 @@ namespace ProjectileAbility
 		/// @brief 重载子弹图片尺寸的函数
 		/// @param proj 子弹
 		/// @param original_val 原始大小
-		/// @return 子弹图片基址。若返回为负数，表示不重载。
+		/// @return 重载后的子弹图片尺寸大小
 		virtual float GetImageSize(MyProjectile proj, float original_val)
 		{
 			return original_val;

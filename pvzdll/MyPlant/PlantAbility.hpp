@@ -20,6 +20,13 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		/// @brief 结算一次植物的被动技能更新
+		/// @note 此函数的调用不受植物加速减速的影响。
+		/// @param plant 植物
+		virtual void TickPassive(MyPlant plant)
+		{
+			return;
+		}
 		/// @brief 重载植物的攻击范围
 		/// @param plant 植物
 		/// @param secondary 是否使用副武器（裂荚射手左向、仙人掌对空等） 
@@ -51,6 +58,7 @@ namespace PlantAbility
 		}
 		/// @brief 植物被移除时，先执行此函数。
 		/// @note 不在 Board 上的植物也会调用此函数。
+		/// @attention 这个函数只应该负责清理技能衍生物，不用于也不该用于结算亡语。
 		/// @param plant 植物
 		virtual void onDie(MyPlant plant)
 		{
@@ -61,6 +69,8 @@ namespace PlantAbility
 		/// @return 是否可以获得经验值
 		virtual bool IsXPRecipient(MyPlant plant)
 		{
+			if (plant.Squash)
+				return false;
 			if (plant.Type == SeedType::Seashroom && !plant.IsPrime())
 				return false;
 			return plant.Level < MyPlant::MAX_LEVEL || plant.IsToolPlant();
@@ -88,10 +98,10 @@ namespace PlantAbility
 		{
 			return true;
 		}
-		/// @brief 植物多发
+		/// @brief 植物更新原版射击过程前，先执行此函数
 		/// @param 触发事件的植物
-		/// @return 是否进行原版的发射。如果要跳过原版发射，一定要注意手动重置+58！
-		virtual bool onShootMultiple(MyPlant plant)
+		/// @return 是否进行原版的发射。
+		virtual bool onUpdateShooter(MyPlant plant)
 		{
 			return true;
 		}
@@ -108,7 +118,7 @@ namespace PlantAbility
 		/// @return 若为负数，则按原版处理；若为 0，则为不可选中；若为正数，则为强制可选。
 		virtual int onFindTargetRT(MyPlant plant, MyZombie zombie, int row)
 		{
-			return -1;
+			return ThreeState::None;
 		}
 		/// @brief 植物开火生成子弹前的事件。
 		/// @param plant 植物
@@ -135,6 +145,23 @@ namespace PlantAbility
 		virtual void OverwritePZDamage(PZDamageEvent* info)
 		{
 			return;
+		}
+		/// @brief 获取植物索敌标签
+		/// @param plant 植物
+		/// @param weapon_type 武器类型
+		/// @return 植物索敌标签。若为负数，则改为使用原版数值。
+		virtual int GetDamageRangeFlags(MyPlant plant, int weapon_type)
+		{
+			return -1;
+		}
+		/// @brief 获取植物索敌优先级
+		/// @param plant 植物
+		/// @param zombie 目标僵尸
+		/// @param original_priority 原始优先级
+		/// @return 索敌优先级
+		virtual int GetTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
+		{
+			return original_priority;
 		}
 	};
 	typedef BasePlant* PlantPTR;

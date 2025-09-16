@@ -1,7 +1,6 @@
 #pragma once
 #include "../framework.h"
 #include "../Const.hpp"
-#include "../MyZombie/MyZombie.hpp"
 #include "../MyProjectile/MyProjectile.hpp"
 
 class MyPlant : public PVZ::Plant
@@ -12,6 +11,10 @@ public:
 	
 	/// @brief 是否由大麦生成
 	T_PROPERTY(mybool, FromBarley, __get_FrB, __set_FrB, 0x064);
+	/// @brief 第一个与该植物相关的场地物件的 ID
+	INT_PROPERTY(RelatedGriditemID1, __get_ReGID1, __set_ReGID1, 0x068);
+	/// @brief 第二个与该植物相关的场地物件的 ID
+	INT_PROPERTY(RelatedGriditemID2, __get_ReGID2, __set_ReGID2, 0x06C);
 	/// @brief 被啃50cs倒计时
 	INT_PROPERTY(EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
 	/// @brief 发光倒计时
@@ -58,6 +61,8 @@ public:
 	INT_PROPERTY(Experience, __get_XP, __set_XP, 0x114);
 	/// @brief 当前等级
 	INT_PROPERTY(Level, __get_Level, __set_Level, 0x118);
+	/// @brief 护盾点数
+	INT_PROPERTY(DamageAbsorption, __get_DaA, __set_DaA, 0x11C);
 	/// @brief 大麦及其派生植物变身倒计时
 	INT_PROPERTY(BarleyCounter, __get_BaC, __set_BaC, 0x120);
 	/// @brief 植物血条显示倒计时
@@ -107,9 +112,10 @@ public:
 	/// @brief 启用彩蛋皮
 	void EnableEasterSkin();
 	/// @brief 植物索敌并准备开火。只有除了三线和杨桃的攻击型植物才应当使用这个函数
+	/// @param row 索敌行
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
 	/// @return 返回一个bool，表示植物是否成功索敌
-	bool FindTargetAndFire(int PlantWeapon);
+	bool FindTargetAndFire(int row, int PlantWeapon);
 	/// @brief 植物寻找敌人。
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
 	/// @return 僵尸ID，仅仅用于开火的参数
@@ -124,13 +130,6 @@ public:
 	/// @param proj 子弹
 	void InitAddProjectile(MyProjectile proj);
 
-	/// @brief 植物对僵尸造成伤害，封装了各种伤害事件。
-	/// @param zombie 僵尸
-	/// @param flags 伤害标记
-	/// @param damage 伤害值
-	/// @param damage_type 伤害类型（用于事件判断）
-	/// @return 实际造成伤害值(伤害<0则失败)
-	int DoDamageToZombie(MyZombie zombie, PVZ::DamageFlags flags, int damage, PVZEvent::PlantDamageType damage_type);
 	/// @brief 植物受到伤害，封装了各种事件。
 	/// @param source 伤害来源
 	/// @param source_type 伤害来源的类型

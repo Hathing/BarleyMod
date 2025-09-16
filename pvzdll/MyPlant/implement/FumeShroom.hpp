@@ -5,9 +5,14 @@ namespace PlantAbility
 {
 	class FumeShroom : public BasePlant
 	{
+		inline static const int interval[6] = { 130, 120, 120, 100, 100, 100 };
 		void onCreated(MyPlant plant)
 		{
-			plant.ShootOrProductInterval = 130;
+			plant.ShootOrProductInterval = interval[0];
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.ShootOrProductInterval = interval[plant.Level];
 		}
 		bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)
 		{

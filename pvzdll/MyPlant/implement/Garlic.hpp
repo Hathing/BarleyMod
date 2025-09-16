@@ -6,12 +6,16 @@ namespace PlantAbility
 {
 	class Garlic : public NoEasterSkinPlant
 	{
+		inline static const int max_health[6] = { 400, 450, 500, 550, 600, 600 };
 		void onCreated(MyPlant plant)
 		{
-			plant.Hp = 400;
-			plant.MaxHp = 400;
+			plant.SetMaxHealth(max_health[0]);
 		}
-		bool TickAbility(MyPlant plant)
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
+		}
+		void TickPassive(MyPlant plant)
 		{
 			if (plant.Level >= MyPlant::MAX_LEVEL)
 			{
@@ -22,7 +26,6 @@ namespace PlantAbility
 					plant.Heal(1);
 				}
 			}
-			return true;
 		}
 		bool onAnimate(MyPlant plant)
 		{

@@ -5,17 +5,18 @@ namespace PlantAbility
 {
 	class SpikeRock : public BasePlant
 	{
+		inline static const int max_health[6] = { 500, 1000, 1000, 1500, 1500, 1500 };
 		void onCreated(MyPlant plant)
 		{
-			plant.Hp = 500;
-			plant.MaxHp = 500;
+			plant.SetMaxHealth(max_health[plant.Level]);
 			plant.RelatedPlantID1 = 0;
 		}
-		bool TickAbility(MyPlant plant)
+		void onUpgrade(MyPlant plant)
 		{
-			if (plant.Squash || plant.NotExist || plant.Sleeping)
-				return true;
-
+			plant.SetMaxHealth(max_health[plant.Level]);
+		}
+		void TickPassive(MyPlant plant)
+		{
 			if (plant.Level >= MyPlant::MAX_LEVEL)
 			{
 				plant.HealCounter++;
@@ -25,6 +26,11 @@ namespace PlantAbility
 					plant.Heal(1);
 				}
 			}
+		}
+		bool TickAbility(MyPlant plant)
+		{
+			if (plant.Squash || plant.NotExist || plant.Sleeping)
+				return true;
 
 			plant.AnotherCounter--;
 			auto creep = MyPlant::GetByID(plant.RelatedPlantID1);

@@ -5,6 +5,8 @@
 void onPlantInitAfter(MyPlant plant)
 {
 	plant.FromBarley = false;
+	plant.RelatedGriditemID1 = 0;
+	plant.RelatedGriditemID2 = 0;
 	plant.OwnerID = 0;
 	plant.EasterSkin = false;
 	plant.HealCounter = 0;
@@ -20,7 +22,15 @@ void onPlantInitAfter(MyPlant plant)
 	plant.SubIndex = 0;
 	plant.BarleyCounter = 0;
 
-	auto model = plant.GetAnimationPart2();
+	auto model = plant.GetAnimationPart1();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "awake");
+		model.AssignRenderGroupToPrefix(-1, "easter");
+		model.AssignRenderGroupToPrefix(-1, "special");
+	}
+	
+	model = plant.GetAnimationPart2();
 	if (model.isValid())
 	{
 		model.AssignRenderGroupToPrefix(-1, "awake");
@@ -68,7 +78,8 @@ bool onPlantSpecialAnimate(MyPlant plant)
 
 void onPlantDamageZombie(PZDamageEvent* info)
 {
-	PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
+	if(info->type != PVZEvent::PLANTDAMAGETYPE_CUSTOM)
+		PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
 	if (info->type == PVZEvent::PLANTDAMAGETYPE_AOE && info->plant.Type != SeedType::Squash)
 	{
 		if (info->zombie.NotDying)
@@ -104,15 +115,15 @@ int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
 	return plant.Row == zombie.Row ? 1 : 0;
 }
 
-bool onPlantShootMultiple(MyPlant plant)
+bool onPlantUpdateShooter(MyPlant plant)
 {
 	if (plant.Type == SeedType::Cactus && plant.ShootOrProductCountdown == 50)
-		plant.FindTargetAndFire(1);
+		plant.FindTargetAndFire(plant.Row, plant.State == PlantState::CACTUS_SHORT_IDLE ? 1 : 0);
 	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
-		plant.FindTargetAndFire(0);
+		plant.FindTargetAndFire(plant.Row, 0);
 	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35 || plant.ShootOrProductCountdown == 70))
 		plant.LaunchThreepeater();
-	return PlantAbility::GetAbility(plant.Type)->onShootMultiple(plant);
+	return PlantAbility::GetAbility(plant.Type)->onUpdateShooter(plant);
 }
 
 bool onPlantPultSkip(MyPlant plant,MyZombie zombie)
@@ -184,14 +195,9 @@ int onPlantFindTargetRT(MyPlant plant,MyZombie zombie,int row)
 	return PlantAbility::GetAbility(plant.Type)->onFindTargetRT(plant,zombie,row);
 }
 
-int onPlantGetDamageRangeFlags(int PlantWeapon,MyPlant plant)
+int GetPlantDamageRangeFlags(MyPlant plant, int weapon)
 {
-	if (plant.Type == SeedType::Peashooter)
-	{
-		PVZ::DamageRangeFlags flags = PVZ::DRF_OFF_GROUND | PVZ::DRF_FLYING | PVZ::DRF_GROUND;
-		return (int)flags;
-	}
-	return -1;
+	return PlantAbility::GetAbility(plant.Type)->GetDamageRangeFlags(plant, weapon);
 }
 
 bool onSingleUsePlantUpdate(MyPlant plant)
@@ -295,17 +301,22 @@ bool onThreepeaterLaunch(MyPlant plant)
 	return true;
 }
 
-bool onHypnoShroomEaten(MyZombie zombie, MyPlant plant)
+bool onHypnoShroomEaten(MyPlant plant, MyZombie zombie)
 {
-	//魅惑菇被啃后掉血
-	//这个判断方式，能防止两个僵尸在魅惑菇面前一格互啃的时候扣魅惑的血
-	//但是这个判断方式，会导致两个僵尸直接在魅惑菇本格内互啃的时候不扣魅惑的血，有待修复，或者直接当特性也行
-	if (zombie.FindZombieTarget().isValid() == false)
-	{
-		plant.Hp -= 100;
-		plant.HpDisplayCounter = 100;
-	}
+	plant.Hp -= 100;
+	plant.HpDisplayCounter = 100;
 	return false;
+}
+
+int GetPlantFindTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
+{
+	return PlantAbility::GetAbility(plant.Type)->GetTargetZombiePriority(plant, zombie, original_priority);
+}
+
+static const int KernelPultProcPartition[6] = {5, 5, 4, 4, 3, 3};
+bool IsKernelPultCastButter(MyPlant plant)
+{
+	return Creator::Rand(KernelPultProcPartition[plant.Level]) == 0;
 }
 
 void InitPlantEvents()
@@ -318,13 +329,13 @@ void InitPlantEvents()
 	PlantDieEvent((int)onPlantDie);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
 	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
-	PVZEvent::PlantShootMultipleEvent((int)onPlantShootMultiple);
+	PVZEvent::PlantUpdateShooterEvent((int)onPlantUpdateShooter);
 	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
 	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
 	PVZEvent::PlantFireEvent((int)onPlantFire);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
-	PVZEvent::PlantGetDamageRangeFlagsEvent((int)onPlantGetDamageRangeFlags);
+	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
 
 	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
@@ -335,6 +346,9 @@ void InitPlantEvents()
 	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
 
 	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
+	PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
+
+	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);

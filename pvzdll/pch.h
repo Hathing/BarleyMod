@@ -4,7 +4,6 @@
 #include "framework.h"
 #include "Const.hpp"
 #include "MyEvents.hpp"
-#include "MyBoard.hpp"
 #include "MyClasses.hpp"
 
 void init();

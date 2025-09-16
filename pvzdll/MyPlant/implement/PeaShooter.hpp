@@ -6,126 +6,90 @@ namespace PlantAbility
 {
 	class PeaShooter : public NoEasterSkinPlant
 	{
+		inline static const int max_health[6] = { 300, 500, 500, 800, 800, 800 };
+		inline static const int base_damage[6] = { 200, 200, 300, 300, 400, 400 };
+		int GetDamage(MyPlant plant, MyZombie zombie)
+		{
+			int dmg = base_damage[plant.Level];
+			if ((plant.Level == MyPlant::MAX_LEVEL && Creator::Rand(10) == 1) || zombie.X > 660)
+				dmg = zombie.BodyMaxHealth + zombie.HelmMaxHealth + zombie.ShieldMaxHealth;
+			else
+				switch (zombie.State)
+				{
+				case ZombieState::DIGGER_DRILL:
+				case ZombieState::DIGGER_LANDING:
+				case ZombieState::IMP_FLYING:
+				case ZombieState::BALLOON_FALLING:
+					dmg = zombie.BodyMaxHealth + zombie.HelmMaxHealth + zombie.ShieldMaxHealth;
+				}
+			return dmg;
+		}
+
 		void onCreated(MyPlant plant)
 		{
-			plant.ShootOrProductInterval = 50;//这是索敌的间隔，不是实际用于重置攻击的间隔
+			plant.ShootOrProductInterval = 700;
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
 		}
 
 		bool TickAbility(MyPlant plant)
 		{
-			//真正的索敌函数
-			if (!plant.NotExist && !plant.Squash)
+			if (!plant.AttributeCountdown)
 			{
-				int threat_p = INT_MIN, threat_z = 0;//p为外部保存的威胁度，z为遍历时计算的威胁度
-				auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
-				int targetid = 0;
-				for (auto& zombie : zombies)
-				{
-					//无法被索敌的条件
-					if (!CanTargetZombie(plant, zombie))continue;
-					//计算威胁度
-					threat_z = 0;
-					threat_z += zombie.BodyHealth;
-					threat_z += zombie.HelmHealth;
-					threat_z += zombie.ShieldHealth;
-					//比较威胁度，更新目标
-					if (threat_z > threat_p)
-					{
-						threat_p = threat_z;
-						targetid = zombie.GetBaseAddress();
-					}
-				}
-				plant.PeashooterTarget = targetid;
-			}
-			return true;
-		}
-
-		bool onUpdateShooting(MyPlant plant)
-		{
-			if (plant.ShootingCountdown == 1)
-			{
-				int targetid = plant.PeashooterTarget;
-				if (targetid != 0)
-				{
-					plant.Fire(0, targetid);
-					plant.ShootOrProductCountdown = 300;//真正的重置CD
-				}
-			}
-			plant.ShootingCountdown -= 1;
-			if (plant.ShootingCountdown == 0)
-			{
-				auto anim1 = plant.GetAnimationPart1();
-				auto anim2 = plant.GetAnimationPart2();
-				if (anim2.isValid() && plant.ShootOrProductInterval > 0)
-				{
-					StartBlend(20, anim2);
-					anim2.SetFramesForLayer("anim_head_idle");
-					int base_addr = anim2.GetBaseAddress();
-					Memory::WriteMemoryUnsafe<int>((DWORD)base_addr + 0x10, 0);
-					anim2.CycleRate = anim1.CycleRate;
-					anim2.Speed = anim1.Speed;
-				}
-				else if (anim1.isValid() && plant.ShootOrProductInterval > 0)
-				{
-					plant.PlayIdleAnim(anim1.Speed);
-				}
-				else plant.ShootingCountdown = 1;
+				plant.AttributeCountdown = 1;
+				MyZombie zombie = plant.FindTargetZombie(0);
+				if (zombie.isValid())
+				plant.mTargetZombieID = zombie.Id;
 			}
 			return false;
 		}
 
 		int onFindTargetRT(MyPlant plant, MyZombie zombie, int row)
 		{
-			return CanTargetZombie(plant, zombie) ? 1 : 0;
+			if (zombie.Blowaway)
+				return ThreeState::Disable;
+			if (zombie.BodyHealth < 30 && (zombie.Type == ZombieType::Zomboin || zombie.Type == ZombieType::CatapultZombie))
+				return ThreeState::Disable;
+			if (!zombie.NotDying)
+				return ThreeState::Disable;
+			switch (zombie.State)
+			{
+			case ZombieState::NEWSPAPER_DESTORYED:
+			case ZombieState::DIGGER_LOST_DIG:
+				return ThreeState::Disable;
+			}
+			return ThreeState::None;
 		}
 
 		bool onFire(MyPlant plant, MyZombie target, int weapon_type)
 		{
-			MyZombie zombie{ plant.PeashooterTarget };
-			zombie.LastDamageSourceID = plant.Id;
-			zombie.Hit(500, PVZ::DAMAGEF_NONE);
-			//创建特效
-			auto particle = PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
-			particle.OverrideImage(PVZ::Image(Memory::ReadMemory<DWORD>(0x6A76A8)));
-			PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::HAMMER_BANG);
+			MyZombie zombie = PVZ::GetByID<MyZombie>((unsigned int)plant.mTargetZombieID);
+			if(!zombie.isValid())
+				zombie = plant.FindTargetZombie(0);
+
+			if (zombie.isValid())
+			{
+				PVZ::ApplyPZDamage(plant, zombie, this->GetDamage(plant, zombie), PVZ::DAMAGEF_BYPASSES_SHIELD);
+				//创建特效
+				auto particle = PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::ZOMBIE_GET_KERNEL_SHOT);
+				particle.OverrideImage(PVZ::Image(Memory::ReadMemory<DWORD>(0x6A76A8)));
+				PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, 0x61A80, EffectType::HAMMER_BANG);
+				plant.AttributeCountdown = 50;
+				plant.mTargetZombieID = 0;
+			}
 			Creator::CreateLowerSound(LowerSoundType::CherryExplode);
 			return false;
 		}
 
-		static bool CanTargetZombie(MyPlant plant, MyZombie zombie)
+		int GetDamageRangeFlags(MyPlant plant, int weapon_type)
 		{
-			ZombieType::ZombieType zombietype = zombie.Type;
-			ZombieState::ZombieState zombiestate = zombie.State;
-			if (zombie.NotExist || zombie.ZombieHeight == 9 || zombie.Hypnotized || zombie.Blowaway || !zombie.NotDying)//这里+64是ZombieHeight？我看指针表是僵尸运动状态
-				return false;
-			if (zombietype == ZombieType::Zomboin || zombietype == ZombieType::CatapultZombie)
-			{
-				if (zombie.BodyHealth < 30)
-					return false;
-			}
-			else if (!zombie.NotDying)
-				return false;
-			if (zombietype == ZombieType::BungeeZombie)
-				return false;
-			switch (zombiestate)
-			{
-			case ZombieState::DYING:
-			case ZombieState::DYING_FROM_INSTANT_KILL:
-			case ZombieState::DYING_FROM_LAWNMOWER:
-			case ZombieState::NEWSPAPER_DESTORYED:
-			case ZombieState::DIGGER_DIG:
-			case ZombieState::DIGGER_LOST_DIG:
-			case ZombieState::DIGGER_IDLE:
-			case ZombieState::SNORKEL_SWIM:
-				return false;
-			default:
-				break;
-			}
-			if (zombie.Row != plant.Row)
-				return false;
-			if (zombie.X < plant.ImageX || zombie.X > 760.0f)
-				return false;
-			return true;
+			return int(PVZ::DRF_OFF_GROUND | PVZ::DRF_FLYING | PVZ::DRF_GROUND);
+		}
+		int GetTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
+		{
+			return original_priority + (zombie.FromWave > WAVE_ELITE_MASK ? 6000 : 0);
 		}
 	};
 }

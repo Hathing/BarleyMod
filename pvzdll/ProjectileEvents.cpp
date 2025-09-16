@@ -7,8 +7,6 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
 	plant.InitAddProjectile(proj);
 	if (plant.Type == SeedType::Starfruit)
 		proj.OriginalRow = (byte)plant.Row;
-	if (plant.Type == SeedType::Kernelpult)
-		proj.BounceCount = 5;
 	return PlantAbility::GetAbility(plant.Type)->onAddProjectile(plant, proj, zombie);
 }
 
@@ -112,6 +110,7 @@ void onProjectileInitAfter(MyProjectile proj)
 	proj.SpecialType = PST_NONE;
 	proj.SourceLevel = 0;
 	proj.SourceType = 0;
+	proj.BounceCount = 0;
 }
 
 void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
@@ -135,6 +134,11 @@ void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
 	}
 }
 
+bool IsProjExpire(MyProjectile proj)
+{
+	return proj.Motion == MotionType::ShortDirect && proj.ExistedTime >= 175;
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -146,4 +150,5 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
 	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
+	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 }

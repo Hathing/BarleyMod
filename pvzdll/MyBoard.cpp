@@ -21,3 +21,13 @@ PVZ::Zombie MyBoard::AddZombieInRow(ZombieType::ZombieType type, int row, int fr
 		.ret()
 	);
 }
+
+PVZ::Griditem MyBoard::AddGriditem(GriditemType::GriditemType type, int row, int column)
+{
+	auto griditem = Creator::CreateGriditem();
+	griditem.Type = type;
+	griditem.Layer = 200001 + 10000 * row;
+	griditem.Row = row;
+	griditem.Column = column;
+	return griditem;
+}

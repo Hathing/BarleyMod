@@ -99,6 +99,7 @@
     <ClInclude Include="MyPlant\implement\CabbagePult.hpp" />
     <ClInclude Include="MyPlant\implement\Cactus.hpp" />
     <ClInclude Include="MyPlant\implement\Cattail.hpp" />
+    <ClInclude Include="MyPlant\implement\KernelPult.hpp" />
     <ClInclude Include="MyPlant\implement\DarkShroom.hpp" />
     <ClInclude Include="MyPlant\implement\DiamondShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Endoflame.hpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="MyPlant\implement\SplitPea.hpp" />
     <ClInclude Include="MyPlant\implement\SpringEquinoxVine.hpp" />
     <ClInclude Include="MyPlant\implement\Squash.hpp" />
+    <ClInclude Include="MyPlant\implement\Starfruit.hpp" />
     <ClInclude Include="MyPlant\implement\SunShroom.hpp" />
     <ClInclude Include="MyPlant\implement\TallNut.hpp" />
     <ClInclude Include="MyPlant\implement\Threepeater.hpp" />
@@ -137,9 +139,12 @@
     <ClInclude Include="MyPlant\implement\UmbrellaLeaf.hpp" />
     <ClInclude Include="MyPlant\implement\WallNut.hpp" />
     <ClInclude Include="MyPlant\implement\GatlingPea.hpp" />
+    <ClInclude Include="MyPlant\implement\WinterMelon.hpp" />
     <ClInclude Include="MyPlant\MyPlant.hpp" />
     <ClInclude Include="MyPlant\PlantAbility.hpp" />
+    <ClInclude Include="MyProjectile\implement\Butter.hpp" />
     <ClInclude Include="MyProjectile\implement\Cabbage.hpp" />
+    <ClInclude Include="MyProjectile\implement\Cobbig.hpp" />
     <ClInclude Include="MyProjectile\implement\Diamond.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldMelon.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldSpike.hpp" />
@@ -174,6 +179,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="LawnmowerEvents.cpp" />
     <ClCompile Include="MyBoard.cpp" />
+    <ClCompile Include="MyClasses.cpp" />
     <ClCompile Include="MyPlant\MyPlant.cpp" />
     <ClCompile Include="MyProjectile\MyProjectile.cpp" />
     <ClCompile Include="MyZombie\MyZombie.cpp" />

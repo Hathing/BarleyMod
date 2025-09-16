@@ -243,6 +243,13 @@ bool onHypnotizedClownZombiePop(MyZombie zombie, int x, int y)
 	return false;
 }
 
+bool onZombieEatSound(MyZombie zombie, MyPlant plant)
+{
+	if (zombie.Hypnotized)
+		return false;
+	return true;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -259,6 +266,7 @@ void InitZombieEvents()
 	ZombieUpdateActionEvent((int)onZombieUpdateAction);
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
+	ZombieEatSoundEvent((int)onZombieEatSound);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
