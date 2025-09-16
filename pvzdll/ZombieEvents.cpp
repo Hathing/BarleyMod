@@ -68,26 +68,31 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		return;
 
 	zombie.Remove();
-	int type = Creator::Rand(33);
-	if (type == 25)type = 26;//僵王换豌豆
-	if (type == 20)type = 27;//蹦极换坚果
-	MyZombie child_zombie{ Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), zombie.Row, 0x0f) };
-	PVZ::CreateParticleSystem(zombie.X + 40.0f,zombie.Y + 65.0f,zombie.Layer+100,EffectType::IMITATER_TRANSFORMING);
-	child_zombie.X = zombie.X;
 
-	int HpPoint = 1 + Creator::Rand(5);
-	if (CLOWN_ZOMBIE_POP_FLAG)
-		HpPoint = 5;
-	child_zombie.HpPoint = HpPoint;
-	float health_ratio = (HpPoint) / 5.0f;
-	
-	child_zombie.BodyHealth *= health_ratio;
-	child_zombie.BodyMaxHealth *= health_ratio;
-	child_zombie.HelmHealth *= health_ratio;
-	child_zombie.HelmMaxHealth *= health_ratio;
-	child_zombie.ShieldHealth *= health_ratio;
-	child_zombie.ShieldMaxHealth *= health_ratio;
-	///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
+	//非魅惑盲盒僵尸的随机池，魅惑盲盒的随机池后面再写
+	if (!zombie.Hypnotized)
+	{
+		int type = Creator::Rand(33);
+		if (type == 25)type = 26;//僵王换豌豆
+		if (type == 20)type = 27;//蹦极换坚果
+		MyZombie child_zombie{ Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), zombie.Row, 0x0f) };
+		PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, zombie.Layer + 100, EffectType::IMITATER_TRANSFORMING);
+		child_zombie.X = zombie.X;
+
+		int HpPoint = 1 + Creator::Rand(5);
+		if (CLOWN_ZOMBIE_POP_FLAG)
+			HpPoint = 5;
+		child_zombie.HpPoint = HpPoint;
+		float health_ratio = (HpPoint) / 5.0f;
+
+		child_zombie.BodyHealth *= health_ratio;
+		child_zombie.BodyMaxHealth *= health_ratio;
+		child_zombie.HelmHealth *= health_ratio;
+		child_zombie.HelmMaxHealth *= health_ratio;
+		child_zombie.ShieldHealth *= health_ratio;
+		child_zombie.ShieldMaxHealth *= health_ratio;
+		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
+	}
 	return;
 }
 
