@@ -179,9 +179,26 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 	}
 }
 
+void onTyping(MyBoard board, char key)
+{
+	auto app = board.GetPVZApp();
+	if (app.LevelId == PVZLevel::Survival_Night)
+	{
+		switch (key)
+		{
+		case 'P':
+			board.MatchRunning = !board.MatchRunning;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 void InitBoardEvents()
 {
 	PVZEvent::BoardInitAfterEvent((int)onBoardInit);
 	UpdateGameObjectsEvent((int)onBoardUpdateGameObject);
 	PVZEvent::BoardDrawImageEvent((int)onBoardDrawImage);
+	PVZEvent::TypingEvent((int)onTyping);
 }
