@@ -9,6 +9,9 @@ void InitPlantExistCount(MyBoard& board)
 
 void onBoardInit(MyBoard board)
 {
+	board.MatchRunning = false;
+	board.MatchTimer = 0;
+
 	board.PoisonCounter = 1;
 	board.ZombieColorShiftCounter = 1;
 	InitPlantExistCount(board);
@@ -212,6 +215,7 @@ void onTyping(MyBoard board, char key)
 
 void InitBoardEvents()
 {
+	MyBoard::SetMemSize(0x6000);
 	PVZEvent::BoardInitAfterEvent((int)onBoardInit);
 	UpdateGameObjectsEvent((int)onBoardUpdateGameObject);
 	PVZEvent::BoardDrawImageEvent((int)onBoardDrawImage);

@@ -334,7 +334,7 @@ namespace PVZEvent
 	public:
 		TypingEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		TypingEvent(int address) : DLLEventTemplate() { Init(address); };
-		TypingEvent() : TypingEvent("onTypingEvent") {};
+		TypingEvent() : TypingEvent("onTyping") {};
 	};
 
 	/// @brief 辣椒烧僵尸事件
