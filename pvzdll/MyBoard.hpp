@@ -16,7 +16,6 @@ public:
 	/// @brief 对局计时
 	INT_PROPERTY(MatchTimer,__get_MatchTimer,__set_MatchTimer,0x5800);
 	/// @brief 对局是否正在进行
-	inline static bool MatchRunning = false;
 	T_PROPERTY(bool,MatchRunning, __get_MatchRunning, __set_MatchRunning, 0x5804);
 	/// @brief 僵尸毒结算倒计时
 	T_PROPERTY(byte, PoisonCounter, __get_PoC, __set_PoC, 0x165);
