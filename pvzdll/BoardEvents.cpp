@@ -9,6 +9,9 @@ void InitPlantExistCount(MyBoard& board)
 
 void onBoardInit(MyBoard board)
 {
+	board.MatchRunning = false;
+	board.MatchTimer = 0;
+
 	board.PoisonCounter = 1;
 	board.ZombieColorShiftCounter = 1;
 	InitPlantExistCount(board);
@@ -100,6 +103,18 @@ void UpdatePlantExistCount(MyBoard& board)
 	}
 }
 
+void UpdateMatch(MyBoard& board)
+{
+	board.MatchTimer += 1;
+	if (board.MatchTimer % 500 == 10)
+	{
+		for (int row = 0; row < 5; row++)
+		{
+			board.AddZombieInRow(ZombieType::ConeheadZombie, row, 0);
+		}
+	}
+}
+
 void onBoardUpdateGameObject(MyBoard board)
 {
 	UpdatePoisonApply(board);
@@ -109,6 +124,9 @@ void onBoardUpdateGameObject(MyBoard board)
 	for (auto& plant : plants)
 		if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)
 			PlantAbility::GetAbility(plant.Type)->TickPassive(plant);
+
+	if (board.MatchRunning)
+		UpdateMatch(board);
 }
 
 byte __asm__DrawImage[35]
@@ -154,8 +172,36 @@ void TodDrawImageScaledF(float scale_x, float scale_y, float x, float y, int Gra
 	Memory::Execute(STRING(__asm__TodDrawImageScaledF));
 }
 
+byte __asm__DrawString[71]
+{
+	MOV_ECX_PTR_ADDR(0x6A74B0),//字体地址 Font*
+	MOV_EAX(0),//Graphics*
+	MOV_PTR_EUX_ADD_V_EVX(REG_EAX,REG_ECX,0x40),
+	MOV_PTR_EUX_ADD_V(REG_EAX,0x30,0xFF),//R
+	MOV_PTR_EUX_ADD_V(REG_EAX,0x34,0xFF),//G
+	MOV_PTR_EUX_ADD_V(REG_EAX,0x38,0xFF),//B
+	MOV_PTR_EUX_ADD_V(REG_EAX,0x3C,0xFF),//A
+	PUSHDWORD(0),//Y
+	PUSHDWORD(0),//X
+	PUSHDWORD(0),//string&
+	INVOKE(0x587120),
+	RET
+};
+//这个函数暂时有问题，原因未知
+void DrawString(int x, int y, const std::string& string, int GraphicsAddr)
+{
+	SETARG(__asm__DrawString, 7) = GraphicsAddr;
+	SETARG(__asm__DrawString, 43) = y;
+	SETARG(__asm__DrawString, 48) = x;
+	SETARG(__asm__DrawString, 53) = (unsigned int)&string;
+	Memory::Execute(STRING(__asm__DrawString));
+}
+
+
 void onBoardDrawImage(int GraphicsID, MyBoard board)
 {
+	//DrawString(200, 200, "啊啊啊啊", GraphicsID);
+
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
 	{
@@ -179,9 +225,27 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 	}
 }
 
+void onTyping(MyBoard board, char key)
+{
+	auto app = board.GetPVZApp();
+	if (app.LevelId == PVZLevel::Survival_Night)
+	{
+		switch (key)
+		{
+		case 'P':
+			board.MatchRunning = !board.MatchRunning;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 void InitBoardEvents()
 {
+	MyBoard::SetMemSize(0x6000);
 	PVZEvent::BoardInitAfterEvent((int)onBoardInit);
 	UpdateGameObjectsEvent((int)onBoardUpdateGameObject);
 	PVZEvent::BoardDrawImageEvent((int)onBoardDrawImage);
+	PVZEvent::TypingEvent((int)onTyping);
 }

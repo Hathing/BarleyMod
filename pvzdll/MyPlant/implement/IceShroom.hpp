@@ -10,7 +10,7 @@ namespace PlantAbility
 		{
 			plant.Hp = max_health[0];	
 			plant.MaxHp = max_health[0];
-			plant.CanWork = 2;
+			plant.SubClass = 2;
 		}
 		void onUpgrade(MyPlant plant)
 		{

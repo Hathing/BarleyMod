@@ -13,6 +13,10 @@ public:
 	inline static std::array<float, MAX_BOARD_ROWS> GoldMagnetFactors{};
 	/// @brief 每行寒冰菇是否存在
 	inline static std::array<bool, MAX_BOARD_ROWS> IceShroomCounts{};
+	/// @brief 对局计时
+	INT_PROPERTY(MatchTimer,__get_MatchTimer,__set_MatchTimer,0x5800);
+	/// @brief 对局是否正在进行
+	T_PROPERTY(bool,MatchRunning, __get_MatchRunning, __set_MatchRunning, 0x5804);
 	/// @brief 僵尸毒结算倒计时
 	T_PROPERTY(byte, PoisonCounter, __get_PoC, __set_PoC, 0x165);
 	/// @brief 僵尸颜色显示切换计时
