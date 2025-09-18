@@ -607,12 +607,16 @@ namespace PVZEvent
 	/// @note 返回值越高，优先级越高
 	/// @param 触发事件的植物，植物当前索敌的僵尸，原始优先级
 	/// @return 重载后的优先级
-	class PlantFindTargetZombiePriorityEvent : public IntDLLEventTemplate<0x46786C, 5, 0, 0, INT32_MIN, REG_EAX, false, REG_EAX, REG_ESI, MEM_ESP_ADD(0x78)>
+	class PlantFindTargetZombiePriorityEvent : public DLLEventTemplate<0x46786C, 5, REG_EAX, REG_ESI, MEM_ESP_ADD(0x78)>
 	{
 	public:
-		PlantFindTargetZombiePriorityEvent(const char* str) : IntDLLEventTemplate() { Init(str); };
-		PlantFindTargetZombiePriorityEvent(int address) : IntDLLEventTemplate() { Init(address); };
+		PlantFindTargetZombiePriorityEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantFindTargetZombiePriorityEvent(int address) : DLLEventTemplate() { Init(address); };
 		PlantFindTargetZombiePriorityEvent() : PlantFindTargetZombiePriorityEvent("GetPlantFindTargetZombiePriority") {};
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX);
+		}
 	};
 
 	namespace KernelPult
