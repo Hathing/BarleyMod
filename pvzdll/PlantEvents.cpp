@@ -202,7 +202,7 @@ int GetPlantDamageRangeFlags(MyPlant plant, int weapon)
 
 bool onSingleUsePlantUpdate(MyPlant plant)
 {
-	if (plant.CanWork > 0)
+	if (plant.SubClass > 0)
 	{
 		return false;
 	}

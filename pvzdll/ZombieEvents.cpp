@@ -126,19 +126,22 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	PVZ::CreateParticleSystem(zombie.X + 40.0f,zombie.Y + 65.0f,zombie.Layer+100,EffectType::IMITATER_TRANSFORMING);
 	child_zombie.X = zombie.X;
 
-	int HpPoint = 1 + Creator::Rand(5);
-	if (CLOWN_ZOMBIE_POP_FLAG)
-		HpPoint = 5;
-	child_zombie.HpPoint = HpPoint;
-	float health_ratio = (HpPoint) / 5.0f;
-	
-	child_zombie.BodyHealth *= health_ratio;
-	child_zombie.BodyMaxHealth *= health_ratio;
-	child_zombie.HelmHealth *= health_ratio;
-	child_zombie.HelmMaxHealth *= health_ratio;
-	child_zombie.ShieldHealth *= health_ratio;
-	child_zombie.ShieldMaxHealth *= health_ratio;
-	///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
+	if (true)
+	{
+		int HpPoint = 1 + Creator::Rand(5);
+		if (CLOWN_ZOMBIE_POP_FLAG)
+			HpPoint = 5;
+		child_zombie.HpPoint = HpPoint;
+		float health_ratio = (HpPoint) / 5.0f;
+
+		child_zombie.BodyHealth *= health_ratio;
+		child_zombie.BodyMaxHealth *= health_ratio;
+		child_zombie.HelmHealth *= health_ratio;
+		child_zombie.HelmMaxHealth *= health_ratio;
+		child_zombie.ShieldHealth *= health_ratio;
+		child_zombie.ShieldMaxHealth *= health_ratio;
+		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
+	}
 	return;
 }
 

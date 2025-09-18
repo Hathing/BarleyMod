@@ -327,6 +327,16 @@ namespace PVZEvent
 		}
 	};
 
+	/// @brief 游戏内按键的事件
+	/// @param Board，Key
+	class TypingEvent : public DLLEventTemplate<0x41B1D0, 6, REG_ECX, REG_EDX>
+	{
+	public:
+		TypingEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		TypingEvent(int address) : DLLEventTemplate() { Init(address); };
+		TypingEvent() : TypingEvent("onTyping") {};
+	};
+
 	/// @brief 辣椒烧僵尸事件
 	/// @param 触发事件的植物，植物烧的僵尸
 	class JalapenoBurnEvent : public DLLEventTemplate<0x466528, 5, REG_ESI, REG_EDI>
