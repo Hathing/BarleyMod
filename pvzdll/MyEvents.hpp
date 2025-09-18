@@ -633,4 +633,19 @@ namespace PVZEvent
 			JudgeButterEvent() : JudgeButterEvent("onKernelPultJudgeButter") {};
 		};
 	}
+
+	/// @brief Zombie 行为动作的更新。
+	/// @note 时机上先于原版的更新。
+	/// @note 该事件与 ZombieUpdateActionEvent 在同一个位置生效。不建议同时使用。
+	/// @note 该事件与 ZombieUpdateActionEvent 基本一致，只是返回值不同
+	/// @param 更新的 Zombie
+	/// @return 是否更新原版行为动作
+	/// @retval false 完全跳过原版的任何行为动作。这会导致原生技能失效。
+	class ZombieUpdateActionEXEvent : public BoolDLLEventTemplate<0x52B112, 6, REG_EAX>
+	{
+	public:
+		ZombieUpdateActionEXEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateAction"); };
+		ZombieUpdateActionEXEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieUpdateActionEXEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
 };

@@ -258,7 +258,8 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	}
 	return true;
 }
-void onZombieUpdateAction(MyZombie zombie)
+
+bool onZombieUpdateAction(MyZombie zombie)
 {
 	//这里是所有僵尸在未定身时必经的更新
 	//小丑僵尸爆炸
@@ -266,7 +267,7 @@ void onZombieUpdateAction(MyZombie zombie)
 	{
 		zombie.AttributeCountdown = 0;
 	}
-	return;
+	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
 }
 
 bool onClownZombiePop(MyZombie zombie, int x, int y)
@@ -317,7 +318,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieApplyAnimSpeedEvent((int)onZombieApplyAnimSpeed);
 	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	ZombieUpdateActionEvent((int)onZombieUpdateAction);
+	PVZEvent::ZombieUpdateActionEXEvent((int)onZombieUpdateAction);
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
 	ZombieEatSoundEvent((int)onZombieEatSound);
