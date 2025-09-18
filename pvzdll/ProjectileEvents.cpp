@@ -158,9 +158,6 @@ void onProjectileImpact(MyProjectile proj, MyZombie zombie)
 			{
 				int dmg = onProjDamageZombie(proj, zombie_, PVZEvent::DAMAGE_SINGULAR, 0, 0);
 				zombie_.Hit(dmg, PVZ::DAMAGEF_HITS_SHIELD_AND_BODY);
-				//寒意还没写，暂时用减速代替
-				zombie_.Decelerate(1000);
-				zombie_.Froze(150);
 			}
 		}
 		//创建音效和特效
@@ -190,4 +187,7 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
 	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
+
+	//冰豌豆和冰瓜不附加原版减速
+	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);
 }
