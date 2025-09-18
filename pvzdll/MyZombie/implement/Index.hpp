@@ -8,6 +8,7 @@
 #include "PogoZombie.hpp"
 #include "BungeeZombie.hpp"
 #include "CatapultZombie.hpp"
+#include "Gargantaur.hpp"
 #include "PeaZombie.hpp"
 #include "WallNutZombie.hpp"
 #include "JalapenoZombie.hpp"
