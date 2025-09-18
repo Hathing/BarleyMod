@@ -139,6 +139,12 @@ bool IsProjExpire(MyProjectile proj)
 	return proj.Motion == MotionType::ShortDirect && proj.ExistedTime >= 175;
 }
 
+void onPlantAddProjDamageRangeFlags(MyProjectile proj, MyPlant plant)
+{
+	if (proj.Type == ProjectileType::WinterMelon && proj.SpecialType == PST_CANNON_WINTERMELON)
+		proj.DamageAbility = 0;
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -151,4 +157,5 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
 	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
+	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
 }

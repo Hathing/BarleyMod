@@ -45,6 +45,13 @@ namespace ProjectileAbility
 		{
 			return original_val;
 		}
+		/// @brief 子弹在非杨桃植物发射子弹后，初始化+74后的事件，用于修改DRF。
+		/// @param proj 子弹
+		/// @param plant 发射者植物
+		virtual void onPlantAddProjDamageRangeFlags(MyProjectile proj, MyPlant plant)
+		{
+			return;
+		}
 	};
 	typedef BaseProjectile* ProjectilePTR;
 	ProjectilePTR GetAbility(ProjectileType::ProjectileType type);

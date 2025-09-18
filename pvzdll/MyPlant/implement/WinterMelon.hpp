@@ -21,7 +21,6 @@ namespace PlantAbility
 			else if (plant.WinterMelonCastState == 2)
 			{
 				proj.SpecialType = PST_CANNON_WINTERMELON;
-				proj.DamageAbility = 0;
 				plant.WinterMelonCastState = 0;
 			}
 			return true;
