@@ -228,6 +228,9 @@
     <ClInclude Include="MyProjectile\implement\Melon.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+	<ClInclude Include="MyProjectile\implement\WinterMelon.hpp">
+		<Filter>头文件</Filter>
+	</ClInclude>
     <ClInclude Include="MyProjectile\implement\Star.hpp">
       <Filter>头文件</Filter>
     </ClInclude>

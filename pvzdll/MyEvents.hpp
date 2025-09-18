@@ -442,7 +442,7 @@ namespace PVZEvent
 		PlantAddProjectileBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantAddProjectileBeforeEvent() : PlantAddProjectileBeforeEvent("onPlantAddProjectileBefore") {};
 	};
-	/// @brief 四个投手的多投事件
+	/// @brief 四个投手的多投事件，冰瓜的概率判定也在此处
 	/// @param 植物ID（EDI） 植物副武器（ESI）
 	class PlantPultMultipleEvent : public DLLEventTemplate<0x464C1C, 5, REG_ESI, REG_EDI>
 	{

@@ -45,6 +45,10 @@ public:
 	INT_PROPERTY(RelatedPlantID3, __get_RePID3, __set_RePID3, 0x0E8);
 	/// @brief 第四个与该植物相关的植物的 ID
 	INT_PROPERTY(RelatedPlantID4, __get_RePID4, __set_RePID4, 0x0EC);
+	/// @brief 冰瓜投掷标记，0=正常，1=小冰瓜，2=大冰瓜
+	T_PROPERTY(byte, WinterMelonCastState, __get_WinterMelonCastState, __set_WinterMelonCastState, 0x0E0);
+	/// @brief 冰瓜散射计数，0=正常，>0表示单轮散射个数
+	INT_PROPERTY(WinterMelonScatterCount, __get_WinterMelonScatterNum, __set_WinterMelonScatterNum, 0x0E4);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 减速效果倒计时

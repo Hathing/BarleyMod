@@ -27,8 +27,10 @@ constexpr ProjSpecialType PST_BLUE_FIREBALL = 3;
 constexpr ProjSpecialType PST_PURPLE_FIREBALL = 4;
 /// @brief 裂荚豌豆的爆裂子弹
 constexpr ProjSpecialType PST_CRACK_PEA = 5;
+/// @brief 冰瓜的小散弹
+constexpr ProjSpecialType PST_SCATTER_WINTERMELON = 1;
 /// @brief 冰瓜的大炮
-constexpr ProjSpecialType PST_CANNON_MELON = 1;
+constexpr ProjSpecialType PST_CANNON_WINTERMELON = 2;
 
 constexpr int WAVE_ELITE_MASK = 5000;
 constexpr int WAVE_ELITE1 = WAVE_ELITE_MASK + 1;

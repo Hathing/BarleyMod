@@ -150,6 +150,9 @@ void PultMultiple(MyPlant plant, int num, int PlantWeapon)
 			MyZombie target{ targetid };
 			plant.Fire(PlantWeapon, targetid);
 			target.PultSkip = 1;
+			//冰瓜对非主目标发射小冰瓜
+			if (plant.Type == SeedType::WinterMelon)
+				plant.WinterMelonCastState = 1;
 		}
 	}
 	//清空所有僵尸的PultSkip标记
@@ -158,14 +161,43 @@ void PultMultiple(MyPlant plant, int num, int PlantWeapon)
 	{
 		zombie.PultSkip = 0;
 	}
+	//冰瓜清空散射相关属性
+	if (plant.Type == SeedType::WinterMelon)
+	{
+		plant.WinterMelonCastState = 0;
+		plant.WinterMelonScatterCount = 0;
+	}
 }
 
+static const int wintermelon_scatter_count[6] = { 5, 7, 7, 10, 10, 10 };
 void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
 {
-	if (plant.Type == SeedType::Cabbagepult)
+	switch (plant.Type)
 	{
+	case SeedType::Cabbagepult:
 		PultMultiple(plant, 3, PlantWeapon);
 		return;
+	case SeedType::WinterMelon:
+	{
+		int rand_num = Creator::Rand(100);
+		if (rand_num < 20)
+			plant.WinterMelonScatterCount = wintermelon_scatter_count[plant.Level];
+		else if (plant.Level == MyPlant::MAX_LEVEL)
+		{
+			if (rand_num < 40)
+				plant.WinterMelonCastState = 2;
+			else
+				plant.WinterMelonScatterCount = 5;
+		}
+		if (plant.WinterMelonScatterCount > 0)
+		{
+			PultMultiple(plant, plant.WinterMelonScatterCount, PlantWeapon);
+			return;
+		}
+		break;
+	}
+	default:
+		break;
 	}
 	//默认的原版处理，不可改动
 	plant.Fire(PlantWeapon,plant.FindTargetZombie(PlantWeapon));

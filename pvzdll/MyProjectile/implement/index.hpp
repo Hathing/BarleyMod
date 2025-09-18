@@ -8,4 +8,5 @@
 #include "Diamond.hpp"
 #include "GoldMelon.hpp"
 #include "Melon.hpp"
+#include "WinterMelon.hpp"
 #include "Fireball.hpp"
