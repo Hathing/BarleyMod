@@ -145,6 +145,37 @@ void onPlantAddProjDamageRangeFlags(MyProjectile proj, MyPlant plant)
 		proj.DamageAbility = 0;
 }
 
+void onProjectileImpact(MyProjectile proj, MyZombie zombie)
+{
+	//注意，zombie*可能=0，因此一般子弹先要检查zombie是否isValid
+	//冰瓜大炮不命中僵尸，也不直接对僵尸操作，因此无需判定
+	if (proj.Type == ProjectileType::WinterMelon && proj.SpecialType == PST_CANNON_WINTERMELON)
+	{
+		auto zombies = proj.GetBoard().GetAllZombies<MyZombie>();
+		for (auto& zombie_ : zombies)
+		{
+			if (zombie_.Row == proj.Row && zombie_.EffectedBy(PVZ::DRF_GROUND | PVZ::DRF_DYING | PVZ::DRF_SUBMERGED) && (zombie_.X<proj.X + 100 && zombie_.X >proj.X - 100))
+			{
+				int dmg = onProjDamageZombie(proj, zombie_, PVZEvent::DAMAGE_SINGULAR, 0, 0);
+				zombie_.Hit(dmg, PVZ::DAMAGEF_HITS_SHIELD_AND_BODY);
+				//寒意还没写，暂时用减速代替
+				zombie_.Decelerate(1000);
+				zombie_.Froze(150);
+			}
+		}
+		//创建音效和特效
+		Creator::CreateLowerSound(LowerSoundType::DiamondDrop);
+		Creator::CreateLowerSound(LowerSoundType::Decelerate);
+		auto effect1 = PVZ::CreateParticleSystem(proj.X - 60.0f, proj.Y + 100.0f, proj.Layer + 100, EffectType::ZOMBOIN_EXPLODED2);
+		effect1.OverrideImage(PVZ::Image(Memory::ReadMemory<DWORD>(0x6A72F4)));
+		effect1.OverrideScale(2.0f);
+		auto effect2 = PVZ::CreateParticleSystem(proj.X - 60.0f, proj.Y + 100.0f, proj.Layer + 100, EffectType::ZOMBOIN_EXPLODED2);
+		effect2.OverrideImage(PVZ::Image(Memory::ReadMemory<DWORD>(0x6A764C)));
+		effect2.OverrideScale(2.0f);
+		PVZ::CreateParticleSystem(proj.X, proj.Y, proj.Layer + 100, EffectType::ICE_SHROOM_EXPLODED);
+	}
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -158,4 +189,5 @@ void InitProjectileEvents()
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
 	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
+	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
 }

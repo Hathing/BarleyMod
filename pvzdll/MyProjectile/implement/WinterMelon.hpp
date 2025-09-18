@@ -11,7 +11,8 @@ namespace ProjectileAbility
 		{
 			if (proj.SpecialType == PST_SCATTER_WINTERMELON)
 				return 10;//散射冰瓜伤害为范围内无衰减10点
-			//冰瓜大炮正常情况下不应该直接击中僵尸，故不处理
+			if (proj.SpecialType == PST_CANNON_WINTERMELON)
+				return 120;//冰瓜大炮伤害为120点
 			return -1;
 		}
 		float GetImageSize(MyProjectile proj, float original_val)
