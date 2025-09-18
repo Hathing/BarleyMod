@@ -50,6 +50,7 @@ void onZombieDropLoot(MyZombie zombie)
 void onZombieInitAfter(MyZombie zombie)
 {
 	zombie.IsWalkingBackwards = 0;
+	zombie.IsWeak = false;
 	
 	zombie.ColorFlag = 0;
 	zombie.HpPoint = 0;
@@ -68,11 +69,11 @@ void onZombieInitAfter(MyZombie zombie)
 
 static const ZombieType::ZombieType hypno_pool[] =
 {
-	ZombieType::Zombie,				ZombieType::FlagZombie,			ZombieType::ConeheadZombie, ZombieType::PoleVaultingZombie, ZombieType::BucketheadZombie,
+	ZombieType::Zombie,				ZombieType::FlagZombie,			ZombieType::ConeheadZombie,									ZombieType::BucketheadZombie,
 	ZombieType::NewspaperZombie,	ZombieType::ScreenDoorZombie,	ZombieType::FootballZombie, ZombieType::DancingZombie,		ZombieType::BackupDancer,
-	ZombieType::DuckyTubeZombie,	ZombieType::SnorkedZombie,		ZombieType::Zomboin,		ZombieType::ZombieBobsledTeam,	ZombieType::DolphinRiderZombie,
-	ZombieType::JackintheboxZombie,	ZombieType::BalloonZombie,		ZombieType::DiggerZombie,	ZombieType::PogoZombie,			ZombieType::ZombieYeti,
-									ZombieType::LadderZombie,		ZombieType::CatapultZombie, ZombieType::Gargantuar,			ZombieType::Imp,
+	ZombieType::DuckyTubeZombie,									ZombieType::Zomboin,		ZombieType::ZombieBobsledTeam,
+	ZombieType::JackintheboxZombie,	ZombieType::BalloonZombie,		ZombieType::DiggerZombie,									ZombieType::ZombieYeti,
+									ZombieType::LadderZombie,									ZombieType::Gargantuar,			ZombieType::Imp,
 									ZombieType::PeashooterZombie,	ZombieType::WallnutZombie,	ZombieType::JalapenoZombie,		ZombieType::GatlingPeaZombie,
 									ZombieType::TallnutZombie,		ZombieType::Gigagargantuar,
 };
@@ -258,7 +259,8 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	}
 	return true;
 }
-void onZombieUpdateAction(MyZombie zombie)
+
+bool onZombieUpdateAction(MyZombie zombie)
 {
 	//这里是所有僵尸在未定身时必经的更新
 	//小丑僵尸爆炸
@@ -266,7 +268,7 @@ void onZombieUpdateAction(MyZombie zombie)
 	{
 		zombie.AttributeCountdown = 0;
 	}
-	return;
+	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
 }
 
 bool onClownZombiePop(MyZombie zombie, int x, int y)
@@ -317,7 +319,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieApplyAnimSpeedEvent((int)onZombieApplyAnimSpeed);
 	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	ZombieUpdateActionEvent((int)onZombieUpdateAction);
+	PVZEvent::ZombieUpdateActionEXEvent((int)onZombieUpdateAction);
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
 	ZombieEatSoundEvent((int)onZombieEatSound);

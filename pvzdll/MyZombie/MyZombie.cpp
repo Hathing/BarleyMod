@@ -1,4 +1,4 @@
-﻿#include "MyZombie.hpp"
+#include "MyZombie.hpp"
 #include "implement/index.hpp"
 
 namespace ZombieAbility
@@ -7,12 +7,12 @@ namespace ZombieAbility
 	{
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new PoleVaulter(), new BaseZombie(),
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new DancingZombie(), new BaseZombie(),
-		new BaseZombie(), new BaseZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new SnorkedZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
 		new ClownZombie(), new BaseZombie(), new DiggerZombie(), new PogoZombie(), new BaseZombie(),
-		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new BaseZombie(), new BaseZombie(),
+		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new Gargantaur(), new BaseZombie(),
 
 		new BaseZombie(), new PeaZombie(),  new WallNutZombie(), new JalapenoZombie(), new BaseZombie(),
-		new SquashZombie(), new TallNutZombie(), new BaseZombie()
+		new SquashZombie(), new TallNutZombie(), new GigaGargantaur()
 	};
 }
 
