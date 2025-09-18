@@ -346,7 +346,8 @@ void InitPlantEvents()
 	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
 
 	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
-	PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
+	//目前不会崩溃了，但植物不索敌，暂时先去掉了
+	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
 	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
 
