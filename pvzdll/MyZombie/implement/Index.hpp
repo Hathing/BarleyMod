@@ -2,6 +2,7 @@
 #include "../ZombieAbility.hpp"
 #include "PoleVaulter.hpp"
 #include "DancingZombie.hpp"
+#include "SnorkedZombie.hpp"
 #include "Zomboni.hpp"
 #include "DiggerZombie.hpp"
 #include "PogoZombie.hpp"
