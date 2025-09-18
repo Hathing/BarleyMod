@@ -235,6 +235,15 @@ void onTyping(MyBoard board, char key)
 		case 'P':
 			board.MatchRunning = !board.MatchRunning;
 			break;
+		case 'F':
+		{
+			auto plants = board.GetAllPlants<MyPlant>();
+			for (auto& plant : plants)
+			{
+				plant.AddExperience(100000);
+			}
+			break;
+		}
 		default:
 			break;
 		}

@@ -18,6 +18,7 @@ PVZ::Zombie MyBoard::AddZombieInRow(ZombieType::ZombieType type, int row, int fr
 		.push_imm32(type)
 		.mov_reg_imm(REG_EAX, this->BaseAddress)
 		.invoke(0x40DDC0)
+		.mov_mem_reg(PVZ::Memory::Variable,REG_EAX)
 		.ret()
 	);
 }

@@ -201,6 +201,16 @@ namespace PVZEvent
 		ProjectileImpactEvent() : ProjectileImpactEvent("onProjectileImpact") {};
 	};
 
+	/// @brief 子弹击中僵尸事件
+	/// @param 依次为：触发事件的子弹，发射子弹的植物
+	class PlantAddProjDamageRangeFlagsEvent : public DLLEventTemplate<0x4672CA, 6, REG_EBP, REG_ECX>
+	{
+	public:
+		PlantAddProjDamageRangeFlagsEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantAddProjDamageRangeFlagsEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantAddProjDamageRangeFlagsEvent() : PlantAddProjDamageRangeFlagsEvent("onPlantAddProjDamageRangeFlags") {};
+	};
+
 	/// @brief 子弹总更新事件，发生在计时器与图层更新后、子弹运动前
 	/// @param 子弹ID
 	class ProjectileUpdateEvent : public DLLEventTemplate<0x46E4FE, 6, REG_ESI>
@@ -442,7 +452,7 @@ namespace PVZEvent
 		PlantAddProjectileBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantAddProjectileBeforeEvent() : PlantAddProjectileBeforeEvent("onPlantAddProjectileBefore") {};
 	};
-	/// @brief 四个投手的多投事件
+	/// @brief 四个投手的多投事件，冰瓜的概率判定也在此处
 	/// @param 植物ID（EDI） 植物副武器（ESI）
 	class PlantPultMultipleEvent : public DLLEventTemplate<0x464C1C, 5, REG_ESI, REG_EDI>
 	{

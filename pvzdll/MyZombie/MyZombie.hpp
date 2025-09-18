@@ -18,7 +18,7 @@ public:
 	/// @note 由于适配问题，这里暂时直接存基址
 	INT_PROPERTY(SourceID, __get_SoID, __set_SoID, 0x0E8);
 	/// @brief 僵尸被多投索敌过的标记
-	T_PROPERTY(byte, PultSkip, __get_PultSkip, __set_PultSkip, 0x106);
+	T_PROPERTY(byte, PultSkip, __get_PultSkip, __set_PultSkip, 0x105);
 	/// @brief 魅惑菇鬼火标记
 	T_PROPERTY(byte, GhostFlameMark, __get_GhFM, __set_GhFM, 0x106);
 	/// @brief 被魅惑菇召唤时，魅惑菇的等级
