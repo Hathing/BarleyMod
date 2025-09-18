@@ -68,11 +68,11 @@ void onZombieInitAfter(MyZombie zombie)
 
 static const ZombieType::ZombieType hypno_pool[] =
 {
-	ZombieType::Zombie,				ZombieType::FlagZombie,			ZombieType::ConeheadZombie, ZombieType::PoleVaultingZombie, ZombieType::BucketheadZombie,
+	ZombieType::Zombie,				ZombieType::FlagZombie,			ZombieType::ConeheadZombie,									ZombieType::BucketheadZombie,
 	ZombieType::NewspaperZombie,	ZombieType::ScreenDoorZombie,	ZombieType::FootballZombie, ZombieType::DancingZombie,		ZombieType::BackupDancer,
-	ZombieType::DuckyTubeZombie,	ZombieType::SnorkedZombie,		ZombieType::Zomboin,		ZombieType::ZombieBobsledTeam,	ZombieType::DolphinRiderZombie,
-	ZombieType::JackintheboxZombie,	ZombieType::BalloonZombie,		ZombieType::DiggerZombie,	ZombieType::PogoZombie,			ZombieType::ZombieYeti,
-									ZombieType::LadderZombie,		ZombieType::CatapultZombie, ZombieType::Gargantuar,			ZombieType::Imp,
+	ZombieType::DuckyTubeZombie,									ZombieType::Zomboin,		ZombieType::ZombieBobsledTeam,
+	ZombieType::JackintheboxZombie,	ZombieType::BalloonZombie,		ZombieType::DiggerZombie,									ZombieType::ZombieYeti,
+									ZombieType::LadderZombie,									ZombieType::Gargantuar,			ZombieType::Imp,
 									ZombieType::PeashooterZombie,	ZombieType::WallnutZombie,	ZombieType::JalapenoZombie,		ZombieType::GatlingPeaZombie,
 									ZombieType::TallnutZombie,		ZombieType::Gigagargantuar,
 };
