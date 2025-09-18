@@ -53,6 +53,10 @@ void onZombieInitAfter(MyZombie zombie)
 	
 	zombie.ColorFlag = 0;
 	zombie.HpPoint = 0;
+	if (zombie.Type != ZombieType::BalloonZombie)
+		zombie.SourceID = 0;
+	zombie.SourceLevel = 0;
+	zombie.GhostFlameMark = 0;
 
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
@@ -62,6 +66,17 @@ void onZombieInitAfter(MyZombie zombie)
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
 }
 
+static const ZombieType::ZombieType hypno_pool[] =
+{
+	ZombieType::Zombie,				ZombieType::FlagZombie,			ZombieType::ConeheadZombie, ZombieType::PoleVaultingZombie, ZombieType::BucketheadZombie,
+	ZombieType::NewspaperZombie,	ZombieType::ScreenDoorZombie,	ZombieType::FootballZombie, ZombieType::DancingZombie,		ZombieType::BackupDancer,
+	ZombieType::DuckyTubeZombie,	ZombieType::SnorkedZombie,		ZombieType::Zomboin,		ZombieType::ZombieBobsledTeam,	ZombieType::DolphinRiderZombie,
+	ZombieType::JackintheboxZombie,	ZombieType::BalloonZombie,		ZombieType::DiggerZombie,	ZombieType::PogoZombie,			ZombieType::ZombieYeti,
+									ZombieType::LadderZombie,		ZombieType::CatapultZombie, ZombieType::Gargantuar,			ZombieType::Imp,
+									ZombieType::PeashooterZombie,	ZombieType::WallnutZombie,	ZombieType::JalapenoZombie,		ZombieType::GatlingPeaZombie,
+									ZombieType::TallnutZombie,		ZombieType::Gigagargantuar,
+};
+
 void onRandomZombieDropHelm(MyZombie zombie)
 {
 	if (zombie.Type != ZombieType::ConeheadZombie)
@@ -69,16 +84,50 @@ void onRandomZombieDropHelm(MyZombie zombie)
 
 	zombie.Remove();
 
-	//非魅惑盲盒僵尸的随机池，魅惑盲盒的随机池后面再写
-	if (!zombie.Hypnotized)
+	int type = 0, elite_type = -1;
+	if (zombie.Hypnotized)
+		type = ::hypno_pool[Creator::Rand(sizeof(hypno_pool) / sizeof(ZombieType::ZombieType))];
+	else
 	{
-		int type = Creator::Rand(33);
+		elite_type = Creator::Rand(2);
+		type = Creator::Rand(33);
 		if (type == 25)type = 26;//僵王换豌豆
 		if (type == 20)type = 27;//蹦极换坚果
-		MyZombie child_zombie{ Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), zombie.Row, 0x0f) };
-		PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, zombie.Layer + 100, EffectType::IMITATER_TRANSFORMING);
-		child_zombie.X = zombie.X;
 
+		switch (type)
+		{
+		case ZombieType::Zombie:
+		case ZombieType::NewspaperZombie:
+		case ZombieType::JackintheboxZombie:
+		case ZombieType::PogoZombie:
+		case ZombieType::CatapultZombie:
+		case ZombieType::SquashZombie:
+		case ZombieType::PeashooterZombie:
+		case ZombieType::WallnutZombie:
+		case ZombieType::TallnutZombie:
+		case ZombieType::Gigagargantuar:
+			elite_type = -1;
+			break;
+		case ZombieType::FootballZombie:
+			if (elite_type > 0)
+				elite_type = 2;
+			break;
+		case ZombieType::FlagZombie:
+		case ZombieType::ScreenDoorZombie:
+			elite_type = Creator::Rand(3);
+			break;
+		}
+
+		elite_type = elite_type > 0 ? elite_type + WAVE_ELITE_MASK : -1;
+	}
+
+	MyBoard board = zombie.GetBoard();
+	MyZombie child_zombie{ board.AddZombieInRow(static_cast<ZombieType::ZombieType>(type), zombie.Row, elite_type) };
+	PVZ::CreateParticleSystem(zombie.X + 40.0f,zombie.Y + 65.0f,zombie.Layer+100,EffectType::IMITATER_TRANSFORMING);
+	child_zombie.X = zombie.X;
+
+	if (true)
+	{
 		int HpPoint = 1 + Creator::Rand(5);
 		if (CLOWN_ZOMBIE_POP_FLAG)
 			HpPoint = 5;
