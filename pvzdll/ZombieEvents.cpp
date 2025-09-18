@@ -50,6 +50,7 @@ void onZombieDropLoot(MyZombie zombie)
 void onZombieInitAfter(MyZombie zombie)
 {
 	zombie.IsWalkingBackwards = 0;
+	zombie.IsWeak = false;
 	
 	zombie.ColorFlag = 0;
 	zombie.HpPoint = 0;
