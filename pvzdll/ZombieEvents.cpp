@@ -327,7 +327,7 @@ void InitZombieEvents()
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
 	//覆盖原盲盒开盒
-	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0D0, 0)};
+	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));
 	//覆盖原金银特效
 	static constexpr byte asm_revert_2[] = { 0x83,0xBE,0xAC,0x00,0x00,0x00,0x00 };
