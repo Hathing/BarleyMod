@@ -336,7 +336,6 @@ void InitZombieEvents()
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
 	
-	//这里意义不明？希望解释一下
 	//ZombieEatSoundEvent((int)onZombieEatSound);
 
 	//修改冰道持续时间

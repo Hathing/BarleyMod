@@ -333,13 +333,6 @@ bool onThreepeaterLaunch(MyPlant plant)
 	return true;
 }
 
-bool onHypnoShroomEaten(MyPlant plant, MyZombie zombie)
-{
-	plant.Hp -= 100;
-	plant.HpDisplayCounter = 100;
-	return false;
-}
-
 int GetPlantFindTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
 {
 	return PlantAbility::GetAbility(plant.Type)->GetTargetZombiePriority(plant, zombie, original_priority);
@@ -377,7 +370,6 @@ void InitPlantEvents()
 
 	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
 
-	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
 	//目前不会崩溃了，但植物不索敌，暂时先去掉了
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
