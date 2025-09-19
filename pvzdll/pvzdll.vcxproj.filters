@@ -279,6 +279,9 @@
     <ClInclude Include="MyZombie\implement\DolphinRiderZombie.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyZombie\implement\NewspaperZombie.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

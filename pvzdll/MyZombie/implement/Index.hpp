@@ -1,6 +1,7 @@
 #pragma once
 #include "../ZombieAbility.hpp"
 #include "PoleVaulter.hpp"
+#include "NewspaperZombie.hpp"
 #include "ScreendoorZombie.hpp"
 #include "DancingZombie.hpp"
 #include "SnorkedZombie.hpp"
