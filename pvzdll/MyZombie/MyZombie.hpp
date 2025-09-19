@@ -25,6 +25,8 @@ public:
 	T_PROPERTY(byte, GhostFlameMark, __get_GhFM, __set_GhFM, 0x106);
 	/// @brief 被魅惑菇召唤时，魅惑菇的等级
 	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x107);
+	/// @brief 僵尸受攻击的动画附件的ID
+	INT_PROPERTY(HitReanimID, __get_HitReanimID, __set_HitReanimID, 0x110);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
 	T_PROPERTY(byte, IsWalkingBackwards, __get_IsWalkingBackwards, __set_IsWalkingBackwards, 0x13C);
 	/// @brief 僵尸寒意层数，上限30层，每层减速2%
@@ -54,15 +56,18 @@ public:
 	/// return 可攻击的僵尸
 	MyZombie FindZombieTarget();
 
-	// @brief 增加寒意值
-	// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！
-	// @param num 增加的数值
+	/// @brief 增加寒意值
+	/// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！
+	/// @param num 增加的数值
 	void AddFrost(int num);
-	// @brief 增加剧毒值
-	// @param num 增加的数值
+	/// @brief 增加剧毒值
+	/// @param num 增加的数值
 	void AddPoison(int num);
-	// @brief 增加燃烬值
-	// @param num 增加的数值
+	/// @brief 增加燃烬值
+	/// @param num 增加的数值
 	void AddFlame(int num);
 
+	/// @brief 判断僵尸是否被水草缠住
+	/// @return 是则返回True
+	bool IsTangleKelpTarget();
 };

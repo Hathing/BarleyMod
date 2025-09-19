@@ -88,3 +88,14 @@ void MyZombie::AddFlame(int num)
 	if (!this->ColorFlag)
 		this->ColorFlag = 3;
 }
+
+bool MyZombie::IsTangleKelpTarget()
+{
+	int result = PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EDI, this->GetBaseAddress())
+		.invoke(0x5324B0)
+		.mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret()
+	);
+	return result & 0x000000FF ;
+}

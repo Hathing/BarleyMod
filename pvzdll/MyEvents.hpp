@@ -314,6 +314,33 @@ namespace PVZEvent
 		}
 	};
 
+	/// @brief 原版缠绕海草+54=0时，自身死亡并击杀目标僵尸的事件
+	/// @param 触发事件的海草
+	/// @return False则跳过原版更新
+	class TangleKelpKillZombieEvent : public BoolDLLEventTemplate<0x4602D5, 6, 0x460316, REG_EDI>
+	{
+	public:
+		TangleKelpKillZombieEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		TangleKelpKillZombieEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		TangleKelpKillZombieEvent() : TangleKelpKillZombieEvent("onTangleKelpKillZombie") {};
+	};
+
+	/// @brief 原版缠绕海草抓住僵尸时的更新事件
+	/// @note 此事件发生在判断水草的+54=50、20、0之后！
+	/// @param 触发事件的海草
+	class TangleKelpUpdateGrabbingEvent : public DLLEventTemplate<0x460316, 5, REG_EDI>
+	{
+	public:
+		TangleKelpUpdateGrabbingEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		TangleKelpUpdateGrabbingEvent(int address) : DLLEventTemplate() { Init(address); };
+		TangleKelpUpdateGrabbingEvent() : TangleKelpUpdateGrabbingEvent("onTangleKelpUpdateGrabbing") {};
+		void InitExtra(AsmBuilder& builder)
+		{
+			//因为注入点在0x460316，为了防止意外访问，需要修改原版的一处跳转
+			PVZ::Memory::WriteMemory<int>(0x0046008B, 0x000000FF);
+		}
+	};
+
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x531070, 5, REG_EBP>
 	{
 	public:
@@ -537,6 +564,27 @@ namespace PVZEvent
 		{
 			builder.fstp_m32_esp_imm8(0x28);
 		}
+	};
+	/// @brief 僵尸出水的额外判断
+	/// @note 不影响原版中僵尸+BD=1且自身不在水格中的前置条件
+	/// @param 僵尸
+	/// @return False则不出水
+	class ZombieWalkOutOfWaterEvent : public BoolDLLEventTemplate<0x52F996, 7, 0x52F9AA, REG_EBP>
+	{
+	public:
+		ZombieWalkOutOfWaterEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieWalkOutOfWaterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieWalkOutOfWaterEvent() : ZombieWalkOutOfWaterEvent("onZombieWalkOutOfWater") {};
+	};
+	/// @brief 僵尸入水的额外判断
+	/// @param 僵尸
+	/// @return False则直接入水，True则正常进行原版判断（如果+BD=0且自身不在水格中则入水）
+	class ZombieWalkIntoWaterEvent : public BoolDLLEventTemplate<0x52F942, 6, 0x52F950, REG_EBP>
+	{
+	public:
+		ZombieWalkIntoWaterEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieWalkIntoWaterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieWalkIntoWaterEvent() : ZombieWalkIntoWaterEvent("onZombieWalkIntoWater") {};
 	};
 	/// @brief 判断僵尸是否反向事件
 	/// @param 僵尸

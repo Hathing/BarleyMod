@@ -340,6 +340,43 @@ bool onHypnoShroomEaten(MyPlant plant, MyZombie zombie)
 	return false;
 }
 
+bool onTangleKelpKillZombie(MyPlant plant)
+{
+	//MyZombie zombie = PVZ::GetByID<MyZombie>((unsigned int)plant.mTargetZombieID);
+	//zombie.RemoveWithLoot();
+	//移除僵尸的动画附件
+	//PVZ::Animation(zombie.HitReanimID).Die();
+	plant.State = PlantState::IDLE;
+	plant.mTargetZombieID = 0;
+	plant.AnotherCounter = 0;
+	//由于事件没配好，返回true的话会直接崩溃，S7的水草实际上也不过原版更新，只是利用这个事件在意外状况下重置水草状态，防止水草死亡，就先这样吧
+	return false;
+}
+
+void onTangleKelpUpdateGrabbing(MyPlant plant)
+{
+	MyZombie zombie = PVZ::GetByID<MyZombie>((unsigned int)plant.mTargetZombieID);
+	if (!zombie.isValid() || zombie.NotExist || !zombie.NotDying || zombie.Hypnotized || zombie.Blowaway)
+	{
+		//僵尸消失则重置水草状态
+		plant.State = PlantState::IDLE;
+		plant.mTargetZombieID = 0;
+		plant.AttributeCountdown = 0;
+		//重置冷却时间为4s
+		plant.AnotherCounter = 400;
+		return;
+	}
+	//水草抓住正常僵尸时，锁定自己的+54倒计时，这意味着水草实际上不会经过将僵尸拖下水的特效音效处理（+54=50、+54=20）和死亡处理（+54=0）。
+	plant.AttributeCountdown = 100;//此处代码已经移至水草的TickAbility中。
+	if (plant.TangleKelpDoEffectCountdown <= 0)
+	{
+		//水草每1s为僵尸施加5层毒
+		plant.TangleKelpDoEffectCountdown = 100;
+		zombie.LastDamageSourceID = plant.Id;
+		zombie.AddPoison(5);
+	}
+}
+
 int GetPlantFindTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
 {
 	return PlantAbility::GetAbility(plant.Type)->GetTargetZombiePriority(plant, zombie, original_priority);
@@ -370,14 +407,18 @@ void InitPlantEvents()
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
 
+	//磁力菇
 	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
 	PVZEvent::MagnetShroomMoveItemEvent((int)onMagnetShroomMoveItem);
 	PVZEvent::MagnetShroomAttractItemEvent((int)onMagnetShroomAttractItem);
 	PVZEvent::MagnetShroomClearItemEvent((int)onMagnetShroomClearItem);
-
+	//三线射手
 	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
-
+	//魅惑菇
 	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
+	//缠绕海草
+	PVZEvent::TangleKelpKillZombieEvent((int)onTangleKelpKillZombie);
+	PVZEvent::TangleKelpUpdateGrabbingEvent((int)onTangleKelpUpdateGrabbing);
 	//目前不会崩溃了，但植物不索敌，暂时先去掉了
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
@@ -391,9 +432,6 @@ void InitPlantEvents()
 	PVZ::Memory::WriteArray<const byte>(0x45F40C, STRING(asm_revert_threepeater1));
 	static constexpr byte asm_revert_threepeater2[] = { 0xEB,0x21,0x90 };
 	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
-	//水草拉僵尸不死
-	static constexpr byte asm_revert_tanglekelp[] = { 0x66,0x0F,0x1F,0x44,0x00,0x00 };//NOP 6
-	PVZ::Memory::WriteArray<const byte>(0x4602D5, STRING(asm_revert_tanglekelp));
 	//水草可以拉陆地僵尸
 	PVZ::Memory::WriteMemory<byte>(0x4677A6, 0xEB);
 }

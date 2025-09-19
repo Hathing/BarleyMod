@@ -179,6 +179,9 @@ void onLoadPlainZombieReanimBefore(MyZombie zombie)
 
 float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
 {
+	if (zombie.IsTangleKelpTarget())
+		return 0.0f;
+
 	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40)
 		return velocity * 2.0f;
 	return velocity;
@@ -306,6 +309,20 @@ bool onZombieEatSound(MyZombie zombie, MyPlant plant)
 	return true;
 }
 
+bool onZombieWalkIntoWater(MyZombie zombie)
+{
+	if (!zombie.InWater && zombie.IsTangleKelpTarget())
+		return false;
+	return true;
+}
+
+bool onZombieWalkOutOfWater(MyZombie zombie)
+{
+	if (zombie.IsTangleKelpTarget())
+		return false;
+	return true;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -323,6 +340,9 @@ void InitZombieEvents()
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
 	ZombieEatSoundEvent((int)onZombieEatSound);
+	PVZEvent::ZombieWalkIntoWaterEvent((int)onZombieWalkIntoWater);
+	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
+
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
