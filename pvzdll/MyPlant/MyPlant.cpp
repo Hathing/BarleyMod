@@ -11,7 +11,7 @@ namespace PlantAbility
 		new PuffShroom(), new SunShroom(), new FumeShroom(), new NilPlant(),
 		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NilPlant(),
 
-		new DiamondShroom(), new Squash(), new Threepeater(), new NoEasterSkinPlant(),
+		new DiamondShroom(), new Squash(), new Threepeater(), new TangleKelp(),
 		new NilPlant(),  new Spikeweed(), new Torchwood(), new TallNut(),
 
 		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),

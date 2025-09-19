@@ -391,4 +391,9 @@ void InitPlantEvents()
 	PVZ::Memory::WriteArray<const byte>(0x45F40C, STRING(asm_revert_threepeater1));
 	static constexpr byte asm_revert_threepeater2[] = { 0xEB,0x21,0x90 };
 	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
+	//水草拉僵尸不死
+	static constexpr byte asm_revert_tanglekelp[] = { 0x66,0x0F,0x1F,0x44,0x00,0x00 };//NOP 6
+	PVZ::Memory::WriteArray<const byte>(0x4602D5, STRING(asm_revert_tanglekelp));
+	//水草可以拉陆地僵尸
+	PVZ::Memory::WriteMemory<byte>(0x4677A6, 0xEB);
 }
