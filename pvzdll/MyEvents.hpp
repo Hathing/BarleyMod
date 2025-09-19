@@ -201,7 +201,7 @@ namespace PVZEvent
 		ProjectileImpactEvent() : ProjectileImpactEvent("onProjectileImpact") {};
 	};
 
-	/// @brief 子弹击中僵尸事件
+	/// @brief 植物发射子弹后，给子弹赋值DRF(+74)之后的事件
 	/// @param 依次为：触发事件的子弹，发射子弹的植物
 	class PlantAddProjDamageRangeFlagsEvent : public DLLEventTemplate<0x4672CA, 6, REG_EBP, REG_ECX>
 	{

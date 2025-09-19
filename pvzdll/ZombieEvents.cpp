@@ -175,7 +175,7 @@ bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, 
 			zombie.X += 50.0f;//击退距离
 			//这里应该将 僵尸伤害植物 和 植物伤害僵尸 和 子弹伤害僵尸 分别封装成一个函数，避免某些原本该触发的事件未触发
 			zombie.Hit(200, PVZ::DAMAGEF_NONE);
-			int damage = onPlantTakeDamage(plant, zombie, GameObjectType::OBJECT_TYPE_NONE, 500);//这里object type没有僵尸？
+			int damage = onPlantTakeDamage(plant, zombie, GameObjectType::OBJECT_TYPE_NONE, 500);
 			plant.Hp -= damage;//植物碾压受伤
 			return false;
 		}
@@ -342,7 +342,7 @@ void InitZombieEvents()
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
 	//覆盖原盲盒开盒
-	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0D0, 0)};
+	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));
 	//覆盖原金银特效
 	static constexpr byte asm_revert_2[] = { 0x83,0xBE,0xAC,0x00,0x00,0x00,0x00 };
