@@ -148,6 +148,19 @@ void onRandomZombieDropHelm(MyZombie zombie)
 
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
 {
+	if (plant.Type == SeedType::Hypnoshroom && source_type == GameObjectType::OBJECT_TYPE_NONE && source.isValid())
+	{
+		MyZombie zombie{ source.GetBaseAddress()};
+		//魅惑菇对僵尸的处理
+		if (!zombie.Hypnotized)
+		{
+			Creator::CreateLowerSound(LowerSoundType::Hypnotize);
+			zombie.Hypnotize();
+			PVZ::CreateParticleSystem(zombie.X + 60.0f, zombie.Y + 40.0f,zombie.Layer + 1, EffectType::ZOMBIE_HYPNOTIZED);
+			zombie.UpdateAnimSpeed();
+		}
+		return 100;
+	}
 	return damage;
 }
 
@@ -322,7 +335,9 @@ void InitZombieEvents()
 	PVZEvent::ZombieUpdateActionEXEvent((int)onZombieUpdateAction);
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
-	ZombieEatSoundEvent((int)onZombieEatSound);
+	
+	//这里意义不明？希望解释一下
+	//ZombieEatSoundEvent((int)onZombieEatSound);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

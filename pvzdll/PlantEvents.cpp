@@ -391,4 +391,10 @@ void InitPlantEvents()
 	PVZ::Memory::WriteArray<const byte>(0x45F40C, STRING(asm_revert_threepeater1));
 	static constexpr byte asm_revert_threepeater2[] = { 0xEB,0x21,0x90 };
 	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
+	//魅惑菇禁用原版的啃咬判定条件
+	static constexpr byte asm_revert_hypnoshroom1[] = { 0xE9,0xCF,0x00,0x00,0x00,0x90 };
+	PVZ::Memory::WriteArray<const byte>(0x52B96A, STRING(asm_revert_hypnoshroom1));
+	//魅惑菇允许被啃扣血
+	static constexpr byte asm_revert_hypnoshroom2[] = { 0xEB,0x24 };
+	PVZ::Memory::WriteArray<const byte>(0x52FC0B, STRING(asm_revert_hypnoshroom2));
 }
