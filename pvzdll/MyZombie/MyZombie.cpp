@@ -7,7 +7,7 @@ namespace ZombieAbility
 	{
 		new BaseZombie(), new BaseZombie(), new BaseZombie(), new PoleVaulter(), new BaseZombie(),
 		new BaseZombie(), new ScreenDoorZombie(), new BaseZombie(), new DancingZombie(), new BaseZombie(),
-		new BaseZombie(), new SnorkedZombie(), new Zomboni(),    new BaseZombie(), new BaseZombie(),
+		new BaseZombie(), new SnorkedZombie(), new Zomboni(),    new BaseZombie(), new DolphinRiderZombie(),
 		new ClownZombie(), new BaseZombie(), new DiggerZombie(), new PogoZombie(), new BaseZombie(),
 		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new Gargantaur(), new BaseZombie(),
 
