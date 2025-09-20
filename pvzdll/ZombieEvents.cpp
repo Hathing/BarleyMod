@@ -332,6 +332,11 @@ bool onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 	return true;
 }
 
+bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
+{
+	return zombie.FromWave < WAVE_ELITE_MASK;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -352,6 +357,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieWalkIntoWaterEvent((int)onZombieWalkIntoWater);
 	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
 	PVZEvent::ZombieCanTargetPlantEvent((int)onZombieCanTargetPlant);
+	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
