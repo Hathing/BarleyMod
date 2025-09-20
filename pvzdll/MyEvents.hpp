@@ -614,6 +614,8 @@ namespace PVZEvent
 	/// @brief 僵尸能否将植物作为目标的额外判断，优先级高于原版
 	/// @param 僵尸，植物，攻击方式(0(啃食/锤砸) | 1(车类碾压) | 2(跳跃) | 3(搭梯))
 	/// @return False则直接不攻击植物，True则正常原版判断
+	/// @note 该事件暂时被PVZClass的ZombieTargetPlant替代
+	/// @deprecated
 	class ZombieCanTargetPlantEvent : public BoolDLLEventTemplate<0x52E500, 6, 0x52E578, MEM_ESP_ADD(0x4C), REG_ESI, REG_EBP>
 	{
 	public:
