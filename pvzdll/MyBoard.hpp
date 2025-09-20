@@ -34,8 +34,10 @@ public:
 
 	PVZ::Griditem AddGriditem(GriditemType::GriditemType type, int row, int column);
 
-	int MyBoard::PixelToGridX(int x, int y);
-	int MyBoard::PixelToGridXKeepOnBoard(int x, int y);
-	int MyBoard::PixelToGridY(int x, int y);
-	int MyBoard::PixelToGridYKeepOnBoard(int x, int y);
+	int PixelToGridX(int x, int y);
+	int PixelToGridXKeepOnBoard(int x, int y);
+	int PixelToGridY(int x, int y);
+	int PixelToGridYKeepOnBoard(int x, int y);
+
+	void GetPlantsOnLawn(int x, int y, PlantOnLawn& plants);
 };

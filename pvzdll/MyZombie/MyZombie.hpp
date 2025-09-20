@@ -46,6 +46,8 @@ public:
 	
 	/// @brief 读报的怒气层数，掉报纸期间每受到一次伤害就增加一层
 	INT_PROPERTY(NewspaperAngerStack, __get_NewspaperAngerStack, __set_NewspaperAngerStack, 0xF0);
+	/// @brief 矿工上次刨根的列数
+	INT_PROPERTY(DiggerLastDigRootColumn, __get_DiggerLastDigRootColumn, __set_DiggerLastDigRootColumnn, 0xF0);
 
 	/// @brief 获取该僵尸掉落的经验值
 	/// @return 掉落的经验值
@@ -77,4 +79,6 @@ public:
 	/// @brief 判断僵尸是否被水草缠住
 	/// @return 是则返回True
 	bool IsTangleKelpTarget();
+	/// @brief 矿工失去镐子
+	void DiggerLoseAxe();
 };

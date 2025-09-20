@@ -80,3 +80,15 @@ int MyBoard::PixelToGridYKeepOnBoard(int x, int y)
 		.ret()
 	);
 }
+
+void MyBoard::GetPlantsOnLawn(int x, int y, PlantOnLawn& plants)
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32(y)
+		.push_imm32(x)
+		.mov_reg_imm(REG_EBX, (uint32_t)&plants)
+		.mov_reg_imm(REG_EDX, this->BaseAddress)
+		.invoke(0x40D2A0)
+		.ret()
+	);
+}

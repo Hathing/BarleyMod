@@ -6,6 +6,14 @@
 
 typedef bool mybool;
 
+struct PlantOnLawn
+{
+	PVZ::Plant BottomPlant;
+	PVZ::Plant PumpkinPlant;
+	PVZ::Plant FlyingPlant;
+	PVZ::Plant MainPlant;
+	PlantOnLawn(): BottomPlant(0), PumpkinPlant(0), FlyingPlant(0), MainPlant(0){}
+};
 
 /// @brief 各种子弹的特殊标记
 typedef unsigned char ProjSpecialFlags;

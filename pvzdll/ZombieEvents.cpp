@@ -266,10 +266,30 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 bool onZombieUpdateAction(MyZombie zombie)
 {
 	//这里是所有僵尸在未定身时必经的更新
+	MyBoard board = zombie.GetBoard();
 	//小丑僵尸爆炸
 	if (zombie.Type == ZombieType::JackintheboxZombie && zombie.State == ZombieState::JACKBOX_WALKING && ((!zombie.Hypnotized && zombie.IsWalkingBackwards == 0) || (zombie.Hypnotized && zombie.X > 725.0f)))
 	{
 		zombie.AttributeCountdown = 0;
+	}
+	if (zombie.Type == ZombieType::DiggerZombie && zombie.State==ZombieState::DIGGER_DIG)
+	{
+		int col = board.PixelToGridXKeepOnBoard(zombie.X + 80.0f, zombie.Y);
+		if (col < zombie.DiggerLastDigRootColumn)
+		{
+			zombie.DiggerLastDigRootColumn = col;
+			PlantOnLawn dug_plants{};
+			board.GetPlantsOnLawn(col, zombie.Row, dug_plants);
+			MyPlant dugplant = dug_plants.MainPlant;
+			//不知道为什么，当矿工没挖到植物时，dugplant会莫名指向场上的其他植物，原因未知，好像是40D2A0自身的特性？
+			//下面暂时加了一个特殊判定
+			if (dugplant.isValid() && dugplant.Row == zombie.Row && dugplant.Column == col)
+			{
+				dugplant.HpDisplayCounter = 100;
+				if (dugplant.Type == SeedType::Spikerock)
+					zombie.DiggerLoseAxe();
+			}
+		}
 	}
 	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
 }

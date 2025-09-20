@@ -104,3 +104,12 @@ bool MyZombie::IsTangleKelpTarget()
 	);
 	return result & 0x000000FF ;
 }
+
+void MyZombie::DiggerLoseAxe()
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EAX, this->GetBaseAddress())
+		.invoke(0x528240)
+		.ret()
+	);
+}
