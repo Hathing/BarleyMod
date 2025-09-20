@@ -44,6 +44,9 @@ public:
 	/// @brief 最近受到伤害的来源植物 ID
 	INT_PROPERTY(LastDamageSourceID, __get_LaDSID, __set_LaDSID, 0x148);
 	
+	/// @brief 读报的怒气层数，掉报纸期间每受到一次伤害就增加一层
+	INT_PROPERTY(NewspaperAngerStack, __get_NewspaperAngerStack, __set_NewspaperAngerStack, 0xF0);
+
 	/// @brief 获取该僵尸掉落的经验值
 	/// @return 掉落的经验值
 	int GetBountyXP();

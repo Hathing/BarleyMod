@@ -623,6 +623,16 @@ namespace PVZEvent
 		ZombieCanTargetPlantEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieCanTargetPlantEvent() : ZombieCanTargetPlantEvent("onZombieCanTargetPlant") {};
 	};
+	/// @brief 僵尸在切换状态时，调用原版PickRandomSpeed获取并重置移速的事件
+	/// @param 僵尸
+	/// @return False则直接返回，True则正常原版
+	class ZombiePickRandomSpeedEvent : public BoolDLLEventTemplate<0x524A70, 7, 0x524A8C, REG_EAX>
+	{
+	public:
+		ZombiePickRandomSpeedEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombiePickRandomSpeedEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombiePickRandomSpeedEvent() : ZombiePickRandomSpeedEvent("onZombiePickRandomSpeed") {};
+	};
 	/// @brief 僵尸施加动画速度事件，主要是处理减速相关
 	/// @param 僵尸、动画、原速率
 	/// @return 修改后的动画速率（浮点数）

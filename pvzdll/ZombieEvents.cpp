@@ -334,7 +334,27 @@ int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 
 int onZombieTakeDmg(MyZombie zombie,PVZ::DamageFlags dmg_flags,int dmg)
 {
+	//读报无敌
+	if (zombie.State == ZombieState::NEWSPAPER_DESTORYED)
+	{
+		//防止毒之类的伤害疯狂刷读报怒气
+		if (dmg_flags != PVZ::DAMAGEF_NOFLASH && zombie.NewspaperAngerStack < 20)
+		{
+			zombie.NewspaperAngerStack += 1;
+		}
+		return 0;
+	}
 	return dmg;
+}
+
+bool onZombiePickRandomSpeed(MyZombie zombie)
+{
+	if (zombie.State == ZombieState::NEWSPAPER_RUNNING)
+	{
+		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 10.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
+		return false;
+	}
+	return true;
 }
 
 bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
@@ -363,6 +383,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
 	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
+	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
 
