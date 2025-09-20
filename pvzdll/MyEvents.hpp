@@ -314,6 +314,42 @@ namespace PVZEvent
 		}
 	};
 
+	/// @brief 原版缠绕海草+54=0时，自身死亡并击杀目标僵尸的事件
+	/// @param 触发事件的海草
+	/// @return False则跳过原版更新
+	class TangleKelpKillZombieEvent : public BoolDLLEventTemplate<0x4602D5, 6, 0x460316, REG_EDI>
+	{
+	public:
+		TangleKelpKillZombieEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		TangleKelpKillZombieEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		TangleKelpKillZombieEvent() : TangleKelpKillZombieEvent("onTangleKelpKillZombie") {};
+	};
+
+	/// @brief 原版缠绕海草抓住僵尸时的更新事件
+	/// @note 此事件发生在判断水草的+54=50、20、0之后！
+	/// @param 触发事件的海草
+	class TangleKelpUpdateGrabbingEvent : public DLLEventTemplate<0x460316, 5, REG_EDI>
+	{
+	public:
+		TangleKelpUpdateGrabbingEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		TangleKelpUpdateGrabbingEvent(int address) : DLLEventTemplate() { Init(address); };
+		TangleKelpUpdateGrabbingEvent() : TangleKelpUpdateGrabbingEvent("onTangleKelpUpdateGrabbing") {};
+		void InitExtra(AsmBuilder& builder)
+		{
+			//因为注入点在0x460316，为了防止意外访问，需要修改原版的一处跳转
+			PVZ::Memory::WriteMemory<int>(0x0046008B, 0x000000FF);
+		}
+	};
+	/// @brief 原版缠绕海草寻找到僵尸并获取目标后的事件
+	/// @param 触发事件的海草、寻找到的僵尸
+	class TangleKelpTargetAfterEvent : public DLLEventTemplate<0x460188, 6, REG_ESI, REG_EDI>
+	{
+	public:
+		TangleKelpTargetAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		TangleKelpTargetAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		TangleKelpTargetAfterEvent() : TangleKelpTargetAfterEvent("onTangleKelpTargetAfter") {};
+	};
+
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x531070, 5, REG_EBP>
 	{
 	public:
@@ -538,6 +574,27 @@ namespace PVZEvent
 			builder.fstp_m32_esp_imm8(0x28);
 		}
 	};
+	/// @brief 僵尸出水的额外判断
+	/// @note 不影响原版中僵尸+BD=1且自身不在水格中的前置条件
+	/// @param 僵尸
+	/// @return False则不出水
+	class ZombieWalkOutOfWaterEvent : public BoolDLLEventTemplate<0x52F996, 7, 0x52F9AA, REG_EBP>
+	{
+	public:
+		ZombieWalkOutOfWaterEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieWalkOutOfWaterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieWalkOutOfWaterEvent() : ZombieWalkOutOfWaterEvent("onZombieWalkOutOfWater") {};
+	};
+	/// @brief 僵尸入水的额外判断
+	/// @param 僵尸
+	/// @return False则直接入水，True则正常进行原版判断（如果+BD=0且自身不在水格中则入水）
+	class ZombieWalkIntoWaterEvent : public BoolDLLEventTemplate<0x52F942, 6, 0x52F950, REG_EBP>
+	{
+	public:
+		ZombieWalkIntoWaterEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieWalkIntoWaterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieWalkIntoWaterEvent() : ZombieWalkIntoWaterEvent("onZombieWalkIntoWater") {};
+	};
 	/// @brief 判断僵尸是否反向事件
 	/// @param 僵尸
 	/// @return 负数则调用原版函数，0则返回false，1则返回true
@@ -553,6 +610,28 @@ namespace PVZEvent
 			builder.cmp_reg_imm(REG_EAX,0).jl_rel(6);
 			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX).popad().ret();
 		}
+	};
+	/// @brief 僵尸能否将植物作为目标的额外判断，优先级高于原版
+	/// @param 僵尸，植物，攻击方式(0(啃食/锤砸) | 1(车类碾压) | 2(跳跃) | 3(搭梯))
+	/// @return False则直接不攻击植物，True则正常原版判断
+	/// @note 该事件暂时被PVZClass的ZombieTargetPlant替代
+	/// @deprecated
+	class ZombieCanTargetPlantEvent : public BoolDLLEventTemplate<0x52E500, 6, 0x52E578, MEM_ESP_ADD(0x4C), REG_ESI, REG_EBP>
+	{
+	public:
+		ZombieCanTargetPlantEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieCanTargetPlantEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieCanTargetPlantEvent() : ZombieCanTargetPlantEvent("onZombieCanTargetPlant") {};
+	};
+	/// @brief 僵尸在切换状态时，调用原版PickRandomSpeed获取并重置移速的事件
+	/// @param 僵尸
+	/// @return False则直接返回，True则正常原版
+	class ZombiePickRandomSpeedEvent : public BoolDLLEventTemplate<0x524A70, 7, 0x524A8C, REG_EAX>
+	{
+	public:
+		ZombiePickRandomSpeedEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombiePickRandomSpeedEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombiePickRandomSpeedEvent() : ZombiePickRandomSpeedEvent("onZombiePickRandomSpeed") {};
 	};
 	/// @brief 僵尸施加动画速度事件，主要是处理减速相关
 	/// @param 僵尸、动画、原速率
@@ -650,8 +729,8 @@ namespace PVZEvent
 	/// @note 该事件与 ZombieUpdateActionEvent 基本一致，只是返回值不同
 	/// @param 更新的 Zombie
 	/// @return 是否更新原版行为动作
-	/// @retval false 完全跳过原版的任何行为动作。这会导致原生技能失效。
-	class ZombieUpdateActionEXEvent : public BoolDLLEventTemplate<0x52B112, 6, REG_EAX>
+	/// @retval false 完全跳过原版的任何行为动作，这会导致原生技能失效，同时包括关于运动的检测！不建议跳过。
+	class ZombieUpdateActionEXEvent : public BoolDLLEventTemplate<0x52B112, 6, 0x52B279, REG_EAX>
 	{
 	public:
 		ZombieUpdateActionEXEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateAction"); };

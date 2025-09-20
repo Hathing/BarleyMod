@@ -49,6 +49,8 @@ public:
 	T_PROPERTY(byte, WinterMelonCastState, __get_WinterMelonCastState, __set_WinterMelonCastState, 0x0E0);
 	/// @brief 冰瓜散射计数，0=正常，>0表示单轮散射个数
 	INT_PROPERTY(WinterMelonScatterCount, __get_WinterMelonScatterNum, __set_WinterMelonScatterNum, 0x0E4);
+	/// @brief 水草对抓取目标施加效果的倒计时
+	INT_PROPERTY(TangleKelpDoEffectCountdown, __get_TangleKelpDoEffectCountdown, __set_TangleKelpDoEffectCountdown, 0x0E0);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 减速效果倒计时

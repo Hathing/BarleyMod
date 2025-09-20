@@ -75,6 +75,9 @@
     <ClInclude Include="MyPlant\implement\Threepeater.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+	<ClInclude Include="MyPlant\implement\TangleKelp.hpp">
+		<Filter>头文件</Filter>
+	</ClInclude>
     <ClInclude Include="MyPlant\implement\Repeater.hpp">
       <Filter>头文件</Filter>
     </ClInclude>

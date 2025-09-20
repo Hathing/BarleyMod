@@ -13,6 +13,7 @@
 #include "DiamondShroom.hpp"
 #include "Squash.hpp"
 #include "Threepeater.hpp"
+#include "TangleKelp.hpp"
 #include "Spikeweed.hpp"
 #include "Torchwood.hpp"
 #include "TallNut.hpp"

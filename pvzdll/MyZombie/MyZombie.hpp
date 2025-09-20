@@ -27,8 +27,8 @@ public:
 	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x107);
 	/// @brief 豌豆僵尸变种类型
 	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
-	/// @brief 大蒜状态
-	INT_PROPERTY(GarlicStatus, __get_GaS, __set_GaS, 0x13C);
+	/// @brief 僵尸受攻击的动画附件的ID
+	INT_PROPERTY(HitReanimID, __get_HitReanimID, __set_HitReanimID, 0x110);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
 	T_PROPERTY(byte, IsWalkingBackwards, __get_IsWalkingBackwards, __set_IsWalkingBackwards, 0x13C);
 	/// @brief 僵尸寒意层数，上限30层，每层减速2%
@@ -44,6 +44,11 @@ public:
 	/// @brief 最近受到伤害的来源植物 ID
 	INT_PROPERTY(LastDamageSourceID, __get_LaDSID, __set_LaDSID, 0x148);
 	
+	/// @brief 读报的怒气层数，掉报纸期间每受到一次伤害就增加一层
+	INT_PROPERTY(NewspaperAngerStack, __get_NewspaperAngerStack, __set_NewspaperAngerStack, 0xF0);
+	/// @brief 矿工上次刨根的列数
+	INT_PROPERTY(DiggerLastDigRootColumn, __get_DiggerLastDigRootColumn, __set_DiggerLastDigRootColumnn, 0xF0);
+
 	/// @brief 获取该僵尸掉落的经验值
 	/// @return 掉落的经验值
 	int GetBountyXP();
@@ -57,16 +62,23 @@ public:
 	/// @brief 寻找可攻击的僵尸目标，封装的原版函数
 	/// return 可攻击的僵尸
 	MyZombie FindZombieTarget();
+	/// @brief 使僵尸停止啃咬
+	void StopEating();
 
-	// @brief 增加寒意值
-	// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！
-	// @param num 增加的数值
+	/// @brief 增加寒意值
+	/// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！
+	/// @param num 增加的数值
 	void AddFrost(int num);
-	// @brief 增加剧毒值
-	// @param num 增加的数值
+	/// @brief 增加剧毒值
+	/// @param num 增加的数值
 	void AddPoison(int num);
-	// @brief 增加燃烬值
-	// @param num 增加的数值
+	/// @brief 增加燃烬值
+	/// @param num 增加的数值
 	void AddFlame(int num);
 
+	/// @brief 判断僵尸是否被水草缠住
+	/// @return 是则返回True
+	bool IsTangleKelpTarget();
+	/// @brief 矿工失去镐子
+	void DiggerLoseAxe();
 };

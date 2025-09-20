@@ -179,6 +179,9 @@ void onLoadPlainZombieReanimBefore(MyZombie zombie)
 
 float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
 {
+	if (zombie.IsTangleKelpTarget())
+		return 0.0f;
+
 	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40)
 		return velocity * 2.0f;
 	return velocity;
@@ -263,10 +266,30 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 bool onZombieUpdateAction(MyZombie zombie)
 {
 	//这里是所有僵尸在未定身时必经的更新
+	MyBoard board = zombie.GetBoard();
 	//小丑僵尸爆炸
 	if (zombie.Type == ZombieType::JackintheboxZombie && zombie.State == ZombieState::JACKBOX_WALKING && ((!zombie.Hypnotized && zombie.IsWalkingBackwards == 0) || (zombie.Hypnotized && zombie.X > 725.0f)))
 	{
 		zombie.AttributeCountdown = 0;
+	}
+	if (zombie.Type == ZombieType::DiggerZombie && zombie.State==ZombieState::DIGGER_DIG)
+	{
+		int col = board.PixelToGridXKeepOnBoard(zombie.X + 80.0f, zombie.Y);
+		if (col < zombie.DiggerLastDigRootColumn)
+		{
+			zombie.DiggerLastDigRootColumn = col;
+			PlantOnLawn dug_plants{};
+			board.GetPlantsOnLawn(col, zombie.Row, dug_plants);
+			MyPlant dugplant = dug_plants.MainPlant;
+			//不知道为什么，当矿工没挖到植物时，dugplant会莫名指向场上的其他植物，原因未知，好像是40D2A0自身的特性？
+			//下面暂时加了一个特殊判定
+			if (dugplant.isValid() && dugplant.Row == zombie.Row && dugplant.Column == col)
+			{
+				dugplant.HpDisplayCounter = 100;
+				if (dugplant.Type == SeedType::Spikerock)
+					zombie.DiggerLoseAxe();
+			}
+		}
 	}
 	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
 }
@@ -306,6 +329,69 @@ bool onZombieEatSound(MyZombie zombie, MyPlant plant)
 	return true;
 }
 
+bool onZombieWalkIntoWater(MyZombie zombie)
+{
+	if (!zombie.InWater && zombie.IsTangleKelpTarget())
+		return false;
+	return true;
+}
+
+bool onZombieWalkOutOfWater(MyZombie zombie)
+{
+	if (zombie.IsTangleKelpTarget() || !zombie.NotDying)
+		return false;
+	return true;
+}
+
+int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
+{
+	if (zombie.IsTangleKelpTarget())
+	{
+		return 0;
+	}
+	if (zombie.State == ZombieState::DIGGER_WALK_RIGHT && zombie.X < 130)
+		return 0;
+	return -1;
+}
+
+int onZombieTakeDmg(MyZombie zombie,PVZ::DamageFlags dmg_flags,int dmg)
+{
+	//读报无敌
+	if (zombie.State == ZombieState::NEWSPAPER_DESTORYED)
+	{
+		//防止毒之类的伤害疯狂刷读报怒气
+		if (dmg_flags != PVZ::DAMAGEF_NOFLASH && zombie.NewspaperAngerStack < 20)
+		{
+			zombie.NewspaperAngerStack += 1;
+		}
+		return 0;
+	}
+	return dmg;
+}
+
+bool onZombiePickRandomSpeed(MyZombie zombie)
+{
+	if (zombie.State == ZombieState::NEWSPAPER_RUNNING)
+	{
+		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 5.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
+		return false;
+	}
+
+	switch (zombie.State)
+	{
+	case ZombieState::NEWSPAPER_RUNNING:
+		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 5.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
+		return false;
+	case ZombieState::DIGGER_WALK_RIGHT:
+		zombie.SetSpeed(0.24f);
+		return false;
+	default:
+		break;
+	}
+
+	return true;
+}
+
 bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 {
 	return zombie.FromWave < WAVE_ELITE_MASK;
@@ -328,10 +414,20 @@ void InitZombieEvents()
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
 	ZombieEatSoundEvent((int)onZombieEatSound);
+	PVZEvent::ZombieWalkIntoWaterEvent((int)onZombieWalkIntoWater);
+	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
+	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
+	ZombieTakeDmgEvent((int)onZombieTakeDmg);
+	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
+
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
+	//矿工正常出土时右行而非左行
+	PVZ::Memory::WriteMemory<int>(0x52874E, 0x00000025);
+	//矿工从底线出土
+	PVZ::Memory::WriteMemory<int>(0x528334, 0x0000041F);
 	//覆盖原盲盒开盒
 	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));

@@ -33,4 +33,11 @@ public:
 	PVZ::Zombie AddZombieInRow(ZombieType::ZombieType type, int row, int from_wave);
 
 	PVZ::Griditem AddGriditem(GriditemType::GriditemType type, int row, int column);
+
+	int PixelToGridX(int x, int y);
+	int PixelToGridXKeepOnBoard(int x, int y);
+	int PixelToGridY(int x, int y);
+	int PixelToGridYKeepOnBoard(int x, int y);
+
+	void GetPlantsOnLawn(int x, int y, PlantOnLawn& plants);
 };
