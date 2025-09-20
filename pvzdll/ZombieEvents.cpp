@@ -351,7 +351,7 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 {
 	if (zombie.State == ZombieState::NEWSPAPER_RUNNING)
 	{
-		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 10.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
+		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 5.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
 		return false;
 	}
 	return true;

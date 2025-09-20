@@ -22,13 +22,17 @@ int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType
 
 	if (zombie.NotDying && !zombie.NotExist)
 	{
-		auto caster = MyPlant::GetByID(proj.ParentID).GetOwner();
-		if (type == PVZEvent::ProjDmgType::DAMAGE_SINGULAR)
-			zombie.LastDamageSourceID = caster.Id;
-		else
+		auto plant = MyPlant::GetByID(proj.ParentID);
+		if (plant.isValid())
 		{
-			if (caster.isValid() && caster.Row == zombie.Row)
+			auto caster = plant.GetOwner();
+			if (type == PVZEvent::ProjDmgType::DAMAGE_SINGULAR)
 				zombie.LastDamageSourceID = caster.Id;
+			else
+			{
+				if (caster.isValid() && caster.Row == zombie.Row)
+					zombie.LastDamageSourceID = caster.Id;
+			}
 		}
 	}
 	ProjectileAbility::GetAbility(proj.Type)->onDamageZombie(proj, zombie, type, subtarget_num, mydamage);
