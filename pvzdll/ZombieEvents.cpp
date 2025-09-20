@@ -329,6 +329,8 @@ int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 	{
 		return 0;
 	}
+	if (zombie.State == ZombieState::DIGGER_WALK_RIGHT && zombie.X < 130)
+		return 0;
 	return -1;
 }
 
@@ -354,6 +356,19 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 5.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
 		return false;
 	}
+
+	switch (zombie.State)
+	{
+	case ZombieState::NEWSPAPER_RUNNING:
+		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 5.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
+		return false;
+	case ZombieState::DIGGER_WALK_RIGHT:
+		zombie.SetSpeed(0.24f);
+		return false;
+	default:
+		break;
+	}
+
 	return true;
 }
 
@@ -389,6 +404,10 @@ void InitZombieEvents()
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
+	//矿工正常出土时右行而非左行
+	PVZ::Memory::WriteMemory<int>(0x52874E, 0x00000025);
+	//矿工从底线出土
+	PVZ::Memory::WriteMemory<int>(0x528334, 0x0000041F);
 	//覆盖原盲盒开盒
 	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));
