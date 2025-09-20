@@ -113,3 +113,23 @@ void MyZombie::DiggerLoseAxe()
 		.ret()
 	);
 }
+
+int MyZombie::FindCatapultTarget()
+{
+	return PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32( this->GetBaseAddress())
+		.invoke(0x525890)
+		.mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret()
+	);
+}
+
+void MyZombie::ZombieCatapultFire(int targetaddr)
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EAX, targetaddr)
+		.mov_reg_imm(REG_ECX, this->GetBaseAddress())
+		.invoke(0x525730)
+		.ret()
+	);
+}

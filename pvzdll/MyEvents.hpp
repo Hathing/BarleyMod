@@ -745,6 +745,33 @@ namespace PVZEvent
 		};
 	}
 
+
+	/// @brief 投篮车的索敌跳过事件，用于投篮车多投
+	/// @param 触发事件的僵尸、当前遍历的植物
+	/// @return False则跳过该植物
+	class CatapultTargetSkipEvent : public BoolDLLEventTemplate<0x5258D3, 6, 0x5259A9, REG_EAX, REG_ECX>
+	{
+	public:
+		CatapultTargetSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		CatapultTargetSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		CatapultTargetSkipEvent() : BoolDLLEventTemplate() { Init("onCatapultTargetSkip"); };
+	};
+	/// @brief 投篮车的索敌并开火事件
+	/// @param 触发事件的僵尸
+	/// @return False则跳过原版开火
+	class CatapultZombieFireEvent : public DLLEventTemplate<0x525A71, 6, REG_EDI>
+	{
+	public:
+		CatapultZombieFireEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		CatapultZombieFireEvent(int address) : DLLEventTemplate() { Init(address); };
+		CatapultZombieFireEvent() : DLLEventTemplate() { Init("onCatapultZombieFire"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x525A7E).ret().popad().push_reg(REG_EDI).invoke(0x525890).push_imm32(0x525A77).ret();
+		}
+	};
+
 	/// @brief Zombie 行为动作的更新。
 	/// @note 时机上先于原版的更新。
 	/// @note 该事件与 ZombieUpdateActionEvent 在同一个位置生效。不建议同时使用。

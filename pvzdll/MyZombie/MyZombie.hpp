@@ -81,4 +81,10 @@ public:
 	bool IsTangleKelpTarget();
 	/// @brief 矿工失去镐子
 	void DiggerLoseAxe();
+	/// @brief 投篮车尝试寻找目标植物
+	/// @return 目标植物的Address，没有找到目标则为0。
+	int FindCatapultTarget();
+	/// @brief 投篮车对目标植物开火
+	/// @rparam 目标植物的Address，0表示没有找到目标。
+	void ZombieCatapultFire(int targetaddr);
 };

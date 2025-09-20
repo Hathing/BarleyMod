@@ -397,6 +397,33 @@ bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 	return zombie.FromWave < WAVE_ELITE_MASK;
 }
 
+bool onCatapultZombieFire(MyZombie zombie)
+{
+	for (int num = 0; num < 3; num++)
+	{
+		int targetaddr = zombie.FindCatapultTarget();
+		if (targetaddr != 0)
+		{
+			zombie.ZombieCatapultFire(targetaddr);
+			MyPlant targetplant{ targetaddr };
+			targetplant.CatapultTargetSkip = 1;
+		}
+	}
+	auto plants = zombie.GetBoard().GetAllPlants<MyPlant>();
+	for (auto& plant : plants)
+	{
+		plant.CatapultTargetSkip = 0;
+	}
+	return false;
+}
+
+bool onCatapultTargetSkip(MyZombie zombie, MyPlant plant)
+{
+	if (plant.CatapultTargetSkip)
+		return false;
+	return true;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -421,6 +448,9 @@ void InitZombieEvents()
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
+
+	PVZEvent::CatapultTargetSkipEvent((int)onCatapultTargetSkip);
+	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
