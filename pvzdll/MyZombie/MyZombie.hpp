@@ -27,8 +27,6 @@ public:
 	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x107);
 	/// @brief 豌豆僵尸变种类型
 	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
-	/// @brief 大蒜状态
-	INT_PROPERTY(GarlicStatus, __get_GaS, __set_GaS, 0x13C);
 	/// @brief 僵尸受攻击的动画附件的ID
 	INT_PROPERTY(HitReanimID, __get_HitReanimID, __set_HitReanimID, 0x110);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
