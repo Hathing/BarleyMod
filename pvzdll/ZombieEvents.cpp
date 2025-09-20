@@ -408,6 +408,11 @@ bool onJalapenoZombieBurn(MyZombie zombie)
 	return true;
 }
 
+bool OverrideZombieDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
+{
+	return ZombieAbility::GetAbility(zombie.Type)->OverrideDrawPos(zombie, draw_pos);
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -433,6 +438,7 @@ void InitZombieEvents()
 	PVZEvent::JalapenoZombieBurnEvent((int)onJalapenoZombieBurn);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
+	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

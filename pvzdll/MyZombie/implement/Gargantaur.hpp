@@ -16,6 +16,12 @@ namespace ZombieAbility
 				zombie.HelmMaxHealth = tmp;
 			}
 		}
+		bool OverrideDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
+		{
+			if (zombie.Hypnotized)
+				draw_pos->ImageOffsetX += 30.0f;
+			return true;
+		}
 	};
 	class GigaGargantaur : public BaseZombie
 	{
@@ -29,6 +35,12 @@ namespace ZombieAbility
 				zombie.HelmHealth = tmp;
 				zombie.HelmMaxHealth = tmp;
 			}
+		}
+		bool OverrideDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
+		{
+			if (zombie.Hypnotized)
+				draw_pos->ImageOffsetX += 30.0f;
+			return true;
 		}
 	};
 }
