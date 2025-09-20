@@ -53,6 +53,11 @@ MyZombie MyZombie::FindZombieTarget()
 	return MyZombie{ targetaddr };
 }
 
+void MyZombie::StopEating()
+{
+	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EDI,this->GetBaseAddress()).invoke(0x52F440).ret());
+}
+
 void MyZombie::AddFrost(int num)
 {
 	int add_frost_num = this->FrostStack + num;

@@ -55,6 +55,8 @@ public:
 	/// @brief 寻找可攻击的僵尸目标，封装的原版函数
 	/// return 可攻击的僵尸
 	MyZombie FindZombieTarget();
+	/// @brief 使僵尸停止啃咬
+	void StopEating();
 
 	/// @brief 增加寒意值
 	/// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！

@@ -318,8 +318,17 @@ bool onZombieWalkIntoWater(MyZombie zombie)
 
 bool onZombieWalkOutOfWater(MyZombie zombie)
 {
-	if (zombie.IsTangleKelpTarget())
+	if (zombie.IsTangleKelpTarget() || !zombie.NotDying)
 		return false;
+	return true;
+}
+
+bool onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
+{
+	if (zombie.IsTangleKelpTarget())
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -342,7 +351,7 @@ void InitZombieEvents()
 	ZombieEatSoundEvent((int)onZombieEatSound);
 	PVZEvent::ZombieWalkIntoWaterEvent((int)onZombieWalkIntoWater);
 	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
-
+	PVZEvent::ZombieCanTargetPlantEvent((int)onZombieCanTargetPlant);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

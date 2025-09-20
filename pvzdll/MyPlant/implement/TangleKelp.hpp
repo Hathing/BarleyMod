@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "../PlantAbility.hpp"
 
 namespace PlantAbility
@@ -22,7 +22,7 @@ namespace PlantAbility
 			if (plant.AnotherCounter > 0)
 			{
 				plant.AnotherCounter -= 1;
-				//¼¼ÄÜµ¹¼ÆÊ±>0Ê±£¬Ìø¹ýÔ­°æ¸üÐÂ£¬°üÀ¨Ë÷µÐ¡¢×¥×¡½©Ê¬Ê±¶ÔÄ¿±êµÄ´¦Àí¡£
+				//æŠ€èƒ½å€’è®¡æ—¶>0æ—¶ï¼Œè·³è¿‡åŽŸç‰ˆæ›´æ–°ï¼ŒåŒ…æ‹¬ç´¢æ•Œã€æŠ“ä½åƒµå°¸æ—¶å¯¹ç›®æ ‡çš„å¤„ç†ã€‚
 				return false;
 			}
 			if (plant.TangleKelpDoEffectCountdown > 0)

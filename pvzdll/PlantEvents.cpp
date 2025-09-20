@@ -377,6 +377,14 @@ void onTangleKelpUpdateGrabbing(MyPlant plant)
 	}
 }
 
+void onTangleKelpTargetAfter(MyPlant plant, MyZombie zombie)
+{
+	if (zombie.Eating)
+	{
+		zombie.StopEating();
+	}
+}
+
 int GetPlantFindTargetZombiePriority(MyPlant plant, MyZombie zombie, int original_priority)
 {
 	return PlantAbility::GetAbility(plant.Type)->GetTargetZombiePriority(plant, zombie, original_priority);
@@ -419,6 +427,7 @@ void InitPlantEvents()
 	//缠绕海草
 	PVZEvent::TangleKelpKillZombieEvent((int)onTangleKelpKillZombie);
 	PVZEvent::TangleKelpUpdateGrabbingEvent((int)onTangleKelpUpdateGrabbing);
+	PVZEvent::TangleKelpTargetAfterEvent((int)onTangleKelpTargetAfter);
 	//目前不会崩溃了，但植物不索敌，暂时先去掉了
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
