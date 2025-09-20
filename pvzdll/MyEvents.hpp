@@ -729,8 +729,8 @@ namespace PVZEvent
 	/// @note 该事件与 ZombieUpdateActionEvent 基本一致，只是返回值不同
 	/// @param 更新的 Zombie
 	/// @return 是否更新原版行为动作
-	/// @retval false 完全跳过原版的任何行为动作。这会导致原生技能失效。
-	class ZombieUpdateActionEXEvent : public BoolDLLEventTemplate<0x52B112, 6, REG_EAX>
+	/// @retval false 完全跳过原版的任何行为动作，这会导致原生技能失效，同时包括关于运动的检测！不建议跳过。
+	class ZombieUpdateActionEXEvent : public BoolDLLEventTemplate<0x52B112, 6, 0x52B279, REG_EAX>
 	{
 	public:
 		ZombieUpdateActionEXEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateAction"); };
