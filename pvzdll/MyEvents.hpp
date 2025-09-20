@@ -350,6 +350,28 @@ namespace PVZEvent
 		TangleKelpTargetAfterEvent() : TangleKelpTargetAfterEvent("onTangleKelpTargetAfter") {};
 	};
 
+	/// @brief 胆小菇下蹲瞬间事件
+	/// @param 胆小菇
+	/// @return False则不会蹲下
+	class ScardyShroomScaredEvent : public BoolDLLEventTemplate<0x46051B, 6, 0x4605EE, REG_EDI>
+	{
+	public:
+		ScardyShroomScaredEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ScardyShroomScaredEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ScardyShroomScaredEvent() : ScardyShroomScaredEvent("onScardyShroomScared") {};
+	};
+
+	/// @brief 胆小菇起立瞬间事件
+	/// @param 胆小菇
+	/// @return False则不会起立
+	class ScardyShroomGrowEvent : public BoolDLLEventTemplate<0x46057F, 6, 0x4605EE, REG_EDI>
+	{
+	public:
+		ScardyShroomGrowEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ScardyShroomGrowEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ScardyShroomGrowEvent() : ScardyShroomGrowEvent("onScardyShroomGrow") {};
+	};
+
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x531070, 5, REG_EBP>
 	{
 	public:
