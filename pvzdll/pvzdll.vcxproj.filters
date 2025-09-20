@@ -228,9 +228,9 @@
     <ClInclude Include="MyProjectile\implement\Melon.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-	<ClInclude Include="MyProjectile\implement\WinterMelon.hpp">
-		<Filter>头文件</Filter>
-	</ClInclude>
+    <ClInclude Include="MyProjectile\implement\WinterMelon.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="MyProjectile\implement\Star.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -271,6 +271,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyZombie\implement\Gargantaur.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyZombie\implement\ScreenDoorZombie.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyZombie\implement\DolphinRiderZombie.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyZombie\implement\NewspaperZombie.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyZombie\implement\BalloonZombie.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,6 +9,9 @@ namespace ZombieAbility
 		{
 			zombie.HelmHealth = 2400;
 			zombie.HelmMaxHealth = 2400;
+
+			//zombie.HelmHealth = 750;
+			//zombie.HelmMaxHealth = 750;
 		}
 	};
 }
