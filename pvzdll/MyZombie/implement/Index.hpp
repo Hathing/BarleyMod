@@ -7,6 +7,7 @@
 #include "SnorkedZombie.hpp"
 #include "Zomboni.hpp"
 #include "DolphinRiderZombie.hpp"
+#include "BalloonZombie.hpp"
 #include "DiggerZombie.hpp"
 #include "PogoZombie.hpp"
 #include "BungeeZombie.hpp"
