@@ -759,4 +759,108 @@ namespace PVZEvent
 		ZombieUpdateActionEXEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieUpdateActionEXEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
+
+
+
+	/// @brief 植物因生命值小于 0 被移除事件。
+	/// @note 照搬的PVZCLASS里的事件，在这基础上增加了一个死亡类型
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class PlantDyingFromLowHealthEvent : public DLLEventTemplate<0x463EDD, 6, CONST_VAL(DYING_HP_BELOW_ZERO), REG_EBX>
+	{
+	public:
+		PlantDyingFromLowHealthEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantDyingFromLowHealthEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantDyingFromLowHealthEvent() : DLLEventTemplate() { Init("onPlantDyingFromLowHealth"); };
+		void InitExtra(AsmBuilder& builder)
+		{
+			BYTE code[] =
+			{
+				TEST_AL_AL,
+				JE(14),
+
+				PUSH_EBX,
+				INVOKE(0x4679B0),
+
+				POPAD,
+				MOV_ECX(0x463EE3),
+				JMP_REG32(REG_ECX)
+			};
+			builder.add_bytes(STRING(code));
+		}
+	};
+	/// @brief 植物因被啃死而被移除事件。
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class PlantDyingFromEatenEvent : public BoolDLLEventTemplate<0x52FD4E, 6, 0x52FD5A, CONST_VAL(DYING_EATEN), REG_ESI>
+	{
+	public:
+		PlantDyingFromEatenEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantDyingFromEatenEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantDyingFromEatenEvent() : BoolDLLEventTemplate() { Init("onPlantDyingFromEaten"); };
+	};
+	/// @brief 植物因压扁或者自身是灰烬而+4C=0时被移除事件。
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class PlantDyingFromDisappearingEvent : public DLLEventTemplate<0x463191, 6, CONST_VAL(DYING_DISAPPEARING), REG_EDI>
+	{
+	public:
+		PlantDyingFromDisappearingEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantDyingFromDisappearingEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantDyingFromDisappearingEvent() : DLLEventTemplate() { Init("onPlantDyingFromDisappearing"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x46319B).ret().popad().push_reg(REG_EDI).invoke(0x4679B0).pop(REG_EDI).pop(REG_ESI).pop(REG_ECX).ret();
+		}
+	};
+	/// @brief 钢地刺被碾压扣血至死的事件
+	/// @attention 由于地刺王死亡时同时还会触发HP<0的亡语事件，要注意亡语重复的问题。
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class SpikerockDyingFromSmashedEvent : public DLLEventTemplate<0x45ECEC, 6, CONST_VAL(DYING_SPIKEROCK_SMASHED), REG_ESI>
+	{
+	public:
+		SpikerockDyingFromSmashedEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		SpikerockDyingFromSmashedEvent(int address) : DLLEventTemplate() { Init(address); };
+		SpikerockDyingFromSmashedEvent() : DLLEventTemplate() { Init("onSpikerockDyingFromSmashed"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x45ECF2).ret().popad().push_reg(REG_ESI).invoke(0x4679B0).pop(REG_EDI).pop(REG_EBX).pop(REG_ECX).ret();
+		}
+	};
+
+
+	/// @brief 植物在游戏中因各种原因而被移除的事件。
+	/// @param 触发事件的植物、死亡原因类型PlantDyingType。
+	/// @return 该植物是否被移除。
+	class PlantDyingEvent
+	{
+	private:
+		PlantDyingFromLowHealthEvent* part1;
+		PlantDyingFromEatenEvent* part2;
+		PlantDyingFromDisappearingEvent* part3;
+		//亡语重复问题，暂时禁用该事件
+		//SpikerockDyingFromSmashedEvent* part4;
+	public:
+		PlantDyingEvent()
+		{
+			PlantDyingEvent(PVZ::Memory::GetProcAddress("onPlantDying"));
+		}
+		PlantDyingEvent(int address)
+		{
+			part1 = new PlantDyingFromLowHealthEvent(address);
+			part2 = new PlantDyingFromEatenEvent(address);
+			part3 = new PlantDyingFromDisappearingEvent(address);
+			//part4 = new SpikerockDyingFromSmashedEvent(address);
+		}
+		void end()
+		{
+			part1->end();
+			part2->end();
+			part3->end();
+			//part4->end();
+		}
+	};
 };

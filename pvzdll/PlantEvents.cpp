@@ -396,6 +396,11 @@ bool IsKernelPultCastButter(MyPlant plant)
 	return Creator::Rand(KernelPultProcPartition[plant.Level]) == 0;
 }
 
+bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
+{
+	return true;
+}
+
 void InitPlantEvents()
 {
 	PlantInitAfterEvent((int)onPlantInitAfter);
@@ -414,6 +419,7 @@ void InitPlantEvents()
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
+	PVZEvent::PlantDyingEvent((int)onPlantDying);
 
 	//磁力菇
 	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
