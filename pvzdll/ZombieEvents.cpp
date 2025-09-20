@@ -397,6 +397,17 @@ bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 	return zombie.FromWave < WAVE_ELITE_MASK;
 }
 
+bool onJalapenoZombieBurn(MyZombie zombie)
+{
+	if (zombie.Hypnotized)
+	{
+		MyBoard board = zombie.GetBoard();
+		board.BurnRow(zombie.Row);
+		return false;
+	}
+	return true;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -419,6 +430,7 @@ void InitZombieEvents()
 	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
+	PVZEvent::JalapenoZombieBurnEvent((int)onJalapenoZombieBurn);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
 
