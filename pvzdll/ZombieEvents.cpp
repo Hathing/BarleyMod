@@ -192,6 +192,11 @@ float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
 	//撑杆僵尸空中额外位移
 	if (zombie.State == ZombieState::POLE_VALUTING_JUMPPING)
 		v += 0.5f;//额外总位移：0.5px/cs * 180cs
+	//海豚僵尸空中额外位移
+	if (zombie.State == ZombieState::DOPHIN_JUMP)
+	{
+		v += 0.35f;//额外总位移：0.35px/cs * 230cs
+	}
 	return v;
 }
 
