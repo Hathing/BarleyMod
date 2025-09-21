@@ -181,10 +181,18 @@ float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
 {
 	if (zombie.IsTangleKelpTarget())
 		return 0.0f;
-
+	
+	float v = velocity;
+	//撑杆僵尸正常跑
+	if (zombie.State == ZombieState::POLE_VALUTING_RUNNING)
+		v *= 2.0f;
 	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40)
-		return velocity * 2.0f;
-	return velocity;
+		v *= 2.0f;
+
+	//撑杆僵尸空中额外位移
+	if (zombie.State == ZombieState::POLE_VALUTING_JUMPPING)
+		v += 0.5f;//额外总位移：0.5px/cs * 180cs
+	return v;
 }
 
 int onZombieIsWalkingBackwards(MyZombie zombie)
