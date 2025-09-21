@@ -186,8 +186,24 @@ float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
 	//撑杆僵尸正常跑
 	if (zombie.State == ZombieState::POLE_VALUTING_RUNNING)
 		v *= 2.0f;
-	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40)
+	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40 && zombie.EffectedBy(PVZ::DRF_GROUND))
 		v *= 2.0f;
+	//击飞或击退则使用+34位移
+	if (zombie.IsLaunched)
+	{
+		v = zombie.Speed;
+		if (zombie.ZombieHeight != 7)
+		{
+			//如果击退，则速度衰减
+			zombie.Speed *= 0.95f;
+			if (zombie.Speed < 0.05f && zombie.Speed > -0.05f)
+			{
+				//速度降到阈值后，状态变为正常，重置速度
+				zombie.IsLaunched = 0;
+				zombie.PickRandomSpeed();
+			}
+		}
+	}
 
 	//撑杆僵尸空中额外位移
 	if (zombie.State == ZombieState::POLE_VALUTING_JUMPPING)
@@ -356,12 +372,35 @@ bool onZombieWalkOutOfWater(MyZombie zombie)
 	return true;
 }
 
+bool onZombieUpdateFalling(MyZombie zombie)
+{
+	if (zombie.IsLaunched)
+	{
+		zombie.Height += zombie.FallSpeed;
+		zombie.FallSpeed -= 0.05f;//原版小鬼使用的加速度
+		return false;
+	}
+	return true;
+}
+
+void onZombieFallOnGround(MyZombie zombie)
+{
+	if (zombie.IsLaunched)
+	{
+		zombie.IsLaunched = 0;
+		zombie.FallSpeed = 0.0f;
+		zombie.PickRandomSpeed();
+	}
+}
+
 int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 {
 	if (zombie.IsTangleKelpTarget())
 	{
 		return 0;
 	}
+	if (zombie.IsLaunched)
+		return 0;
 	if (zombie.State == ZombieState::DIGGER_WALK_RIGHT && zombie.X < 130)
 		return 0;
 	return -1;
@@ -456,6 +495,8 @@ void InitZombieEvents()
 	ZombieEatSoundEvent((int)onZombieEatSound);
 	PVZEvent::ZombieWalkIntoWaterEvent((int)onZombieWalkIntoWater);
 	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
+	PVZEvent::ZombieUpdateFallingEvent((int)onZombieUpdateFalling);
+	PVZEvent::ZombieFallOnGroundEvent((int)onZombieFallOnGround);
 	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
@@ -484,4 +525,7 @@ void InitZombieEvents()
 	//覆盖原金银特效
 	static constexpr byte asm_revert_2[] = { 0x83,0xBE,0xAC,0x00,0x00,0x00,0x00 };
 	PVZ::Memory::WriteArray<const byte>(0x52D309, STRING(asm_revert_2));
+	//覆盖位于僵尸总更新里的气球落地以及其他代码，此处代码应当搬运至恰当的更新函数中
+	static constexpr byte asm_revert_3[] = { 0x83,0xBB,0xFC,0x07,0x00,0x00,0x04 };
+	PVZ::Memory::WriteArray<const byte>(0x52AF2F, STRING(asm_revert_3));
 }

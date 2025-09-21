@@ -58,6 +58,11 @@ void MyZombie::StopEating()
 	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EDI,this->GetBaseAddress()).invoke(0x52F440).ret());
 }
 
+void MyZombie::PickRandomSpeed()
+{
+	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, this->GetBaseAddress()).invoke(0x524A70).ret());
+}
+
 void MyZombie::AddFrost(int num)
 {
 	int add_frost_num = this->FrostStack + num;

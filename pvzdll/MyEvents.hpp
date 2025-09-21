@@ -617,6 +617,28 @@ namespace PVZEvent
 		ZombieWalkIntoWaterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieWalkIntoWaterEvent() : ZombieWalkIntoWaterEvent("onZombieWalkIntoWater") {};
 	};
+
+	/// @brief 僵尸更新坠落事件
+	/// @param 僵尸
+	/// @return False则跳过原版位置更新
+	class ZombieUpdateFallingEvent : public BoolDLLEventTemplate<0x529775, 6, 0x5297A1, REG_ESI>
+	{
+	public:
+		ZombieUpdateFallingEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieUpdateFallingEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieUpdateFallingEvent() : ZombieUpdateFallingEvent("onZombieUpdateFalling") {};
+	};
+
+	/// @brief 僵尸落地时事件
+	/// @param 僵尸
+	class ZombieFallOnGroundEvent : public DLLEventTemplate<0x5297DA, 7, REG_ESI>
+	{
+	public:
+		ZombieFallOnGroundEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieFallOnGroundEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieFallOnGroundEvent() : ZombieFallOnGroundEvent("onZombieFallOnGround") {};
+	};
+
 	/// @brief 判断僵尸是否反向事件
 	/// @param 僵尸
 	/// @return 负数则调用原版函数，0则返回false，1则返回true
