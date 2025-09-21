@@ -857,6 +857,16 @@ namespace PVZEvent
 			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x45ECF2).ret().popad().push_reg(REG_ESI).invoke(0x4679B0).pop(REG_EDI).pop(REG_EBX).pop(REG_ECX).ret();
 		}
 	};
+	/// @brief 植物因被辣椒僵尸烧死而被移除事件。
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class PlantDyingFromJalapenoHeadEvent : public BoolDLLEventTemplate<0x527722, 6, 0x52772E, CONST_VAL(DYING_JALAPENOHEAD_EXPLODED), REG_EAX>
+	{
+	public:
+		PlantDyingFromJalapenoHeadEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantDyingFromJalapenoHeadEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantDyingFromJalapenoHeadEvent() : BoolDLLEventTemplate() { Init("onPlantDyingFromJalapenoHead"); };
+	};
 
 
 	/// @brief 植物在游戏中因各种原因而被移除的事件。
@@ -870,6 +880,7 @@ namespace PVZEvent
 		PlantDyingFromDisappearingEvent* part3;
 		//亡语重复问题，暂时禁用该事件
 		//SpikerockDyingFromSmashedEvent* part4;
+		PlantDyingFromJalapenoHeadEvent* part5;
 	public:
 		PlantDyingEvent()
 		{
@@ -881,6 +892,7 @@ namespace PVZEvent
 			part2 = new PlantDyingFromEatenEvent(address);
 			part3 = new PlantDyingFromDisappearingEvent(address);
 			//part4 = new SpikerockDyingFromSmashedEvent(address);
+			part5 = new PlantDyingFromJalapenoHeadEvent(address);
 		}
 		void end()
 		{
@@ -888,6 +900,7 @@ namespace PVZEvent
 			part2->end();
 			part3->end();
 			//part4->end();
+			part5->end();
 		}
 	};
 };
