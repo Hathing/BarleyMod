@@ -471,6 +471,13 @@ void InitZombieEvents()
 	PVZ::Memory::WriteMemory<int>(0x52874E, 0x00000025);
 	//矿工从底线出土
 	PVZ::Memory::WriteMemory<int>(0x528334, 0x0000041F);
+	//海豚随地下水
+	static constexpr byte asm_revert_dophin1[] = { 0xEB,0x14,0x90,0x90,0x90 };
+	PVZ::Memory::WriteArray<const byte>(0x526211, STRING(asm_revert_dophin1));
+	//海豚冲刺到屏幕左侧不出水
+	PVZ::Memory::WriteMemory<byte>(0x5263E8, 0xEB);
+	//潜水场内下水
+	PVZ::Memory::WriteMemory<byte>(0x526747, 0x07);
 	//覆盖原盲盒开盒
 	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));
