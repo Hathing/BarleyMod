@@ -655,6 +655,24 @@ namespace PVZEvent
 			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX).popad().ret();
 		}
 	};
+	/// @brief 僵尸索敌间隔的重写事件
+	/// @note 在原版中，使用僵尸的+60 % 4或8（无减速/有减速） = 0 作为触发索敌的条件，该事件用于替代这一判断
+	/// @param 僵尸
+	/// @return 负数则调用原版判断，0则不索敌，正数则索敌
+	class ZombieFindTargetIntervalEvent : public DLLEventTemplate<0x52F640, 7, REG_EDI>
+	{
+	public:
+		ZombieFindTargetIntervalEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieFindTargetIntervalEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieFindTargetIntervalEvent() : ZombieFindTargetIntervalEvent("onZombieFindTargetInterval") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(23);
+			builder.cmp_reg_imm(REG_EAX,0).jne_rel(7).popad().push_imm32(0x52F6BC).ret();
+			builder.popad().push_imm32(0x52F65D).ret();
+		}
+	};
 	/// @brief 僵尸能否将植物作为目标的额外判断，优先级高于原版
 	/// @param 僵尸，植物，攻击方式(0(啃食/锤砸) | 1(车类碾压) | 2(跳跃) | 3(搭梯))
 	/// @return False则直接不攻击植物，True则正常原版判断

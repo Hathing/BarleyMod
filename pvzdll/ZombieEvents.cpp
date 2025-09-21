@@ -3,6 +3,8 @@
 #include "MyZombie/ZombieAbility.hpp"
 #include "MyEvents.hpp"
 
+#define FROST_DECELERATE(zombie) max(1.0f - (zombie).FrostStack * 0.02f,0.4f)
+
 bool CLOWN_ZOMBIE_POP_FLAG = false;
 
 void onZombieDropLoot(MyZombie zombie)
@@ -235,7 +237,7 @@ float onZombieApplyAnimSpeed(MyZombie zombie, PVZ::Animation anim, float rate)
 {
 	if (zombie.FrostStack && zombie.FrostStack !=0xFF)//在InitAfter之前会调用一次AnimSpeed，此时僵尸的FrostStack还没有初始化，初始值为0xFF
 	{
-		rate *= max(1.0f - zombie.FrostStack * 0.02f,0.4f);
+		rate *= FROST_DECELERATE(zombie);
 	}
 	return rate;
 }
@@ -444,6 +446,21 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 	return true;
 }
 
+int onZombieFindTargetInterval(MyZombie zombie)
+{
+	int cd = zombie.ExistedTime * 100;
+	//引入寒意百分比减速
+	int interval = 400 / (FROST_DECELERATE(zombie));
+	if (zombie.DecelerateCountdown > 0)
+		interval * 2;
+
+	if (cd % interval < 100)
+		return 1;
+	else return 0;
+
+	return -1;
+}
+
 bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 {
 	return zombie.FromWave < WAVE_ELITE_MASK;
@@ -500,6 +517,7 @@ void InitZombieEvents()
 	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
+	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
 
