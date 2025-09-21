@@ -58,6 +58,11 @@ void MyZombie::StopEating()
 	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EDI,this->GetBaseAddress()).invoke(0x52F440).ret());
 }
 
+void MyZombie::PickRandomSpeed()
+{
+	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, this->GetBaseAddress()).invoke(0x524A70).ret());
+}
+
 void MyZombie::AddFrost(int num)
 {
 	int add_frost_num = this->FrostStack + num;
@@ -110,6 +115,26 @@ void MyZombie::DiggerLoseAxe()
 	PVZ::Memory::Execute(AsmBuilder()
 		.mov_reg_imm(REG_EAX, this->GetBaseAddress())
 		.invoke(0x528240)
+		.ret()
+	);
+}
+
+int MyZombie::FindCatapultTarget()
+{
+	return PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32( this->GetBaseAddress())
+		.invoke(0x525890)
+		.mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret()
+	);
+}
+
+void MyZombie::ZombieCatapultFire(int targetaddr)
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EAX, targetaddr)
+		.mov_reg_imm(REG_ECX, this->GetBaseAddress())
+		.invoke(0x525730)
 		.ret()
 	);
 }

@@ -75,6 +75,8 @@ public:
 	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0x130);
 	/// @brief 是否在 Board 上
 	T_PROPERTY(mybool, OnBoard, __get_OnB, __set_OnB, 0x144);
+	/// @brief 投篮车索敌标记
+	T_PROPERTY(byte, CatapultTargetSkip, __get_CatapultTargetSkip, __set_CatapultTargetSkip, 0x146);
 
 	/// @brief 获取植物的所有者。
 	/// @return 植物的所有者

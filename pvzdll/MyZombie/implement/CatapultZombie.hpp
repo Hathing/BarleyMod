@@ -9,6 +9,7 @@ namespace ZombieAbility
 		{
 			zombie.BodyHealth = 650;
 			zombie.BodyMaxHealth = 650;
+			zombie.SummonCounter = 3;
 		}
 	};
 }

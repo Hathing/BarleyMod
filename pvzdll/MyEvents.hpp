@@ -350,6 +350,28 @@ namespace PVZEvent
 		TangleKelpTargetAfterEvent() : TangleKelpTargetAfterEvent("onTangleKelpTargetAfter") {};
 	};
 
+	/// @brief 胆小菇下蹲瞬间事件
+	/// @param 胆小菇
+	/// @return False则不会蹲下
+	class ScardyShroomScaredEvent : public BoolDLLEventTemplate<0x46051B, 6, 0x4605EE, REG_EDI>
+	{
+	public:
+		ScardyShroomScaredEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ScardyShroomScaredEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ScardyShroomScaredEvent() : ScardyShroomScaredEvent("onScardyShroomScared") {};
+	};
+
+	/// @brief 胆小菇起立瞬间事件
+	/// @param 胆小菇
+	/// @return False则不会起立
+	class ScardyShroomGrowEvent : public BoolDLLEventTemplate<0x46057F, 6, 0x4605EE, REG_EDI>
+	{
+	public:
+		ScardyShroomGrowEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ScardyShroomGrowEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ScardyShroomGrowEvent() : ScardyShroomGrowEvent("onScardyShroomGrow") {};
+	};
+
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x531070, 5, REG_EBP>
 	{
 	public:
@@ -595,6 +617,28 @@ namespace PVZEvent
 		ZombieWalkIntoWaterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieWalkIntoWaterEvent() : ZombieWalkIntoWaterEvent("onZombieWalkIntoWater") {};
 	};
+
+	/// @brief 僵尸更新坠落事件
+	/// @param 僵尸
+	/// @return False则跳过原版位置更新
+	class ZombieUpdateFallingEvent : public BoolDLLEventTemplate<0x529775, 6, 0x5297A1, REG_ESI>
+	{
+	public:
+		ZombieUpdateFallingEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieUpdateFallingEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieUpdateFallingEvent() : ZombieUpdateFallingEvent("onZombieUpdateFalling") {};
+	};
+
+	/// @brief 僵尸落地时事件
+	/// @param 僵尸
+	class ZombieFallOnGroundEvent : public DLLEventTemplate<0x5297DA, 7, REG_ESI>
+	{
+	public:
+		ZombieFallOnGroundEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieFallOnGroundEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieFallOnGroundEvent() : ZombieFallOnGroundEvent("onZombieFallOnGround") {};
+	};
+
 	/// @brief 判断僵尸是否反向事件
 	/// @param 僵尸
 	/// @return 负数则调用原版函数，0则返回false，1则返回true
@@ -609,6 +653,24 @@ namespace PVZEvent
 		{
 			builder.cmp_reg_imm(REG_EAX,0).jl_rel(6);
 			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX).popad().ret();
+		}
+	};
+	/// @brief 僵尸索敌间隔的重写事件
+	/// @note 在原版中，使用僵尸的+60 % 4或8（无减速/有减速） = 0 作为触发索敌的条件，该事件用于替代这一判断
+	/// @param 僵尸
+	/// @return 负数则调用原版判断，0则不索敌，正数则索敌
+	class ZombieFindTargetIntervalEvent : public DLLEventTemplate<0x52F640, 7, REG_EDI>
+	{
+	public:
+		ZombieFindTargetIntervalEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieFindTargetIntervalEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieFindTargetIntervalEvent() : ZombieFindTargetIntervalEvent("onZombieFindTargetInterval") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(23);
+			builder.cmp_reg_imm(REG_EAX,0).jne_rel(7).popad().push_imm32(0x52F6BC).ret();
+			builder.popad().push_imm32(0x52F65D).ret();
 		}
 	};
 	/// @brief 僵尸能否将植物作为目标的额外判断，优先级高于原版
@@ -723,6 +785,33 @@ namespace PVZEvent
 		};
 	}
 
+
+	/// @brief 投篮车的索敌跳过事件，用于投篮车多投
+	/// @param 触发事件的僵尸、当前遍历的植物
+	/// @return False则跳过该植物
+	class CatapultTargetSkipEvent : public BoolDLLEventTemplate<0x5258D3, 6, 0x5259A9, REG_EAX, REG_ECX>
+	{
+	public:
+		CatapultTargetSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		CatapultTargetSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		CatapultTargetSkipEvent() : BoolDLLEventTemplate() { Init("onCatapultTargetSkip"); };
+	};
+	/// @brief 投篮车的索敌并开火事件
+	/// @param 触发事件的僵尸
+	/// @return False则跳过原版开火
+	class CatapultZombieFireEvent : public DLLEventTemplate<0x525A71, 6, REG_EDI>
+	{
+	public:
+		CatapultZombieFireEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		CatapultZombieFireEvent(int address) : DLLEventTemplate() { Init(address); };
+		CatapultZombieFireEvent() : DLLEventTemplate() { Init("onCatapultZombieFire"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x525A7E).ret().popad().push_reg(REG_EDI).invoke(0x525890).push_imm32(0x525A77).ret();
+		}
+	};
+
 	/// @brief Zombie 行为动作的更新。
 	/// @note 时机上先于原版的更新。
 	/// @note 该事件与 ZombieUpdateActionEvent 在同一个位置生效。不建议同时使用。
@@ -736,5 +825,122 @@ namespace PVZEvent
 		ZombieUpdateActionEXEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateAction"); };
 		ZombieUpdateActionEXEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieUpdateActionEXEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
+
+
+	/// @brief 植物因生命值小于 0 被移除事件。
+	/// @note 照搬的PVZCLASS里的事件，在这基础上增加了一个死亡类型
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class PlantDyingFromLowHealthEvent : public DLLEventTemplate<0x463EDD, 6, CONST_VAL(DYING_HP_BELOW_ZERO), REG_EBX>
+	{
+	public:
+		PlantDyingFromLowHealthEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantDyingFromLowHealthEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantDyingFromLowHealthEvent() : DLLEventTemplate() { Init("onPlantDyingFromLowHealth"); };
+		void InitExtra(AsmBuilder& builder)
+		{
+			BYTE code[] =
+			{
+				TEST_AL_AL,
+				JE(14),
+
+				PUSH_EBX,
+				INVOKE(0x4679B0),
+
+				POPAD,
+				MOV_ECX(0x463EE3),
+				JMP_REG32(REG_ECX)
+			};
+			builder.add_bytes(STRING(code));
+		}
+	};
+	/// @brief 植物因被啃死而被移除事件。
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class PlantDyingFromEatenEvent : public BoolDLLEventTemplate<0x52FD4E, 6, 0x52FD5A, CONST_VAL(DYING_EATEN), REG_ESI>
+	{
+	public:
+		PlantDyingFromEatenEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantDyingFromEatenEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantDyingFromEatenEvent() : BoolDLLEventTemplate() { Init("onPlantDyingFromEaten"); };
+	};
+	/// @brief 植物因压扁或者自身是灰烬而+4C=0时被移除事件。
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class PlantDyingFromDisappearingEvent : public DLLEventTemplate<0x463191, 6, CONST_VAL(DYING_DISAPPEARING), REG_EDI>
+	{
+	public:
+		PlantDyingFromDisappearingEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantDyingFromDisappearingEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantDyingFromDisappearingEvent() : DLLEventTemplate() { Init("onPlantDyingFromDisappearing"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x46319B).ret().popad().push_reg(REG_EDI).invoke(0x4679B0).pop(REG_EDI).pop(REG_ESI).pop(REG_ECX).ret();
+		}
+	};
+	/// @brief 钢地刺被碾压扣血至死的事件
+	/// @attention 由于地刺王死亡时同时还会触发HP<0的亡语事件，要注意亡语重复的问题。
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class SpikerockDyingFromSmashedEvent : public DLLEventTemplate<0x45ECEC, 6, CONST_VAL(DYING_SPIKEROCK_SMASHED), REG_ESI>
+	{
+	public:
+		SpikerockDyingFromSmashedEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		SpikerockDyingFromSmashedEvent(int address) : DLLEventTemplate() { Init(address); };
+		SpikerockDyingFromSmashedEvent() : DLLEventTemplate() { Init("onSpikerockDyingFromSmashed"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x45ECF2).ret().popad().push_reg(REG_ESI).invoke(0x4679B0).pop(REG_EDI).pop(REG_EBX).pop(REG_ECX).ret();
+		}
+	};
+	/// @brief 植物因被辣椒僵尸烧死而被移除事件。
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被移除。
+	class PlantDyingFromJalapenoHeadEvent : public BoolDLLEventTemplate<0x527722, 6, 0x52772E, CONST_VAL(DYING_JALAPENOHEAD_EXPLODED), REG_EAX>
+	{
+	public:
+		PlantDyingFromJalapenoHeadEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantDyingFromJalapenoHeadEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantDyingFromJalapenoHeadEvent() : BoolDLLEventTemplate() { Init("onPlantDyingFromJalapenoHead"); };
+	};
+
+
+	/// @brief 植物在游戏中因各种原因而被移除的事件。
+	/// @param 触发事件的植物、死亡原因类型PlantDyingType。
+	/// @return 该植物是否被移除。
+	class PlantDyingEvent
+	{
+	private:
+		PlantDyingFromLowHealthEvent* part1;
+		PlantDyingFromEatenEvent* part2;
+		PlantDyingFromDisappearingEvent* part3;
+		//亡语重复问题，暂时禁用该事件
+		//SpikerockDyingFromSmashedEvent* part4;
+		PlantDyingFromJalapenoHeadEvent* part5;
+	public:
+		PlantDyingEvent()
+		{
+			PlantDyingEvent(PVZ::Memory::GetProcAddress("onPlantDying"));
+		}
+		PlantDyingEvent(int address)
+		{
+			part1 = new PlantDyingFromLowHealthEvent(address);
+			part2 = new PlantDyingFromEatenEvent(address);
+			part3 = new PlantDyingFromDisappearingEvent(address);
+			//part4 = new SpikerockDyingFromSmashedEvent(address);
+			part5 = new PlantDyingFromJalapenoHeadEvent(address);
+		}
+		void end()
+		{
+			part1->end();
+			part2->end();
+			part3->end();
+			//part4->end();
+			part5->end();
+		}
 	};
 };
