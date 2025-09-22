@@ -3,6 +3,8 @@
 #include "MyZombie/ZombieAbility.hpp"
 #include "MyEvents.hpp"
 
+#define FROST_DECELERATE(zombie) max(1.0f - (zombie).FrostStack * 0.02f,0.4f)
+
 bool CLOWN_ZOMBIE_POP_FLAG = false;
 
 void onZombieDropLoot(MyZombie zombie)
@@ -107,7 +109,20 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		case ZombieType::WallnutZombie:
 		case ZombieType::TallnutZombie:
 		case ZombieType::Gigagargantuar:
-			elite_type = -1;
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        elite_type = -1;
 			break;
 		case ZombieType::FootballZombie:
 			if (elite_type > 0)
@@ -181,10 +196,39 @@ float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
 {
 	if (zombie.IsTangleKelpTarget())
 		return 0.0f;
+	
+	float v = velocity;
+	//撑杆僵尸正常跑
+	if (zombie.State == ZombieState::POLE_VALUTING_RUNNING)
+		v *= 2.0f;
+	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40 && zombie.EffectedBy(PVZ::DRF_GROUND))
+		v *= 2.0f;
+	//击飞或击退则使用+34位移
+	if (zombie.IsLaunched)
+	{
+		v = zombie.Speed;
+		if (zombie.ZombieHeight != 7)
+		{
+			//如果击退，则速度衰减
+			zombie.Speed *= 0.95f;
+			if (zombie.Speed < 0.05f && zombie.Speed > -0.05f)
+			{
+				//速度降到阈值后，状态变为正常，重置速度
+				zombie.IsLaunched = 0;
+				zombie.PickRandomSpeed();
+			}
+		}
+	}
 
-	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40)
-		return velocity * 2.0f;
-	return velocity;
+	//撑杆僵尸空中额外位移
+	if (zombie.State == ZombieState::POLE_VALUTING_JUMPPING)
+		v += 0.5f;//额外总位移：0.5px/cs * 180cs
+	//海豚僵尸空中额外位移
+	if (zombie.State == ZombieState::DOPHIN_JUMP)
+	{
+		v += 0.35f;//额外总位移：0.35px/cs * 230cs
+	}
+	return v;
 }
 
 int onZombieIsWalkingBackwards(MyZombie zombie)
@@ -206,7 +250,7 @@ float onZombieApplyAnimSpeed(MyZombie zombie, PVZ::Animation anim, float rate)
 {
 	if (zombie.FrostStack && zombie.FrostStack !=0xFF)//在InitAfter之前会调用一次AnimSpeed，此时僵尸的FrostStack还没有初始化，初始值为0xFF
 	{
-		rate *= max(1.0f - zombie.FrostStack * 0.02f,0.4f);
+		rate *= FROST_DECELERATE(zombie);
 	}
 	return rate;
 }
@@ -343,12 +387,35 @@ bool onZombieWalkOutOfWater(MyZombie zombie)
 	return true;
 }
 
+bool onZombieUpdateFalling(MyZombie zombie)
+{
+	if (zombie.IsLaunched)
+	{
+		zombie.Height += zombie.FallSpeed;
+		zombie.FallSpeed -= 0.05f;//原版小鬼使用的加速度
+		return false;
+	}
+	return true;
+}
+
+void onZombieFallOnGround(MyZombie zombie)
+{
+	if (zombie.IsLaunched)
+	{
+		zombie.IsLaunched = 0;
+		zombie.FallSpeed = 0.0f;
+		zombie.PickRandomSpeed();
+	}
+}
+
 int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 {
 	if (zombie.IsTangleKelpTarget())
 	{
 		return 0;
 	}
+	if (zombie.IsLaunched)
+		return 0;
 	if (zombie.State == ZombieState::DIGGER_WALK_RIGHT && zombie.X < 130)
 		return 0;
 	return -1;
@@ -392,6 +459,21 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 	return true;
 }
 
+int onZombieFindTargetInterval(MyZombie zombie)
+{
+	int cd = zombie.ExistedTime * 100;
+	//引入寒意百分比减速
+	int interval = 400 / (FROST_DECELERATE(zombie));
+	if (zombie.DecelerateCountdown > 0)
+		interval * 2;
+
+	if (cd % interval < 100)
+		return 1;
+	else return 0;
+
+	return -1;
+}
+
 bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 {
 	return zombie.FromWave < WAVE_ELITE_MASK;
@@ -413,6 +495,33 @@ bool OverrideZombieDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
 	return ZombieAbility::GetAbility(zombie.Type)->OverrideDrawPos(zombie, draw_pos);
 }
 
+bool onCatapultZombieFire(MyZombie zombie)
+{
+	for (int num = 0; num < 3; num++)
+	{
+		int targetaddr = zombie.FindCatapultTarget();
+		if (targetaddr != 0)
+		{
+			zombie.ZombieCatapultFire(targetaddr);
+			MyPlant targetplant{ targetaddr };
+			targetplant.CatapultTargetSkip = 1;
+		}
+	}
+	auto plants = zombie.GetBoard().GetAllPlants<MyPlant>();
+	for (auto& plant : plants)
+	{
+		plant.CatapultTargetSkip = 0;
+	}
+	return false;
+}
+
+bool onCatapultTargetSkip(MyZombie zombie, MyPlant plant)
+{
+	if (plant.CatapultTargetSkip)
+		return false;
+	return true;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -432,13 +541,19 @@ void InitZombieEvents()
 	ZombieEatSoundEvent((int)onZombieEatSound);
 	PVZEvent::ZombieWalkIntoWaterEvent((int)onZombieWalkIntoWater);
 	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
+	PVZEvent::ZombieUpdateFallingEvent((int)onZombieUpdateFalling);
+	PVZEvent::ZombieFallOnGroundEvent((int)onZombieFallOnGround);
 	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
 	PVZEvent::JalapenoZombieBurnEvent((int)onJalapenoZombieBurn);
+	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
 	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
+
+	PVZEvent::CatapultTargetSkipEvent((int)onCatapultTargetSkip);
+	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
@@ -446,10 +561,20 @@ void InitZombieEvents()
 	PVZ::Memory::WriteMemory<int>(0x52874E, 0x00000025);
 	//矿工从底线出土
 	PVZ::Memory::WriteMemory<int>(0x528334, 0x0000041F);
+	//海豚随地下水
+	static constexpr byte asm_revert_dophin1[] = { 0xEB,0x14,0x90,0x90,0x90 };
+	PVZ::Memory::WriteArray<const byte>(0x526211, STRING(asm_revert_dophin1));
+	//海豚冲刺到屏幕左侧不出水
+	PVZ::Memory::WriteMemory<byte>(0x5263E8, 0xEB);
+	//潜水场内下水
+	PVZ::Memory::WriteMemory<byte>(0x526747, 0x07);
 	//覆盖原盲盒开盒
 	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));
 	//覆盖原金银特效
 	static constexpr byte asm_revert_2[] = { 0x83,0xBE,0xAC,0x00,0x00,0x00,0x00 };
 	PVZ::Memory::WriteArray<const byte>(0x52D309, STRING(asm_revert_2));
+	//覆盖位于僵尸总更新里的气球落地以及其他代码，此处代码应当搬运至恰当的更新函数中
+	static constexpr byte asm_revert_3[] = { 0x83,0xBB,0xFC,0x07,0x00,0x00,0x04 };
+	PVZ::Memory::WriteArray<const byte>(0x52AF2F, STRING(asm_revert_3));
 }

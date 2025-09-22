@@ -7,6 +7,8 @@ public:
 	MyZombie(int idoraddress) : PVZ::Zombie(idoraddress) {};
 	MyZombie(const PVZ::Zombie& zombie) : PVZ::Zombie(zombie.GetBaseAddress()) {};
 
+	/// @brief 默认=0，=1时，如果+64=7，击飞；如果+64=0，击退。
+	T_PROPERTY(byte, IsLaunched, __get_IsLaunched, __set_IsLaunched, 0x52);
 	/// @brief 生成的波数
 	INT_PROPERTY(FromWave, __get_FrW, __set_FrW, 0x6C);
 	/// @brief 是否掉落过掉落物
@@ -29,6 +31,8 @@ public:
 	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
 	/// @brief 僵尸受攻击的动画附件的ID
 	INT_PROPERTY(HitReanimID, __get_HitReanimID, __set_HitReanimID, 0x110);
+	/// @brief 僵尸的掉落速度，原版中只有小鬼和水族馆僵尸使用该指针；负数表示下落，正数表示上升
+	T_PROPERTY(float, FallSpeed, __get_FallSpeed, __set_FallSpeed, 0x120);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
 	T_PROPERTY(byte, IsWalkingBackwards, __get_IsWalkingBackwards, __set_IsWalkingBackwards, 0x13C);
 	/// @brief 僵尸寒意层数，上限30层，每层减速2%
@@ -64,6 +68,8 @@ public:
 	MyZombie FindZombieTarget();
 	/// @brief 使僵尸停止啃咬
 	void StopEating();
+	/// @brief 重置僵尸的速度
+	void PickRandomSpeed();
 
 	/// @brief 增加寒意值
 	/// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！
@@ -81,4 +87,10 @@ public:
 	bool IsTangleKelpTarget();
 	/// @brief 矿工失去镐子
 	void DiggerLoseAxe();
+	/// @brief 投篮车尝试寻找目标植物
+	/// @return 目标植物的Address，没有找到目标则为0。
+	int FindCatapultTarget();
+	/// @brief 投篮车对目标植物开火
+	/// @rparam 目标植物的Address，0表示没有找到目标。
+	void ZombieCatapultFire(int targetaddr);
 };
