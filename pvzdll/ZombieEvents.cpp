@@ -307,7 +307,7 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	return true;
 }
 
-bool onZombieUpdateAction(MyZombie zombie)
+bool onZombieUpdateAbility(MyZombie zombie)
 {
 	//这里是所有僵尸在未定身时必经的更新
 	MyBoard board = zombie.GetBoard();
@@ -535,7 +535,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieApplyAnimSpeedEvent((int)onZombieApplyAnimSpeed);
 	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	PVZEvent::ZombieUpdateActionEXEvent((int)onZombieUpdateAction);
+	PVZEvent::ZombieUpdateAbilityEvent((int)onZombieUpdateAbility);
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
 	ZombieEatSoundEvent((int)onZombieEatSound);
