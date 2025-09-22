@@ -15,5 +15,11 @@ namespace ZombieAbility
 				.ret()
 			);
 		}
+		bool OverrideDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
+		{
+			if (zombie.Hypnotized)
+				draw_pos->ImageOffsetX -= 120.0f;
+			return true;
+		}
 	};
 }

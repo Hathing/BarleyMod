@@ -109,7 +109,20 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		case ZombieType::WallnutZombie:
 		case ZombieType::TallnutZombie:
 		case ZombieType::Gigagargantuar:
-			elite_type = -1;
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        elite_type = -1;
 			break;
 		case ZombieType::FootballZombie:
 			if (elite_type > 0)
@@ -466,6 +479,22 @@ bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 	return zombie.FromWave < WAVE_ELITE_MASK;
 }
 
+bool onJalapenoZombieBurn(MyZombie zombie)
+{
+	if (zombie.Hypnotized)
+	{
+		MyBoard board = zombie.GetBoard();
+		board.BurnRow(zombie.Row);
+		return false;
+	}
+	return true;
+}
+
+bool OverrideZombieDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
+{
+	return ZombieAbility::GetAbility(zombie.Type)->OverrideDrawPos(zombie, draw_pos);
+}
+
 bool onCatapultZombieFire(MyZombie zombie)
 {
 	for (int num = 0; num < 3; num++)
@@ -517,9 +546,11 @@ void InitZombieEvents()
 	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
+	PVZEvent::JalapenoZombieBurnEvent((int)onJalapenoZombieBurn);
 	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
+	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
 
 	PVZEvent::CatapultTargetSkipEvent((int)onCatapultTargetSkip);
 	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
