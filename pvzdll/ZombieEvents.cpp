@@ -309,6 +309,8 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 
 bool onZombieUpdateAbility(MyZombie zombie)
 {
+	if (zombie.Hypnotized && zombie.Type == ZombieType::Zomboin)
+		return false;
 	//这里是所有僵尸在未定身时必经的更新
 	MyBoard board = zombie.GetBoard();
 	//小丑僵尸爆炸
