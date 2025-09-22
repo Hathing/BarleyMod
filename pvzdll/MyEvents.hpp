@@ -671,6 +671,8 @@ namespace PVZEvent
 			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(23);
 			builder.cmp_reg_imm(REG_EAX,0).jne_rel(7).popad().push_imm32(0x52F6BC).ret();
 			builder.popad().push_imm32(0x52F65D).ret();
+			//覆盖掉了原版的一个逆天判断条件：如果僵尸+60为正奇数则对植物不造成伤害
+			PVZ::Memory::WriteMemory<byte>(0x52FC82, 0xEB);
 		}
 	};
 	/// @brief 僵尸能否将植物作为目标的额外判断，优先级高于原版

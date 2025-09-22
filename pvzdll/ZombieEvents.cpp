@@ -448,6 +448,7 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 
 int onZombieFindTargetInterval(MyZombie zombie)
 {
+	//existed time最大值约为21亿，即2100W cs，÷100后为210000cs，约58小时
 	int cd = zombie.ExistedTime * 100;
 	//引入寒意百分比减速
 	int interval = 400 / (FROST_DECELERATE(zombie));
