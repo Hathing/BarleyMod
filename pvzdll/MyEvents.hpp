@@ -974,4 +974,15 @@ namespace PVZEvent
 			part5->end();
 		}
 	};
+
+	/// @brief 车类僵尸碾压结算事件。
+	/// @param 触发事件的僵尸
+	/// @return 是否结算原版碾压过程。
+	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x24)>
+	{
+	public:
+		ZombieCheckSquishEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieCheckSquishEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieCheckSquishEvent() : BoolDLLEventTemplate() { Init("onZombieCheckSquish"); };
+	};
 };

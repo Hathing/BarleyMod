@@ -524,6 +524,39 @@ bool onCatapultTargetSkip(MyZombie zombie, MyPlant plant)
 	return true;
 }
 
+bool onZombieCheckSquish(MyZombie zombie)
+{
+	if (zombie.State != ZombieState::CATAPULT_SHOOT && zombie.State != ZombieState::CATAPULT_IDLE)
+	{
+		auto attack_rect = zombie.GetActualAttackRect();
+		auto zombies = zombie.GetBoard().GetAllZombies<MyZombie>();
+		for (auto myzombie : zombies)
+		{
+			if (zombie.Hypnotized == myzombie.Hypnotized || zombie.Row != myzombie.Row)
+				continue;
+			switch (myzombie.State)
+			{
+			case ZombieState::DYING:
+			case ZombieState::DYING_FROM_INSTANT_KILL:
+			case ZombieState::DYING_FROM_LAWNMOWER:
+			case ZombieState::BUNGEE_TARGET_DROP:
+			case ZombieState::BUNGEE_BODY_DROP:
+			case ZombieState::DIGGER_DIG:
+			case ZombieState::DIGGER_LOST_DIG:
+			case ZombieState::IMP_FLYING:
+			case ZombieState::BALLOON_FLYING:
+				continue;
+			}
+
+			auto rect = myzombie.GetActualRect();
+			if (PVZ::GetXOverlap(attack_rect, rect) >= -30)
+				myzombie.Hit(1, PVZ::DAMAGEF_HITS_SHIELD_AND_BODY);
+		}
+	}
+	auto rect = zombie.GetActualAttackRect();
+	return !(zombie.Hypnotized || zombie.ZombieHeight == 9);
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -556,6 +589,7 @@ void InitZombieEvents()
 
 	PVZEvent::CatapultTargetSkipEvent((int)onCatapultTargetSkip);
 	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
+	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
