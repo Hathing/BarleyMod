@@ -66,6 +66,9 @@ public:
 	/// @brief 寻找可攻击的僵尸目标，封装的原版函数
 	/// return 可攻击的僵尸
 	MyZombie FindZombieTarget();
+	/// @brief 寻找可攻击的植物目标，封装的原版函数
+	/// return 可攻击的植物
+	PVZ::Plant FindPlantTarget(int attacktype);
 	/// @brief 使僵尸停止啃咬
 	void StopEating();
 	/// @brief 重置僵尸的速度

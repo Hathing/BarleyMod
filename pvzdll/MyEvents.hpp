@@ -675,6 +675,23 @@ namespace PVZEvent
 			PVZ::Memory::WriteMemory<byte>(0x52FC82, 0xEB);
 		}
 	};
+	/// @brief 僵尸受伤害范围判断的事件
+	/// @param 僵尸，DRF
+	/// @return 负数则调用原版判断，0则不能被伤害，正数则可以被伤害
+	class ZombieEffectedByDamageRangeEvent : public DLLEventTemplate<0x531A84, 7, MEM_ESP_ADD(0x38), REG_ESI>
+	{
+	public:
+		ZombieEffectedByDamageRangeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieEffectedByDamageRangeEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieEffectedByDamageRangeEvent() : ZombieEffectedByDamageRangeEvent("onZombieEffectedByDamageRange") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(30);
+			builder.cmp_reg_imm(REG_EAX, 0).jne_rel(9).popad().xor_reg_reg(REG_EAX,REG_EAX).push_imm32(0x531AB9).ret();
+			builder.popad().mov_reg_imm(REG_EAX,1).push_imm32(0x531AB9).ret();
+		}
+	};
 	/// @brief 僵尸能否将植物作为目标的额外判断，优先级高于原版
 	/// @param 僵尸，植物，攻击方式(0(啃食/锤砸) | 1(车类碾压) | 2(跳跃) | 3(搭梯))
 	/// @return False则直接不攻击植物，True则正常原版判断
@@ -812,6 +829,33 @@ namespace PVZEvent
 		{
 			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x525A7E).ret().popad().push_reg(REG_EDI).invoke(0x525890).push_imm32(0x525A77).ret();
 		}
+	};
+
+	/// @brief 跳跳更新高度事件
+	/// @param 触发事件的僵尸，原版计算好的新高度
+	/// @return 新的高度
+	class PogoUpdateHeightEvent : public DLLEventTemplate<0x525573, 10, MEM_ESP_ADD(0x2C), REG_EDI>
+	{
+	public:
+		PogoUpdateHeightEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PogoUpdateHeightEvent(int address) : DLLEventTemplate() { Init(address); };
+		PogoUpdateHeightEvent() : DLLEventTemplate() { Init("onPogoUpdateHeight"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.fstp_m32_esp_imm8(0x2C);
+		}
+	};
+
+	/// @brief 跳跳的非位置更新事件，发生在更新高度、更新音效和动画、判断是否撞高坚果之后，发生在着陆处理之前
+	/// @param 触发事件的僵尸
+	/// @return False则不进行着陆的判断
+	class PogoUpdateActionsEvent : public BoolDLLEventTemplate<0x5256AA, 5, 0x525722, REG_EDI>
+	{
+	public:
+		PogoUpdateActionsEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PogoUpdateActionsEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PogoUpdateActionsEvent() : BoolDLLEventTemplate() { Init("onPogoUpdateActions"); };
 	};
 
 	/// @brief Zombie 行为动作的更新。

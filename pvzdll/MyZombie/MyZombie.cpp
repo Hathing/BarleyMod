@@ -53,6 +53,12 @@ MyZombie MyZombie::FindZombieTarget()
 	return MyZombie{ targetaddr };
 }
 
+PVZ::Plant MyZombie::FindPlantTarget(int attacktype)
+{
+	int targetaddr = PVZ::Memory::Execute(AsmBuilder().push_imm32(attacktype).push_imm32(this->GetBaseAddress()).invoke(0x52E780).mov_mem_reg(Memory::Variable, REG_EAX).ret());
+	return PVZ::Plant{ targetaddr };
+}
+
 void MyZombie::StopEating()
 {
 	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EDI,this->GetBaseAddress()).invoke(0x52F440).ret());

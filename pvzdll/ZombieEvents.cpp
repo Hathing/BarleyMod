@@ -453,11 +453,20 @@ int onZombieFindTargetInterval(MyZombie zombie)
 	//引入寒意百分比减速
 	int interval = 400 / (FROST_DECELERATE(zombie));
 	if (zombie.DecelerateCountdown > 0)
-		interval * 2;
+		interval *= 2;
 
 	if (cd % interval < 100)
 		return 1;
 	else return 0;
+
+	return -1;
+}
+
+int onZombieEffectedByDamageRange(MyZombie zombie, PVZ::DamageRangeFlags drf)
+{
+	//高空僵尸会被视为飞行范围内
+	if (zombie.Height > 20.0f && (drf & PVZ::DRF_FLYING) == 0)
+		return 0;
 
 	return -1;
 }
@@ -494,6 +503,39 @@ bool onCatapultTargetSkip(MyZombie zombie, MyPlant plant)
 	return true;
 }
 
+float onPogoUpdateHeight(MyZombie zombie, float height)
+{
+	return height;
+}
+
+bool onPogoUpdateActions(MyZombie zombie)
+{
+	/*
+	*以下是誊抄的原版代码
+	if (zombie.AttributeCountdown != 0)
+		return false;
+
+	zombie.AttributeCountdown = 80;
+	auto target = zombie.FindPlantTarget(2);
+	if (zombie.FromWave == -2 || zombie.FromWave == -3 || !(target.isValid()))
+	{
+		zombie.State = ZombieState::POGO_WITH_STICK;
+		zombie.PickRandomSpeed();
+	}
+	if (zombie.State == ZombieState::POGO_IDLE_BEFORE_TARGET)
+	{
+		zombie.Speed = (zombie.ImageX - target.ImageX + 60) / 80.0f;
+	}
+	else
+	{
+		zombie.State = ZombieState::POGO_IDLE_BEFORE_TARGET;
+		zombie.Speed = 0.0f;
+	}
+	return false;
+	*/
+	return true;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -519,11 +561,15 @@ void InitZombieEvents()
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
 	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
+	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
 
 	PVZEvent::CatapultTargetSkipEvent((int)onCatapultTargetSkip);
 	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
+
+	PVZEvent::PogoUpdateHeightEvent((int)onPogoUpdateHeight);
+	PVZEvent::PogoUpdateActionsEvent((int)onPogoUpdateActions);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
