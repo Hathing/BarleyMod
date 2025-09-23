@@ -11,6 +11,7 @@ namespace ZombieAbility
 			auto model = zombie.GetSpecialHeadAnimation();
 			model.AssignRenderGroupToPrefix(-1, "awake");
 			model.AssignRenderGroupToPrefix(-1, "easter");
+			zombie.AttributeCountdown = 500;
 		}
 	};
 }

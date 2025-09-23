@@ -69,6 +69,11 @@ void MyZombie::PickRandomSpeed()
 	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, this->GetBaseAddress()).invoke(0x524A70).ret());
 }
 
+void MyZombie::RiseFromGrave(int row, int column)
+{
+	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EBX, this->GetBaseAddress()).mov_reg_imm(REG_EAX,column).push_imm32(row).invoke(0x531C90).ret());
+}
+
 void MyZombie::AddFrost(int num)
 {
 	int add_frost_num = this->FrostStack + num;

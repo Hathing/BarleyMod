@@ -858,6 +858,17 @@ namespace PVZEvent
 		PogoUpdateActionsEvent() : BoolDLLEventTemplate() { Init("onPogoUpdateActions"); };
 	};
 
+	/// @brief 辣椒头僵尸创建特效之后、烧植物之前的事件
+	/// @param 触发事件的僵尸
+	/// @return False则不烧植物
+	class JalapenoHeadBurnBeforeEvent : public BoolDLLEventTemplate<0x5276BB, 7, 0x52773E, REG_EDI>
+	{
+	public:
+		JalapenoHeadBurnBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		JalapenoHeadBurnBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		JalapenoHeadBurnBeforeEvent() : BoolDLLEventTemplate() { Init("onJalapenoHeadBurnBefore"); };
+	};
+
 	/// @brief Zombie 行为动作的更新。
 	/// @note 时机上先于原版的更新。
 	/// @note 该事件与 ZombieUpdateActionEvent 在同一个位置生效。不建议同时使用。

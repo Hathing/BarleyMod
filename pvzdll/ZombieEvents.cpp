@@ -508,6 +508,33 @@ float onPogoUpdateHeight(MyZombie zombie, float height)
 	return height;
 }
 
+bool onJalapenoHeadBurnBefore(MyZombie zombie)
+{
+	MyBoard board{ zombie.GetBoard() };
+	auto zombies = board.GetAllZombies<MyZombie>();
+	int count = 0;
+	for (auto& zombie_ : zombies)
+	{
+		if (zombie_.Row == zombie.Row && !zombie.NotExist && !zombie.Hypnotized)
+		{
+			count += zombie_.BodyHealth;
+			count += zombie_.HelmHealth;
+			count += zombie_.ShieldHealth;
+			if (zombie_.BodyHealth > 1800)
+				zombie_.BodyHealth = 1799;
+			zombie_.Blast();
+		}
+	}
+	MyZombie summoned = board.AddZombieInRow(ZombieType::Gigagargantuar, zombie.Row, 1);//后续可以考虑传入from wave为精英标记
+	float amplify = min(1.0f + count / 5000.0f,2.0f);
+	summoned.Size = amplify;
+	summoned.BodyHealth *= amplify;
+	summoned.BodyMaxHealth *= amplify;
+	summoned.RiseFromGrave(zombie.Row,board.PixelToGridX(zombie.X,zombie.Y));
+	summoned.GetActualRect();
+	return false;
+}
+
 bool onPogoUpdateActions(MyZombie zombie)
 {
 	/*
@@ -570,6 +597,8 @@ void InitZombieEvents()
 
 	PVZEvent::PogoUpdateHeightEvent((int)onPogoUpdateHeight);
 	PVZEvent::PogoUpdateActionsEvent((int)onPogoUpdateActions);
+
+	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

@@ -73,6 +73,8 @@ public:
 	void StopEating();
 	/// @brief 重置僵尸的速度
 	void PickRandomSpeed();
+	/// @brief 让僵尸从土里或者泳池里冒出来，通常在生成后调用该函数
+	void RiseFromGrave(int row,int column);
 
 	/// @brief 增加寒意值
 	/// @note 寒意的上限层数只有30层，使用byte储存，请注意溢出问题！
