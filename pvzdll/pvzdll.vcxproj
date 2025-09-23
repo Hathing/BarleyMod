@@ -147,6 +147,7 @@
     <ClInclude Include="MyProjectile\implement\Cabbage.hpp" />
     <ClInclude Include="MyProjectile\implement\Cobbig.hpp" />
     <ClInclude Include="MyProjectile\implement\Diamond.hpp" />
+    <ClInclude Include="MyProjectile\implement\Puff.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldMelon.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldSpike.hpp" />
     <ClInclude Include="MyProjectile\implement\index.hpp" />

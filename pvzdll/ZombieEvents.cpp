@@ -531,7 +531,6 @@ bool onJalapenoHeadBurnBefore(MyZombie zombie)
 	summoned.BodyHealth *= amplify;
 	summoned.BodyMaxHealth *= amplify;
 	summoned.RiseFromGrave(zombie.Row,board.PixelToGridX(zombie.X,zombie.Y));
-	summoned.GetActualRect();
 	return false;
 }
 
