@@ -985,4 +985,17 @@ namespace PVZEvent
 		ZombieCheckSquishEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieCheckSquishEvent() : BoolDLLEventTemplate() { Init("onZombieCheckSquish"); };
 	};
+
+	/// @brief 子弹击中判定分支事件。
+	/// @warning 该事件与 ProjectileCollisionEvent 冲突，
+	/// @param 触发事件的子弹
+	/// @retval true 结算对植物的索敌和击中效果。
+	/// @retval false 结算对僵尸的索敌和击中效果。
+	class ProjectileHitDiversionEvent : public DiversionEventTemplate<0x46CFC9, 6, 0x46CFCF, 0x46D058, REG_EBP>
+	{
+	public:
+		ProjectileHitDiversionEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		ProjectileHitDiversionEvent(int address) : DiversionEventTemplate() { Init(address); };
+		ProjectileHitDiversionEvent() : DiversionEventTemplate() { Init("onProjectileHitDiversion"); };
+	};
 };

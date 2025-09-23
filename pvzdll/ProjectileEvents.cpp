@@ -177,6 +177,11 @@ void onProjectileImpact(MyProjectile proj, MyZombie zombie)
 	}
 }
 
+bool onProjectileDivert(MyProjectile proj)
+{
+	return proj.Type == ProjectileType::ZombiePea && (proj.ExistedTime & 1);
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -191,6 +196,7 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
 	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
+	PVZEvent::ProjectileHitDiversionEvent((int)onProjectileDivert);
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);
