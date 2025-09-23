@@ -200,8 +200,18 @@ namespace PVZEvent
 		ProjectileImpactEvent(int address) : DLLEventTemplate() { Init(address); };
 		ProjectileImpactEvent() : ProjectileImpactEvent("onProjectileImpact") {};
 	};
+	/// @brief 子弹跳过寻找碰撞僵尸的事件
+	/// @param 子弹，正在遍历的僵尸
+	/// @return False则不碰撞该僵尸
+	class ProjectileFindZombieTargetSkipEvent : public BoolDLLEventTemplate<0x46CD95, 6, 0x46CE58, REG_ESI, REG_EDI>
+	{
+	public:
+		ProjectileFindZombieTargetSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileFindZombieTargetSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileFindZombieTargetSkipEvent() : ProjectileFindZombieTargetSkipEvent("onProjectileFindZombieTarget") {};
+	};
 
-	/// @brief 子弹击中僵尸事件
+	/// @brief 植物添加子弹后，给子弹的DRF赋值之后的事件
 	/// @param 依次为：触发事件的子弹，发射子弹的植物
 	class PlantAddProjDamageRangeFlagsEvent : public DLLEventTemplate<0x4672CA, 6, REG_EBP, REG_ECX>
 	{
@@ -212,7 +222,7 @@ namespace PVZEvent
 	};
 
 	/// @brief 子弹总更新事件，发生在计时器与图层更新后、子弹运动前
-	/// @param 子弹ID
+	/// @param 子弹
 	class ProjectileUpdateEvent : public DLLEventTemplate<0x46E4FE, 6, REG_ESI>
 	{
 	public:

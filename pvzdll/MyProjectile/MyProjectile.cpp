@@ -50,6 +50,17 @@ void MyProjectile::MakePiercing(int piercingnum)
 	ghostproj.IsGhost = true;
 	ghostproj.AttachmentID = 0;
 
+	ghostproj.PiercingID1 = 0;
+	ghostproj.PiercingID2 = 0;
+	ghostproj.PiercingID3 = 0;
+	ghostproj.PiercingID4 = 0;
+	ghostproj.PiercingID5 = 0;
+	ghostproj.PiercingID6 = 0;
+	ghostproj.PiercingID7 = 0;
+	ghostproj.PiercingID8 = 0;
+	ghostproj.PiercingMaxCount = max(min(piercingnum, 8), 1);//穿透数不能<1，不能>8
+	ghostproj.PiercingCount = 0;
+
 	this->GhostAddr = ghostaddr;
 	this->Motion = MotionType::Piercing;
 

@@ -60,7 +60,10 @@ void onProjectileUpdate(MyProjectile proj)
 
 bool onProjectileRemove(MyProjectile proj)
 {
-	//处理弹跳子弹
+	// 幽灵子弹直接Remove无需多言
+	if (proj.IsGhost)
+		return false;
+	// 处理弹跳子弹
 	if (proj.Motion == MotionType::Throw && proj.BounceCount > 0 && proj.X > 0.0f && proj.X < 1000.0f)
 	{
 		proj.BounceCount -= 1;
@@ -68,9 +71,13 @@ bool onProjectileRemove(MyProjectile proj)
 		proj.HeightSpeed *= -0.75f;
 		return true;
 	}
+	// 处理穿透子弹
 	if (proj.Motion == MotionType::Piercing && proj.GhostAddr != 0)
 	{
 		MyProjectile ghost{ proj.GhostAddr };
+		ghost.PiercingCount += 1;
+		if (ghost.PiercingCount < ghost.PiercingMaxCount)
+			return true;
 		ghost.Remove();
 	}
 	return false;
@@ -182,6 +189,11 @@ void onProjectileImpact(MyProjectile proj, MyZombie zombie)
 		effect2.OverrideScale(2.0f);
 		PVZ::CreateParticleSystem(proj.X, proj.Y, proj.Layer + 100, EffectType::ICE_SHROOM_EXPLODED);
 	}
+	if (proj.Motion == MotionType::Piercing && proj.GhostAddr!=0 && zombie.isValid())
+	{
+		MyProjectile ghost{ proj.GhostAddr };
+		ghost.SetPiercingID(ghost.PiercingCount, zombie.Id);
+	}
 }
 
 
@@ -189,6 +201,22 @@ bool onProjectileSkipUpdateAndDraw(MyProjectile proj)
 {
 	if (proj.IsGhost)
 		return false;
+	return true;
+}
+
+bool onProjectileFindZombieTargetSkip(MyProjectile proj, MyZombie zombie)
+{
+	if (proj.Motion == MotionType::Piercing && proj.GhostAddr != 0)
+	{
+		MyProjectile ghost{ proj.GhostAddr };
+		for (int i = 0; i < ghost.PiercingCount; i++)
+		{
+			if (ghost.GetPiercingID(i) == zombie.Id)
+			{
+				return false;
+			}
+		}
+	}
 	return true;
 }
 
@@ -207,6 +235,7 @@ void InitProjectileEvents()
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
 	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
 	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
+	PVZEvent::ProjectileFindZombieTargetSkipEvent((int)onProjectileFindZombieTargetSkip);
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);
