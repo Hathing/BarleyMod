@@ -37,3 +37,20 @@ void MyProjectile::AdjustRow()
 	SETARG(__asm__AdjustRow, 16) = this->GetBoard().GetBaseAddress();
 	PVZ::Memory::Execute(STRING(__asm__AdjustRow));
 }
+
+
+
+void MyProjectile::MakePiercing(int piercingnum)
+{
+	// 在Projectile上DataArrayAlloc
+	// 有bug，干脆直接创建个正常子弹算了
+	// int ghostaddr = PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EDI, PVZ::Memory::ReadPointer(this->GetBaseAddress()+0x04,0xC8)).invoke(0x41DF60).mov_mem_reg(PVZ::Memory::Variable,REG_EAX).ret());
+	int ghostaddr = PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, this->GetBoard().GetBaseAddress()).push_imm32(0).push_imm32(0).push_imm32(0).push_imm32(0).push_imm32(0).invoke(0x40D620).mov_mem_reg(PVZ::Memory::Variable, REG_EAX).ret());
+	MyProjectile ghostproj{ ghostaddr };
+	ghostproj.IsGhost = true;
+	ghostproj.AttachmentID = 0;
+
+	this->GhostAddr = ghostaddr;
+	this->Motion = MotionType::Piercing;
+
+}

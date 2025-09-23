@@ -110,7 +110,7 @@ void MyZombie::AddFlame(int num)
 		this->ColorFlag = 3;
 }
 
-void MyZombie::Launch(float xspeed, float yspeed, float startheight = 1.0f)
+void MyZombie::Launch(float xspeed, float yspeed, float startheight)
 {
 	if (this->IsLaunched == 0 && this->ZombieHeight == 0)
 	{

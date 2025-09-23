@@ -68,6 +68,11 @@ bool onProjectileRemove(MyProjectile proj)
 		proj.HeightSpeed *= -0.75f;
 		return true;
 	}
+	if (proj.Motion == MotionType::Piercing && proj.GhostAddr != 0)
+	{
+		MyProjectile ghost{ proj.GhostAddr };
+		ghost.Remove();
+	}
 	return false;
 }
 
@@ -115,6 +120,8 @@ void onProjectileInitAfter(MyProjectile proj)
 	proj.SourceLevel = 0;
 	proj.SourceType = 0;
 	proj.BounceCount = 0;
+
+	proj.IsGhost = false;
 }
 
 void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
@@ -177,6 +184,14 @@ void onProjectileImpact(MyProjectile proj, MyZombie zombie)
 	}
 }
 
+
+bool onProjectileSkipUpdateAndDraw(MyProjectile proj)
+{
+	if (proj.IsGhost)
+		return false;
+	return true;
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -191,6 +206,7 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
 	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
+	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);

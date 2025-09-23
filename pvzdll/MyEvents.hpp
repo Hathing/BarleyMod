@@ -1000,4 +1000,44 @@ namespace PVZEvent
 			part5->end();
 		}
 	};
+
+
+	/// @brief 用于跳过幽灵子弹更新和绘制的事件
+	/// @param 子弹
+	/// @return False则跳过更新和绘制
+	class ProjectileSkipUpdateAndDrawEvent
+	{
+	private:
+		class ProjectileSkipUpdateEvent : public BoolDLLEventTemplate<0x46E462, 6, 0x46E533, REG_EAX>
+		{
+		public:
+			ProjectileSkipUpdateEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ProjectileSkipUpdateEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ProjectileSkipUpdateEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipUpdate"); };
+		};
+		class ProjectileSkipDrawEvent : public BoolDLLEventTemplate<0x46E540, 6, 0x46E8AF, MEM_ESP_ADD(0x24)>
+		{
+		public:
+			ProjectileSkipDrawEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ProjectileSkipDrawEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ProjectileSkipDrawEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipDraw"); };
+		};
+		ProjectileSkipUpdateEvent* part1;
+		ProjectileSkipDrawEvent* part2;
+	public:
+		ProjectileSkipUpdateAndDrawEvent()
+		{
+			ProjectileSkipUpdateAndDrawEvent(PVZ::Memory::GetProcAddress("onProjectileSkipUpdateAndDraw"));
+		}
+		ProjectileSkipUpdateAndDrawEvent(int address)
+		{
+			part1 = new ProjectileSkipUpdateEvent(address);
+			part2 = new ProjectileSkipDrawEvent(address);
+		}
+		void end()
+		{
+			part1->end();
+			part2->end();
+		}
+	};
 };
