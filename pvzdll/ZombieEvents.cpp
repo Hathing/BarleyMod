@@ -557,6 +557,33 @@ bool onZombieCheckSquish(MyZombie zombie)
 	return !(zombie.Hypnotized || zombie.ZombieHeight == 9);
 }
 
+void onZombieAddProj(MyZombie zombie, MyProjectile proj)
+{
+	switch (zombie.Type)
+	{
+	case ZombieType::GatlingPeaZombie:
+		proj.DamageAbility = PVZ::DRF_GROUND | PVZ::DRF_HYPNOTIZED;
+		if (zombie.Hypnotized)
+		{
+			proj.Type = ProjectileType::Pea;
+			proj.X += 100;
+			proj.DamageAbility = PVZ::DRF_GROUND;
+		}
+		break;
+	case ZombieType::PeashooterZombie:
+		proj.DamageAbility = PVZ::DRF_GROUND | PVZ::DRF_HYPNOTIZED;
+		if (zombie.Hypnotized)
+		{
+			proj.Type = ProjectileType::Pea;
+			if (zombie.PeaHeadType == 1)
+				proj.Type = ProjectileType::SnowPea;
+			proj.X += 100;
+			proj.DamageAbility = PVZ::DRF_GROUND;
+		}
+		break;
+	}
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -590,6 +617,7 @@ void InitZombieEvents()
 	PVZEvent::CatapultTargetSkipEvent((int)onCatapultTargetSkip);
 	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
 	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
+	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
