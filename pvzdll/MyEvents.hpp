@@ -814,17 +814,39 @@ namespace PVZEvent
 
 	/// @brief Zombie 行为动作的更新。
 	/// @note 时机上先于原版的更新。
-	/// @note 该事件与 ZombieUpdateActionEvent 在同一个位置生效。不建议同时使用。
-	/// @note 该事件与 ZombieUpdateActionEvent 基本一致，只是返回值不同
+	/// @note 该事件与 ZombieUpdateActionEvent 不同，只影响僵尸自身的技能。
 	/// @param 更新的 Zombie
 	/// @return 是否更新原版行为动作
-	/// @retval false 完全跳过原版的任何行为动作，这会导致原生技能失效，同时包括关于运动的检测！不建议跳过。
-	class ZombieUpdateActionEXEvent : public BoolDLLEventTemplate<0x52B112, 6, 0x52B279, REG_EAX>
+	/// @retval false 完全跳过原版的任何行为动作，这会导致原生技能失效。
+	class ZombieUpdateAbilityEvent : public DLLEventTemplate<0x52B174, 6, REG_ESI>
 	{
 	public:
-		ZombieUpdateActionEXEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateAction"); };
-		ZombieUpdateActionEXEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		ZombieUpdateActionEXEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieUpdateAbilityEvent() : DLLEventTemplate() { Init("onZombieUpdateAbility"); };
+		ZombieUpdateAbilityEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieUpdateAbilityEvent(int address) : DLLEventTemplate() { Init(address); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			static constexpr byte after[] =
+			{
+				TEST_AL_AL,
+				JNZ(7),
+
+				POPAD,
+				PUSHDWORD(0x52B279),
+				RET,
+
+				POPAD,
+				CMP_PTR_EUX_ADD_V_V(REG_ESI, 0x24, 3),
+				JNZ(6),
+
+				PUSHDWORD(0x52B17A),
+				RET,
+				PUSHDWORD(0x52B279),
+				RET,
+			};
+			builder.add_bytes(STRING(after));
+		}
 	};
 
 	/// @brief 重载僵尸绘制位置事件
@@ -951,5 +973,16 @@ namespace PVZEvent
 			//part4->end();
 			part5->end();
 		}
+	};
+
+	/// @brief 车类僵尸碾压结算事件。
+	/// @param 触发事件的僵尸
+	/// @return 是否结算原版碾压过程。
+	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x24)>
+	{
+	public:
+		ZombieCheckSquishEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieCheckSquishEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieCheckSquishEvent() : BoolDLLEventTemplate() { Init("onZombieCheckSquish"); };
 	};
 };

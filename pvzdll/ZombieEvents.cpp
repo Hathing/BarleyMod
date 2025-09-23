@@ -307,8 +307,10 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	return true;
 }
 
-bool onZombieUpdateAction(MyZombie zombie)
+bool onZombieUpdateAbility(MyZombie zombie)
 {
+	if (zombie.Hypnotized && zombie.Type == ZombieType::Zomboin)
+		return false;
 	//这里是所有僵尸在未定身时必经的更新
 	MyBoard board = zombie.GetBoard();
 	//小丑僵尸爆炸
@@ -522,6 +524,66 @@ bool onCatapultTargetSkip(MyZombie zombie, MyPlant plant)
 	return true;
 }
 
+bool onZombieCheckSquish(MyZombie zombie)
+{
+	if (zombie.State != ZombieState::CATAPULT_SHOOT && zombie.State != ZombieState::CATAPULT_IDLE)
+	{
+		auto attack_rect = zombie.GetActualAttackRect();
+		auto zombies = zombie.GetBoard().GetAllZombies<MyZombie>();
+		for (auto myzombie : zombies)
+		{
+			if (zombie.Hypnotized == myzombie.Hypnotized || zombie.Row != myzombie.Row)
+				continue;
+			switch (myzombie.State)
+			{
+			case ZombieState::DYING:
+			case ZombieState::DYING_FROM_INSTANT_KILL:
+			case ZombieState::DYING_FROM_LAWNMOWER:
+			case ZombieState::BUNGEE_TARGET_DROP:
+			case ZombieState::BUNGEE_BODY_DROP:
+			case ZombieState::DIGGER_DIG:
+			case ZombieState::DIGGER_LOST_DIG:
+			case ZombieState::IMP_FLYING:
+			case ZombieState::BALLOON_FLYING:
+				continue;
+			}
+
+			auto rect = myzombie.GetActualRect();
+			if (PVZ::GetXOverlap(attack_rect, rect) >= -30)
+				myzombie.Hit(1, PVZ::DAMAGEF_HITS_SHIELD_AND_BODY);
+		}
+	}
+	auto rect = zombie.GetActualAttackRect();
+	return !(zombie.Hypnotized || zombie.ZombieHeight == 9);
+}
+
+void onZombieAddProj(MyZombie zombie, MyProjectile proj)
+{
+	switch (zombie.Type)
+	{
+	case ZombieType::GatlingPeaZombie:
+		proj.DamageAbility = PVZ::DRF_GROUND | PVZ::DRF_HYPNOTIZED;
+		if (zombie.Hypnotized)
+		{
+			proj.Type = ProjectileType::Pea;
+			proj.X += 100;
+			proj.DamageAbility = PVZ::DRF_GROUND;
+		}
+		break;
+	case ZombieType::PeashooterZombie:
+		proj.DamageAbility = PVZ::DRF_GROUND | PVZ::DRF_HYPNOTIZED;
+		if (zombie.Hypnotized)
+		{
+			proj.Type = ProjectileType::Pea;
+			if (zombie.PeaHeadType == 1)
+				proj.Type = ProjectileType::SnowPea;
+			proj.X += 100;
+			proj.DamageAbility = PVZ::DRF_GROUND;
+		}
+		break;
+	}
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -535,7 +597,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieApplyAnimSpeedEvent((int)onZombieApplyAnimSpeed);
 	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	PVZEvent::ZombieUpdateActionEXEvent((int)onZombieUpdateAction);
+	PVZEvent::ZombieUpdateAbilityEvent((int)onZombieUpdateAbility);
 	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
 	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
 	ZombieEatSoundEvent((int)onZombieEatSound);
@@ -554,6 +616,8 @@ void InitZombieEvents()
 
 	PVZEvent::CatapultTargetSkipEvent((int)onCatapultTargetSkip);
 	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
+	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
+	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
