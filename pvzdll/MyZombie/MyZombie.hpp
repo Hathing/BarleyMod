@@ -64,11 +64,12 @@ public:
 	/// @param factor 被击飞后水平速度的因子，取负数让僵尸反向飞出屏幕，但是这个参数理论来说没啥用？
 	void FlyAway(float factor);
 	/// @brief 寻找可攻击的僵尸目标，封装的原版函数
-	/// return 可攻击的僵尸
+	/// @return 可攻击的僵尸
 	MyZombie FindZombieTarget();
 	/// @brief 寻找可攻击的植物目标，封装的原版函数
-	/// return 可攻击的植物
+	/// @return 可攻击的植物
 	PVZ::Plant FindPlantTarget(int attacktype);
+
 	/// @brief 使僵尸停止啃咬
 	void StopEating();
 	/// @brief 重置僵尸的速度
@@ -86,6 +87,13 @@ public:
 	/// @brief 增加燃烬值
 	/// @param num 增加的数值
 	void AddFlame(int num);
+
+	/// @brief 僵尸被击飞
+	/// @note 使用前请先在函数外处理对气球等空中僵尸的判断
+	void Launch(float xspeed,float yspeed,float startheight = 1.0f);
+	/// @brief 僵尸被击退
+	/// @note 使用前请先在函数外处理对气球等空中僵尸的判断
+	void KnockBack(float xspeed);
 
 	/// @brief 判断僵尸是否被水草缠住
 	/// @return 是则返回True

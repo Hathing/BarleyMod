@@ -110,6 +110,31 @@ void MyZombie::AddFlame(int num)
 		this->ColorFlag = 3;
 }
 
+void MyZombie::Launch(float xspeed, float yspeed, float startheight = 1.0f)
+{
+	if (this->IsLaunched == 0 && this->ZombieHeight == 0)
+	{
+		if (this->Eating)
+			this->StopEating();
+		this->IsLaunched = 1;
+		this->ZombieHeight = 7;
+		this->Height = startheight;
+		this->Speed = xspeed;
+		this->FallSpeed = yspeed;
+	}
+}
+/// @brief 僵尸被击退
+void MyZombie::KnockBack(float xspeed)
+{
+	if (this->IsLaunched == 0 && this->ZombieHeight == 0)
+	{
+		if (this->Eating)
+			this->StopEating();
+		this->IsLaunched = 1;
+		this->Speed = xspeed;
+	}
+}
+
 bool MyZombie::IsTangleKelpTarget()
 {
 	int result = PVZ::Memory::Execute(AsmBuilder()
