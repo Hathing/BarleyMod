@@ -66,18 +66,17 @@ void onRandomZombieDropHelm(MyZombie zombie)
 
 	if (true)
 	{
-		int HpPoint = 1 + Creator::Rand(5);
+		int HpPoint = zombie.GenHpPoint();
 		if (CLOWN_ZOMBIE_POP_FLAG)
 			HpPoint = 5;
 		child_zombie.HpPoint = HpPoint;
-		float health_ratio = (HpPoint) / 5.0f;
 
-		child_zombie.BodyHealth *= health_ratio;
-		child_zombie.BodyMaxHealth *= health_ratio;
-		child_zombie.HelmHealth *= health_ratio;
-		child_zombie.HelmMaxHealth *= health_ratio;
-		child_zombie.ShieldHealth *= health_ratio;
-		child_zombie.ShieldMaxHealth *= health_ratio;
+		child_zombie.BodyHealth = child_zombie.BodyHealth * HpPoint / 5;
+		child_zombie.BodyMaxHealth = child_zombie.BodyMaxHealth * HpPoint / 5;
+		child_zombie.HelmHealth = child_zombie.HelmHealth * HpPoint / 5;
+		child_zombie.HelmMaxHealth = child_zombie.HelmMaxHealth * HpPoint / 5;
+		child_zombie.ShieldHealth = child_zombie.ShieldHealth * HpPoint / 5;
+		child_zombie.ShieldMaxHealth = child_zombie.ShieldMaxHealth * HpPoint / 5;
 		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
 	}
 	return;

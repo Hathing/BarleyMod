@@ -110,4 +110,7 @@ public:
 	/// @brief 投篮车对目标植物开火
 	/// @rparam 目标植物的Address，0表示没有找到目标。
 	void ZombieCatapultFire(int targetaddr);
+	/// @brief 盲盒僵尸获取生命分数
+	/// @return 生命分数的分子
+	int GenHpPoint();
 };

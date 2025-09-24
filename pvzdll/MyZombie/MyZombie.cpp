@@ -174,3 +174,47 @@ void MyZombie::ZombieCatapultFire(int targetaddr)
 		.ret()
 	);
 }
+
+static constexpr int HpPointTable[5][5] =
+{
+	{1, 2, 3, 4, 4},
+	{1, 2, 3, 4, 5},
+	{2, 2, 3, 4, 5},
+	{2, 3, 3, 4, 5},
+	{3, 3, 3, 4, 5}
+};
+static constexpr int HpPointTable_9[7] = {3, 3, 3, 4, 4, 5, 5};
+
+int MyZombie::GenHpPoint()
+{
+	if (this->FromWave >= WAVE_ELITE_MASK)
+		return 5;
+
+	MyBoard board = this->GetBoard();
+	int duration_2min = board.MatchTimer / 12000;
+
+	switch (duration_2min)
+	{
+	case 0:
+	case 1:
+		return 1 + Creator::Rand(3);
+	case 2:
+	{
+		int tmp = 1 + Creator::Rand(4);
+		return tmp == 4 ? 3 : tmp;
+	}
+	case 3:
+		return 1 + Creator::Rand(4);
+	case 4:
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+		return HpPointTable[duration_2min - 4][Creator::Rand(5)];
+	case 9:
+		return HpPointTable_9[Creator::Rand(7)];
+	}
+
+	// default
+	return 2 + Creator::Rand(3);
+}
