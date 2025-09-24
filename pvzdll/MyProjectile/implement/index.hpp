@@ -11,3 +11,4 @@
 #include "WinterMelon.hpp"
 #include "Fireball.hpp"
 #include "Puff.hpp"
+#include "Pea.hpp"

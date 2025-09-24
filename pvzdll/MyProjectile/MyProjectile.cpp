@@ -5,7 +5,7 @@ namespace ProjectileAbility
 {
 	ProjectilePTR pt_factory[] =
 	{
-		new BaseProjectile(), new BaseProjectile(), new Cabbage(),		  new Melon(),			new Puff(),
+		new Pea(),			  new BaseProjectile(), new Cabbage(),		  new Melon(),			new Puff(),
 		new WinterMelon(),	  new Fireball(),		new Star(),			  new BaseProjectile(), new BaseProjectile(),
 		new Kernel(),		  new Cobbig(),			new Butter(),		  new BaseProjectile(), new BaseProjectile(),
 		new GoldSpike(),	  new BaseProjectile(), new BaseProjectile(), new Diamond(),		new BaseProjectile(),
@@ -20,12 +20,12 @@ ProjectileAbility::ProjectilePTR ProjectileAbility::GetAbility(ProjectileType::P
 
 byte __asm__AdjustRow[37]
 {
-	MOV_EBX(0),
-	MOV_EAX(0),
 	MOV_ECX(0),
-	MOV_EDX(0),
-	INVOKE(0x41C550),
-	0x89,0x43,0x1C,//mov [ebx+1c],eax
+	MOV_EAX(0),
+	MOV_EDI(0),
+	MOV_EBX(0),
+	INVOKE(0x41C650),
+	0x89,0x41,0x1C,//mov [ecx+1c],eax
 	RET
 };
 
@@ -69,6 +69,7 @@ void MyProjectile::MakePiercing(int piercingnum,float xspeed,float yspeed)
 
 void MyProjectile::DeriveProperty(MyProjectile proj)
 {
+	this->Row = proj.Row;
 	this->SourceType = proj.SourceType;
 	this->SourceLevel = proj.SourceLevel;
 	this->ParentID = proj.ParentID;

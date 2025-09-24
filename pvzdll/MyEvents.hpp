@@ -214,7 +214,7 @@ namespace PVZEvent
 	/// @brief 子弹更新穿透运动的事件，实际上充当一个跳转到+58=7的运动更新的作用
 	/// @param 子弹
 	/// @return False则跳到+58=7的位置，True则原版更新
-	class ProjectileUpdatePiercingMotionEvent : public BoolDLLEventTemplate<0x46DB5E, 6, 0x46DAC0, REG_EBX>
+	class ProjectileUpdatePiercingMotionEvent : public BoolDLLEventTemplate<0x46DBE5, 6, 0x46DAC0, REG_EBX>
 	{
 	public:
 		ProjectileUpdatePiercingMotionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
