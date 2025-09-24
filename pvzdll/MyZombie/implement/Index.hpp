@@ -1,5 +1,6 @@
 #pragma once
 #include "../ZombieAbility.hpp"
+#include "FlagZombie.hpp"
 #include "PoleVaulter.hpp"
 #include "NewspaperZombie.hpp"
 #include "ScreendoorZombie.hpp"

@@ -148,7 +148,7 @@
     <ClInclude Include="MyProjectile\implement\Cobbig.hpp" />
     <ClInclude Include="MyProjectile\implement\Diamond.hpp" />
     <ClInclude Include="MyProjectile\implement\Puff.hpp" />
-	<ClInclude Include="MyProjectile\implement\Pea.hpp" />
+    <ClInclude Include="MyProjectile\implement\Pea.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldMelon.hpp" />
     <ClInclude Include="MyProjectile\implement\GoldSpike.hpp" />
     <ClInclude Include="MyProjectile\implement\index.hpp" />
@@ -165,6 +165,7 @@
     <ClInclude Include="MyZombie\implement\DancingZombie.hpp" />
     <ClInclude Include="MyZombie\implement\DiggerZombie.hpp" />
     <ClInclude Include="MyZombie\implement\DolphinRiderZombie.hpp" />
+    <ClInclude Include="MyZombie\implement\FlagZombie.hpp" />
     <ClInclude Include="MyZombie\implement\Gargantaur.hpp" />
     <ClInclude Include="MyZombie\implement\Index.hpp" />
     <ClInclude Include="MyZombie\implement\JalapenoZombie.hpp" />
