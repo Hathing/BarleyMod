@@ -25,5 +25,11 @@ namespace PlantAbility
 			}
 			return secondary;
 		}
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		{
+			//if(proj.Motion==MotionType::None)
+			proj.SpecialType = PST_CRACK_PEA;
+			return true;
+		}
 	};
 }

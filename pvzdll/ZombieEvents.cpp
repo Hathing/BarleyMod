@@ -5,8 +5,6 @@
 
 #define FROST_DECELERATE(zombie) max(1.0f - (zombie).FrostStack * 0.02f,0.4f)
 
-bool CLOWN_ZOMBIE_POP_FLAG = false;
-
 void onZombieDropLoot(MyZombie zombie)
 {
 	zombie.DroppedLoot = 1;
@@ -369,11 +367,12 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 
 int onZombieFindTargetInterval(MyZombie zombie)
 {
+	//existed time最大值约为21亿，即2100W cs，÷100后为210000cs，约58小时
 	int cd = zombie.ExistedTime * 100;
 	//引入寒意百分比减速
 	int interval = 400 / (FROST_DECELERATE(zombie));
 	if (zombie.DecelerateCountdown > 0)
-		interval * 2;
+		interval *= 2;
 
 	if (cd % interval < 100)
 		return 1;
@@ -382,20 +381,18 @@ int onZombieFindTargetInterval(MyZombie zombie)
 	return -1;
 }
 
+int onZombieEffectedByDamageRange(MyZombie zombie, PVZ::DamageRangeFlags drf)
+{
+	//高空僵尸会被视为飞行范围内
+	if (zombie.Height > 20.0f && (drf & PVZ::DRF_FLYING) == 0)
+		return 0;
+
+	return -1;
+}
+
 bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 {
 	return zombie.FromWave < WAVE_ELITE_MASK;
-}
-
-bool onJalapenoZombieBurn(MyZombie zombie)
-{
-	if (zombie.Hypnotized)
-	{
-		MyBoard board = zombie.GetBoard();
-		board.BurnRow(zombie.Row);
-		return false;
-	}
-	return true;
 }
 
 bool OverrideZombieDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
@@ -545,6 +542,71 @@ bool onGargantaurSquishPlant(MyZombie attacker)
 	return !attacker.Hypnotized;
 }
 
+float onPogoUpdateHeight(MyZombie zombie, float height)
+{
+	return height;
+}
+
+bool onJalapenoHeadBurnBefore(MyZombie zombie)
+{
+	MyBoard board{ zombie.GetBoard() };
+	if (zombie.Hypnotized)
+	{
+		//board的burn row函数有问题，暂时禁用
+		//board.BurnRow(zombie.Row);
+		return false;
+	}
+	auto zombies = board.GetAllZombies<MyZombie>();
+	int count = 0;
+	for (auto& zombie_ : zombies)
+	{
+		if (zombie_.Row == zombie.Row && !zombie.NotExist && !zombie.Hypnotized)
+		{
+			count += zombie_.BodyHealth;
+			count += zombie_.HelmHealth;
+			count += zombie_.ShieldHealth;
+			if (zombie_.BodyHealth > 1800)
+				zombie_.BodyHealth = 1799;
+			zombie_.Blast();
+		}
+	}
+	MyZombie summoned = board.AddZombieInRow(ZombieType::Gigagargantuar, zombie.Row, 1);//后续可以考虑传入from wave为精英标记
+	float amplify = min(1.0f + count / 5000.0f,2.0f);
+	summoned.Size = amplify;
+	summoned.BodyHealth *= amplify;
+	summoned.BodyMaxHealth *= amplify;
+	summoned.RiseFromGrave(zombie.Row,board.PixelToGridX(zombie.X,zombie.Y));
+	return false;
+}
+
+bool onPogoUpdateActions(MyZombie zombie)
+{
+	/*
+	*以下是誊抄的原版代码
+	if (zombie.AttributeCountdown != 0)
+		return false;
+
+	zombie.AttributeCountdown = 80;
+	auto target = zombie.FindPlantTarget(2);
+	if (zombie.FromWave == -2 || zombie.FromWave == -3 || !(target.isValid()))
+	{
+		zombie.State = ZombieState::POGO_WITH_STICK;
+		zombie.PickRandomSpeed();
+	}
+	if (zombie.State == ZombieState::POGO_IDLE_BEFORE_TARGET)
+	{
+		zombie.Speed = (zombie.ImageX - target.ImageX + 60) / 80.0f;
+	}
+	else
+	{
+		zombie.State = ZombieState::POGO_IDLE_BEFORE_TARGET;
+		zombie.Speed = 0.0f;
+	}
+	return false;
+	*/
+	return true;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -568,8 +630,9 @@ void InitZombieEvents()
 	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
-	PVZEvent::JalapenoZombieBurnEvent((int)onJalapenoZombieBurn);
+
 	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
+	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);
 
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
 	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
@@ -583,6 +646,11 @@ void InitZombieEvents()
 	PVZEvent::GargantaurJudgeXFixEvent();
 	PVZEvent::GargantaurJudgeSquishEvent((int)onGargantaurJudgeSquish);
 	PVZEvent::GargantaurSquishPlantEvent((int)onGargantaurSquishPlant);
+
+	PVZEvent::PogoUpdateHeightEvent((int)onPogoUpdateHeight);
+	PVZEvent::PogoUpdateActionsEvent((int)onPogoUpdateActions);
+
+	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

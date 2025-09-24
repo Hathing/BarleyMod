@@ -53,6 +53,12 @@ MyZombie MyZombie::FindZombieTarget()
 	return MyZombie{ targetaddr };
 }
 
+PVZ::Plant MyZombie::FindPlantTarget(int attacktype)
+{
+	int targetaddr = PVZ::Memory::Execute(AsmBuilder().push_imm32(attacktype).push_imm32(this->GetBaseAddress()).invoke(0x52E780).mov_mem_reg(Memory::Variable, REG_EAX).ret());
+	return PVZ::Plant{ targetaddr };
+}
+
 void MyZombie::StopEating()
 {
 	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EDI,this->GetBaseAddress()).invoke(0x52F440).ret());
@@ -61,6 +67,11 @@ void MyZombie::StopEating()
 void MyZombie::PickRandomSpeed()
 {
 	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, this->GetBaseAddress()).invoke(0x524A70).ret());
+}
+
+void MyZombie::RiseFromGrave(int row, int column)
+{
+	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EBX, this->GetBaseAddress()).mov_reg_imm(REG_EAX,column).push_imm32(row).invoke(0x531C90).ret());
 }
 
 void MyZombie::AddFrost(int num)
@@ -97,6 +108,31 @@ void MyZombie::AddFlame(int num)
 	}
 	if (!this->ColorFlag)
 		this->ColorFlag = 3;
+}
+
+void MyZombie::Launch(float xspeed, float yspeed, float startheight)
+{
+	if (this->IsLaunched == 0 && this->ZombieHeight == 0)
+	{
+		if (this->Eating)
+			this->StopEating();
+		this->IsLaunched = 1;
+		this->ZombieHeight = 7;
+		this->Height = startheight;
+		this->Speed = xspeed;
+		this->FallSpeed = yspeed;
+	}
+}
+/// @brief 僵尸被击退
+void MyZombie::KnockBack(float xspeed)
+{
+	if (this->IsLaunched == 0 && this->ZombieHeight == 0)
+	{
+		if (this->Eating)
+			this->StopEating();
+		this->IsLaunched = 1;
+		this->Speed = xspeed;
+	}
 }
 
 bool MyZombie::IsTangleKelpTarget()

@@ -60,13 +60,25 @@ void onProjectileUpdate(MyProjectile proj)
 
 bool onProjectileRemove(MyProjectile proj)
 {
-	//处理弹跳子弹
+	// 幽灵子弹直接Remove无需多言
+	if (proj.IsGhost)
+		return false;
+	// 处理弹跳子弹
 	if (proj.Motion == MotionType::Throw && proj.BounceCount > 0 && proj.X > 0.0f && proj.X < 1000.0f)
 	{
 		proj.BounceCount -= 1;
 		proj.XSpeed *= 0.45f;
 		proj.HeightSpeed *= -0.75f;
 		return true;
+	}
+	// 处理穿透子弹
+	if (proj.Motion == MotionType::Piercing && proj.GhostAddr != 0)
+	{
+		MyProjectile ghost{ proj.GhostAddr };
+		ghost.PiercingCount += 1;
+		if (ghost.PiercingCount < ghost.PiercingMaxCount)
+			return true;
+		ghost.Remove();
 	}
 	return false;
 }
@@ -115,6 +127,8 @@ void onProjectileInitAfter(MyProjectile proj)
 	proj.SourceLevel = 0;
 	proj.SourceType = 0;
 	proj.BounceCount = 0;
+
+	proj.IsGhost = false;
 }
 
 void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
@@ -140,7 +154,11 @@ void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
 
 bool IsProjExpire(MyProjectile proj)
 {
-	return proj.Motion == MotionType::ShortDirect && proj.ExistedTime >= 175;
+	if (proj.Motion == MotionType::ShortDirect && proj.ExistedTime >= 175)
+		return true;
+	if (proj.Motion == MotionType::Piercing && proj.ExistedTime >= 30)
+		return true;
+	return false;
 }
 
 void onPlantAddProjDamageRangeFlags(MyProjectile proj, MyPlant plant)
@@ -175,6 +193,75 @@ void onProjectileImpact(MyProjectile proj, MyZombie zombie)
 		effect2.OverrideScale(2.0f);
 		PVZ::CreateParticleSystem(proj.X, proj.Y, proj.Layer + 100, EffectType::ICE_SHROOM_EXPLODED);
 	}
+	if (proj.Motion == MotionType::Piercing && proj.GhostAddr!=0 && zombie.isValid())
+	{
+		MyProjectile ghost{ proj.GhostAddr };
+		ghost.SetPiercingID(ghost.PiercingCount, zombie.Id);
+	}
+	//爆裂子弹的效果
+	if (proj.Type == ProjectileType::Pea && proj.SpecialType == PST_CRACK_PEA)
+	{
+		int crack_num = 2 + proj.SourceLevel / 2;//这个数是循环用的，实际爆裂子弹数量 = 1 + crack_num * 2
+		int x = proj.X, y = proj.Y;
+		constexpr float v = 5.0f;
+		//水平的子弹
+		MyProjectile newproj{ Creator::CreateProjectile(ProjectileType::Pea,x,y,0.0f,2.0f) };
+		newproj.DeriveProperty(proj);
+		newproj.MakePiercing(3, v, 0.0f);
+		newproj.SpecialType = PST_SCATTER_PEA;
+		//斜向的子弹
+		for (int i = crack_num; i > 0; i--)
+		{
+			float rad = 1.14f * i / crack_num;
+			float cos = std::cosf(rad);
+			float sin = std::sinf(rad);
+
+			MyProjectile newproj_{ Creator::CreateProjectile(ProjectileType::Pea,x,y,0.0f,2.0f) };
+			newproj_.DeriveProperty(proj);
+			//newproj.Row = min(proj.Row + 1, (proj.GetBoard().SixRoute ? 6 : 5));
+			newproj_.MakePiercing(3, v * cos, v * sin);
+			newproj_.SpecialType = PST_SCATTER_PEA;
+
+			MyProjectile newproj__{ Creator::CreateProjectile(ProjectileType::Pea,x,y,0.0f,2.0f) };
+			newproj__.DeriveProperty(proj);
+			//newproj__.Row = max(0, proj.Row - 1);
+			newproj__.MakePiercing(3, v * cos, v * sin * -1);
+			newproj__.SpecialType = PST_SCATTER_PEA;
+		}
+	}
+}
+
+
+bool onProjectileSkipUpdateAndDraw(MyProjectile proj)
+{
+	if (proj.IsGhost)
+		return false;
+	return true;
+}
+
+bool onProjectileFindZombieTargetSkip(MyProjectile proj, MyZombie zombie)
+{
+	if (proj.Motion == MotionType::Piercing && proj.GhostAddr != 0)
+	{
+		MyProjectile ghost{ proj.GhostAddr };
+		for (int i = 0; i < ghost.PiercingCount; i++)
+		{
+			if (ghost.GetPiercingID(i) == zombie.Id)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool onProjectileUpdatePiercingMotion(MyProjectile proj)
+{
+	if (proj.Motion == MotionType::Piercing)
+	{
+		return false;
+	}
+	return true;
 }
 
 bool onProjectileDivert(MyProjectile proj)
@@ -197,6 +284,10 @@ void InitProjectileEvents()
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
 	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
 	PVZEvent::ProjectileHitDiversionEvent((int)onProjectileDivert);
+	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
+	PVZEvent::ProjectileFindZombieTargetSkipEvent((int)onProjectileFindZombieTargetSkip);
+
+	PVZEvent::ProjectileUpdatePiercingMotionEvent((int)onProjectileUpdatePiercingMotion);
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);

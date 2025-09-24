@@ -40,3 +40,9 @@ namespace PlantState
 	typedef PlantState Type2;
 	constexpr Type2 HYPNOSHROOM_SUMMONING = (Type2)50;
 }
+
+namespace MotionType
+{
+	typedef MotionType Type2;
+	constexpr Type2 Piercing = (Type2)10;
+}

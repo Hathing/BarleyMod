@@ -81,6 +81,7 @@ namespace PVZEvent
 	/// @brief 辣椒僵尸爆炸事件
 	/// @param 触发事件的僵尸
 	/// @return 是否执行烧毁植物的部分。
+	/// @deprecated
 	class JalapenoZombieBurnEvent : public BoolDLLEventTemplate<0x5276BB, 7, 0x52773E, REG_EDI>
 	{
 	public:
@@ -200,8 +201,29 @@ namespace PVZEvent
 		ProjectileImpactEvent(int address) : DLLEventTemplate() { Init(address); };
 		ProjectileImpactEvent() : ProjectileImpactEvent("onProjectileImpact") {};
 	};
+	/// @brief 子弹跳过寻找碰撞僵尸的事件
+	/// @param 子弹，正在遍历的僵尸
+	/// @return False则不碰撞该僵尸
+	class ProjectileFindZombieTargetSkipEvent : public BoolDLLEventTemplate<0x46CD95, 6, 0x46CE58, REG_ESI, REG_EDI>
+	{
+	public:
+		ProjectileFindZombieTargetSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileFindZombieTargetSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileFindZombieTargetSkipEvent() : ProjectileFindZombieTargetSkipEvent("onProjectileFindZombieTarget") {};
+	};
 
-	/// @brief 子弹击中僵尸事件
+	/// @brief 子弹更新穿透运动的事件，实际上充当一个跳转到+58=7的运动更新的作用
+	/// @param 子弹
+	/// @return False则跳到+58=7的位置，True则原版更新
+	class ProjectileUpdatePiercingMotionEvent : public BoolDLLEventTemplate<0x46DBE5, 6, 0x46DAC0, REG_EBX>
+	{
+	public:
+		ProjectileUpdatePiercingMotionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileUpdatePiercingMotionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileUpdatePiercingMotionEvent() : ProjectileUpdatePiercingMotionEvent("onProjectileUpdatePiercingMotion") {};
+	};
+
+	/// @brief 植物添加子弹后，给子弹的DRF赋值之后的事件
 	/// @param 依次为：触发事件的子弹，发射子弹的植物
 	class PlantAddProjDamageRangeFlagsEvent : public DLLEventTemplate<0x4672CA, 6, REG_EBP, REG_ECX>
 	{
@@ -212,7 +234,7 @@ namespace PVZEvent
 	};
 
 	/// @brief 子弹总更新事件，发生在计时器与图层更新后、子弹运动前
-	/// @param 子弹ID
+	/// @param 子弹
 	class ProjectileUpdateEvent : public DLLEventTemplate<0x46E4FE, 6, REG_ESI>
 	{
 	public:
@@ -671,6 +693,25 @@ namespace PVZEvent
 			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(23);
 			builder.cmp_reg_imm(REG_EAX,0).jne_rel(7).popad().push_imm32(0x52F6BC).ret();
 			builder.popad().push_imm32(0x52F65D).ret();
+			//覆盖掉了原版的一个逆天判断条件：如果僵尸+60为正奇数则对植物不造成伤害
+			PVZ::Memory::WriteMemory<byte>(0x52FC82, 0xEB);
+		}
+	};
+	/// @brief 僵尸受伤害范围判断的事件
+	/// @param 僵尸，DRF
+	/// @return 负数则调用原版判断，0则不能被伤害，正数则可以被伤害
+	class ZombieEffectedByDamageRangeEvent : public DLLEventTemplate<0x531A84, 7, MEM_ESP_ADD(0x38), REG_ESI>
+	{
+	public:
+		ZombieEffectedByDamageRangeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieEffectedByDamageRangeEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieEffectedByDamageRangeEvent() : ZombieEffectedByDamageRangeEvent("onZombieEffectedByDamageRange") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(30);
+			builder.cmp_reg_imm(REG_EAX, 0).jne_rel(9).popad().xor_reg_reg(REG_EAX,REG_EAX).push_imm32(0x531AB9).ret();
+			builder.popad().mov_reg_imm(REG_EAX,1).push_imm32(0x531AB9).ret();
 		}
 	};
 	/// @brief 僵尸能否将植物作为目标的额外判断，优先级高于原版
@@ -810,6 +851,44 @@ namespace PVZEvent
 		{
 			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x525A7E).ret().popad().push_reg(REG_EDI).invoke(0x525890).push_imm32(0x525A77).ret();
 		}
+	};
+
+	/// @brief 跳跳更新高度事件
+	/// @param 触发事件的僵尸，原版计算好的新高度
+	/// @return 新的高度
+	class PogoUpdateHeightEvent : public DLLEventTemplate<0x525573, 10, MEM_ESP_ADD(0x2C), REG_EDI>
+	{
+	public:
+		PogoUpdateHeightEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PogoUpdateHeightEvent(int address) : DLLEventTemplate() { Init(address); };
+		PogoUpdateHeightEvent() : DLLEventTemplate() { Init("onPogoUpdateHeight"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.fstp_m32_esp_imm8(0x2C);
+		}
+	};
+
+	/// @brief 跳跳的非位置更新事件，发生在更新高度、更新音效和动画、判断是否撞高坚果之后，发生在着陆处理之前
+	/// @param 触发事件的僵尸
+	/// @return False则不进行着陆的判断
+	class PogoUpdateActionsEvent : public BoolDLLEventTemplate<0x5256AA, 5, 0x525722, REG_EDI>
+	{
+	public:
+		PogoUpdateActionsEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PogoUpdateActionsEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PogoUpdateActionsEvent() : BoolDLLEventTemplate() { Init("onPogoUpdateActions"); };
+	};
+
+	/// @brief 辣椒头僵尸创建特效之后、烧植物之前的事件
+	/// @param 触发事件的僵尸
+	/// @return False则不烧植物
+	class JalapenoHeadBurnBeforeEvent : public BoolDLLEventTemplate<0x5276BB, 7, 0x52773E, REG_EDI>
+	{
+	public:
+		JalapenoHeadBurnBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		JalapenoHeadBurnBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		JalapenoHeadBurnBeforeEvent() : BoolDLLEventTemplate() { Init("onJalapenoHeadBurnBefore"); };
 	};
 
 	/// @brief Zombie 行为动作的更新。
@@ -1074,6 +1153,46 @@ namespace PVZEvent
 			builder.test_al_al().jz_rel(7);
 			builder.popad().push_imm32(0x52724E).ret();
 			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x526D6C).ret();
+		}
+	};
+
+
+	/// @brief 用于跳过幽灵子弹更新和绘制的事件
+	/// @param 子弹
+	/// @return False则跳过更新和绘制
+	class ProjectileSkipUpdateAndDrawEvent
+	{
+	private:
+		class ProjectileSkipUpdateEvent : public BoolDLLEventTemplate<0x46E462, 6, 0x46E533, REG_EAX>
+		{
+		public:
+			ProjectileSkipUpdateEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ProjectileSkipUpdateEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ProjectileSkipUpdateEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipUpdate"); };
+		};
+		class ProjectileSkipDrawEvent : public BoolDLLEventTemplate<0x46E540, 6, 0x46E8AF, MEM_ESP_ADD(0x24)>
+		{
+		public:
+			ProjectileSkipDrawEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ProjectileSkipDrawEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ProjectileSkipDrawEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipDraw"); };
+		};
+		ProjectileSkipUpdateEvent* part1;
+		ProjectileSkipDrawEvent* part2;
+	public:
+		ProjectileSkipUpdateAndDrawEvent()
+		{
+			ProjectileSkipUpdateAndDrawEvent(PVZ::Memory::GetProcAddress("onProjectileSkipUpdateAndDraw"));
+		}
+		ProjectileSkipUpdateAndDrawEvent(int address)
+		{
+			part1 = new ProjectileSkipUpdateEvent(address);
+			part2 = new ProjectileSkipDrawEvent(address);
+		}
+		void end()
+		{
+			part1->end();
+			part2->end();
 		}
 	};
 };
