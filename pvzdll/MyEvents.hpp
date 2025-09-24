@@ -978,7 +978,7 @@ namespace PVZEvent
 	/// @brief 车类僵尸碾压结算事件。
 	/// @param 触发事件的僵尸
 	/// @return 是否结算原版碾压过程。
-	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x24)>
+	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x20)>
 	{
 	public:
 		ZombieCheckSquishEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
@@ -1009,5 +1009,15 @@ namespace PVZEvent
 		GatlingZombieJudgeShootEvent(const char* str) : DiversionEventTemplate() { Init(str); };
 		GatlingZombieJudgeShootEvent(int address) : DiversionEventTemplate() { Init(address); };
 		GatlingZombieJudgeShootEvent() : DiversionEventTemplate() { Init("onGatlingZombieJudgeShoot"); };
+	};
+
+	/// @brief 巨人扔小鬼事件
+	/// @param 触发事件的僵尸，僵尸投掷的小鬼
+	class GargantaurThrowAfterEvent : public DLLEventTemplate<0x527148, 7, REG_ESI, MEM_ESP_ADD(0x38)>
+	{
+	public:
+		GargantaurThrowAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurThrowAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurThrowAfterEvent() : DLLEventTemplate() { Init("onGargantaurThrowAfter"); };
 	};
 };
