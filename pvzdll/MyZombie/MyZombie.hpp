@@ -33,6 +33,8 @@ public:
 	T_PROPERTY(float, FallSpeed, __get_FallSpeed, __set_FallSpeed, 0x120);
 	/// @brief 巨人变种类型
 	INT_PROPERTY(GargantaurType, __get_GaT, __set_GaT, 0x128);
+	/// @brief 金色标记
+	INT_PROPERTY(GoldMark, __get_GoM, __set_GoM, 0x12C);
 	/// @brief 豌豆僵尸变种类型
 	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕

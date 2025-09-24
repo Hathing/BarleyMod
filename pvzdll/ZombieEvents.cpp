@@ -520,6 +520,21 @@ void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
 		imp.X += 266;
 		imp.Speed = -3.0;
 	}
+
+	if (zombie.Type == ZombieType::Gargantuar && zombie.BodyMaxHealth >= 4000)
+	{
+		imp.BodyHealth += 150;
+		imp.BodyMaxHealth += 150;
+		imp.Size = 1.3f;
+		imp.GoldMark = 1;
+	}
+	if (zombie.Type == ZombieType::Gigagargantuar && zombie.BodyMaxHealth >= 10000)
+	{
+		imp.BodyHealth += 450;
+		imp.BodyMaxHealth += 450;
+		imp.Size = 1.5f;
+		imp.GoldMark = 1;
+	}
 }
 
 int onGargantaurJudgeSquish(MyZombie zombie)
