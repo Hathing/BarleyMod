@@ -69,98 +69,6 @@ void onZombieInitAfter(MyZombie zombie)
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
 }
 
-static const ZombieType::ZombieType hypno_pool[] =
-{
-	ZombieType::Zombie,				ZombieType::FlagZombie,			ZombieType::ConeheadZombie,									ZombieType::BucketheadZombie,
-	ZombieType::NewspaperZombie,	ZombieType::ScreenDoorZombie,	ZombieType::FootballZombie, ZombieType::DancingZombie,		ZombieType::BackupDancer,
-	ZombieType::DuckyTubeZombie,									ZombieType::Zomboin,		ZombieType::ZombieBobsledTeam,
-	ZombieType::JackintheboxZombie,	ZombieType::BalloonZombie,		ZombieType::DiggerZombie,									ZombieType::ZombieYeti,
-									ZombieType::LadderZombie,									ZombieType::Gargantuar,			ZombieType::Imp,
-									ZombieType::PeashooterZombie,	ZombieType::WallnutZombie,	ZombieType::JalapenoZombie,		ZombieType::GatlingPeaZombie,
-									ZombieType::TallnutZombie,		ZombieType::Gigagargantuar,
-};
-
-void onRandomZombieDropHelm(MyZombie zombie)
-{
-	if (zombie.Type != ZombieType::ConeheadZombie)
-		return;
-
-	zombie.Remove();
-
-	int type = 0, elite_type = -1;
-	if (zombie.Hypnotized)
-		type = ::hypno_pool[Creator::Rand(sizeof(hypno_pool) / sizeof(ZombieType::ZombieType))];
-	else
-	{
-		elite_type = Creator::Rand(2);
-		type = Creator::Rand(33);
-		if (type == 25)type = 26;//僵王换豌豆
-		if (type == 20)type = 27;//蹦极换坚果
-
-		switch (type)
-		{
-		case ZombieType::Zombie:
-		case ZombieType::NewspaperZombie:
-		case ZombieType::JackintheboxZombie:
-		case ZombieType::PogoZombie:
-		case ZombieType::CatapultZombie:
-		case ZombieType::SquashZombie:
-		case ZombieType::PeashooterZombie:
-		case ZombieType::WallnutZombie:
-		case ZombieType::TallnutZombie:
-		case ZombieType::Gigagargantuar:
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        elite_type = -1;
-			break;
-		case ZombieType::FootballZombie:
-			if (elite_type > 0)
-				elite_type = 2;
-			break;
-		case ZombieType::FlagZombie:
-		case ZombieType::ScreenDoorZombie:
-			elite_type = Creator::Rand(3);
-			break;
-		}
-
-		elite_type = elite_type > 0 ? elite_type + WAVE_ELITE_MASK : -1;
-	}
-
-	MyBoard board = zombie.GetBoard();
-	MyZombie child_zombie{ board.AddZombieInRow(static_cast<ZombieType::ZombieType>(type), zombie.Row, elite_type) };
-	PVZ::CreateParticleSystem(zombie.X + 40.0f,zombie.Y + 65.0f,zombie.Layer+100,EffectType::IMITATER_TRANSFORMING);
-	child_zombie.X = zombie.X;
-
-	if (true)
-	{
-		int HpPoint = 1 + Creator::Rand(5);
-		if (CLOWN_ZOMBIE_POP_FLAG)
-			HpPoint = 5;
-		child_zombie.HpPoint = HpPoint;
-		float health_ratio = (HpPoint) / 5.0f;
-
-		child_zombie.BodyHealth *= health_ratio;
-		child_zombie.BodyMaxHealth *= health_ratio;
-		child_zombie.HelmHealth *= health_ratio;
-		child_zombie.HelmMaxHealth *= health_ratio;
-		child_zombie.ShieldHealth *= health_ratio;
-		child_zombie.ShieldMaxHealth *= health_ratio;
-		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
-	}
-	return;
-}
-
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
 {
 	return damage;
@@ -327,9 +235,7 @@ bool onZombieUpdateAbility(MyZombie zombie)
 			PlantOnLawn dug_plants{};
 			board.GetPlantsOnLawn(col, zombie.Row, dug_plants);
 			MyPlant dugplant = dug_plants.MainPlant;
-			//不知道为什么，当矿工没挖到植物时，dugplant会莫名指向场上的其他植物，原因未知，好像是40D2A0自身的特性？
-			//下面暂时加了一个特殊判定
-			if (dugplant.isValid() && dugplant.Row == zombie.Row && dugplant.Column == col)
+			if (dugplant.isValid())
 			{
 				dugplant.HpDisplayCounter = 100;
 				if (dugplant.Type == SeedType::Spikerock)
@@ -584,12 +490,66 @@ void onZombieAddProj(MyZombie zombie, MyProjectile proj)
 	}
 }
 
+bool IsGatlingZombieShoot(MyZombie zombie)
+{
+	if (zombie.Hypnotized)
+		return zombie.AttributeCountdown == 19 || zombie.AttributeCountdown == 32
+			|| zombie.AttributeCountdown == 45 || zombie.AttributeCountdown == 58 || zombie.AttributeCountdown == 71;
+	else
+		return zombie.AttributeCountdown == 18 || zombie.AttributeCountdown == 35
+			|| zombie.AttributeCountdown == 51 || zombie.AttributeCountdown == 68;
+}
+
+void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
+{
+	imp.DecelerateCountdown = zombie.DecelerateCountdown;
+	imp.FrostStack = zombie.FrostStack;
+	if (zombie.Hypnotized)
+	{
+		imp.Hypnotized = true;
+		imp.X += 266;
+		imp.Speed = -3.0;
+	}
+}
+
+int onGargantaurJudgeSquish(MyZombie zombie)
+{
+	if (zombie.ZombieHeight == 9)
+		return 0;
+	if (zombie.FindZombieTarget().isValid())
+		return 1;
+	if (zombie.Hypnotized)
+		return 0;
+	return -1;
+}
+
+bool onGargantaurSquishPlant(MyZombie attacker)
+{
+	auto atk_rect = attacker.GetActualAttackRect();
+	int damage = 0;
+	if (attacker.Type == ZombieType::Gargantuar)
+		damage = attacker.BodyMaxHealth <= 3000 ? 900 : 1200;
+	else if (attacker.Type == ZombieType::Gigagargantuar)
+		damage = attacker.BodyMaxHealth <= 6000 ? 900 : 1800;
+
+	auto zombies = attacker.GetBoard().GetAllZombies<MyZombie>();
+	for (auto myzombie : zombies)
+	{
+		if (attacker.Hypnotized != myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
+			continue;
+		auto rect = myzombie.GetActualRect();
+		if (PVZ::GetXOverlap(atk_rect, rect) >= -30)
+			myzombie.Hit(damage);
+	}
+
+	return !attacker.Hypnotized;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
 	ZombieDropLootEvent((int)onZombieDropLoot);
 	ZombieInitAfterEvent((int)onZombieInitAfter);
-	PVZEvent::ZombieDropHelmByDamageEvent((int)onRandomZombieDropHelm);
 	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 	PVZEvent::ZombieUpdateWalkingSpeedEvent((int)onZombieUpdateWalkingSpeed);
@@ -618,6 +578,11 @@ void InitZombieEvents()
 	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
 	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
 	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
+	PVZEvent::GatlingZombieJudgeShootEvent((int)IsGatlingZombieShoot);
+	PVZEvent::GargantaurThrowAfterEvent((int)onGargantaurThrowAfter);
+	PVZEvent::GargantaurJudgeXFixEvent();
+	PVZEvent::GargantaurJudgeSquishEvent((int)onGargantaurJudgeSquish);
+	PVZEvent::GargantaurSquishPlantEvent((int)onGargantaurSquishPlant);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

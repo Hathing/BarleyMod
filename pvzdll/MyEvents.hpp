@@ -978,11 +978,102 @@ namespace PVZEvent
 	/// @brief 车类僵尸碾压结算事件。
 	/// @param 触发事件的僵尸
 	/// @return 是否结算原版碾压过程。
-	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x24)>
+	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x20)>
 	{
 	public:
 		ZombieCheckSquishEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieCheckSquishEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieCheckSquishEvent() : BoolDLLEventTemplate() { Init("onZombieCheckSquish"); };
+	};
+
+	/// @brief 子弹击中判定分支事件。
+	/// @warning 该事件与 ProjectileCollisionEvent 冲突，
+	/// @param 触发事件的子弹
+	/// @retval true 结算对植物的索敌和击中效果。
+	/// @retval false 结算对僵尸的索敌和击中效果。
+	class ProjectileHitDiversionEvent : public DiversionEventTemplate<0x46CFC9, 6, 0x46CFCF, 0x46D058, REG_EBP>
+	{
+	public:
+		ProjectileHitDiversionEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		ProjectileHitDiversionEvent(int address) : DiversionEventTemplate() { Init(address); };
+		ProjectileHitDiversionEvent() : DiversionEventTemplate() { Init("onProjectileHitDiversion"); };
+	};
+
+	/// @brief 机枪僵尸判定是否发射子弹事件事件。
+	/// @note 不会影响射击动作，只影响子弹生成。
+	/// @param 触发事件的僵尸
+	/// @retval true 是否发射子弹
+	class GatlingZombieJudgeShootEvent : public DiversionEventTemplate<0x5277D9, 5, 0x52783D, 0x5277ED, REG_EDI>
+	{
+	public:
+		GatlingZombieJudgeShootEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		GatlingZombieJudgeShootEvent(int address) : DiversionEventTemplate() { Init(address); };
+		GatlingZombieJudgeShootEvent() : DiversionEventTemplate() { Init("onGatlingZombieJudgeShoot"); };
+	};
+
+	/// @brief 巨人扔小鬼事件
+	/// @param 触发事件的僵尸，僵尸投掷的小鬼
+	class GargantaurThrowAfterEvent : public DLLEventTemplate<0x527148, 7, REG_ESI, MEM_ESP_ADD(0x38)>
+	{
+	public:
+		GargantaurThrowAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurThrowAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurThrowAfterEvent() : DLLEventTemplate() { Init("onGargantaurThrowAfter"); };
+	};
+
+	class GargantaurJudgeXFixEvent : public DLLEvent
+	{
+	public:
+		GargantaurJudgeXFixEvent()
+		{
+			hookAddress = 0x526EEA;
+			rawlen = 6;
+			BYTE code[] =
+			{
+				CMP_BYTE_PTR_EUX_ADD__V(REG_EBX, 0x0B8, 0),
+				JE(8),
+				FCHS,
+				FADD_PTR_ADDR(0x67A114), // 800
+				CMP_EUX(REG_EAX, 0x45)
+			};
+			start(STRING(code));
+		}
+	};
+
+	/// @brief 巨人僵尸判断是否砸地板的事件
+	/// @param 触发事件的僵尸
+	/// @return 若为负数，与原版一致；若为 0，则强制不砸；若为正数，则强制砸。
+	class GargantaurJudgeSquishEvent: public DLLEventTemplate<0x527242, 8, REG_EBX>
+	{
+	public:
+		GargantaurJudgeSquishEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurJudgeSquishEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurJudgeSquishEvent() : DLLEventTemplate() { Init("IsGargantaurJudgeSquish"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().js_rel(20).jz_rel(7);
+			builder.popad().push_imm32(0x5272AC).ret();
+			builder.popad().push_imm32(0x52724E).ret();
+			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x52724A).ret();
+		}
+	};
+
+	/// @brief 巨人僵尸砸植物的事件
+	/// @param 触发事件的僵尸
+	/// @return 是否砸植物。
+	class GargantaurSquishPlantEvent : public DLLEventTemplate<0x526D64, 8, REG_EBX>
+	{
+	public:
+		GargantaurSquishPlantEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurSquishPlantEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurSquishPlantEvent() : DLLEventTemplate() { Init("onGargantaurSquishPlant"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jz_rel(7);
+			builder.popad().push_imm32(0x52724E).ret();
+			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x526D6C).ret();
+		}
 	};
 };

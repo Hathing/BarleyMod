@@ -12,7 +12,7 @@ struct PlantOnLawn
 	PVZ::Plant PumpkinPlant;
 	PVZ::Plant FlyingPlant;
 	PVZ::Plant MainPlant;
-	PlantOnLawn(): BottomPlant(0), PumpkinPlant(0), FlyingPlant(0), MainPlant(0){}
+	PlantOnLawn(): BottomPlant(INVALID_BASEADDRESS), PumpkinPlant(INVALID_BASEADDRESS), FlyingPlant(INVALID_BASEADDRESS), MainPlant(INVALID_BASEADDRESS){}
 };
 
 /// @brief 各种子弹的特殊标记
