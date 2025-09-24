@@ -81,6 +81,7 @@ namespace PVZEvent
 	/// @brief 辣椒僵尸爆炸事件
 	/// @param 触发事件的僵尸
 	/// @return 是否执行烧毁植物的部分。
+	/// @deprecated
 	class JalapenoZombieBurnEvent : public BoolDLLEventTemplate<0x5276BB, 7, 0x52773E, REG_EDI>
 	{
 	public:

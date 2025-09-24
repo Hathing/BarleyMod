@@ -5,8 +5,6 @@
 
 #define FROST_DECELERATE(zombie) max(1.0f - (zombie).FrostStack * 0.02f,0.4f)
 
-bool CLOWN_ZOMBIE_POP_FLAG = false;
-
 void onZombieDropLoot(MyZombie zombie)
 {
 	zombie.DroppedLoot = 1;
@@ -397,17 +395,6 @@ bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 	return zombie.FromWave < WAVE_ELITE_MASK;
 }
 
-bool onJalapenoZombieBurn(MyZombie zombie)
-{
-	if (zombie.Hypnotized)
-	{
-		MyBoard board = zombie.GetBoard();
-		board.BurnRow(zombie.Row);
-		return false;
-	}
-	return true;
-}
-
 bool OverrideZombieDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
 {
 	return ZombieAbility::GetAbility(zombie.Type)->OverrideDrawPos(zombie, draw_pos);
@@ -563,6 +550,12 @@ float onPogoUpdateHeight(MyZombie zombie, float height)
 bool onJalapenoHeadBurnBefore(MyZombie zombie)
 {
 	MyBoard board{ zombie.GetBoard() };
+	if (zombie.Hypnotized)
+	{
+		//board的burn row函数有问题，暂时禁用
+		//board.BurnRow(zombie.Row);
+		return false;
+	}
 	auto zombies = board.GetAllZombies<MyZombie>();
 	int count = 0;
 	for (auto& zombie_ : zombies)
@@ -637,7 +630,7 @@ void InitZombieEvents()
 	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
 	ZombieTakeDmgEvent((int)onZombieTakeDmg);
 	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
-	PVZEvent::JalapenoZombieBurnEvent((int)onJalapenoZombieBurn);
+
 	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
 	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);
 

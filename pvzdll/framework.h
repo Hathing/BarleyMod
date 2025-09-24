@@ -4,6 +4,8 @@
 #include "../pvzclass/pvzclass.h"
 #include "../pvzclass/Events/Events.h"
 
+extern bool CLOWN_ZOMBIE_POP_FLAG;
+
 typedef bool mybool;
 
 struct PlantOnLawn
