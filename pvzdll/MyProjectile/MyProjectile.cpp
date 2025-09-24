@@ -40,7 +40,7 @@ void MyProjectile::AdjustRow()
 
 
 
-void MyProjectile::MakePiercing(int piercingnum)
+void MyProjectile::MakePiercing(int piercingnum,float xspeed,float yspeed)
 {
 	// 在Projectile上DataArrayAlloc
 	// 有bug，干脆直接创建个正常子弹算了
@@ -63,5 +63,13 @@ void MyProjectile::MakePiercing(int piercingnum)
 
 	this->GhostAddr = ghostaddr;
 	this->Motion = MotionType::Piercing;
+	this->XSpeed = xspeed;
+	this->YSpeed = yspeed;
+}
 
+void MyProjectile::DeriveProperty(MyProjectile proj)
+{
+	this->SourceType = proj.SourceType;
+	this->SourceLevel = proj.SourceLevel;
+	this->ParentID = proj.ParentID;
 }

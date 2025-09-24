@@ -35,6 +35,8 @@ constexpr ProjSpecialType PST_BLUE_FIREBALL = 3;
 constexpr ProjSpecialType PST_PURPLE_FIREBALL = 4;
 /// @brief 裂荚豌豆的爆裂子弹
 constexpr ProjSpecialType PST_CRACK_PEA = 5;
+/// @brief 裂荚豌豆的散开的小子弹
+constexpr ProjSpecialType PST_SCATTER_PEA = 6;
 /// @brief 冰瓜的小散弹
 constexpr ProjSpecialType PST_SCATTER_WINTERMELON = 1;
 /// @brief 冰瓜的大炮

@@ -154,7 +154,11 @@ void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
 
 bool IsProjExpire(MyProjectile proj)
 {
-	return proj.Motion == MotionType::ShortDirect && proj.ExistedTime >= 175;
+	if (proj.Motion == MotionType::ShortDirect && proj.ExistedTime >= 175)
+		return true;
+	if (proj.Motion == MotionType::Piercing && proj.ExistedTime >= 20)
+		return true;
+	return false;
 }
 
 void onPlantAddProjDamageRangeFlags(MyProjectile proj, MyPlant plant)
@@ -194,6 +198,13 @@ void onProjectileImpact(MyProjectile proj, MyZombie zombie)
 		MyProjectile ghost{ proj.GhostAddr };
 		ghost.SetPiercingID(ghost.PiercingCount, zombie.Id);
 	}
+	//爆裂子弹的效果
+	if (proj.Type == ProjectileType::Pea && proj.SpecialType == PST_CRACK_PEA)
+	{
+		MyProjectile newproj3{ Creator::CreateProjectile(ProjectileType::Pea,proj.X,proj.Y,0.0f,2.0f) };
+		newproj3.DeriveProperty(proj);
+		newproj3.MakePiercing(3,10.0f,0.0f);
+	}
 }
 
 
@@ -220,6 +231,13 @@ bool onProjectileFindZombieTargetSkip(MyProjectile proj, MyZombie zombie)
 	return true;
 }
 
+bool onProjectileUpdatePiercingMotion(MyProjectile proj)
+{
+	if (proj.Motion == MotionType::Piercing)
+		return false;
+	return true;
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -236,6 +254,8 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
 	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
 	PVZEvent::ProjectileFindZombieTargetSkipEvent((int)onProjectileFindZombieTargetSkip);
+
+	PVZEvent::ProjectileUpdatePiercingMotionEvent((int)onProjectileUpdatePiercingMotion);
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);

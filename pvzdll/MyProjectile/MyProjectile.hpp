@@ -63,5 +63,10 @@ public:
 	/// @brief 生成一个不会实际更新的“幽灵子弹”，用于记录穿透的僵尸
 	/// @attention 并不能阻止其他函数访问这个子弹，尤其是遍历！
 	/// @param piercingnum 能够穿透的目标的最大数量，目前最大允许8个目标
-	void MakePiercing(int piercingnum);
+	/// @param xspeed 子弹的X速度
+	/// @param yspeed 子弹的Y速度
+	void MakePiercing(int piercingnum, float xspeed, float yspeed);
+	/// @brief 从其他子弹上面继承部分初始化属性
+	/// @param proj 其他子弹
+	void DeriveProperty(MyProjectile proj);
 };

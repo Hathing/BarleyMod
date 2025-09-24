@@ -211,6 +211,17 @@ namespace PVZEvent
 		ProjectileFindZombieTargetSkipEvent() : ProjectileFindZombieTargetSkipEvent("onProjectileFindZombieTarget") {};
 	};
 
+	/// @brief 子弹更新穿透运动的事件，实际上充当一个跳转到+58=7的运动更新的作用
+	/// @param 子弹
+	/// @return False则跳到+58=7的位置，True则原版更新
+	class ProjectileUpdatePiercingMotionEvent : public BoolDLLEventTemplate<0x46DB5E, 6, 0x46DAC0, REG_EBX>
+	{
+	public:
+		ProjectileUpdatePiercingMotionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileUpdatePiercingMotionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileUpdatePiercingMotionEvent() : ProjectileUpdatePiercingMotionEvent("onProjectileUpdatePiercingMotion") {};
+	};
+
 	/// @brief 植物添加子弹后，给子弹的DRF赋值之后的事件
 	/// @param 依次为：触发事件的子弹，发射子弹的植物
 	class PlantAddProjDamageRangeFlagsEvent : public DLLEventTemplate<0x4672CA, 6, REG_EBP, REG_ECX>
