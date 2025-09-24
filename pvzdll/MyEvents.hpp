@@ -1020,4 +1020,42 @@ namespace PVZEvent
 		GargantaurThrowAfterEvent(int address) : DLLEventTemplate() { Init(address); };
 		GargantaurThrowAfterEvent() : DLLEventTemplate() { Init("onGargantaurThrowAfter"); };
 	};
+
+	class GargantaurJudgeXFixEvent : public DLLEvent
+	{
+	public:
+		GargantaurJudgeXFixEvent()
+		{
+			hookAddress = 0x526EEA;
+			rawlen = 6;
+			BYTE code[] =
+			{
+				CMP_BYTE_PTR_EUX_ADD__V(REG_EBX, 0x0B8, 0),
+				JE(8),
+				FCHS,
+				FADD_PTR_ADDR(0x67A114), // 800
+				CMP_EUX(REG_EAX, 0x45)
+			};
+			start(STRING(code));
+		}
+	};
+
+	/// @brief 巨人僵尸判断是否砸地板的事件
+	/// @param 触发事件的僵尸
+	/// @return 若为负数，与原版一致；若为 0，则强制不砸；若为正数，则强制砸。
+	class GargantaurJudgeSquishEvent: public DLLEventTemplate<0x527242, 8, REG_EBX>
+	{
+	public:
+		GargantaurJudgeSquishEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurJudgeSquishEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurJudgeSquishEvent() : DLLEventTemplate() { Init("IsGargantaurJudgeSquish"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().js_rel(20).jz_rel(7);
+			builder.popad().push_imm32(0x5272AC).ret();
+			builder.popad().push_imm32(0x52724E).ret();
+			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x52724A).ret();
+		}
+	};
 };

@@ -514,6 +514,17 @@ void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
 	}
 }
 
+int onGargantaurJudgeSquishPlant(MyZombie zombie)
+{
+	if (zombie.ZombieHeight == 9)
+		return 0;
+	if (zombie.FindZombieTarget().isValid())
+		return 1;
+	if (zombie.Hypnotized)
+		return 0;
+	return -1;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -549,6 +560,8 @@ void InitZombieEvents()
 	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
 	PVZEvent::GatlingZombieJudgeShootEvent((int)IsGatlingZombieShoot);
 	PVZEvent::GargantaurThrowAfterEvent((int)onGargantaurThrowAfter);
+	PVZEvent::GargantaurJudgeXFixEvent();
+	PVZEvent::GargantaurJudgeSquishEvent((int)onGargantaurJudgeSquishPlant);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
