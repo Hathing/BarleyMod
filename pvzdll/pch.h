@@ -14,5 +14,6 @@ void InitPlantEvents();
 void InitProjectileEvents();
 void InitZombieEvents();
 void InitCoinEvents();
+void InitRandomZombieEvents();
 
 #endif //PCH_H

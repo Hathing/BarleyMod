@@ -892,20 +892,52 @@ namespace PVZEvent
 
 	/// @brief Zombie 行为动作的更新。
 	/// @note 时机上先于原版的更新。
-	/// @note 该事件与 ZombieUpdateActionEvent 在同一个位置生效。不建议同时使用。
-	/// @note 该事件与 ZombieUpdateActionEvent 基本一致，只是返回值不同
+	/// @note 该事件与 ZombieUpdateActionEvent 不同，只影响僵尸自身的技能。
 	/// @param 更新的 Zombie
 	/// @return 是否更新原版行为动作
-	/// @retval false 完全跳过原版的任何行为动作，这会导致原生技能失效，同时包括关于运动的检测！不建议跳过。
-	class ZombieUpdateActionEXEvent : public BoolDLLEventTemplate<0x52B112, 6, 0x52B279, REG_EAX>
+	/// @retval false 完全跳过原版的任何行为动作，这会导致原生技能失效。
+	class ZombieUpdateAbilityEvent : public DLLEventTemplate<0x52B174, 6, REG_ESI>
 	{
 	public:
-		ZombieUpdateActionEXEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateAction"); };
-		ZombieUpdateActionEXEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		ZombieUpdateActionEXEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieUpdateAbilityEvent() : DLLEventTemplate() { Init("onZombieUpdateAbility"); };
+		ZombieUpdateAbilityEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieUpdateAbilityEvent(int address) : DLLEventTemplate() { Init(address); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			static constexpr byte after[] =
+			{
+				TEST_AL_AL,
+				JNZ(7),
+
+				POPAD,
+				PUSHDWORD(0x52B279),
+				RET,
+
+				POPAD,
+				CMP_PTR_EUX_ADD_V_V(REG_ESI, 0x24, 3),
+				JNZ(6),
+
+				PUSHDWORD(0x52B17A),
+				RET,
+				PUSHDWORD(0x52B279),
+				RET,
+			};
+			builder.add_bytes(STRING(after));
+		}
 	};
 
-
+	/// @brief 重载僵尸绘制位置事件
+	/// @note 此时已经完成了除 BodyY 和 ClipRect 的所有量的设定
+	/// @param 触发事件的僵尸，僵尸的 ZombieDrawPos
+	/// @return 是否执行原版对 BodyY 和 ClipRect 的设定
+	class ZombieOverrideDrawPosEvent : BoolDLLEventTemplate<0x52DBAC, 6, 0x52DFD8, REG_ESI, REG_ECX>
+	{
+	public:
+		ZombieOverrideDrawPosEvent() : BoolDLLEventTemplate() { Init("OverrideZombieDrawPos"); };
+		ZombieOverrideDrawPosEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieOverrideDrawPosEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+  };
 
 	/// @brief 植物因生命值小于 0 被移除事件。
 	/// @note 照搬的PVZCLASS里的事件，在这基础上增加了一个死亡类型
@@ -986,7 +1018,6 @@ namespace PVZEvent
 		PlantDyingFromJalapenoHeadEvent() : BoolDLLEventTemplate() { Init("onPlantDyingFromJalapenoHead"); };
 	};
 
-
 	/// @brief 植物在游戏中因各种原因而被移除的事件。
 	/// @param 触发事件的植物、死亡原因类型PlantDyingType。
 	/// @return 该植物是否被移除。
@@ -1019,6 +1050,108 @@ namespace PVZEvent
 			part3->end();
 			//part4->end();
 			part5->end();
+		}
+	};
+
+	/// @brief 车类僵尸碾压结算事件。
+	/// @param 触发事件的僵尸
+	/// @return 是否结算原版碾压过程。
+	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x20)>
+	{
+	public:
+		ZombieCheckSquishEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieCheckSquishEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieCheckSquishEvent() : BoolDLLEventTemplate() { Init("onZombieCheckSquish"); };
+	};
+
+	/// @brief 子弹击中判定分支事件。
+	/// @warning 该事件与 ProjectileCollisionEvent 冲突，
+	/// @param 触发事件的子弹
+	/// @retval true 结算对植物的索敌和击中效果。
+	/// @retval false 结算对僵尸的索敌和击中效果。
+	class ProjectileHitDiversionEvent : public DiversionEventTemplate<0x46CFC9, 6, 0x46CFCF, 0x46D058, REG_EBP>
+	{
+	public:
+		ProjectileHitDiversionEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		ProjectileHitDiversionEvent(int address) : DiversionEventTemplate() { Init(address); };
+		ProjectileHitDiversionEvent() : DiversionEventTemplate() { Init("onProjectileHitDiversion"); };
+	};
+
+	/// @brief 机枪僵尸判定是否发射子弹事件事件。
+	/// @note 不会影响射击动作，只影响子弹生成。
+	/// @param 触发事件的僵尸
+	/// @retval true 是否发射子弹
+	class GatlingZombieJudgeShootEvent : public DiversionEventTemplate<0x5277D9, 5, 0x52783D, 0x5277ED, REG_EDI>
+	{
+	public:
+		GatlingZombieJudgeShootEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		GatlingZombieJudgeShootEvent(int address) : DiversionEventTemplate() { Init(address); };
+		GatlingZombieJudgeShootEvent() : DiversionEventTemplate() { Init("onGatlingZombieJudgeShoot"); };
+	};
+
+	/// @brief 巨人扔小鬼事件
+	/// @param 触发事件的僵尸，僵尸投掷的小鬼
+	class GargantaurThrowAfterEvent : public DLLEventTemplate<0x527148, 7, REG_ESI, MEM_ESP_ADD(0x38)>
+	{
+	public:
+		GargantaurThrowAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurThrowAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurThrowAfterEvent() : DLLEventTemplate() { Init("onGargantaurThrowAfter"); };
+	};
+
+	class GargantaurJudgeXFixEvent : public DLLEvent
+	{
+	public:
+		GargantaurJudgeXFixEvent()
+		{
+			hookAddress = 0x526EEA;
+			rawlen = 6;
+			BYTE code[] =
+			{
+				CMP_BYTE_PTR_EUX_ADD__V(REG_EBX, 0x0B8, 0),
+				JE(8),
+				FCHS,
+				FADD_PTR_ADDR(0x67A114), // 800
+				CMP_EUX(REG_EAX, 0x45)
+			};
+			start(STRING(code));
+		}
+	};
+
+	/// @brief 巨人僵尸判断是否砸地板的事件
+	/// @param 触发事件的僵尸
+	/// @return 若为负数，与原版一致；若为 0，则强制不砸；若为正数，则强制砸。
+	class GargantaurJudgeSquishEvent: public DLLEventTemplate<0x527242, 8, REG_EBX>
+	{
+	public:
+		GargantaurJudgeSquishEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurJudgeSquishEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurJudgeSquishEvent() : DLLEventTemplate() { Init("IsGargantaurJudgeSquish"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().js_rel(20).jz_rel(7);
+			builder.popad().push_imm32(0x5272AC).ret();
+			builder.popad().push_imm32(0x52724E).ret();
+			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x52724A).ret();
+		}
+	};
+
+	/// @brief 巨人僵尸砸植物的事件
+	/// @param 触发事件的僵尸
+	/// @return 是否砸植物。
+	class GargantaurSquishPlantEvent : public DLLEventTemplate<0x526D64, 8, REG_EBX>
+	{
+	public:
+		GargantaurSquishPlantEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurSquishPlantEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurSquishPlantEvent() : DLLEventTemplate() { Init("onGargantaurSquishPlant"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jz_rel(7);
+			builder.popad().push_imm32(0x52724E).ret();
+			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x526D6C).ret();
 		}
 	};
 

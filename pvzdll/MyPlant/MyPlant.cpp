@@ -1,5 +1,6 @@
 #include "MyPlant.hpp"
 #include "implement/Index.hpp"
+#include <cassert>
 
 namespace PlantAbility
 {
@@ -163,6 +164,7 @@ bool MyPlant::CheckUpgrade()
 
 void MyPlant::AddExperience(int val, bool kill_credit)
 {
+	assert(PlantAbility::PLANT_LEVEL_EXP[this->Type] > 0);
 	this->Experience += val;
 	PlantAbility::GetAbility(this->Type)->onGainXP(*this, val, kill_credit);
 

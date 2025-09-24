@@ -264,6 +264,11 @@ bool onProjectileUpdatePiercingMotion(MyProjectile proj)
 	return true;
 }
 
+bool onProjectileDivert(MyProjectile proj)
+{
+	return proj.Type == ProjectileType::ZombiePea && (proj.ExistedTime & 1);
+}
+
 void InitProjectileEvents()
 {
 	ProjectileRemoveEvent((int)onProjectileRemove);
@@ -278,6 +283,7 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
 	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
+	PVZEvent::ProjectileHitDiversionEvent((int)onProjectileDivert);
 	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
 	PVZEvent::ProjectileFindZombieTargetSkipEvent((int)onProjectileFindZombieTargetSkip);
 

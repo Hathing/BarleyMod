@@ -40,4 +40,16 @@ namespace PVZ
 	}
 
 	void ApplyPZDamage(MyPlant plant, MyZombie zombie, int damage, PVZ::DamageFlags flags = PVZ::DAMAGEF_NONE);
+
+	class ZombieDrawPosition
+	{
+	public:
+		int HeadX;
+		int HeadY;
+		int ArmY;
+		float BodyY;
+		float ImageOffsetX;
+		float ImageOffsetY;
+		float ClipHeight;
+	};
 }
