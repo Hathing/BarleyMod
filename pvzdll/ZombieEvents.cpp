@@ -492,6 +492,16 @@ void onZombieAddProj(MyZombie zombie, MyProjectile proj)
 	}
 }
 
+bool IsGatlingZombieShoot(MyZombie zombie)
+{
+	if (zombie.Hypnotized)
+		return zombie.AttributeCountdown == 19 || zombie.AttributeCountdown == 32
+			|| zombie.AttributeCountdown == 45 || zombie.AttributeCountdown == 58 || zombie.AttributeCountdown == 71;
+	else
+		return zombie.AttributeCountdown == 18 || zombie.AttributeCountdown == 35
+			|| zombie.AttributeCountdown == 51 || zombie.AttributeCountdown == 68;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -525,6 +535,7 @@ void InitZombieEvents()
 	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
 	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
 	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
+	PVZEvent::GatlingZombieJudgeShootEvent((int)IsGatlingZombieShoot);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

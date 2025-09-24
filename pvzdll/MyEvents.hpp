@@ -998,4 +998,16 @@ namespace PVZEvent
 		ProjectileHitDiversionEvent(int address) : DiversionEventTemplate() { Init(address); };
 		ProjectileHitDiversionEvent() : DiversionEventTemplate() { Init("onProjectileHitDiversion"); };
 	};
+
+	/// @brief 机枪僵尸判定是否发射子弹事件事件。
+	/// @note 不会影响射击动作，只影响子弹生成。
+	/// @param 触发事件的僵尸
+	/// @retval true 是否发射子弹
+	class GatlingZombieJudgeShootEvent : public DiversionEventTemplate<0x5277D9, 5, 0x52783D, 0x5277ED, REG_EDI>
+	{
+	public:
+		GatlingZombieJudgeShootEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		GatlingZombieJudgeShootEvent(int address) : DiversionEventTemplate() { Init(address); };
+		GatlingZombieJudgeShootEvent() : DiversionEventTemplate() { Init("onGatlingZombieJudgeShoot"); };
+	};
 };
