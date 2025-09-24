@@ -109,20 +109,7 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		case ZombieType::WallnutZombie:
 		case ZombieType::TallnutZombie:
 		case ZombieType::Gigagargantuar:
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        elite_type = -1;
+			elite_type = -1;
 			break;
 		case ZombieType::FootballZombie:
 			if (elite_type > 0)
