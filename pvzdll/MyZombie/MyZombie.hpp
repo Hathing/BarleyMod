@@ -18,6 +18,7 @@ public:
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 是否受钢地刺影响，啃食伤害减半
 	T_PROPERTY(BOOLEAN, IsWeak, __get_IsW, __set_IsW, 0x73);
+	INT_PROPERTY(Unknown2, __get_Un2, __set_Un2, 0x80);
 	/// @brief 召唤该僵尸的植物的 ID
 	/// @note 由于适配问题，这里暂时直接存基址
 	INT_PROPERTY(SourceID, __get_SoID, __set_SoID, 0x0E8);

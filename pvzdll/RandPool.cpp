@@ -80,9 +80,12 @@ void onRandomZombieDropHelm(MyZombie zombie)
 
 		if (HpPoint == 5)
 			child_zombie.GoldMark = 1;
+		if (HpPoint == 4)
+			child_zombie.GoldMark = 2;
 		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
 	}
 
+	child_zombie.Unknown2 = zombie.Unknown2;
 	if (zombie.Unknown == 1)
 		child_zombie.Unknown = 1;
 	return;
