@@ -59,6 +59,8 @@ void onRandomZombieDropHelm(MyZombie zombie)
 
 	MyBoard board = zombie.GetBoard();
 	MyZombie child_zombie{ board.AddZombieInRow(static_cast<ZombieType::ZombieType>(type), zombie.Row, elite_type) };
+	if (zombie.Hypnotized)
+		child_zombie.Hypnotized = true;
 	PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, zombie.Layer + 100, EffectType::IMITATER_TRANSFORMING);
 	child_zombie.X = zombie.X;
 
