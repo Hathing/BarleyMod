@@ -77,8 +77,14 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		child_zombie.HelmMaxHealth = child_zombie.HelmMaxHealth * HpPoint / 5;
 		child_zombie.ShieldHealth = child_zombie.ShieldHealth * HpPoint / 5;
 		child_zombie.ShieldMaxHealth = child_zombie.ShieldMaxHealth * HpPoint / 5;
+
+		if (HpPoint == 5)
+			child_zombie.GoldMark = 1;
 		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
 	}
+
+	if (zombie.Unknown == 1)
+		child_zombie.Unknown = 1;
 	return;
 }
 

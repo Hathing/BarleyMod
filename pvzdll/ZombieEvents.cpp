@@ -50,6 +50,7 @@ void onZombieDropLoot(MyZombie zombie)
 void onZombieInitAfter(MyZombie zombie)
 {
 	zombie.IsWalkingBackwards = 0;
+	zombie.Unknown = 0;
 	zombie.IsWeak = false;
 	
 	zombie.ColorFlag = 0;
@@ -61,6 +62,7 @@ void onZombieInitAfter(MyZombie zombie)
 
 	zombie.GargantaurType = 0;
 	zombie.PeaHeadType = 0;
+	zombie.InvulnerableDuration = 0;
 
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
