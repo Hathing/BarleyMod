@@ -27,12 +27,14 @@ public:
 	T_PROPERTY(byte, GhostFlameMark, __get_GhFM, __set_GhFM, 0x106);
 	/// @brief 被魅惑菇召唤时，魅惑菇的等级
 	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x107);
-	/// @brief 豌豆僵尸变种类型
-	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
 	/// @brief 僵尸受攻击的动画附件的ID
 	INT_PROPERTY(HitReanimID, __get_HitReanimID, __set_HitReanimID, 0x110);
 	/// @brief 僵尸的掉落速度，原版中只有小鬼和水族馆僵尸使用该指针；负数表示下落，正数表示上升
 	T_PROPERTY(float, FallSpeed, __get_FallSpeed, __set_FallSpeed, 0x120);
+	/// @brief 巨人变种类型
+	INT_PROPERTY(GargantaurType, __get_GaT, __set_GaT, 0x128);
+	/// @brief 豌豆僵尸变种类型
+	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
 	T_PROPERTY(byte, IsWalkingBackwards, __get_IsWalkingBackwards, __set_IsWalkingBackwards, 0x13C);
 	/// @brief 僵尸寒意层数，上限30层，每层减速2%

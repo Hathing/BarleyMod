@@ -59,6 +59,9 @@ void onZombieInitAfter(MyZombie zombie)
 	zombie.SourceLevel = 0;
 	zombie.GhostFlameMark = 0;
 
+	zombie.GargantaurType = 0;
+	zombie.PeaHeadType = 0;
+
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
 	zombie.FlameStack = 0;
@@ -344,12 +347,6 @@ int onZombieTakeDmg(MyZombie zombie,PVZ::DamageFlags dmg_flags,int dmg)
 
 bool onZombiePickRandomSpeed(MyZombie zombie)
 {
-	if (zombie.State == ZombieState::NEWSPAPER_RUNNING)
-	{
-		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 5.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
-		return false;
-	}
-
 	switch (zombie.State)
 	{
 	case ZombieState::NEWSPAPER_RUNNING:
@@ -357,6 +354,22 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 		return false;
 	case ZombieState::DIGGER_WALK_RIGHT:
 		zombie.SetSpeed(0.24f);
+		return false;
+	default:
+		break;
+	}
+
+	switch (zombie.Type)
+	{
+	case ZombieType::Gargantuar:
+	case ZombieType::Gigagargantuar:
+		if (PVZ::Memory::ReadMemory<int>(0x701190))
+		{
+			zombie.GargantaurType = 1;
+			zombie.Speed = Creator::RandFloat(0.14f) + 0.23f + 0.66f;
+		}
+		if (PVZ::Memory::ReadMemory<int>(0x701200))
+			zombie.GargantaurType = 2;
 		return false;
 	default:
 		break;
