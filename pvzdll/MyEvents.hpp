@@ -1058,4 +1058,22 @@ namespace PVZEvent
 			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x52724A).ret();
 		}
 	};
+
+	/// @brief 巨人僵尸砸植物的事件
+	/// @param 触发事件的僵尸
+	/// @return 是否砸植物。
+	class GargantaurSquishPlantEvent : public DLLEventTemplate<0x526D64, 8, REG_EBX>
+	{
+	public:
+		GargantaurSquishPlantEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		GargantaurSquishPlantEvent(int address) : DLLEventTemplate() { Init(address); };
+		GargantaurSquishPlantEvent() : DLLEventTemplate() { Init("onGargantaurSquishPlant"); };
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jz_rel(7);
+			builder.popad().push_imm32(0x52724E).ret();
+			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x526D6C).ret();
+		}
+	};
 };

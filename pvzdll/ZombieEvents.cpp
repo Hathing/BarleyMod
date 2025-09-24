@@ -514,7 +514,7 @@ void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
 	}
 }
 
-int onGargantaurJudgeSquishPlant(MyZombie zombie)
+int onGargantaurJudgeSquish(MyZombie zombie)
 {
 	if (zombie.ZombieHeight == 9)
 		return 0;
@@ -523,6 +523,28 @@ int onGargantaurJudgeSquishPlant(MyZombie zombie)
 	if (zombie.Hypnotized)
 		return 0;
 	return -1;
+}
+
+bool onGargantaurSquishPlant(MyZombie attacker)
+{
+	auto atk_rect = attacker.GetActualAttackRect();
+	int damage = 0;
+	if (attacker.Type == ZombieType::Gargantuar)
+		damage = attacker.BodyMaxHealth <= 3000 ? 900 : 1200;
+	else if (attacker.Type == ZombieType::Gigagargantuar)
+		damage = attacker.BodyMaxHealth <= 6000 ? 900 : 1800;
+
+	auto zombies = attacker.GetBoard().GetAllZombies<MyZombie>();
+	for (auto myzombie : zombies)
+	{
+		if (attacker.Hypnotized != myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
+			continue;
+		auto rect = myzombie.GetActualRect();
+		if (PVZ::GetXOverlap(atk_rect, rect) >= -30)
+			myzombie.Hit(damage);
+	}
+
+	return !attacker.Hypnotized;
 }
 
 void InitZombieEvents()
@@ -561,7 +583,8 @@ void InitZombieEvents()
 	PVZEvent::GatlingZombieJudgeShootEvent((int)IsGatlingZombieShoot);
 	PVZEvent::GargantaurThrowAfterEvent((int)onGargantaurThrowAfter);
 	PVZEvent::GargantaurJudgeXFixEvent();
-	PVZEvent::GargantaurJudgeSquishEvent((int)onGargantaurJudgeSquishPlant);
+	PVZEvent::GargantaurJudgeSquishEvent((int)onGargantaurJudgeSquish);
+	PVZEvent::GargantaurSquishPlantEvent((int)onGargantaurSquishPlant);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
