@@ -15,6 +15,7 @@ public:
 	T_PROPERTY(byte, DroppedLoot, __get_DrL, __set_DrL, 0x70);
 	T_PROPERTY(byte, Unknown, __get_Un, __set_Un, 0x71);
 	/// @brief 精英类别
+	/// @deprecated 请使用 WAVE_ELITE 系列常量和 FromWave 替代之。
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 是否受钢地刺影响，啃食伤害减半
 	T_PROPERTY(BOOLEAN, IsWeak, __get_IsW, __set_IsW, 0x73);

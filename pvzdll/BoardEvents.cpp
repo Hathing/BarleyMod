@@ -31,7 +31,7 @@ inline void UpdatePoisonApply(MyBoard& board)
 				continue;
 			if (zombie.Type == ZombieType::DrZomboss)
 				continue;
-			if (zombie.Type == ZombieType::NewspaperZombie && zombie.EliteType)
+			if (zombie.Type == ZombieType::NewspaperZombie && zombie.FromWave >= WAVE_ELITE_MASK)
 				continue;
 			zombie.Hit(zombie.PoisonStack, PVZ::DAMAGEF_NOFLASH);
 		}
