@@ -244,6 +244,7 @@ bool onZombieUpdateAbility(MyZombie zombie)
 			}
 		}
 	}
+	// 空投的车类不更新
 	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
 }
 
@@ -354,7 +355,7 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 	default:
 		break;
 	}
-
+	/*
 	switch (zombie.Type)
 	{
 	case ZombieType::Gargantuar:
@@ -370,7 +371,7 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 	default:
 		break;
 	}
-
+	*/
 	return true;
 }
 
