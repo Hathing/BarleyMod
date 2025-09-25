@@ -643,7 +643,8 @@ void InitZombieEvents()
 
 	// 僵尸绘制相关
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
+	//这个事件会使僵尸无法绘制，暂时禁用
+	//PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
 
 	// 僵尸攻击相关
 	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
