@@ -59,25 +59,35 @@ void onRandomZombieDropHelm(MyZombie zombie)
 
 	MyBoard board = zombie.GetBoard();
 	MyZombie child_zombie{ board.AddZombieInRow(static_cast<ZombieType::ZombieType>(type), zombie.Row, elite_type) };
+	if (zombie.Hypnotized)
+		child_zombie.Hypnotized = true;
 	PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, zombie.Layer + 100, EffectType::IMITATER_TRANSFORMING);
 	child_zombie.X = zombie.X;
 
 	if (true)
 	{
-		int HpPoint = 1 + Creator::Rand(5);
+		int HpPoint = zombie.GenHpPoint();
 		if (CLOWN_ZOMBIE_POP_FLAG)
 			HpPoint = 5;
 		child_zombie.HpPoint = HpPoint;
-		float health_ratio = (HpPoint) / 5.0f;
 
-		child_zombie.BodyHealth *= health_ratio;
-		child_zombie.BodyMaxHealth *= health_ratio;
-		child_zombie.HelmHealth *= health_ratio;
-		child_zombie.HelmMaxHealth *= health_ratio;
-		child_zombie.ShieldHealth *= health_ratio;
-		child_zombie.ShieldMaxHealth *= health_ratio;
+		child_zombie.BodyHealth = child_zombie.BodyHealth * HpPoint / 5;
+		child_zombie.BodyMaxHealth = child_zombie.BodyMaxHealth * HpPoint / 5;
+		child_zombie.HelmHealth = child_zombie.HelmHealth * HpPoint / 5;
+		child_zombie.HelmMaxHealth = child_zombie.HelmMaxHealth * HpPoint / 5;
+		child_zombie.ShieldHealth = child_zombie.ShieldHealth * HpPoint / 5;
+		child_zombie.ShieldMaxHealth = child_zombie.ShieldMaxHealth * HpPoint / 5;
+
+		if (HpPoint == 5)
+			child_zombie.GoldMark = 1;
+		if (HpPoint == 4)
+			child_zombie.GoldMark = 2;
 		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
 	}
+
+	child_zombie.Unknown2 = zombie.Unknown2;
+	if (zombie.Unknown == 1)
+		child_zombie.Unknown = 1;
 	return;
 }
 

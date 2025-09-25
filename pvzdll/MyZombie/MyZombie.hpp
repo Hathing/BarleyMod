@@ -15,9 +15,11 @@ public:
 	T_PROPERTY(byte, DroppedLoot, __get_DrL, __set_DrL, 0x70);
 	T_PROPERTY(byte, Unknown, __get_Un, __set_Un, 0x71);
 	/// @brief 精英类别
+	/// @deprecated 请使用 WAVE_ELITE 系列常量和 FromWave 替代之。
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 是否受钢地刺影响，啃食伤害减半
 	T_PROPERTY(BOOLEAN, IsWeak, __get_IsW, __set_IsW, 0x73);
+	INT_PROPERTY(Unknown2, __get_Un2, __set_Un2, 0x80);
 	/// @brief 召唤该僵尸的植物的 ID
 	/// @note 由于适配问题，这里暂时直接存基址
 	INT_PROPERTY(SourceID, __get_SoID, __set_SoID, 0x0E8);
@@ -27,12 +29,18 @@ public:
 	T_PROPERTY(byte, GhostFlameMark, __get_GhFM, __set_GhFM, 0x106);
 	/// @brief 被魅惑菇召唤时，魅惑菇的等级
 	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x107);
-	/// @brief 豌豆僵尸变种类型
-	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
 	/// @brief 僵尸受攻击的动画附件的ID
 	INT_PROPERTY(HitReanimID, __get_HitReanimID, __set_HitReanimID, 0x110);
 	/// @brief 僵尸的掉落速度，原版中只有小鬼和水族馆僵尸使用该指针；负数表示下落，正数表示上升
 	T_PROPERTY(float, FallSpeed, __get_FallSpeed, __set_FallSpeed, 0x120);
+	/// @brief 巨人变种类型
+	INT_PROPERTY(GargantaurType, __get_GaT, __set_GaT, 0x128);
+	/// @brief 金色标记
+	INT_PROPERTY(GoldMark, __get_GoM, __set_GoM, 0x12C);
+	/// @brief 伤害免疫持续时间
+	INT_PROPERTY(InvulnerableDuration, __get_InD, __set_InD, 0x12C);
+	/// @brief 豌豆僵尸变种类型
+	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
 	T_PROPERTY(byte, IsWalkingBackwards, __get_IsWalkingBackwards, __set_IsWalkingBackwards, 0x13C);
 	/// @brief 僵尸寒意层数，上限30层，每层减速2%
@@ -106,4 +114,7 @@ public:
 	/// @brief 投篮车对目标植物开火
 	/// @rparam 目标植物的Address，0表示没有找到目标。
 	void ZombieCatapultFire(int targetaddr);
+	/// @brief 盲盒僵尸获取生命分数
+	/// @return 生命分数的分子
+	int GenHpPoint();
 };

@@ -50,6 +50,7 @@ void onZombieDropLoot(MyZombie zombie)
 void onZombieInitAfter(MyZombie zombie)
 {
 	zombie.IsWalkingBackwards = 0;
+	zombie.Unknown = 0;
 	zombie.IsWeak = false;
 	
 	zombie.ColorFlag = 0;
@@ -58,6 +59,10 @@ void onZombieInitAfter(MyZombie zombie)
 		zombie.SourceID = 0;
 	zombie.SourceLevel = 0;
 	zombie.GhostFlameMark = 0;
+
+	zombie.GargantaurType = 0;
+	zombie.PeaHeadType = 0;
+	zombie.InvulnerableDuration = 0;
 
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
@@ -344,12 +349,6 @@ int onZombieTakeDmg(MyZombie zombie,PVZ::DamageFlags dmg_flags,int dmg)
 
 bool onZombiePickRandomSpeed(MyZombie zombie)
 {
-	if (zombie.State == ZombieState::NEWSPAPER_RUNNING)
-	{
-		zombie.SetSpeed(0.9f * (zombie.NewspaperAngerStack / 5.0f + 1.0f));//原版读报暴走移速区间为0.89-0.91
-		return false;
-	}
-
 	switch (zombie.State)
 	{
 	case ZombieState::NEWSPAPER_RUNNING:
@@ -357,6 +356,22 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 		return false;
 	case ZombieState::DIGGER_WALK_RIGHT:
 		zombie.SetSpeed(0.24f);
+		return false;
+	default:
+		break;
+	}
+
+	switch (zombie.Type)
+	{
+	case ZombieType::Gargantuar:
+	case ZombieType::Gigagargantuar:
+		if (PVZ::Memory::ReadMemory<int>(0x701190))
+		{
+			zombie.GargantaurType = 1;
+			zombie.Speed = Creator::RandFloat(0.14f) + 0.23f + 0.66f;
+		}
+		if (PVZ::Memory::ReadMemory<int>(0x701200))
+			zombie.GargantaurType = 2;
 		return false;
 	default:
 		break;
@@ -506,6 +521,21 @@ void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
 		imp.Hypnotized = true;
 		imp.X += 266;
 		imp.Speed = -3.0;
+	}
+
+	if (zombie.Type == ZombieType::Gargantuar && zombie.BodyMaxHealth >= 4000)
+	{
+		imp.BodyHealth += 150;
+		imp.BodyMaxHealth += 150;
+		imp.Size = 1.3f;
+		imp.GoldMark = 1;
+	}
+	if (zombie.Type == ZombieType::Gigagargantuar && zombie.BodyMaxHealth >= 10000)
+	{
+		imp.BodyHealth += 450;
+		imp.BodyMaxHealth += 450;
+		imp.Size = 1.5f;
+		imp.GoldMark = 1;
 	}
 }
 

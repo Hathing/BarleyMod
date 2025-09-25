@@ -932,7 +932,7 @@ namespace PVZEvent
 	/// @note 此时已经完成了除 BodyY 和 ClipRect 的所有量的设定
 	/// @param 触发事件的僵尸，僵尸的 ZombieDrawPos
 	/// @return 是否执行原版对 BodyY 和 ClipRect 的设定
-	class ZombieOverrideDrawPosEvent : BoolDLLEventTemplate<0x52DBAC, 6, 0x52DFD8, REG_ESI, REG_ECX>
+	class ZombieOverrideDrawPosEvent : BoolDLLEventTemplate<0x52DBAC, 6, 0x52DF89, REG_ESI, REG_ECX>
 	{
 	public:
 		ZombieOverrideDrawPosEvent() : BoolDLLEventTemplate() { Init("OverrideZombieDrawPos"); };
