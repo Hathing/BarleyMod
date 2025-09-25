@@ -67,6 +67,7 @@ void onZombieInitAfter(MyZombie zombie)
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
 	zombie.FlameStack = 0;
+	zombie.IceBounded = false;
 
 	zombie.LastDamageSourceID = 0;
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
@@ -654,6 +655,15 @@ void onZombieChilled(MyZombie zombie)
 	zombie.DecelerateCountdown = 400;
 }
 
+void onZombieRemoveIceTrap(MyZombie zombie)
+{
+	if (zombie.IceBounded)
+	{
+		zombie.IceBounded = false;
+		zombie.Hit((zombie.BodyHealth + zombie.HelmHealth + zombie.ShieldHealth) >> 3, PVZ::DAMAGEF_BYPASSES_SHIELD);
+	}
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -701,6 +711,7 @@ void InitZombieEvents()
 
 	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
 	PVZEvent::ZombieChillEvent((int)onZombieChilled);
+	PVZEvent::ZombieRemoveIceTrapEvent((int)onZombieRemoveIceTrap);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
