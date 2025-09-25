@@ -649,6 +649,11 @@ ThreeState::ThreeState IsZombieCanBeChilled(MyZombie zombie)
 	}
 }
 
+void onZombieChilled(MyZombie zombie)
+{
+	zombie.DecelerateCountdown = 400;
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -695,6 +700,7 @@ void InitZombieEvents()
 	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
 
 	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
+	PVZEvent::ZombieChillEvent((int)onZombieChilled);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
