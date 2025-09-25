@@ -795,6 +795,17 @@ namespace PVZEvent
 		ProjectileCheckExpireEvent() : ProjectileCheckExpireEvent("onProjectileCheckExpire") {};
 	};
 
+	/// @brief 子弹反飞运动事件
+	/// @param 子弹
+	/// @return False则不经过原版运动更新
+	class ProjectileUpdateLeftMotionEvent : BoolDLLEventTemplate<0x46D8A7, 9, 0x46DC1F, REG_EBX>
+	{
+	public:
+		ProjectileUpdateLeftMotionEvent() : BoolDLLEventTemplate() { Init("onProjectileUpdateLeftMotion"); };
+		ProjectileUpdateLeftMotionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileUpdateLeftMotionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
 	/// @brief 植物索敌优先级重载函数
 	/// @note 返回值越高，优先级越高
 	/// @param 触发事件的植物，植物当前索敌的僵尸，原始优先级
@@ -938,7 +949,7 @@ namespace PVZEvent
 		ZombieOverrideDrawPosEvent() : BoolDLLEventTemplate() { Init("OverrideZombieDrawPos"); };
 		ZombieOverrideDrawPosEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieOverrideDrawPosEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-  };
+	};
 
 	/// @brief 植物因生命值小于 0 被移除事件。
 	/// @note 照搬的PVZCLASS里的事件，在这基础上增加了一个死亡类型

@@ -264,6 +264,27 @@ bool onProjectileUpdatePiercingMotion(MyProjectile proj)
 	return true;
 }
 
+bool onProjectileUpdateLeftMotion(MyProjectile proj)
+{
+	if (proj.X <= 10.0f)
+	{
+		proj.Motion = MotionType::Direct;
+		/*
+		* 尝试让火球反向失败，代码先放这吧
+		if(proj.Type==ProjectileType::FirePea)
+		{
+			MyAttachment attachment = PVZ::GetByID<PVZ::Attachment>(proj.AttachmentID);
+			if (attachment.isValid())
+			{
+				MyAttachEffect attacheffect{ attachment.GetBaseAddress()};
+				attacheffect.GetOffset().ScaleRotateTransformMatrix(0, 0, 0, -1.0f, 1.0f);
+			}
+		}
+		*/
+	}
+	return true;
+}
+
 bool onProjectileDivert(MyProjectile proj)
 {
 	return proj.Type == ProjectileType::ZombiePea && (proj.ExistedTime & 1);
@@ -298,6 +319,7 @@ void InitProjectileEvents()
 	// 子弹运动相关
 	PVZEvent::ProjectileUpdatePiercingMotionEvent((int)onProjectileUpdatePiercingMotion);
 	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
+	PVZEvent::ProjectileUpdateLeftMotionEvent((int)onProjectileUpdateLeftMotion);
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);
