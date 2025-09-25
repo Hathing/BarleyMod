@@ -77,13 +77,13 @@ void MyZombie::RiseFromGrave(int row, int column)
 void MyZombie::AddFrost(int num)
 {
 	int add_frost_num = this->FrostStack + num;
-	this->FrostStack = add_frost_num;
-	if (this->FrostStack > 30)
+	if (add_frost_num > 30)
 	{
-		int damage = (this->FrostStack - 30) * 0.01f * (this->BodyHealth + this->HelmHealth + this->ShieldHealth);//溢出层数*1%*当前生命值转化为伤害
+		int damage = (add_frost_num - 30) * 0.01f * (this->BodyHealth + this->HelmHealth + this->ShieldHealth);//溢出层数*1%*当前生命值转化为伤害
 		this->Hit(damage, PVZ::DAMAGEF_NOFLASH);
-		this->FrostStack = 30;
+		add_frost_num = 30;
 	}
+	this->FrostStack = add_frost_num;
 	this->UpdateAnimSpeed();
 	if (!this->ColorFlag)
 		this->ColorFlag = 2;
