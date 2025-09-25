@@ -582,8 +582,7 @@ bool onJalapenoHeadBurnBefore(MyZombie zombie)
 	MyBoard board{ zombie.GetBoard() };
 	if (zombie.Hypnotized)
 	{
-		//board的burn row函数有问题，暂时禁用
-		//board.BurnRow(zombie.Row);
+		Creator::CreatePlant(SeedType::Jalapeno, zombie.Row, 20).CreateEffect();
 		return false;
 	}
 	auto zombies = board.GetAllZombies<MyZombie>();

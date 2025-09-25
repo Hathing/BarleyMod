@@ -1,14 +1,4 @@
-﻿#include "MyBoard.hpp"
-
-void MyBoard::BurnRow(int row)
-{
-	PVZ::Memory::Execute(AsmBuilder()
-		.push_imm32(row)
-		.mov_reg_imm(REG_EDI, this->GetBaseAddress())
-		.invoke(0x4664B0)//edi不应该是Plant*吗，函数里甚至调用了植物获取DRF。。。
-		.ret()
-	);
-}
+#include "MyBoard.hpp"
 
 PVZ::Zombie MyBoard::AddZombieInRow(ZombieType::ZombieType type, int row, int from_wave)
 {
