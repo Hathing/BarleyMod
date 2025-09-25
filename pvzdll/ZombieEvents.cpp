@@ -319,10 +319,6 @@ void onZombieFallOnGround(MyZombie zombie)
 
 int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 {
-	if (zombie.IsTangleKelpTarget())
-	{
-		return 0;
-	}
 	if (zombie.IsLaunched)
 		return 0;
 	if (zombie.State == ZombieState::DIGGER_WALK_RIGHT && zombie.X < 130)
