@@ -13,13 +13,11 @@ public:
 	INT_PROPERTY(FromWave, __get_FrW, __set_FrW, 0x6C);
 	/// @brief 是否掉落过掉落物
 	T_PROPERTY(byte, DroppedLoot, __get_DrL, __set_DrL, 0x70);
-	T_PROPERTY(byte, Unknown, __get_Un, __set_Un, 0x71);
 	/// @brief 精英类别
 	/// @deprecated 请使用 WAVE_ELITE 系列常量和 FromWave 替代之。
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 是否受钢地刺影响，啃食伤害减半
 	T_PROPERTY(BOOLEAN, IsWeak, __get_IsW, __set_IsW, 0x73);
-	INT_PROPERTY(Unknown2, __get_Un2, __set_Un2, 0x80);
 	/// @brief 召唤该僵尸的植物的 ID
 	/// @note 由于适配问题，这里暂时直接存基址
 	INT_PROPERTY(SourceID, __get_SoID, __set_SoID, 0x0E8);
