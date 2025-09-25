@@ -85,10 +85,8 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
 	}
 
-	child_zombie.Unknown2 = zombie.Unknown2;
-	if (zombie.Unknown == 1)
-		child_zombie.Unknown = 1;
-	return;
+	//僵尸的各种属性继承
+	child_zombie.FlameStack = zombie.FlameStack;
 }
 
 void InitRandomZombieEvents()

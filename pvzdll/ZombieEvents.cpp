@@ -50,7 +50,6 @@ void onZombieDropLoot(MyZombie zombie)
 void onZombieInitAfter(MyZombie zombie)
 {
 	zombie.IsWalkingBackwards = 0;
-	zombie.Unknown = 0;
 	zombie.IsWeak = false;
 	
 	zombie.ColorFlag = 0;
@@ -60,8 +59,7 @@ void onZombieInitAfter(MyZombie zombie)
 	zombie.SourceLevel = 0;
 	zombie.GhostFlameMark = 0;
 
-	zombie.GargantaurType = 0;
-	zombie.PeaHeadType = 0;
+	zombie.VariantType = 0;
 	zombie.InvulnerableDuration = 0;
 
 	zombie.FrostStack = 0;
@@ -367,11 +365,11 @@ bool onZombiePickRandomSpeed(MyZombie zombie)
 	case ZombieType::Gigagargantuar:
 		if (PVZ::Memory::ReadMemory<int>(0x701190))
 		{
-			zombie.GargantaurType = 1;
+			zombie.VariantType = 1;
 			zombie.Speed = Creator::RandFloat(0.14f) + 0.23f + 0.66f;
 		}
 		if (PVZ::Memory::ReadMemory<int>(0x701200))
-			zombie.GargantaurType = 2;
+			zombie.VariantType = 2;
 		return false;
 	default:
 		break;
@@ -493,7 +491,7 @@ void onZombieAddProj(MyZombie zombie, MyProjectile proj)
 		if (zombie.Hypnotized)
 		{
 			proj.Type = ProjectileType::Pea;
-			if (zombie.PeaHeadType == 1)
+			if (zombie.VariantType == ZombieVariantType::SnowPeaHead)
 				proj.Type = ProjectileType::SnowPea;
 			proj.X += 100;
 			proj.DamageAbility = PVZ::DRF_GROUND;
