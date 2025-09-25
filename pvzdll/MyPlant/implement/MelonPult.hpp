@@ -10,7 +10,7 @@ namespace PlantAbility
 		{
 			plant.ShootOrProductInterval = 300;
 		}
-		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{
 			while (Creator::Rand(100) < 90)
 			{

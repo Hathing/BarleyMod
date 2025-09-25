@@ -18,11 +18,12 @@ public:
 		rawlen = 6;
 		BYTE code[] =
 		{
-			PUSH_PTR_ESP_ADD_V(0x54),
+			PUSH_PTR_ESP_ADD_V(0x5C),
+			PUSH_PTR_ESP_ADD_V(0x58),
 			PUSH_EAX,
 			PUSH_EBP,
 			INVOKE(address),
-			ADD_ESP(0x0C),
+			ADD_ESP(0x10),
 
 			TEST_AL_AL,
 			JNZ(7),
@@ -52,10 +53,11 @@ public:
 		BYTE code[] =
 		{
 			PUSH(0),
+			PUSH(0),
 			PUSH_EDI,
 			PUSH_ESI,
 			INVOKE(address),
-			ADD_ESP(0x0C),
+			ADD_ESP(0x10),
 
 			TEST_AL_AL,
 			JNZ(7),
@@ -68,7 +70,7 @@ public:
 };
 
 /// @brief 植物发射子弹事件。
-/// @param 按参数列表顺序，依次为：触发事件的植物、生成的子弹、子弹目标僵尸的基址。
+/// @param 按参数列表顺序，依次为：触发事件的植物、生成的子弹、子弹目标僵尸的基址、PlantWeapon。
 /// @return 是否进行原版的初始化过程。
 class PlantAddProjectileEvent
 {

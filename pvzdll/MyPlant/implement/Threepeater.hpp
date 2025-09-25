@@ -11,7 +11,7 @@ namespace PlantAbility
 		{
 			plant.ShootOrProductInterval = 145;
 		}
-		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{
 			//新正弦运动的标记
 			proj.OriginalY = proj.Y;

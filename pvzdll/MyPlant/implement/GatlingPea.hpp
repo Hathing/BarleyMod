@@ -54,7 +54,7 @@ namespace PlantAbility
 			return false;
 		}
 
-		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{
 			if (plant.AnotherCounter > 0)
 			{

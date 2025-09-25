@@ -14,7 +14,7 @@ namespace PlantAbility
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
 		}
-		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{
 			if (plant.WinterMelonCastState == 1)
 				proj.SpecialType = PST_SCATTER_WINTERMELON;

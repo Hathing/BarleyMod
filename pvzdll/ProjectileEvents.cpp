@@ -2,12 +2,12 @@
 #include "MyProjectile/ProjectileAbility.hpp"
 #include "MyPlant/PlantAbility.hpp"
 
-bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 {
 	plant.InitAddProjectile(proj);
 	if (plant.Type == SeedType::Starfruit)
 		proj.OriginalRow = (byte)plant.Row;
-	return PlantAbility::GetAbility(plant.Type)->onAddProjectile(plant, proj, zombie);
+	return PlantAbility::GetAbility(plant.Type)->onAddProjectile(plant, proj, zombie, PlantWeapon);
 }
 
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
