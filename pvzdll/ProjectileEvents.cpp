@@ -282,6 +282,7 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileImageSizeEvent((int)GetProjectileImageSize);
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
 
+	// 子弹创建相关
 	PlantAddProjectileEvent((int)onPlantAddProjectile);
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
 

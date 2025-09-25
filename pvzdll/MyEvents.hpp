@@ -921,7 +921,7 @@ namespace PVZEvent
 
 				PUSHDWORD(0x52B17A),
 				RET,
-				PUSHDWORD(0x52B279),
+				PUSHDWORD(0x52B278),
 				RET,
 			};
 			builder.add_bytes(STRING(after));
