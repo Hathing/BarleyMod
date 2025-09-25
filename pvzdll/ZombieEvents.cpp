@@ -636,6 +636,19 @@ bool onPogoUpdateActions(MyZombie zombie)
 	return true;
 }
 
+ThreeState::ThreeState IsZombieCanBeChilled(MyZombie zombie)
+{
+	switch (zombie.Type)
+	{
+	case ZombieType::ZombieBobsledTeam:
+	case ZombieType::PogoZombie:
+	case ZombieType::ZombieYeti:
+		return ThreeState::Disable;
+	default:
+		return ThreeState::None;
+	}
+}
+
 void InitZombieEvents()
 {
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
@@ -680,6 +693,8 @@ void InitZombieEvents()
 	PVZEvent::PogoUpdateActionsEvent((int)onPogoUpdateActions);
 
 	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
+
+	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);
