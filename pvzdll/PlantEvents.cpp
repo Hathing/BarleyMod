@@ -121,7 +121,7 @@ bool onPlantUpdateShooter(MyPlant plant)
 		plant.FindTargetAndFire(plant.Row, plant.State == PlantState::CACTUS_SHORT_IDLE ? 1 : 0);
 	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
 		plant.FindTargetAndFire(plant.Row, 0);
-	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35 || plant.ShootOrProductCountdown == 70))
+	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35))
 		plant.LaunchThreepeater();
 	return PlantAbility::GetAbility(plant.Type)->onUpdateShooter(plant);
 }
@@ -458,4 +458,6 @@ void InitPlantEvents()
 	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
 	//水草可以拉陆地僵尸
 	PVZ::Memory::WriteMemory<byte>(0x4677A6, 0xEB);
+	//植物不再会根据更新+130调用SetSleeping
+	PVZ::Memory::WriteMemory<byte>(0x46320C, 0xEB);
 }

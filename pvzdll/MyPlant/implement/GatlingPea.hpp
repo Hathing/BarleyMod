@@ -41,7 +41,7 @@ namespace PlantAbility
 					StartBlend(20, anim2);
 					anim2.SetFramesForLayer("anim_head_idle");
 					int base_addr = anim2.GetBaseAddress();
-					Memory::WriteMemoryUnsafe<int>((DWORD)base_addr + 0x10, 0);
+					Memory::WriteMemory<int>((DWORD)base_addr + 0x10, 0);
 					anim2.CycleRate = anim1.CycleRate;
 					anim2.Speed = anim1.Speed;
 				}
