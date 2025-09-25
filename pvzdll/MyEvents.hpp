@@ -1177,8 +1177,16 @@ namespace PVZEvent
 			ProjectileSkipDrawEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 			ProjectileSkipDrawEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipDraw"); };
 		};
+		class ProjectileSkipDrawShadowEvent : public BoolDLLEventTemplate<0x46E8C0, 5, 0x46EB19, REG_ESI>
+		{
+		public:
+			ProjectileSkipDrawShadowEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ProjectileSkipDrawShadowEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ProjectileSkipDrawShadowEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipDrawShadow"); };
+		};
 		ProjectileSkipUpdateEvent* part1;
 		ProjectileSkipDrawEvent* part2;
+		ProjectileSkipDrawShadowEvent* part3;
 	public:
 		ProjectileSkipUpdateAndDrawEvent()
 		{
@@ -1188,11 +1196,13 @@ namespace PVZEvent
 		{
 			part1 = new ProjectileSkipUpdateEvent(address);
 			part2 = new ProjectileSkipDrawEvent(address);
+			part3 = new ProjectileSkipDrawShadowEvent(address);
 		}
 		void end()
 		{
 			part1->end();
 			part2->end();
+			part3->end();
 		}
 	};
 };
