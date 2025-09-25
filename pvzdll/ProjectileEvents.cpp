@@ -271,23 +271,32 @@ bool onProjectileDivert(MyProjectile proj)
 
 void InitProjectileEvents()
 {
+	// 子弹初始化与销毁相关
+	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 	ProjectileRemoveEvent((int)onProjectileRemove);
-	PlantAddProjectileEvent((int)onPlantAddProjectile);
-	PVZEvent::ProjectileDamageZombieEvent((int)onProjDamageZombie);
+
+	// 子弹总更新与绘制相关
+	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
+	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
 	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);
 	PVZEvent::ProjectileImageSizeEvent((int)GetProjectileImageSize);
-	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
-	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
-	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
-	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
+
+	PlantAddProjectileEvent((int)onPlantAddProjectile);
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
-	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
+
+	// 子弹碰撞相关
+	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 	PVZEvent::ProjectileHitDiversionEvent((int)onProjectileDivert);
-	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
 	PVZEvent::ProjectileFindZombieTargetSkipEvent((int)onProjectileFindZombieTargetSkip);
 
+	// 子弹碰撞效果相关
+	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
+	PVZEvent::ProjectileDamageZombieEvent((int)onProjDamageZombie);
+
+	// 子弹运动相关
 	PVZEvent::ProjectileUpdatePiercingMotionEvent((int)onProjectileUpdatePiercingMotion);
+	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);

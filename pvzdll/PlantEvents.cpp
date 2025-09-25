@@ -403,41 +403,50 @@ bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
 
 void InitPlantEvents()
 {
+	// 植物初始化与销毁相关
 	PlantInitAfterEvent((int)onPlantInitAfter);
-	PlantUpdateAbilityEvent((int)onPlantUpdateAbility);
-	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
-	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
-	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
 	PlantDieEvent((int)onPlantDie);
+
+	// 植物绘制与动画相关
+	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
-	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
+
+	// 植物攻击相关
+	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
+	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::PlantUpdateShooterEvent((int)onPlantUpdateShooter);
-	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
-	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
+	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
+	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
 	PVZEvent::PlantFireEvent((int)onPlantFire);
-	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
-	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
-	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
+	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
+	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
+	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
+
+	// 植物受击死亡相关
 	PVZEvent::PlantDyingEvent((int)onPlantDying);
 
-	//磁力菇
+	// 植物特性相关
+	PlantUpdateAbilityEvent((int)onPlantUpdateAbility);
+	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
+	// 磁力菇
 	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
 	PVZEvent::MagnetShroomMoveItemEvent((int)onMagnetShroomMoveItem);
 	PVZEvent::MagnetShroomAttractItemEvent((int)onMagnetShroomAttractItem);
 	PVZEvent::MagnetShroomClearItemEvent((int)onMagnetShroomClearItem);
-	//三线射手
+	// 三线射手
 	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
-	//魅惑菇
+	// 魅惑菇
 	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
-	//缠绕海草
+	// 缠绕海草
 	PVZEvent::TangleKelpKillZombieEvent((int)onTangleKelpKillZombie);
 	PVZEvent::TangleKelpUpdateGrabbingEvent((int)onTangleKelpUpdateGrabbing);
 	PVZEvent::TangleKelpTargetAfterEvent((int)onTangleKelpTargetAfter);
+	// 玉米投手
+	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
+
 	//目前不会崩溃了，但植物不索敌，暂时先去掉了
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
-
-	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);

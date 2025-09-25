@@ -637,47 +637,60 @@ bool onPogoUpdateActions(MyZombie zombie)
 
 void InitZombieEvents()
 {
-	PlantTakeDamageEvent((int)onPlantTakeDamage);
-	ZombieDropLootEvent((int)onZombieDropLoot);
+	// 僵尸初始化相关
 	ZombieInitAfterEvent((int)onZombieInitAfter);
-	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
+
+	// 僵尸绘制相关
+	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
+	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
+
+	// 僵尸攻击相关
+	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
+	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
+	PVZEvent::ZombieSquishPlantEvent((int)onZombieSquishPlant);
+	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
+	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
+	ZombieEatSoundEvent((int)onZombieEatSound);
+	PlantTakeDamageEvent((int)onPlantTakeDamage);
+
+	// 僵尸受击相关
+	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);
+	ZombieTakeDmgEvent((int)onZombieTakeDmg);
+	ZombieDropLootEvent((int)onZombieDropLoot);
+
+	// 僵尸移动相关
 	PVZEvent::ZombieUpdateWalkingSpeedEvent((int)onZombieUpdateWalkingSpeed);
 	PVZEvent::ZombieIsWalkingBackwardsEvent((int)onZombieIsWalkingBackwards);
+	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
 	PVZEvent::ZombieApplyAnimSpeedEvent((int)onZombieApplyAnimSpeed);
-	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
-	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	PVZEvent::ZombieUpdateAbilityEvent((int)onZombieUpdateAbility);
-	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
-	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
-	ZombieEatSoundEvent((int)onZombieEatSound);
 	PVZEvent::ZombieWalkIntoWaterEvent((int)onZombieWalkIntoWater);
 	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
 	PVZEvent::ZombieUpdateFallingEvent((int)onZombieUpdateFalling);
 	PVZEvent::ZombieFallOnGroundEvent((int)onZombieFallOnGround);
-	ZombieTargetPlantEvent((int)onZombieCanTargetPlant);
-	ZombieTakeDmgEvent((int)onZombieTakeDmg);
-	PVZEvent::ZombiePickRandomSpeedEvent((int)onZombiePickRandomSpeed);
 
-	PVZEvent::ZombieFindTargetIntervalEvent((int)onZombieFindTargetInterval);
-	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);
-
+	// 僵尸特性相关
+	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
+	PVZEvent::ZombieUpdateAbilityEvent((int)onZombieUpdateAbility);
+	// 撑杆僵尸
 	PVZEvent::PoleVaulter::HalfJumpEvent((int)onPoleVaulterHalfJump);
-	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
-
+	// 小丑僵尸
+	PVZEvent::ClownZombiePopEvent((int)onClownZombiePop);
+	PVZEvent::HypnotizedClownZombiePopEvent((int)onHypnotizedClownZombiePop);
+	// 投篮车僵尸
 	PVZEvent::CatapultTargetSkipEvent((int)onCatapultTargetSkip);
 	PVZEvent::CatapultZombieFireEvent((int)onCatapultZombieFire);
-	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
-	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
+	// 机枪头僵尸
 	PVZEvent::GatlingZombieJudgeShootEvent((int)IsGatlingZombieShoot);
+	// 巨人僵尸
 	PVZEvent::GargantaurThrowAfterEvent((int)onGargantaurThrowAfter);
 	PVZEvent::GargantaurJudgeXFixEvent();
 	PVZEvent::GargantaurJudgeSquishEvent((int)onGargantaurJudgeSquish);
 	PVZEvent::GargantaurSquishPlantEvent((int)onGargantaurSquishPlant);
-
+	// 跳跳僵尸
 	PVZEvent::PogoUpdateHeightEvent((int)onPogoUpdateHeight);
 	PVZEvent::PogoUpdateActionsEvent((int)onPogoUpdateActions);
-
+	// 辣椒头僵尸
 	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
 
 	//修改冰道持续时间
