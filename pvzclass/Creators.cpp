@@ -16,8 +16,8 @@ PVZ::Animation Creator::CreateReanimation(AnimationType::AnimationType type, flo
 	SETARG(__asm__CreateReanimation, 1) = PVZ_BASE;
 	SETARG(__asm__CreateReanimation, 6) = type;
 	SETARG(__asm__CreateReanimation, 11) = layer;
-	SETARGFLOAT(__asm__CreateReanimation, 16) = x;
-	SETARGFLOAT(__asm__CreateReanimation, 21) = y;
+	SETARGFLOAT(__asm__CreateReanimation, 16) = y;
+	SETARGFLOAT(__asm__CreateReanimation, 21) = x;
 	SETARG(__asm__CreateReanimation, 39) = PVZ::Memory::Variable;
 	return PVZ::Animation(PVZ::Memory::Execute(STRING(__asm__CreateReanimation)));
 }
