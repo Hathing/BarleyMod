@@ -120,10 +120,12 @@ void onBoardUpdateGameObject(MyBoard board)
 	UpdatePoisonApply(board);
 	UpdatePlantExistCount(board);
 	
+	/*
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
 		if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)
 			PlantAbility::GetAbility(plant.Type)->TickPassive(plant);
+	*/
 
 	if (board.MatchRunning)
 		UpdateMatch(board);
@@ -252,6 +254,9 @@ void onTyping(MyBoard board, char key)
 
 bool onBoardCallPlantUpdate(MyPlant plant)
 {
+	if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)
+		PlantAbility::GetAbility(plant.Type)->TickPassive(plant);
+
 	if (plant.FertilizedCounter > 0)
 	{
 		plant.FertilizedCounter -= 1;
