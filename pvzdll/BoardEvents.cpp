@@ -250,11 +250,22 @@ void onTyping(MyBoard board, char key)
 	}
 }
 
+bool onBoardCallPlantUpdate(MyPlant plant)
+{
+	if (plant.FertilizedCounter > 0)
+	{
+		plant.FertilizedCounter -= 1;
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, plant.GetBaseAddress()).invoke(0x463E40).ret());
+	}
+	return true;
+}
+
 void InitBoardEvents()
 {
 	MyBoard::SetMemSize(0x6000);
 	PVZEvent::BoardInitAfterEvent((int)onBoardInit);
 	UpdateGameObjectsEvent((int)onBoardUpdateGameObject);
+	PVZEvent::BoardCallPlantUpdateEvent((int)onBoardCallPlantUpdate);
 	PVZEvent::BoardDrawImageEvent((int)onBoardDrawImage);
 	PVZEvent::TypingEvent((int)onTyping);
 }

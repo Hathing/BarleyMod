@@ -1228,4 +1228,22 @@ namespace PVZEvent
 			part3->end();
 		}
 	};
+
+	/// @brief Board调用植物Update的事件
+	/// @param 植物
+	/// @return false则跳过原版更新
+	class BoardCallPlantUpdateEvent : public DLLEventTemplate<0x4130F4, 5, REG_EAX>
+	{
+	public:
+		BoardCallPlantUpdateEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		BoardCallPlantUpdateEvent(int address) : DLLEventTemplate() { Init(address); };
+		BoardCallPlantUpdateEvent() : BoardCallPlantUpdateEvent("onBoardCallPlantUpdate") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7);
+			builder.popad().push_imm32(0x4130F9).ret();
+			builder.popad().invoke(0x463E40).push_imm32(0x4130F9).ret();
+		}
+	};
 };

@@ -107,6 +107,7 @@ namespace PlantAbility
 				auto target = PVZ::GetByID<MyPlant>(plant.MarigoldTargetID);
 				if (target.isValid())
 				{
+					target.Flash();
 					int overwhelm = target.Heal(300);
 					if (overwhelm > 0)
 					{
