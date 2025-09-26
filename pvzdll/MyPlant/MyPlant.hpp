@@ -58,6 +58,10 @@ public:
 	T_PROPERTY(byte, MarigoldItemType, __get_MarigoldItemType, __set_MarigoldItemType, 0x0E0);
 	/// @brief 金盏花技能目标ID
 	INT_PROPERTY(MarigoldTargetID, __get_MarigoldTargetID, __set_MarigoldTargetID, 0x0E4);
+	/// @brief 双发下次发射的子弹种类
+	INT_PROPERTY(RepeaterNextProjType, __get_RepeaterNextProjType, __set_RepeaterNextProjType, 0x0E0);
+	/// @brief 双发记录自身发射过的子弹种类
+	INT_PROPERTY(ReapeaterRecord, __get_ReapeaterRecord, __set_ReapeaterRecord, 0x0E4); 
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 减速效果倒计时
