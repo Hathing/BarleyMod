@@ -17,10 +17,16 @@ namespace PlantAbility
 			proj.OriginalY = proj.Y;
 			return true;
 		}
+		bool TickAbility(MyPlant plant)
+		{
+			if (plant.AnotherCounter > 0)
+				plant.AnotherCounter -= 1;
+			return true;
+		}
 		bool onUpdateShooting(MyPlant plant)
 		{
 			int shootingcd = plant.ShootingCountdown;
-			if (shootingcd > 1 && plant.ThreepeaterUltraCount != 0)
+			if (shootingcd > 1 && plant.AnotherCounter > 0)
 			{
 				//锁血、高亮
 				plant.Hp = plant.MaxHp;
@@ -51,7 +57,7 @@ namespace PlantAbility
 				}
 				//关闭大招状态
 				if (shootingcd < 3)
-					plant.ThreepeaterUltraCount = 0;
+					plant.AnotherCounter = 0;
 			}
 			return true;
 		}

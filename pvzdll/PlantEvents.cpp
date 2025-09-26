@@ -203,6 +203,47 @@ void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
 	plant.Fire(PlantWeapon,plant.FindTargetZombie(PlantWeapon));
 }
 
+void onPlantFindTargetResult(MyPlant plant, MyZombie zombie)
+{
+	if (zombie.isValid())
+	{
+		//机枪索敌成功后判定开大
+		if (plant.Type == SeedType::GatlingPea && plant.AnotherCounter <= 0)
+		{
+			float ultra_rate = 0.2f;
+			if (Creator::RandFloat(1.0f) < ultra_rate)
+			{
+				plant.UltraCount = 1;
+			}
+		}
+		if (plant.Type==SeedType::SplitPea)
+		{
+			if (plant.AnotherCounter <= 0)
+			{
+				if (plant.Level == 5 && plant.FindTargetCount == 1 && Creator::RandFloat(1.0f) < 0.2f)
+				{
+					plant.UltraCount = 1;
+				}
+			}
+			/*
+			else
+			{
+				plant.ShootOrProductCountdown += 40;//大招间隔0.4s
+				plant.Fire(0, zombie.GetBaseAddress());
+			}
+			*/
+		}
+	}
+	switch (plant.Type)
+	{
+	case SeedType::SplitPea:
+		plant.FindTargetCount +=1;
+		break;
+	default:
+		break;
+	}
+}
+
 bool onPlantUpdateShooting(MyPlant plant)
 {
 	return PlantAbility::GetAbility(plant.Type)->onUpdateShooting(plant);
@@ -320,14 +361,14 @@ void onMagnetShroomClearItem(MyPlant plant)
 
 bool onThreepeaterLaunch(MyPlant plant)
 {
-	//概率开大，三线是每发判定概率，而不是每轮（三发）。
-	if (plant.ThreepeaterUltraCount==0 && Creator::Rand(3) == 0)
+	if (plant.AnotherCounter <= 0 && plant.ShootOrProductCountdown > 0 && Creator::Rand(3) == 0)
 	{
-		plant.ThreepeaterUltraCount = 3;
+		int ultra_count = 3;
+		int ultra_time = 111 * ultra_count;
+		plant.AnotherCounter = ultra_time;
+		plant.ShootingCountdown = plant.AnotherCounter;
+		plant.ShootOrProductCountdown += plant.AnotherCounter;
 		Creator::CreateUpperSound(UpperSoundType::CoffeeBeanVanish);
-
-		plant.ShootingCountdown = 111 * plant.ThreepeaterUltraCount;
-		plant.ShootOrProductCountdown = plant.ShootingCountdown + plant.ShootOrProductInterval;
 		return false;
 	}
 	return true;
@@ -399,6 +440,20 @@ bool IsKernelPultCastButter(MyPlant plant)
 bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
 {
 	return true;
+
+}
+
+int onPlantReload(MyPlant plant, int shoot_cd)
+{
+	switch (plant.Type)
+	{
+	case SeedType::SplitPea:
+		plant.FindTargetCount = 0;
+		break;
+	default:
+		break;
+	}
+	return shoot_cd;
 }
 
 void InitPlantEvents()
@@ -415,8 +470,10 @@ void InitPlantEvents()
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::PlantUpdateShooterEvent((int)onPlantUpdateShooter);
+	PlantReloadEvent((int)onPlantReload);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
 	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
+	PVZEvent::PlantFindTargetResultEvent((int)onPlantFindTargetResult);
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
 	PVZEvent::PlantFireEvent((int)onPlantFire);
 	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);

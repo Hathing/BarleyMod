@@ -33,8 +33,10 @@ public:
 	T_PROPERTY(byte, MagnetState, __get_MagnetState, __set_MagnetState, 0xEC);
 	/// @brief 狙击豌豆的目标
 	INT_PROPERTY(PeashooterTarget, __get_PeashooterTarget, __set_PeashooterTarget, 0x0E0);
-	/// @brief 三线射手大招波次，0则表示不开大
-	T_PROPERTY(byte, ThreepeaterUltraCount, __get_ThreepeaterUltraCount, __set_ThreepeaterUltraCount, 0xEC);
+	/// @brief 机枪和裂荚和三线等植物开大波次，0则表示不开大
+	T_PROPERTY(byte, UltraCount, __get_UltraCount, __set_UltraCount, 0xEC);
+	/// @brief 植物每次重置+58后，在下一次重置+58之前FindTarget的次数，用于处理多连发植物开大概率的判断，目前只有裂荚在用
+	T_PROPERTY(byte, FindTargetCount, __get_FindTargetCount, __set_FindTargetCount, 0xED);
 	/// @brief 路灯花复活植物类型
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 第一个与该植物相关的植物的 ID
@@ -143,9 +145,10 @@ public:
 	/// @param source_type 伤害来源的类型
 	/// @param damage 伤害值
 	/// @return 实际受到伤害值(伤害<0则失败)
-	int TakeDamage(PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
+	/// @deprecated
+	/// int TakeDamage(PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
+	
 	/// @brief 最大等级
-
 	static const int MAX_LEVEL = 5;
 
 	/// @brief 根据识别 ID 获取对应植物。

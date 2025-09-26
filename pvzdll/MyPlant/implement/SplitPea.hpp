@@ -68,24 +68,12 @@ namespace PlantAbility
 				plant.AnotherCounter -= 1;
 			return true;
 		}
-		bool onUpdateShooter(MyPlant plant)
+		bool onUpdateShooting(MyPlant plant)
 		{
-			if (plant.ShootOrProductCountdown == 26)
+			if (plant.UltraCount != 0)
 			{
-				if (plant.Level == 5 && plant.AnotherCounter <= 0)
-				{
-					//在第一发时判定是否大招
-					if (Creator::RandFloat(1.0f) < 0.2f)
-					{
-						plant.AnotherCounter = 400;
-					}
-				}
-				if (plant.AnotherCounter > 0)
-				{
-					plant.ShootOrProductCountdown += 40;//大招间隔0.4s
-					plant.FindTargetAndFire(plant.Row, 1);
-					plant.FindTargetAndFire(plant.Row, 0);
-				}
+				plant.UltraCount = 0;
+				plant.AnotherCounter = 440;//大招时长
 			}
 			return true;
 		}
