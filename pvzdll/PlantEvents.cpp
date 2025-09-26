@@ -21,6 +21,7 @@ void onPlantInitAfter(MyPlant plant)
 	plant.RelatedPlantID4 = 0;
 	plant.SubIndex = 0;
 	plant.BarleyCounter = 0;
+	plant.FertilizedCounter = 0;
 
 	auto model = plant.GetAnimationPart1();
 	if (model.isValid())

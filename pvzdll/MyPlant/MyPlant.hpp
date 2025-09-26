@@ -78,6 +78,8 @@ public:
 	INT_PROPERTY(DamageAbsorption, __get_DaA, __set_DaA, 0x11C);
 	/// @brief 大麦及其派生植物变身倒计时
 	INT_PROPERTY(BarleyCounter, __get_BaC, __set_BaC, 0x120);
+	/// @brief 肥料倒计时
+	INT_PROPERTY(FertilizedCounter, __get_FertilizedCounter, __set_FertilizedCounter, 0x124);
 	/// @brief 植物血条显示倒计时
 	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0x130);
 	/// @brief 是否在 Board 上
