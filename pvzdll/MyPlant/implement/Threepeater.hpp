@@ -7,9 +7,14 @@ namespace PlantAbility
 {
 	class Threepeater : public NoEasterSkinPlant
 	{
+		inline static const int interval[6] = { 180, 180, 150, 150, 120, 120 };
 		void onCreated(MyPlant plant)
 		{
-			plant.ShootOrProductInterval = 145;
+			plant.ShootOrProductInterval = interval[0];
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.ShootOrProductInterval = interval[plant.Level];
 		}
 		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{

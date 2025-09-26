@@ -361,9 +361,12 @@ void onMagnetShroomClearItem(MyPlant plant)
 
 bool onThreepeaterLaunch(MyPlant plant)
 {
-	if (plant.AnotherCounter <= 0 && plant.ShootOrProductCountdown > 0 && Creator::Rand(3) == 0)
+	static const int probability[6] = { 0.01f,0.02f,0.02f,0.03f,0.03f,0.03f };
+	if (plant.AnotherCounter <= 0 && plant.ShootOrProductCountdown > 0 && Creator::RandFloat(1.0f) < probability[plant.Level])
 	{
-		int ultra_count = 3;
+		int ultra_count = 1;
+		if (plant.Level == 5)
+			ultra_count = 3;
 		int ultra_time = 111 * ultra_count;
 		plant.AnotherCounter = ultra_time;
 		plant.ShootingCountdown = plant.AnotherCounter;
