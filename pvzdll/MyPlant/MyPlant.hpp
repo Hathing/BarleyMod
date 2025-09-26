@@ -32,6 +32,7 @@ public:
 	/// @brief 磁力菇当前状态，0表示不攻击，1表示攻击
 	T_PROPERTY(byte, MagnetState, __get_MagnetState, __set_MagnetState, 0xEC);
 	/// @brief 狙击豌豆的目标
+	/// @deprecated
 	INT_PROPERTY(PeashooterTarget, __get_PeashooterTarget, __set_PeashooterTarget, 0x0E0);
 	/// @brief 机枪和裂荚和三线等植物开大波次，0则表示不开大
 	T_PROPERTY(byte, UltraCount, __get_UltraCount, __set_UltraCount, 0xEC);
@@ -53,6 +54,10 @@ public:
 	INT_PROPERTY(WinterMelonScatterCount, __get_WinterMelonScatterNum, __set_WinterMelonScatterNum, 0x0E4);
 	/// @brief 水草对抓取目标施加效果的倒计时
 	INT_PROPERTY(TangleKelpDoEffectCountdown, __get_TangleKelpDoEffectCountdown, __set_TangleKelpDoEffectCountdown, 0x0E0);
+	/// @brief 金盏花技能类型，0=无技能，1=水壶，2=钉耙，3=杀虫剂，4=肥料
+	T_PROPERTY(byte, MarigoldItemType, __get_MarigoldItemType, __set_MarigoldItemType, 0x0E0);
+	/// @brief 金盏花技能目标ID
+	INT_PROPERTY(MarigoldTargetID, __get_MarigoldTargetID, __set_MarigoldTargetID, 0x0E4);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 减速效果倒计时
@@ -111,7 +116,8 @@ public:
 	/// @brief 治疗植物
 	/// @note 不会超出生命值上限。
 	/// @param val 治疗量
-	void Heal(int val);
+	/// @return 溢出的治疗量
+	int Heal(int val);
 	/// @brief 检查是否符合升级条件。若符合，则立刻升级。
 	/// @return 是否升级
 	bool CheckUpgrade();
