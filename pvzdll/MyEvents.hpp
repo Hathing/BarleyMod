@@ -393,6 +393,21 @@ namespace PVZEvent
 		ScardyShroomGrowEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ScardyShroomGrowEvent() : ScardyShroomGrowEvent("onScardyShroomGrow") {};
 	};
+	/// @brief 胆小菇判断附近是否有僵尸事件
+	/// @param 胆小菇，bool 原判结果IsZombieNear
+	/// @return False表示附近无僵尸，True表示附近有僵尸
+	class ScardyShroomJudgeZombieNearEvent : public DLLEventTemplate<0x460507, 5, MEM_ESP_ADD(0x33), REG_EDI>
+	{
+	public:
+		ScardyShroomJudgeZombieNearEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ScardyShroomJudgeZombieNearEvent(int address) : DLLEventTemplate() { Init(address); };
+		ScardyShroomJudgeZombieNearEvent() : ScardyShroomJudgeZombieNearEvent("onScardyShroomJudgeZombieNear") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.add_dword(0x33244488);//mov [esp+33],al
+		}
+	};
 
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x531070, 5, REG_EBP>
 	{

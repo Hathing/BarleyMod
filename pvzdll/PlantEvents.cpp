@@ -460,6 +460,23 @@ int onPlantReload(MyPlant plant, int shoot_cd)
 	return shoot_cd;
 }
 
+bool onScaredyShroomScared(MyPlant plant)
+{;
+	return true;
+}
+
+bool onScaredyShroomGrow(MyPlant plant)
+{
+	return true;
+}
+
+bool onScaredyShroomJudgeZombieNear(MyPlant plant, bool IsZombieNear)
+{
+	if (plant.Level >= 5)
+		return false;
+	return IsZombieNear;
+}
+
 void InitPlantEvents()
 {
 	// 植物初始化与销毁相关
@@ -505,6 +522,10 @@ void InitPlantEvents()
 	PVZEvent::TangleKelpTargetAfterEvent((int)onTangleKelpTargetAfter);
 	// 玉米投手
 	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
+	// 胆小菇
+	PVZEvent::ScardyShroomScaredEvent((int)onScaredyShroomScared);
+	PVZEvent::ScardyShroomGrowEvent((int)onScaredyShroomGrow);
+	PVZEvent::ScardyShroomJudgeZombieNearEvent((int)onScaredyShroomJudgeZombieNear);
 
 	//目前不会崩溃了，但植物不索敌，暂时先去掉了
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
