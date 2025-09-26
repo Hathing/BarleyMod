@@ -491,7 +491,7 @@ namespace PVZEvent
 		PlantUpdateShooterEvent() : PlantUpdateShooterEvent("onPlantUpdateShooter") {};
 	};
 	/// @brief 投手类植物跳过被多投标记的僵尸事件
-	/// @param 植物ID(ECX)，僵尸ID(ESI)
+	/// @param 植物(ECX)，僵尸(ESI)
 	/// @return False则跳过该僵尸
 	class PlantPultSkipEvent : public BoolDLLEventTemplate<0x4677E9, 6, 0x467881, REG_ESI, REG_ECX>
 	{
@@ -500,8 +500,20 @@ namespace PVZEvent
 		PlantPultSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantPultSkipEvent() : PlantPultSkipEvent("onPlantPultSkip") {};
 	};
+	/// @brief 植物在调用FindTarget返回结果时的事件，不包括场上不存在僵尸时的情况（此时该函数会跳转至另一位置）
+	/// @attention 使用该事件，请注意该事件的调用时机！
+	/// @note 原版以下函数调用了FindTarget：FindTargetAndFire、LaunchThreepeater、土豆雷、水草、地刺特性、仙人掌、大嘴花、保龄球的特性更新、香蒲以及所有投手在UpdateShooting函数中
+	/// @param 植物、FindTarget返回值的僵尸（可能为空）、PlantWeapon
+	class PlantFindTargetResultEvent : public DLLEventTemplate<0x46789C, 5, REG_EAX, REG_EDI>
+	{
+	public:
+		PlantFindTargetResultEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantFindTargetResultEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantFindTargetResultEvent() : PlantFindTargetResultEvent("onPlantFindTargetResult") {};
+	};
+
 	/// @brief 植物更新Shooting事件，发生在更新+90计时前
-	/// @param 植物ID
+	/// @param 植物
 	/// @return False则跳过原版更新，注意更新计时、重置豌豆头部动画等也会被跳过
 	class PlantUpdateShootingEvent : public BoolDLLEventTemplate<0x464889, 6, 0x464D9F, REG_EDI>
 	{
@@ -923,7 +935,7 @@ namespace PVZEvent
 				JNZ(7),
 
 				POPAD,
-				PUSHDWORD(0x52B279),
+				PUSHDWORD(0x52B278),
 				RET,
 
 				POPAD,
