@@ -5,7 +5,7 @@ namespace PlantAbility
 {
 	class WinterMelon : public BasePlant
 	{
-		inline static const int max_health[6] = { 300, 400, 400, 600, 1500, 1500 };
+		inline static const int max_health[6] = { 300, 300, 300, 300, 300, 300 };
 		void onCreated(MyPlant plant)
 		{
 			plant.SetMaxHealth(max_health[0]);
@@ -14,7 +14,7 @@ namespace PlantAbility
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
 		}
-		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{
 			if (plant.WinterMelonCastState == 1)
 				proj.SpecialType = PST_SCATTER_WINTERMELON;

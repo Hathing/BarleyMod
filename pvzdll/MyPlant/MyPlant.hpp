@@ -32,9 +32,12 @@ public:
 	/// @brief 磁力菇当前状态，0表示不攻击，1表示攻击
 	T_PROPERTY(byte, MagnetState, __get_MagnetState, __set_MagnetState, 0xEC);
 	/// @brief 狙击豌豆的目标
+	/// @deprecated
 	INT_PROPERTY(PeashooterTarget, __get_PeashooterTarget, __set_PeashooterTarget, 0x0E0);
-	/// @brief 三线射手大招波次，0则表示不开大
-	T_PROPERTY(byte, ThreepeaterUltraCount, __get_ThreepeaterUltraCount, __set_ThreepeaterUltraCount, 0xEC);
+	/// @brief 机枪和裂荚和三线等植物开大波次，0则表示不开大
+	T_PROPERTY(byte, UltraCount, __get_UltraCount, __set_UltraCount, 0xEC);
+	/// @brief 植物每次重置+58后，在下一次重置+58之前FindTarget的次数，用于处理多连发植物开大概率的判断，目前只有裂荚在用
+	T_PROPERTY(byte, FindTargetCount, __get_FindTargetCount, __set_FindTargetCount, 0xED);
 	/// @brief 路灯花复活植物类型
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 第一个与该植物相关的植物的 ID
@@ -51,6 +54,14 @@ public:
 	INT_PROPERTY(WinterMelonScatterCount, __get_WinterMelonScatterNum, __set_WinterMelonScatterNum, 0x0E4);
 	/// @brief 水草对抓取目标施加效果的倒计时
 	INT_PROPERTY(TangleKelpDoEffectCountdown, __get_TangleKelpDoEffectCountdown, __set_TangleKelpDoEffectCountdown, 0x0E0);
+	/// @brief 金盏花技能类型，0=无技能，1=水壶，2=钉耙，3=杀虫剂，4=肥料
+	T_PROPERTY(byte, MarigoldItemType, __get_MarigoldItemType, __set_MarigoldItemType, 0x0E0);
+	/// @brief 金盏花技能目标ID
+	INT_PROPERTY(MarigoldTargetID, __get_MarigoldTargetID, __set_MarigoldTargetID, 0x0E4);
+	/// @brief 双发下次发射的子弹种类
+	INT_PROPERTY(RepeaterNextProjType, __get_RepeaterNextProjType, __set_RepeaterNextProjType, 0x0E0);
+	/// @brief 双发记录自身发射过的子弹种类
+	INT_PROPERTY(ReapeaterRecord, __get_ReapeaterRecord, __set_ReapeaterRecord, 0x0E4); 
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 减速效果倒计时
@@ -71,6 +82,8 @@ public:
 	INT_PROPERTY(DamageAbsorption, __get_DaA, __set_DaA, 0x11C);
 	/// @brief 大麦及其派生植物变身倒计时
 	INT_PROPERTY(BarleyCounter, __get_BaC, __set_BaC, 0x120);
+	/// @brief 肥料倒计时
+	INT_PROPERTY(FertilizedCounter, __get_FertilizedCounter, __set_FertilizedCounter, 0x124);
 	/// @brief 植物血条显示倒计时
 	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0x130);
 	/// @brief 是否在 Board 上
@@ -109,7 +122,8 @@ public:
 	/// @brief 治疗植物
 	/// @note 不会超出生命值上限。
 	/// @param val 治疗量
-	void Heal(int val);
+	/// @return 溢出的治疗量
+	int Heal(int val);
 	/// @brief 检查是否符合升级条件。若符合，则立刻升级。
 	/// @return 是否升级
 	bool CheckUpgrade();
@@ -143,9 +157,10 @@ public:
 	/// @param source_type 伤害来源的类型
 	/// @param damage 伤害值
 	/// @return 实际受到伤害值(伤害<0则失败)
-	int TakeDamage(PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
+	/// @deprecated
+	/// int TakeDamage(PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
+	
 	/// @brief 最大等级
-
 	static const int MAX_LEVEL = 5;
 
 	/// @brief 根据识别 ID 获取对应植物。

@@ -20,12 +20,12 @@ ProjectileAbility::ProjectilePTR ProjectileAbility::GetAbility(ProjectileType::P
 
 byte __asm__AdjustRow[37]
 {
-	MOV_ECX(0),
+	MOV_ESI(0),
 	MOV_EAX(0),
 	MOV_EDI(0),
 	MOV_EBX(0),
 	INVOKE(0x41C650),
-	0x89,0x41,0x1C,//mov [ecx+1c],eax
+	0x89,0x46,0x1C,//mov [esi+1c],eax
 	RET
 };
 

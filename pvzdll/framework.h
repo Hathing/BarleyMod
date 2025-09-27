@@ -64,3 +64,14 @@ enum PlantDyingType
 	DYING_HYPNOSHROOM_EATEN,
 	DYING_BUNGEE_STOLEN
 };
+
+/// @brief 非精英僵尸的变种类型
+namespace ZombieVariantType
+{
+	typedef unsigned char ZombieVariantType;
+
+	constexpr ZombieVariantType None = 0;
+
+	constexpr ZombieVariantType SnowPeaHead = 1;
+
+}

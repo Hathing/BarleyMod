@@ -21,6 +21,7 @@ void onPlantInitAfter(MyPlant plant)
 	plant.RelatedPlantID4 = 0;
 	plant.SubIndex = 0;
 	plant.BarleyCounter = 0;
+	plant.FertilizedCounter = 0;
 
 	auto model = plant.GetAnimationPart1();
 	if (model.isValid())
@@ -121,7 +122,7 @@ bool onPlantUpdateShooter(MyPlant plant)
 		plant.FindTargetAndFire(plant.Row, plant.State == PlantState::CACTUS_SHORT_IDLE ? 1 : 0);
 	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
 		plant.FindTargetAndFire(plant.Row, 0);
-	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35 || plant.ShootOrProductCountdown == 70))
+	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35))
 		plant.LaunchThreepeater();
 	return PlantAbility::GetAbility(plant.Type)->onUpdateShooter(plant);
 }
@@ -201,6 +202,47 @@ void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
 	}
 	//默认的原版处理，不可改动
 	plant.Fire(PlantWeapon,plant.FindTargetZombie(PlantWeapon));
+}
+
+void onPlantFindTargetResult(MyPlant plant, MyZombie zombie)
+{
+	if (zombie.isValid())
+	{
+		//机枪索敌成功后判定开大
+		if (plant.Type == SeedType::GatlingPea && plant.AnotherCounter <= 0)
+		{
+			float ultra_rate = 0.2f;
+			if (Creator::RandFloat(1.0f) < ultra_rate)
+			{
+				plant.UltraCount = 1;
+			}
+		}
+		if (plant.Type==SeedType::SplitPea)
+		{
+			if (plant.AnotherCounter <= 0)
+			{
+				if (plant.Level == 5 && plant.FindTargetCount == 1 && Creator::RandFloat(1.0f) < 0.2f)
+				{
+					plant.UltraCount = 1;
+				}
+			}
+			/*
+			else
+			{
+				plant.ShootOrProductCountdown += 40;//大招间隔0.4s
+				plant.Fire(0, zombie.GetBaseAddress());
+			}
+			*/
+		}
+	}
+	switch (plant.Type)
+	{
+	case SeedType::SplitPea:
+		plant.FindTargetCount +=1;
+		break;
+	default:
+		break;
+	}
 }
 
 bool onPlantUpdateShooting(MyPlant plant)
@@ -320,14 +362,17 @@ void onMagnetShroomClearItem(MyPlant plant)
 
 bool onThreepeaterLaunch(MyPlant plant)
 {
-	//概率开大，三线是每发判定概率，而不是每轮（三发）。
-	if (plant.ThreepeaterUltraCount==0 && Creator::Rand(3) == 0)
+	static const int probability[6] = { 0.01f,0.02f,0.02f,0.03f,0.03f,0.03f };
+	if (plant.AnotherCounter <= 0 && plant.ShootOrProductCountdown > 0 && Creator::RandFloat(1.0f) < probability[plant.Level])
 	{
-		plant.ThreepeaterUltraCount = 3;
+		int ultra_count = 1;
+		if (plant.Level == 5)
+			ultra_count = 3;
+		int ultra_time = 111 * ultra_count;
+		plant.AnotherCounter = ultra_time;
+		plant.ShootingCountdown = plant.AnotherCounter;
+		plant.ShootOrProductCountdown += plant.AnotherCounter;
 		Creator::CreateUpperSound(UpperSoundType::CoffeeBeanVanish);
-
-		plant.ShootingCountdown = 111 * plant.ThreepeaterUltraCount;
-		plant.ShootOrProductCountdown = plant.ShootingCountdown + plant.ShootOrProductInterval;
 		return false;
 	}
 	return true;
@@ -399,45 +444,93 @@ bool IsKernelPultCastButter(MyPlant plant)
 bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
 {
 	return true;
+
+}
+
+int onPlantReload(MyPlant plant, int shoot_cd)
+{
+	switch (plant.Type)
+	{
+	case SeedType::SplitPea:
+		plant.FindTargetCount = 0;
+		break;
+	default:
+		break;
+	}
+	return shoot_cd;
+}
+
+bool onScaredyShroomScared(MyPlant plant)
+{;
+	return true;
+}
+
+bool onScaredyShroomGrow(MyPlant plant)
+{
+	if (plant.Level < 5)
+		plant.AddExperience(3000);
+	return true;
+}
+
+bool onScaredyShroomJudgeZombieNear(MyPlant plant, bool IsZombieNear)
+{
+	if (plant.Level >= 5)
+		return false;
+	return IsZombieNear;
 }
 
 void InitPlantEvents()
 {
+	// 植物初始化与销毁相关
 	PlantInitAfterEvent((int)onPlantInitAfter);
-	PlantUpdateAbilityEvent((int)onPlantUpdateAbility);
-	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
-	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
-	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
 	PlantDieEvent((int)onPlantDie);
+
+	// 植物绘制与动画相关
+	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
-	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
+
+	// 植物攻击相关
+	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
+	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::PlantUpdateShooterEvent((int)onPlantUpdateShooter);
-	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
-	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
+	PlantReloadEvent((int)onPlantReload);
+	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
+	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
+	PVZEvent::PlantFindTargetResultEvent((int)onPlantFindTargetResult);
 	PVZEvent::PlantUpdateShootingEvent((int)onPlantUpdateShooting);
 	PVZEvent::PlantFireEvent((int)onPlantFire);
-	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
-	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
-	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
+	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
+	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
+	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
+
+	// 植物受击死亡相关
 	PVZEvent::PlantDyingEvent((int)onPlantDying);
 
-	//磁力菇
+	// 植物特性相关
+	PlantUpdateAbilityEvent((int)onPlantUpdateAbility);
+	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
+	// 磁力菇
 	PVZEvent::MagnetShroomAttractRadiusEvent((int)onMagnetShroomAttractRadius);
 	PVZEvent::MagnetShroomMoveItemEvent((int)onMagnetShroomMoveItem);
 	PVZEvent::MagnetShroomAttractItemEvent((int)onMagnetShroomAttractItem);
 	PVZEvent::MagnetShroomClearItemEvent((int)onMagnetShroomClearItem);
-	//三线射手
+	// 三线射手
 	PVZEvent::ThreepeaterLaunchEvent((int)onThreepeaterLaunch);
-	//魅惑菇
+	// 魅惑菇
 	PVZEvent::HypnoShroomEatenEvent((int)onHypnoShroomEaten);
-	//缠绕海草
+	// 缠绕海草
 	PVZEvent::TangleKelpKillZombieEvent((int)onTangleKelpKillZombie);
 	PVZEvent::TangleKelpUpdateGrabbingEvent((int)onTangleKelpUpdateGrabbing);
 	PVZEvent::TangleKelpTargetAfterEvent((int)onTangleKelpTargetAfter);
+	// 玉米投手
+	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
+	// 胆小菇
+	PVZEvent::ScardyShroomScaredEvent((int)onScaredyShroomScared);
+	PVZEvent::ScardyShroomGrowEvent((int)onScaredyShroomGrow);
+	PVZEvent::ScardyShroomJudgeZombieNearEvent((int)onScaredyShroomJudgeZombieNear);
+
 	//目前不会崩溃了，但植物不索敌，暂时先去掉了
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
-
-	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);
@@ -449,4 +542,6 @@ void InitPlantEvents()
 	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
 	//水草可以拉陆地僵尸
 	PVZ::Memory::WriteMemory<byte>(0x4677A6, 0xEB);
+	//植物不再会根据更新+130调用SetSleeping
+	PVZ::Memory::WriteMemory<byte>(0x46320C, 0xEB);
 }

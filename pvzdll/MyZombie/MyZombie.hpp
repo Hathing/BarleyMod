@@ -13,13 +13,17 @@ public:
 	INT_PROPERTY(FromWave, __get_FrW, __set_FrW, 0x6C);
 	/// @brief 是否掉落过掉落物
 	T_PROPERTY(byte, DroppedLoot, __get_DrL, __set_DrL, 0x70);
-	T_PROPERTY(byte, Unknown, __get_Un, __set_Un, 0x71);
+	/// @brief 僵尸的特殊标记，=1表示被精英小丑标记爆炸，=9表示虚影
+	/// @deprecated 精英小丑与虚影拟定废除或者重做，不再使用该指针，该属性仅用于协助阅读CT！
+	T_PROPERTY(byte, SpecialFlag, __get_SpecialFlag, __set_SpecialFlag, 0x71);
 	/// @brief 精英类别
 	/// @deprecated 请使用 WAVE_ELITE 系列常量和 FromWave 替代之。
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 是否受钢地刺影响，啃食伤害减半
 	T_PROPERTY(BOOLEAN, IsWeak, __get_IsW, __set_IsW, 0x73);
-	INT_PROPERTY(Unknown2, __get_Un2, __set_Un2, 0x80);
+	/// @brief 燃烬层数过去使用的地址
+	/// @deprecated 已转移至FlameStack属性，不再使用该指针，该属性仅用于协助阅读CT！
+	INT_PROPERTY(DeprecatedFlameStack, __get_DeprecatedFlameStack, __set_DeprecatedFlameStack, 0x80);
 	/// @brief 召唤该僵尸的植物的 ID
 	/// @note 由于适配问题，这里暂时直接存基址
 	INT_PROPERTY(SourceID, __get_SoID, __set_SoID, 0x0E8);
@@ -34,21 +38,22 @@ public:
 	/// @brief 僵尸的掉落速度，原版中只有小鬼和水族馆僵尸使用该指针；负数表示下落，正数表示上升
 	T_PROPERTY(float, FallSpeed, __get_FallSpeed, __set_FallSpeed, 0x120);
 	/// @brief 巨人变种类型
-	INT_PROPERTY(GargantaurType, __get_GaT, __set_GaT, 0x128);
+	/// @deprecated 已转移至VariantType属性，不再使用该指针，该属性仅用于协助阅读CT！
+	INT_PROPERTY(DeprecatedGargantaurType, __get_GaT, __set_GaT, 0x128);
 	/// @brief 金色标记
 	INT_PROPERTY(GoldMark, __get_GoM, __set_GoM, 0x12C);
 	/// @brief 伤害免疫持续时间
 	INT_PROPERTY(InvulnerableDuration, __get_InD, __set_InD, 0x12C);
-	/// @brief 豌豆僵尸变种类型
-	INT_PROPERTY(PeaHeadType, __get_PeHT, __set_PeHT, 0x138);
+	/// @brief 僵尸血量点数标记，非盲盒开出的僵尸该值为0
+	T_PROPERTY(byte, HpPoint, __get_HpPoint, __set_HpPoint, 0x138);
 	/// @brief 僵尸反向标记，1=反向回头，2=反向出屏幕
 	T_PROPERTY(byte, IsWalkingBackwards, __get_IsWalkingBackwards, __set_IsWalkingBackwards, 0x13C);
 	/// @brief 僵尸寒意层数，上限30层，每层减速2%
 	T_PROPERTY(byte, FrostStack, __get_FrostStack, __set_FrostStack, 0x13D);
 	/// @brief 僵尸显示颜色标记，0为不显示，1为毒，2为冰，3为火
 	T_PROPERTY(byte, ColorFlag, __get_ColorFlag, __set_ColorFlag, 0x13E);
-	/// @brief 僵尸血量点数标记，非盲盒开出的僵尸该值为0
-	T_PROPERTY(byte, HpPoint, __get_HpPoint, __set_HpPoint, 0x13F);
+	/// @brief 非精英僵尸变种类型
+	T_PROPERTY(ZombieVariantType::ZombieVariantType, VariantType, __get_VariantType, __set_VariantType, 0x13F);
 	/// @brief 毒的层数
 	INT_PROPERTY(PoisonStack, __get_PoS, __set_PoS, 0x140);
 	/// @brief 燃烬层数
