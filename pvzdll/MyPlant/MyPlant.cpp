@@ -142,11 +142,11 @@ void MyPlant::Upgrade()
 
 int MyPlant::Heal(int val)
 {
-	int overwhelm = 0;
+	int overflow = 0;
 	this->Hp += val;
 	if (this->Hp > this->MaxHp)
 	{
-		overwhelm = this->Hp - this->MaxHp;
+		overflow = this->Hp - this->MaxHp;
 		this->Hp = this->MaxHp;
 	}
 	return overwhelm;
