@@ -149,7 +149,7 @@ int MyPlant::Heal(int val)
 		overflow = this->Hp - this->MaxHp;
 		this->Hp = this->MaxHp;
 	}
-	return overwhelm;
+	return overflow;
 }
 
 bool MyPlant::CheckUpgrade()
