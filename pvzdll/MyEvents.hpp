@@ -393,6 +393,21 @@ namespace PVZEvent
 		ScardyShroomGrowEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ScardyShroomGrowEvent() : ScardyShroomGrowEvent("onScardyShroomGrow") {};
 	};
+	/// @brief 胆小菇判断附近是否有僵尸事件
+	/// @param 胆小菇，bool 原判结果IsZombieNear
+	/// @return False表示附近无僵尸，True表示附近有僵尸
+	class ScardyShroomJudgeZombieNearEvent : public DLLEventTemplate<0x460507, 5, MEM_ESP_ADD(0x33), REG_EDI>
+	{
+	public:
+		ScardyShroomJudgeZombieNearEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ScardyShroomJudgeZombieNearEvent(int address) : DLLEventTemplate() { Init(address); };
+		ScardyShroomJudgeZombieNearEvent() : ScardyShroomJudgeZombieNearEvent("onScardyShroomJudgeZombieNear") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.add_dword(0x33244488);//mov [esp+33],al
+		}
+	};
 
 	class ZombieDropHelmByDamageEvent : public DLLEventTemplate<0x531070, 5, REG_EBP>
 	{
@@ -491,7 +506,7 @@ namespace PVZEvent
 		PlantUpdateShooterEvent() : PlantUpdateShooterEvent("onPlantUpdateShooter") {};
 	};
 	/// @brief 投手类植物跳过被多投标记的僵尸事件
-	/// @param 植物ID(ECX)，僵尸ID(ESI)
+	/// @param 植物(ECX)，僵尸(ESI)
 	/// @return False则跳过该僵尸
 	class PlantPultSkipEvent : public BoolDLLEventTemplate<0x4677E9, 6, 0x467881, REG_ESI, REG_ECX>
 	{
@@ -500,8 +515,20 @@ namespace PVZEvent
 		PlantPultSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantPultSkipEvent() : PlantPultSkipEvent("onPlantPultSkip") {};
 	};
+	/// @brief 植物在调用FindTarget返回结果时的事件，不包括场上不存在僵尸时的情况（此时该函数会跳转至另一位置）
+	/// @attention 使用该事件，请注意该事件的调用时机！
+	/// @note 原版以下函数调用了FindTarget：FindTargetAndFire、LaunchThreepeater、土豆雷、水草、地刺特性、仙人掌、大嘴花、保龄球的特性更新、香蒲以及所有投手在UpdateShooting函数中
+	/// @param 植物、FindTarget返回值的僵尸（可能为空）、PlantWeapon
+	class PlantFindTargetResultEvent : public DLLEventTemplate<0x46789C, 5, REG_EAX, REG_EDI>
+	{
+	public:
+		PlantFindTargetResultEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantFindTargetResultEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantFindTargetResultEvent() : PlantFindTargetResultEvent("onPlantFindTargetResult") {};
+	};
+
 	/// @brief 植物更新Shooting事件，发生在更新+90计时前
-	/// @param 植物ID
+	/// @param 植物
 	/// @return False则跳过原版更新，注意更新计时、重置豌豆头部动画等也会被跳过
 	class PlantUpdateShootingEvent : public BoolDLLEventTemplate<0x464889, 6, 0x464D9F, REG_EDI>
 	{
@@ -795,6 +822,17 @@ namespace PVZEvent
 		ProjectileCheckExpireEvent() : ProjectileCheckExpireEvent("onProjectileCheckExpire") {};
 	};
 
+	/// @brief 子弹反飞运动事件
+	/// @param 子弹
+	/// @return False则不经过原版运动更新
+	class ProjectileUpdateLeftMotionEvent : BoolDLLEventTemplate<0x46D8A7, 9, 0x46DC1F, REG_EBX>
+	{
+	public:
+		ProjectileUpdateLeftMotionEvent() : BoolDLLEventTemplate() { Init("onProjectileUpdateLeftMotion"); };
+		ProjectileUpdateLeftMotionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileUpdateLeftMotionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
 	/// @brief 植物索敌优先级重载函数
 	/// @note 返回值越高，优先级越高
 	/// @param 触发事件的植物，植物当前索敌的僵尸，原始优先级
@@ -912,7 +950,7 @@ namespace PVZEvent
 				JNZ(7),
 
 				POPAD,
-				PUSHDWORD(0x52B279),
+				PUSHDWORD(0x52B278),
 				RET,
 
 				POPAD,
@@ -921,7 +959,7 @@ namespace PVZEvent
 
 				PUSHDWORD(0x52B17A),
 				RET,
-				PUSHDWORD(0x52B279),
+				PUSHDWORD(0x52B180),
 				RET,
 			};
 			builder.add_bytes(STRING(after));
@@ -938,7 +976,7 @@ namespace PVZEvent
 		ZombieOverrideDrawPosEvent() : BoolDLLEventTemplate() { Init("OverrideZombieDrawPos"); };
 		ZombieOverrideDrawPosEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieOverrideDrawPosEvent(int address) : BoolDLLEventTemplate() { Init(address); };
-  };
+	};
 
 	/// @brief 植物因生命值小于 0 被移除事件。
 	/// @note 照搬的PVZCLASS里的事件，在这基础上增加了一个死亡类型
@@ -1057,7 +1095,7 @@ namespace PVZEvent
 	/// @brief 车类僵尸碾压结算事件。
 	/// @param 触发事件的僵尸
 	/// @return 是否结算原版碾压过程。
-	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x20)>
+	class ZombieCheckSquishEvent : public BoolDLLEventTemplate<0x52EDB0, 6, 0x52EEEC, MEM_ESP_ADD(0x24)>
 	{
 	public:
 		ZombieCheckSquishEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
@@ -1177,8 +1215,16 @@ namespace PVZEvent
 			ProjectileSkipDrawEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 			ProjectileSkipDrawEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipDraw"); };
 		};
+		class ProjectileSkipDrawShadowEvent : public BoolDLLEventTemplate<0x46E8C0, 5, 0x46EB19, REG_ESI>
+		{
+		public:
+			ProjectileSkipDrawShadowEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ProjectileSkipDrawShadowEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ProjectileSkipDrawShadowEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipDrawShadow"); };
+		};
 		ProjectileSkipUpdateEvent* part1;
 		ProjectileSkipDrawEvent* part2;
+		ProjectileSkipDrawShadowEvent* part3;
 	public:
 		ProjectileSkipUpdateAndDrawEvent()
 		{
@@ -1188,11 +1234,31 @@ namespace PVZEvent
 		{
 			part1 = new ProjectileSkipUpdateEvent(address);
 			part2 = new ProjectileSkipDrawEvent(address);
+			part3 = new ProjectileSkipDrawShadowEvent(address);
 		}
 		void end()
 		{
 			part1->end();
 			part2->end();
+			part3->end();
+		}
+	};
+
+	/// @brief Board调用植物Update的事件
+	/// @param 植物
+	/// @return false则跳过原版更新
+	class BoardCallPlantUpdateEvent : public DLLEventTemplate<0x4130F4, 5, REG_EAX>
+	{
+	public:
+		BoardCallPlantUpdateEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		BoardCallPlantUpdateEvent(int address) : DLLEventTemplate() { Init(address); };
+		BoardCallPlantUpdateEvent() : BoardCallPlantUpdateEvent("onBoardCallPlantUpdate") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7);
+			builder.popad().push_imm32(0x4130F9).ret();
+			builder.popad().invoke(0x463E40).push_imm32(0x4130F9).ret();
 		}
 	};
 

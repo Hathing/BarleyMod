@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "MyBoard.hpp"
 #include "MyPlant/MyPlant.hpp"
 #include "MyProjectile/MyProjectile.hpp"
@@ -53,3 +53,19 @@ namespace PVZ
 		float ClipHeight;
 	};
 }
+
+class MyAttachEffect : public PVZ::AttachEffect
+{
+public:
+	MyAttachEffect(int address) : PVZ::AttachEffect(address) {};
+	MyAttachEffect(const PVZ::AttachEffect& attacheffect) : PVZ::AttachEffect(attacheffect.GetBaseAddress()) {};
+};
+
+class MyAttachment : public PVZ::Attachment
+{
+public:
+	MyAttachment(int address) : PVZ::Attachment(address) {};
+	MyAttachment(const PVZ::Attachment& attachment) : PVZ::Attachment(attachment.GetBaseAddress()) {};
+
+	INT_PROPERTY(mNumEffects, __get_mNumEffects, __set_mNumEffects, 0x300);
+};

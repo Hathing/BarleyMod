@@ -20,15 +20,16 @@ void onRandomZombieDropHelm(MyZombie zombie)
 
 	zombie.Remove();
 
-	int type = 0, elite_type = -1;
+	ZombieType::ZombieType type = ZombieType::None;
+	int elite_type = -1;
 	if (zombie.Hypnotized)
 		type = ::hypno_pool[Creator::Rand(sizeof(hypno_pool) / sizeof(ZombieType::ZombieType))];
 	else
 	{
 		elite_type = Creator::Rand(2);
-		type = Creator::Rand(33);
-		if (type == 25)type = 26;//僵王换豌豆
-		if (type == 20)type = 27;//蹦极换坚果
+		type = static_cast<ZombieType::ZombieType>(Creator::Rand(33));
+		if (type == ZombieType::DrZomboss)type = ZombieType::PeashooterZombie;//僵王换豌豆
+		if (type == ZombieType::BungeeZombie)type = ZombieType::WallnutZombie;//蹦极换坚果
 
 		switch (type)
 		{
@@ -58,7 +59,7 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	}
 
 	MyBoard board = zombie.GetBoard();
-	MyZombie child_zombie{ board.AddZombieInRow(static_cast<ZombieType::ZombieType>(type), zombie.Row, elite_type) };
+	MyZombie child_zombie{ board.AddZombieInRow(type, zombie.Row, elite_type) };
 	if (zombie.Hypnotized)
 		child_zombie.Hypnotized = true;
 	PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, zombie.Layer + 100, EffectType::IMITATER_TRANSFORMING);
@@ -85,10 +86,8 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		///651185跳到了651373和6512d5,不知道是干啥的一段代码，没搬
 	}
 
-	child_zombie.Unknown2 = zombie.Unknown2;
-	if (zombie.Unknown == 1)
-		child_zombie.Unknown = 1;
-	return;
+	//僵尸的各种属性继承
+	child_zombie.FlameStack = zombie.FlameStack;
 }
 
 void InitRandomZombieEvents()

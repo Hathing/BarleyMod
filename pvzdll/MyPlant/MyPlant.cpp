@@ -91,7 +91,7 @@ bool MyPlant::CanUpgrade()
 
 void MyPlant::Upgrade()
 {
-	auto anim = Creator::CreateReanimation(static_cast<AnimationType::AnimationType>(0x96), (float)this->ImageY, (float)this->ImageX, 0x61a80);
+	auto anim = Creator::CreateReanimation(static_cast<AnimationType::AnimationType>(0x96), (float)this->ImageX, (float)this->ImageY, 0x61a80);
 	anim.Play("anim_idle", 0, 2, 30.0);
 
 	if (this->IsToolPlant())
@@ -140,11 +140,16 @@ void MyPlant::Upgrade()
 	this->Heal(this->MaxHp / 5);
 }
 
-void MyPlant::Heal(int val)
+int MyPlant::Heal(int val)
 {
+	int overflow = 0;
 	this->Hp += val;
 	if (this->Hp > this->MaxHp)
+	{
+		overflow = this->Hp - this->MaxHp;
 		this->Hp = this->MaxHp;
+	}
+	return overflow;
 }
 
 bool MyPlant::CheckUpgrade()

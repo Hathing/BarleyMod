@@ -2,12 +2,12 @@
 #include "MyProjectile/ProjectileAbility.hpp"
 #include "MyPlant/PlantAbility.hpp"
 
-bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 {
 	plant.InitAddProjectile(proj);
 	if (plant.Type == SeedType::Starfruit)
 		proj.OriginalRow = (byte)plant.Row;
-	return PlantAbility::GetAbility(plant.Type)->onAddProjectile(plant, proj, zombie);
+	return PlantAbility::GetAbility(plant.Type)->onAddProjectile(plant, proj, zombie, PlantWeapon);
 }
 
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
@@ -264,6 +264,27 @@ bool onProjectileUpdatePiercingMotion(MyProjectile proj)
 	return true;
 }
 
+bool onProjectileUpdateLeftMotion(MyProjectile proj)
+{
+	if (proj.X <= 10.0f)
+	{
+		proj.Motion = MotionType::Direct;
+		/*
+		* 尝试让火球反向失败，代码先放这吧
+		if(proj.Type==ProjectileType::FirePea)
+		{
+			MyAttachment attachment = PVZ::GetByID<PVZ::Attachment>(proj.AttachmentID);
+			if (attachment.isValid())
+			{
+				MyAttachEffect attacheffect{ attachment.GetBaseAddress()};
+				attacheffect.GetOffset().ScaleRotateTransformMatrix(0, 0, 0, -1.0f, 1.0f);
+			}
+		}
+		*/
+	}
+	return true;
+}
+
 bool onProjectileDivert(MyProjectile proj)
 {
 	return proj.Type == ProjectileType::ZombiePea && (proj.ExistedTime & 1);
@@ -271,23 +292,34 @@ bool onProjectileDivert(MyProjectile proj)
 
 void InitProjectileEvents()
 {
+	// 子弹初始化与销毁相关
+	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 	ProjectileRemoveEvent((int)onProjectileRemove);
-	PlantAddProjectileEvent((int)onPlantAddProjectile);
-	PVZEvent::ProjectileDamageZombieEvent((int)onProjDamageZombie);
+
+	// 子弹总更新与绘制相关
+	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
+	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
 	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);
 	PVZEvent::ProjectileImageSizeEvent((int)GetProjectileImageSize);
-	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
-	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
-	PVZEvent::ProjectileInitAfterEvent((int)onProjectileInitAfter);
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
-	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
+
+	// 子弹创建相关
+	PlantAddProjectileEvent((int)onPlantAddProjectile);
 	PVZEvent::PlantAddProjDamageRangeFlagsEvent((int)onPlantAddProjDamageRangeFlags);
-	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
+
+	// 子弹碰撞相关
+	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 	PVZEvent::ProjectileHitDiversionEvent((int)onProjectileDivert);
-	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
 	PVZEvent::ProjectileFindZombieTargetSkipEvent((int)onProjectileFindZombieTargetSkip);
 
+	// 子弹碰撞效果相关
+	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);
+	PVZEvent::ProjectileDamageZombieEvent((int)onProjDamageZombie);
+
+	// 子弹运动相关
 	PVZEvent::ProjectileUpdatePiercingMotionEvent((int)onProjectileUpdatePiercingMotion);
+	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
+	PVZEvent::ProjectileUpdateLeftMotionEvent((int)onProjectileUpdateLeftMotion);
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);

@@ -23,7 +23,7 @@ ZombieAbility::ZombiePTR ZombieAbility::GetAbility(ZombieType::ZombieType type)
 
 int MyZombie::GetBountyXP()
 {
-	if (this->Hypnotized || this->Unknown == 9 || this->Type == ZombieType::ConeheadZombie)
+	if (this->Hypnotized || this->Type == ZombieType::ConeheadZombie)
 		return 0;
 	else
 		return this->BodyMaxHealth + this->HelmMaxHealth + this->ShieldMaxHealth;

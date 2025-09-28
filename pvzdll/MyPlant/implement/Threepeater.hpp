@@ -7,20 +7,31 @@ namespace PlantAbility
 {
 	class Threepeater : public NoEasterSkinPlant
 	{
+		inline static const int interval[6] = { 180, 180, 150, 150, 120, 120 };
 		void onCreated(MyPlant plant)
 		{
-			plant.ShootOrProductInterval = 145;
+			plant.ShootOrProductInterval = interval[0];
 		}
-		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie)
+		void onUpgrade(MyPlant plant)
+		{
+			plant.ShootOrProductInterval = interval[plant.Level];
+		}
+		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{
 			//新正弦运动的标记
 			proj.OriginalY = proj.Y;
 			return true;
 		}
+		bool TickAbility(MyPlant plant)
+		{
+			if (plant.AnotherCounter > 0)
+				plant.AnotherCounter -= 1;
+			return true;
+		}
 		bool onUpdateShooting(MyPlant plant)
 		{
 			int shootingcd = plant.ShootingCountdown;
-			if (shootingcd > 1 && plant.ThreepeaterUltraCount != 0)
+			if (shootingcd > 1 && plant.AnotherCounter > 0)
 			{
 				//锁血、高亮
 				plant.Hp = plant.MaxHp;
@@ -51,7 +62,7 @@ namespace PlantAbility
 				}
 				//关闭大招状态
 				if (shootingcd < 3)
-					plant.ThreepeaterUltraCount = 0;
+					plant.AnotherCounter = 0;
 			}
 			return true;
 		}
