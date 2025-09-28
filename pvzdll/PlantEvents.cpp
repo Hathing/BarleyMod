@@ -529,8 +529,7 @@ void InitPlantEvents()
 	PVZEvent::ScardyShroomGrowEvent((int)onScaredyShroomGrow);
 	PVZEvent::ScardyShroomJudgeZombieNearEvent((int)onScaredyShroomJudgeZombieNear);
 
-	//目前不会崩溃了，但植物不索敌，暂时先去掉了
-	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
+  PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);

@@ -65,6 +65,7 @@ void onZombieInitAfter(MyZombie zombie)
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
 	zombie.FlameStack = 0;
+	zombie.IceBounded = false;
 
 	zombie.LastDamageSourceID = 0;
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
@@ -577,8 +578,7 @@ bool onJalapenoHeadBurnBefore(MyZombie zombie)
 	MyBoard board{ zombie.GetBoard() };
 	if (zombie.Hypnotized)
 	{
-		//board的burn row函数有问题，暂时禁用
-		//board.BurnRow(zombie.Row);
+		Creator::CreatePlant(SeedType::Jalapeno, zombie.Row, 20).CreateEffect();
 		return false;
 	}
 	auto zombies = board.GetAllZombies<MyZombie>();
@@ -630,6 +630,33 @@ bool onPogoUpdateActions(MyZombie zombie)
 	return false;
 	*/
 	return true;
+}
+
+ThreeState::ThreeState IsZombieCanBeChilled(MyZombie zombie)
+{
+	switch (zombie.Type)
+	{
+	case ZombieType::ZombieBobsledTeam:
+	case ZombieType::PogoZombie:
+	case ZombieType::ZombieYeti:
+		return ThreeState::Disable;
+	default:
+		return ThreeState::None;
+	}
+}
+
+void onZombieChilled(MyZombie zombie)
+{
+	zombie.DecelerateCountdown = 400;
+}
+
+void onZombieRemoveIceTrap(MyZombie zombie)
+{
+	if (zombie.IceBounded)
+	{
+		zombie.IceBounded = false;
+		zombie.Hit((zombie.BodyHealth + zombie.HelmHealth + zombie.ShieldHealth) >> 3, PVZ::DAMAGEF_BYPASSES_SHIELD);
+	}
 }
 
 void InitZombieEvents()
@@ -690,6 +717,10 @@ void InitZombieEvents()
 	PVZEvent::PogoUpdateActionsEvent((int)onPogoUpdateActions);
 	// 辣椒头僵尸
 	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
+
+	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
+	PVZEvent::ZombieChillEvent((int)onZombieChilled);
+	PVZEvent::ZombieRemoveIceTrapEvent((int)onZombieRemoveIceTrap);
 
 	//修改冰道持续时间
 	PVZ::Memory::WriteMemory<int>(0x52A8B6, 1000);

@@ -1261,4 +1261,14 @@ namespace PVZEvent
 			builder.popad().invoke(0x463E40).push_imm32(0x4130F9).ret();
 		}
 	};
+
+	/// @brief 僵尸失去冻结效果事件
+	/// @param 触发事件的僵尸
+	class ZombieRemoveIceTrapEvent : public DLLEventTemplate<0x532350, 5, REG_EAX>
+	{
+	public:
+		ZombieRemoveIceTrapEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieRemoveIceTrapEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieRemoveIceTrapEvent() : DLLEventTemplate() { Init("onZombieRemoveIceTrap"); };
+	};
 };

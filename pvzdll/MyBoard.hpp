@@ -22,9 +22,6 @@ public:
 	/// @brief 僵尸颜色显示切换计时
 	T_PROPERTY(byte, ZombieColorShiftCounter, __get_ZombieColorShiftCounter, __set_ZombieColorShiftCounter, 0x166);
 
-	/// @brief 对指定行的所有僵尸造成灰烬伤害
-	/// @param row 行
-	void BurnRow(int row);
 	/// @brief 在指定行右侧生成一只指定类型的僵尸
 	/// @param type 僵尸类型
 	/// @param row 行
