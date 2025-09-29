@@ -46,3 +46,7 @@ namespace MotionType
 	typedef MotionType Type2;
 	constexpr Type2 Piercing = (Type2)10;
 }
+
+constexpr int WAVE_ELITE_MASK = 5000;
+constexpr int WAVE_ELITE1 = WAVE_ELITE_MASK + 1;
+constexpr int WAVE_ELITE2 = WAVE_ELITE_MASK + 2;

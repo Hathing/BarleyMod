@@ -44,9 +44,6 @@ constexpr ProjSpecialType PST_SCATTER_WINTERMELON = 1;
 /// @brief 冰瓜的大炮
 constexpr ProjSpecialType PST_CANNON_WINTERMELON = 2;
 
-constexpr int WAVE_ELITE_MASK = 5000;
-constexpr int WAVE_ELITE1 = WAVE_ELITE_MASK + 1;
-
 enum PlantDyingType
 {
 	DYING_NONE = 0,
