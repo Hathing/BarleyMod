@@ -13,6 +13,14 @@ namespace ZombieAbility
 			model.AssignRenderGroupToPrefix(-1, "easter");
 			model.AssignRenderGroupToPrefix(-1, "damai");
 
+			if (!zombie.VariantType)
+			{
+				model.AssignRenderGroupToPrefix(0, "anim_bucket");
+				model.AssignRenderGroupToPrefix(-1, "anim_hair");
+				zombie.HelmType = HelmType::Bucket;
+				zombie.HelmHealth = 1100;
+				zombie.HelmMaxHealth = 1100;
+			}
 			if (zombie.FromWave != WAVE_ELITE1)
 			{
 				zombie.ShieldType = ShieldType::ScreenDoor;
