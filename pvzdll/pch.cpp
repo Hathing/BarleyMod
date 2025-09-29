@@ -1,4 +1,14 @@
 #include "pch.h"
+#include <direct.h>
+
+Draw::PString OverrideSavedataFolder()
+{
+	char working_dir[255];
+	char buf[300];
+	_getcwd(working_dir, sizeof(working_dir));
+	snprintf(buf, 300, "%s\\savedata", working_dir);
+	return Draw::ToString(buf);
+}
 
 void init()
 {
@@ -16,4 +26,5 @@ void init()
 	Creator::AsmInit();
 
 	EnableBackgroundRunning();
+	PVZEvent::OverrideSavedataFolderEvent((int)OverrideSavedataFolder);
 }
