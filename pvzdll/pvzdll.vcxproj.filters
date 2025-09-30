@@ -279,7 +279,7 @@
     <ClInclude Include="MyZombie\implement\SnorkedZombie.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyZombie\implement\Gargantaur.hpp">
+    <ClInclude Include="MyZombie\implement\Gargantuar.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyZombie\implement\ScreenDoorZombie.hpp">

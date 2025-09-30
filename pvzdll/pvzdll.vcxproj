@@ -167,7 +167,7 @@
     <ClInclude Include="MyZombie\implement\DiggerZombie.hpp" />
     <ClInclude Include="MyZombie\implement\DolphinRiderZombie.hpp" />
     <ClInclude Include="MyZombie\implement\FlagZombie.hpp" />
-    <ClInclude Include="MyZombie\implement\Gargantaur.hpp" />
+    <ClInclude Include="MyZombie\implement\Gargantuar.hpp" />
     <ClInclude Include="MyZombie\implement\Index.hpp" />
     <ClInclude Include="MyZombie\implement\JalapenoZombie.hpp" />
     <ClInclude Include="MyZombie\implement\NewspaperZombie.hpp" />
