@@ -3,7 +3,7 @@
 
 namespace ZombieAbility
 {
-	class Gargantaur : public BaseZombie
+	class Gargantuar : public BaseZombie
 	{
 	public:
 		void onCreated(MyZombie zombie)
@@ -27,7 +27,7 @@ namespace ZombieAbility
 			return true;
 		}
 	};
-	class GigaGargantaur : public BaseZombie
+	class GigaGargantuar : public BaseZombie
 	{
 	public:
 		void onCreated(MyZombie zombie)
