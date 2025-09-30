@@ -131,7 +131,7 @@ void onBoardUpdateGameObject(MyBoard board)
 		UpdateMatch(board);
 }
 
-byte __asm__DrawImage[35]
+byte __asm__MyDrawImage[35]
 {
 	PUSHDWORD(0),
 	PUSHDWORD(0),
@@ -141,13 +141,13 @@ byte __asm__DrawImage[35]
 	RET
 };
 
-void DrawImage(int x, int y, int GraphicsID, int ImageAddr)
+void MyDrawImage(int x, int y, int GraphicsID, int ImageAddr)
 {
-	SETARG(__asm__DrawImage, 1) = y;
-	SETARG(__asm__DrawImage, 6) = x;
-	SETARG(__asm__DrawImage, 12) = ImageAddr;
-	SETARG(__asm__DrawImage, 17) = GraphicsID;
-	Memory::Execute(STRING(__asm__DrawImage));
+	SETARG(__asm__MyDrawImage, 1) = y;
+	SETARG(__asm__MyDrawImage, 6) = x;
+	SETARG(__asm__MyDrawImage, 12) = ImageAddr;
+	SETARG(__asm__MyDrawImage, 17) = GraphicsID;
+	Memory::Execute(STRING(__asm__MyDrawImage));
 }
 
 byte __asm__TodDrawImageScaledF[48]
@@ -174,7 +174,7 @@ void TodDrawImageScaledF(float scale_x, float scale_y, float x, float y, int Gra
 	Memory::Execute(STRING(__asm__TodDrawImageScaledF));
 }
 
-byte __asm__DrawString[71]
+byte __asm__MyDrawString[71]
 {
 	MOV_ECX_PTR_ADDR(0x6A74B0),//字体地址 Font*
 	MOV_EAX(0),//Graphics*
@@ -190,13 +190,13 @@ byte __asm__DrawString[71]
 	RET
 };
 //这个函数暂时有问题，原因未知
-void DrawString(int x, int y, const std::string& string, int GraphicsAddr)
+void MyDrawString(int x, int y, const std::string& string, int GraphicsAddr)
 {
-	SETARG(__asm__DrawString, 7) = GraphicsAddr;
-	SETARG(__asm__DrawString, 43) = y;
-	SETARG(__asm__DrawString, 48) = x;
-	SETARG(__asm__DrawString, 53) = (unsigned int)&string;
-	Memory::Execute(STRING(__asm__DrawString));
+	SETARG(__asm__MyDrawString, 7) = GraphicsAddr;
+	SETARG(__asm__MyDrawString, 43) = y;
+	SETARG(__asm__MyDrawString, 48) = x;
+	SETARG(__asm__MyDrawString, 53) = (unsigned int)&string;
+	Memory::Execute(STRING(__asm__MyDrawString));
 }
 
 
@@ -216,14 +216,14 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 		{
 			ix = x + 9;
 			iy = y + 60;
-			DrawImage(ix, iy, GraphicsID, 0x6FF0A0);
+			MyDrawImage(ix, iy, GraphicsID, 0x6FF0A0);
 			TodDrawImageScaledF(hp_ratio, 1.0f, (float)ix, (float)iy, GraphicsID, 0x6FF09C);
-			DrawImage(ix, iy, GraphicsID, 0x6FF0A4);
+			MyDrawImage(ix, iy, GraphicsID, 0x6FF0A4);
 		}
 		//绘制等级图标
 		ix = x - 20;
 		iy = y + 55;
-		DrawImage(ix, iy, GraphicsID, 0x6FF084 + 4 * plant.Level);
+		MyDrawImage(ix, iy, GraphicsID, 0x6FF084 + 4 * plant.Level);
 	}
 }
 
