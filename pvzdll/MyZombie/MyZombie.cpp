@@ -9,10 +9,10 @@ namespace ZombieAbility
 		new NewspaperZombie(), new ScreenDoorZombie(), new BaseZombie(), new DancingZombie(), new BaseZombie(),
 		new BaseZombie(), new SnorkedZombie(), new Zomboni(),    new BaseZombie(), new DolphinRiderZombie(),
 		new ClownZombie(), new BalloonZombie(), new DiggerZombie(), new PogoZombie(), new BaseZombie(),
-		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new Gargantaur(), new BaseZombie(),
+		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new Gargantuar(), new BaseZombie(),
 
 		new BaseZombie(), new PeaZombie(),  new WallNutZombie(), new JalapenoZombie(), new BaseZombie(),
-		new SquashZombie(), new TallNutZombie(), new GigaGargantaur()
+		new SquashZombie(), new TallNutZombie(), new GigaGargantuar()
 	};
 }
 

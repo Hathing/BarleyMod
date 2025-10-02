@@ -744,4 +744,8 @@ void InitZombieEvents()
 	//覆盖位于僵尸总更新里的气球落地以及其他代码，此处代码应当搬运至恰当的更新函数中
 	static constexpr byte asm_revert_3[] = { 0x83,0xBB,0xFC,0x07,0x00,0x00,0x04 };
 	PVZ::Memory::WriteArray<const byte>(0x52AF2F, STRING(asm_revert_3));
+	
+	// 掉铁桶不露头发
+	PVZ::Memory::WriteMemory<WORD>(0x461775, Creator::makeshort(0xEB, 0x38));
+	PVZ::Memory::WriteMemory<WORD>(0x530EEA, Creator::makeshort(0xEB, 0x0C));
 }
