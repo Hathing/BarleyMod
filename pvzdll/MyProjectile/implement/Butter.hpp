@@ -14,7 +14,7 @@ namespace ProjectileAbility
 				original_val *= 2;
 			return original_val;
 		}
-		void onImpact(MyProjectile proj, MyZombie zombie)
+		bool onImpact(MyProjectile proj, MyZombie zombie)
 		{
 			if (proj.SpecialStack == 1)
 			{
@@ -24,6 +24,7 @@ namespace ProjectileAbility
 						if (myzombie.X >= proj.X - 20 && myzombie.X <= proj.X + 60)
 							myzombie.Butter(400);
 			}
+			return true;
 		}
 	};
 }

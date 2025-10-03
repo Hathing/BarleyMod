@@ -55,9 +55,9 @@ namespace ProjectileAbility
 		/// @brief 子弹击中地面或僵尸时，先执行此函数
 		/// @param proj 子弹
 		/// @param zombie 目标僵尸，可能为无效对象
-		virtual void onImpact(MyProjectile proj, MyZombie zombie)
+		virtual bool onImpact(MyProjectile proj, MyZombie zombie)
 		{
-			return;
+			return true;
 		}
 	};
 	typedef BaseProjectile* ProjectilePTR;
