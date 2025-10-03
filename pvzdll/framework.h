@@ -71,4 +71,5 @@ namespace ZombieVariantType
 
 	constexpr ZombieVariantType SnowPeaHead = 1;
 
+	constexpr ZombieVariantType UmbrellaHead = 2;
 }
