@@ -286,7 +286,7 @@ class ThreeStateEventTemplate : public DLLEventTemplate<_Hook_Address, _Raw_Len,
 protected:
 	virtual void InitExtra(AsmBuilder& builder)
 	{
-		builder.test_al_al().js_rel(19).popad().jz_rel(6)
+		builder.test_al_al().js_rel(16).popad().jz_rel(6)
 			.push_imm32(_Posi_Addr).ret()
 			.push_imm32(_Zero_Addr).ret();
 	}
