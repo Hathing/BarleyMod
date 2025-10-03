@@ -231,6 +231,7 @@ void onProjectileImpact(MyProjectile proj, MyZombie zombie)
 			newproj__.SpecialType = PST_SCATTER_PEA;
 		}
 	}
+	ProjectileAbility::GetAbility(proj.Type)->onImpact(proj, zombie);
 }
 
 
