@@ -129,6 +129,8 @@ void onProjectileInitAfter(MyProjectile proj)
 	proj.BounceCount = 0;
 
 	proj.IsGhost = false;
+
+	proj.Unknown = 0;
 }
 
 void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
