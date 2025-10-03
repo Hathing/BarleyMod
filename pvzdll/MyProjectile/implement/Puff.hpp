@@ -7,9 +7,44 @@ namespace ProjectileAbility
 	{
 	public:
 		inline static const int damage[6] = { 20, 20, 30, 30, 40, 40 };
+		inline static const int dark_bonus_damage[6] = { 0, 0, 2, 2, 5, 5 };
 		int OverrideDamage(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
-			return damage[proj.SourceLevel];
+			switch (proj.SourceType)
+			{
+			case SeedType::Puffshroom:
+				return damage[proj.SourceLevel] * proj.Unknown2;
+			case SeedType::Fumeshroom:
+				return 10;
+			case SeedType::Scaredyshroom:
+			{
+				int total_dmg = damage[proj.SourceLevel];
+
+				MyPlant owner = MyPlant::GetByID(proj.ParentID);
+				if (owner.isValid())
+					total_dmg += (owner.KillCount * 4);
+
+				return total_dmg;
+			}
+			case SeedType::Seashroom:
+			{
+				zombie.AddPoison(1);
+				return 5;
+			}
+			case SeedType::DarkShroom:
+			{
+				int tmp = proj.Unknown;
+				int base_damage = 20;
+				while (tmp--)
+					base_damage >>= 1;
+				if (proj.SourceLevel >= MyPlant::MAX_LEVEL && Creator::Rand(5) == 1)
+					zombie.AddFrost(1);
+
+				return base_damage + dark_bonus_damage[proj.SourceLevel];
+			}
+			default:
+				return 20;
+			}
 		}
 		float GetImageSize(MyProjectile proj, float original_val)
 		{
