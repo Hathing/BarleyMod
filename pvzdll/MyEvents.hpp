@@ -195,7 +195,7 @@ namespace PVZEvent
 	/// @brief 子弹击中僵尸事件
 	/// @param 依次为：触发事件的子弹，子弹击中的僵尸
 	/// @return 是否结算原版的子弹击中过程。若为 false，则子弹不会消失，但也不会造成伤害
-	class ProjectileImpactEvent : public BoolDLLEventTemplate<0x46E000, 5, REG_EAX, REG_ECX>
+	class ProjectileImpactEvent : public BoolDLLEventTemplate<0x46E000, 5, 0x46EB41, REG_EAX, REG_ECX>
 	{
 	public:
 		ProjectileImpactEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
