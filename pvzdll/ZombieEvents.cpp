@@ -62,6 +62,7 @@ void onZombieInitAfter(MyZombie zombie)
 
 	zombie.VariantType = 0;
 	zombie.InvulnerableDuration = 0;
+	zombie.ChillDuration = 0;
 
 	zombie.FrostStack = 0;
 	zombie.PoisonStack = 0;
@@ -177,9 +178,32 @@ void onZombieUpdatePlaying(MyZombie zombie)
 
 bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,int blue,int alpha)
 {
+	if (zombie.Hypnotized && zombie.HpPoint >= 4)
+	{
+		PVZ::Color color{ 232, 70, 255, alpha };
+		if (zombie.HpPoint == 5)
+			color = PVZ::Color{232, 21, 255, alpha};
+	
+		anim.SetColor(color);
+		anim.SetAdditiveColor(color);
+		anim.DrawAdditiveColor = true;
+		return false;
+	}
+	if (zombie.ChillDuration > 0)
+	{
+		return true;
+	}
 	if (zombie.HpPoint == 5)
 	{
 		PVZ::Color color{ 248,255,0,alpha };
+		anim.SetColor(color);
+		anim.SetAdditiveColor(color);
+		anim.DrawAdditiveColor = true;
+		return false;
+	}
+	if (zombie.HpPoint == 4)
+	{
+		PVZ::Color color{ 255,144,255,alpha };
 		anim.SetColor(color);
 		anim.SetAdditiveColor(color);
 		anim.DrawAdditiveColor = true;

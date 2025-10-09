@@ -46,6 +46,8 @@ public:
 	INT_PROPERTY(GoldMark, __get_GoM, __set_GoM, 0x12C);
 	/// @brief 伤害免疫持续时间
 	INT_PROPERTY(InvulnerableDuration, __get_InD, __set_InD, 0x12C);
+	/// @brief 寒意持续时间
+	INT_PROPERTY(ChillDuration, __get_ChD, __set_ChD, 0x130);
 	/// @brief 是否已被嘲讽
 	T_PROPERTY(byte, Taunted, __get_Ta, __set_Ta, 0x134);
 	/// @brief 僵尸血量点数标记，非盲盒开出的僵尸该值为0
