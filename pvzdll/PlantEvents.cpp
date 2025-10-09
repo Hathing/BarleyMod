@@ -467,7 +467,7 @@ bool onScaredyShroomScared(MyPlant plant)
 
 bool onScaredyShroomGrow(MyPlant plant)
 {
-	if (plant.Level < 5)
+	if (plant.Level < MyPlant::MAX_LEVEL)
 		plant.AddExperience(3000);
 	return true;
 }

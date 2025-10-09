@@ -9,6 +9,7 @@ namespace PlantAbility
 		void onCreated(MyPlant plant)
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
+			plant.AttributeCountdown = 50;
 		}
 		void onUpgrade(MyPlant plant)
 		{
@@ -25,6 +26,41 @@ namespace PlantAbility
 					plant.Heal(50);
 				}
 			}
+		}
+		bool TickAbility(MyPlant plant)
+		{
+			if (!plant.AttributeCountdown)
+			{
+				plant.AttributeCountdown = 50;
+				auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
+				MyZombie target = INVALID_BASEADDRESS;
+				for (auto _zombie : zombies)
+				{
+					if (_zombie.Row == plant.Row && !_zombie.Hypnotized && !_zombie.Blowaway && _zombie.NotDying
+						&& _zombie.Type != ZombieType::Zomboin && _zombie.Type != ZombieType::DiggerZombie
+						&& _zombie.Type != ZombieType::PogoZombie && _zombie.Type != ZombieType::BungeeZombie
+						&& _zombie.Type != ZombieType::CatapultZombie && _zombie.Type != ZombieType::DancingZombie
+						&& _zombie.State != ZombieState::POLE_VALUTING_JUMPPING && _zombie.State != ZombieState::BALLOON_FLYING
+						&& _zombie.State != ZombieState::IMP_FLYING)
+					{
+						if (_zombie.Id == plant.mTargetZombieID)
+							return false;
+						if (_zombie.Taunted)
+							continue;
+
+						if (!target.isValid() || target.ImageX > _zombie.ImageX)
+							target = _zombie;
+					}
+				}
+				if (target.isValid())
+				{
+					plant.mTargetZombieID = target.Id;
+					target.Taunted = true;
+					if (target.ImageX < plant.ImageX)
+						target.IsWalkingBackwards = 1;
+				}
+			}
+			return false;
 		}
 		bool onAnimate(MyPlant plant)
 		{

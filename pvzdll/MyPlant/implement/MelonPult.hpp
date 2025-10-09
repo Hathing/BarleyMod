@@ -1,6 +1,7 @@
 #pragma once
 #include "../PlantAbility.hpp"
 #include "SpecialPlants.hpp"
+#include <cassert>
 
 namespace PlantAbility
 {
@@ -23,6 +24,12 @@ namespace PlantAbility
 					proj.SpecialStack += 1;
 				}
 			}
+			return true;
+		}
+		bool TickAbility(MyPlant plant)
+		{
+			plant.ShootOrProductInterval = 300;
+			assert(plant.ShootOrProductCountdown >= 0);
 			return true;
 		}
 	};

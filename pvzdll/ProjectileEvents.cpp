@@ -129,6 +129,8 @@ void onProjectileInitAfter(MyProjectile proj)
 	proj.BounceCount = 0;
 
 	proj.IsGhost = false;
+
+	proj.Unknown = 0;
 }
 
 void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
@@ -167,8 +169,30 @@ void onPlantAddProjDamageRangeFlags(MyProjectile proj, MyPlant plant)
 		proj.DamageAbility = 0;
 }
 
-void onProjectileImpact(MyProjectile proj, MyZombie zombie)
+bool onProjectileImpact(MyProjectile proj, MyZombie zombie)
 {
+	if (zombie.isValid())
+	{
+		if (zombie.Type == ZombieType::WallnutZombie && zombie.VariantType == ZombieVariantType::UmbrellaHead && Creator::Rand(2))
+		{
+			if (proj.Motion == MotionType::Direct)
+			{
+				proj.Motion = MotionType::Throw;
+				proj.XSpeed = -3.0f;
+				proj.HeightSpeed = -5.0f;
+				proj.HeightAcceleration = 0.15f;
+			}
+			if (proj.Motion == MotionType::Throw)
+			{
+				proj.XSpeed = -proj.XSpeed;
+				proj.HeightSpeed *= -0.8f;
+			}
+
+			zombie.JustGotShotCounter = 20;
+			Creator::CreateSound(LowerSoundType::ConeheadHit);
+			return false;
+		}
+	}
 	//注意，zombie*可能=0，因此一般子弹先要检查zombie是否isValid
 	//冰瓜大炮不命中僵尸，也不直接对僵尸操作，因此无需判定
 	if (proj.Type == ProjectileType::WinterMelon && proj.SpecialType == PST_CANNON_WINTERMELON)
@@ -229,6 +253,7 @@ void onProjectileImpact(MyProjectile proj, MyZombie zombie)
 			newproj__.SpecialType = PST_SCATTER_PEA;
 		}
 	}
+	return ProjectileAbility::GetAbility(proj.Type)->onImpact(proj, zombie);
 }
 
 

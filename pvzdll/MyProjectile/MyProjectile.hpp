@@ -15,6 +15,8 @@ public:
 	T_PROPERTY(byte, SourceType, __get_SoT, __set_SoT, 0x52);
 	/// @brief 一个自减倒计时，暂时不清楚会不会影响原版子弹的更新
 	INT_PROPERTY(DecrementTime, __get_DecrementTime, __set_DecrementTime, 0x64);
+	/// @brief 小喷菇生成子弹时指定的某个属性
+	INT_PROPERTY(Unknown2, __get_Un2, __set_Un2, 0x78);
 	/// @brief 子弹的动画附件的ID
 	INT_PROPERTY(AttachmentID, __get_AttachmentID, __set_AttachmentID, 0x7C);
 	/// @brief 创建该子弹的植物的 ID
@@ -23,6 +25,7 @@ public:
 	T_PROPERTY(byte,OriginalRow, __get_OrR, __set_OrR, 0x84);
 	/// @brief 子弹的特殊标记
 	T_PROPERTY(ProjSpecialFlags, SpecialFlags, __get_SpecialFlags, __set_SpecialFlags, 0x84);
+	INT_PROPERTY(Unknown, __get_Un, __set_Un, 0x8C);
 	/// @brief 三线创建子弹时子弹的初始Y坐标，使用了子弹的Z加速度，因此注意其他运动方式对该参数的影响
 	T_PROPERTY(float, OriginalY, __get_OriginalY, __set_OriginalY, 0x48);
 	/// @brief 抛射子弹的弹跳计数器
