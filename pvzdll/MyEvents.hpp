@@ -463,6 +463,22 @@ namespace PVZEvent
 		}
 	};
 
+	/// @brief 植物修正+130伸缩动画时，体型不为1时yoffset的问题
+	/// @param 植物
+	/// @return yoffset使用的植物高度（原版为80.0d）
+	class PlantDrawBodyStretchRectifyEvent : public DLLEventTemplate<0x463B67, 6, REG_EBX>
+	{
+	public:
+		PlantDrawBodyStretchRectifyEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantDrawBodyStretchRectifyEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantDrawBodyStretchRectifyEvent() : PlantDrawBodyStretchRectifyEvent("onPlantDrawBodyStretchRectify") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.popad().push_imm32(0x463B6D).ret();
+		}
+	};
+
 	/// @brief 游戏内按键的事件
 	/// @param Board，Key
 	class TypingEvent : public DLLEventTemplate<0x41B1D0, 6, REG_ECX, REG_EDX>

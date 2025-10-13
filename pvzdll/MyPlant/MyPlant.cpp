@@ -297,6 +297,13 @@ void MyPlant::InitAddProjectile(MyProjectile proj)
 	proj.ParentID = this->Id;
 }
 
+void MyPlant::SetBodySizeChange(int time)
+{
+	if (this->StretchCounter <= 0)
+		this->StretchCounter = 70;
+	this->BodySizeCountdown += time;
+}
+
 MyPlant MyPlant::GetByID(int id)
 {
 	if (id)

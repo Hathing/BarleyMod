@@ -67,7 +67,9 @@ public:
 	/// @brief 当前体型值
 	T_PROPERTY(float, BodySize, __get_BodySize, __BodySize, 0xF4);
 	/// @brief 体型变化动画倒计时
-	INT_PROPERTY(BodySizeCountdown, __get_BodySizeCountdown, __set_BodySizeCountdown, 0xFC);
+	INT_PROPERTY(BodySizeCountdown, __get_BodySizeCountdown, __set_BodySizeCountdown, 0xF8);
+	/// @brief 植物血条显示倒计时
+	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0xFC);
 	/// @brief 减速效果倒计时
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
 	/// @brief 胆小菇击杀次数
@@ -88,8 +90,8 @@ public:
 	INT_PROPERTY(BarleyCounter, __get_BaC, __set_BaC, 0x120);
 	/// @brief 肥料倒计时
 	INT_PROPERTY(FertilizedCounter, __get_FertilizedCounter, __set_FertilizedCounter, 0x124);
-	/// @brief 植物血条显示倒计时
-	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0x130);
+	/// @brief 植物伸缩倒计时，原版蘑菇苏醒倒计时
+	INT_PROPERTY(StretchCounter, __get_StretchCounter, __set_StretchCounter, 0x130);
 	/// @brief 是否在 Board 上
 	T_PROPERTY(mybool, OnBoard, __get_OnB, __set_OnB, 0x144);
 	/// @brief 投篮车索敌标记
@@ -155,6 +157,9 @@ public:
 	/// @brief 所有植物通用的初始化标记一个子弹的属性
 	/// @param proj 子弹
 	void InitAddProjectile(MyProjectile proj);
+	/// @brief 植物根据参数time设置体型增大或缩小，每1cs变化1%的体型。会处理剩余时间和伸缩动画。
+	/// @param time 正数表示增大，负数表示缩小
+	void SetBodySizeChange(int time);
 
 	/// @brief 植物受到伤害，封装了各种事件。
 	/// @param source 伤害来源

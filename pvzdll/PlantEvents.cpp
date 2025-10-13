@@ -23,8 +23,8 @@ void onPlantInitAfter(MyPlant plant)
 	plant.BarleyCounter = 0;
 	plant.FertilizedCounter = 0;
 	plant.BodySize = 1.0f;
-	plant.DestBodySize = 1.0f;
 	plant.BodySizeCountdown = 0;
+	plant.HpDisplayCounter = 0;
 
 	auto model = plant.GetAnimationPart1();
 	if (model.isValid())
@@ -134,6 +134,11 @@ void onPlantDrawBodySize(MyPlant plant, PVZ::Animation anim)
 	anim.YOffset -= (bodysize - 1.0f) * plant.Height;
 	anim.XScale *= bodysize;
 	anim.YScale *= bodysize;
+}
+
+float onPlantDrawBodyStretchRectify(MyPlant plant)
+{
+	return plant.BodySize * 80.0f;
 }
 
 float onPlantDrawShadowSize(MyPlant plant,float original_size)
@@ -520,6 +525,7 @@ void InitPlantEvents()
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
 	PVZEvent::PlantDrawBodySizeEvent((int)onPlantDrawBodySize);
 	PVZEvent::PlantDrawShadowSizeEvent((int)onPlantDrawShadowSize);
+	PVZEvent::PlantDrawBodyStretchRectifyEvent((int)onPlantDrawBodyStretchRectify);
 
 	// 植物攻击相关
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
