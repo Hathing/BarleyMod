@@ -9,6 +9,8 @@ void InitPlantExistCount(MyBoard& board)
 
 void onBoardInit(MyBoard board)
 {
+	board.GetPVZApp().FreePlantingCheat = true;
+
 	board.MatchRunning = false;
 	board.MatchTimer = 0;
 
@@ -273,4 +275,9 @@ void InitBoardEvents()
 	PVZEvent::BoardCallPlantUpdateEvent((int)onBoardCallPlantUpdate);
 	PVZEvent::BoardDrawImageEvent((int)onBoardDrawImage);
 	PVZEvent::TypingEvent((int)onTyping);
+
+	//所有关卡暂停出怪
+	PVZ::Memory::WriteMemory<byte>(0x413E4B, 0x00);
+	//白天关卡暂停天降阳光
+	PVZ::Memory::WriteMemory<byte>(0x413B82, 0x00);
 }
