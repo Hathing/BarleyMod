@@ -22,6 +22,9 @@ void onPlantInitAfter(MyPlant plant)
 	plant.SubIndex = 0;
 	plant.BarleyCounter = 0;
 	plant.FertilizedCounter = 0;
+	plant.BodySize = 1.0f;
+	plant.DestBodySize = 1.0f;
+	plant.BodySizeCountdown = 0;
 
 	auto model = plant.GetAnimationPart1();
 	if (model.isValid())
@@ -57,6 +60,19 @@ void onPlantInitAfter(MyPlant plant)
 
 bool onPlantUpdateAbility(MyPlant plant)
 {
+	//更新体型
+	if (plant.BodySizeCountdown > 0)
+	{
+		plant.BodySizeCountdown -= 1;
+		plant.BodySize += 0.01f;
+	}
+	else if (plant.BodySizeCountdown < 0)
+	{
+		plant.BodySizeCountdown += 1;
+		if (plant.BodySize > 0.01f)
+			plant.BodySize -= 0.01f;
+	}
+
 	auto tmp = PlantAbility::GetAbility(plant.Type)->TickAbility(plant);
 	if (plant.FromBarley)
 	{
@@ -109,6 +125,20 @@ bool onPlantUpdateColor(MyPlant plant, PVZ::Animation anim)
 
 	//默认不修改，返回true
 	return true;
+}
+
+void onPlantDrawBodySize(MyPlant plant, PVZ::Animation anim)
+{
+	float bodysize = plant.BodySize;
+	anim.XOffset -= (bodysize - 1.0f) * plant.Width * 0.5f;
+	anim.YOffset -= (bodysize - 1.0f) * plant.Height;
+	anim.XScale *= bodysize;
+	anim.YScale *= bodysize;
+}
+
+float onPlantDrawShadowSize(MyPlant plant,float original_size)
+{
+	return original_size * plant.BodySize;
 }
 
 int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
@@ -362,7 +392,7 @@ void onMagnetShroomClearItem(MyPlant plant)
 
 bool onThreepeaterLaunch(MyPlant plant)
 {
-	static const int probability[6] = { 0.01f,0.02f,0.02f,0.03f,0.03f,0.03f };
+	static const float probability[6] = { 0.01f,0.02f,0.02f,0.03f,0.03f,0.03f };
 	if (plant.AnotherCounter <= 0 && plant.ShootOrProductCountdown > 0 && Creator::RandFloat(1.0f) < probability[plant.Level])
 	{
 		int ultra_count = 1;
@@ -488,6 +518,8 @@ void InitPlantEvents()
 	// 植物绘制与动画相关
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
+	PVZEvent::PlantDrawBodySizeEvent((int)onPlantDrawBodySize);
+	PVZEvent::PlantDrawShadowSizeEvent((int)onPlantDrawShadowSize);
 
 	// 植物攻击相关
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
