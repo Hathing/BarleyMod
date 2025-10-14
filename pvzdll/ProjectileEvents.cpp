@@ -188,6 +188,17 @@ bool onProjectileImpact(MyProjectile proj, MyZombie zombie)
 				proj.HeightSpeed *= -0.8f;
 			}
 
+			int dist = zombie.ImageX + PVZ::Memory::ReadMemory<int>(zombie.GetBaseAddress() + 0x8C)
+				- proj.ImageX - proj.Width;
+			if (dist > 0)
+			{
+				dist--;
+				proj.X += dist;
+				float tmp = dist / proj.XSpeed * proj.HeightSpeed + proj.Height;
+				proj.Height = tmp;
+				proj.ImageY = tmp + proj.Y;
+			}
+
 			zombie.JustGotShotCounter = 20;
 			Creator::CreateSound(LowerSoundType::ConeheadHit);
 			return false;
