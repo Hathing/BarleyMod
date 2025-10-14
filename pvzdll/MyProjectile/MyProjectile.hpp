@@ -63,7 +63,8 @@ public:
 	/// @brief “幽灵子弹”记录的目标，index最大为8
 	INT_ARRAY_PROPERTY(GetPiercingID, SetPiercingID, 0x30);
 
-
+	/// @brief 调用原函数获取伤害flag
+	PVZ::DamageFlags GetDamageFlags(int zombie_addr);
 	/// @brief 根据子弹坐标调整子弹行数，目前只有三线子弹在用，其余子弹要用的话请注意
 	void AdjustRow();
 	/// @brief 生成一个不会实际更新的“幽灵子弹”，用于记录穿透的僵尸

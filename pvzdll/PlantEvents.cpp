@@ -97,10 +97,13 @@ void onPlantDamageZombie(PZDamageEvent* info)
 {
 	if(info->type != PVZEvent::PLANTDAMAGETYPE_CUSTOM)
 		PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
-	if (info->type == PVZEvent::PLANTDAMAGETYPE_AOE && info->plant.Type != SeedType::Squash)
+	//伤害来源标记
+	if (info->zombie.NotDying)
 	{
-		if (info->zombie.NotDying)
+		if (info->plant.Type != SeedType::Squash)
+		{
 			info->zombie.LastDamageSourceID = info->plant.GetOwner().Id;
+		}
 	}
 }
 
@@ -572,7 +575,7 @@ void InitPlantEvents()
 	PVZEvent::ScardyShroomGrowEvent((int)onScaredyShroomGrow);
 	PVZEvent::ScardyShroomJudgeZombieNearEvent((int)onScaredyShroomJudgeZombieNear);
 
-  PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
+	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);

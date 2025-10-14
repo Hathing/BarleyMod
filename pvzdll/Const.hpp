@@ -33,6 +33,7 @@ namespace PVZEvent
 {
 	typedef PlantDamageType Type2;
 	constexpr Type2 PLANTDAMAGETYPE_CUSTOM = (Type2)16;
+	constexpr Type2 PLANTDAMAGETYPE_PROJECTILE = (Type2)10;
 }
 
 namespace PlantState

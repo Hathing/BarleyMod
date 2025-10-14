@@ -18,6 +18,17 @@ ProjectileAbility::ProjectilePTR ProjectileAbility::GetAbility(ProjectileType::P
 	return ProjectileAbility::pt_factory[type];
 }
 
+PVZ::DamageFlags MyProjectile::GetDamageFlags(int zombie_addr)
+{
+	return static_cast<PVZ::DamageFlags>(PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EAX, zombie_addr)
+		.mov_reg_imm(REG_EDI, this->GetBaseAddress())
+		.invoke(0x46D230)
+		.mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret())
+	);
+}
+
 byte __asm__AdjustRow[37]
 {
 	MOV_ESI(0),
