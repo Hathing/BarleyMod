@@ -22,3 +22,4 @@
 #include "TallNutZombie.hpp"
 #include "SquashZombie.hpp"
 #include "ClownZombie.hpp"
+#include "ZombieBobsledTeam.hpp"
