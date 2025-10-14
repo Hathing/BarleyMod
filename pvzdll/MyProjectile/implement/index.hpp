@@ -4,6 +4,7 @@
 #include "Kernel.hpp"
 #include "Cobbig.hpp"
 #include "Butter.hpp"
+#include "ZombiePea.hpp"
 #include "GoldSpike.hpp"
 #include "Diamond.hpp"
 #include "GoldMelon.hpp"
