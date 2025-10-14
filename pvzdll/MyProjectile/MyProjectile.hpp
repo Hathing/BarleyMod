@@ -15,8 +15,11 @@ public:
 	T_PROPERTY(byte, SourceType, __get_SoT, __set_SoT, 0x52);
 	/// @brief 一个自减倒计时，暂时不清楚会不会影响原版子弹的更新
 	INT_PROPERTY(DecrementTime, __get_DecrementTime, __set_DecrementTime, 0x64);
-	/// @brief 小喷菇生成子弹时指定的某个属性
+	/// @brief 小喷菇生成子弹时孢子的倍率，现已弃用，仅供阅读CT参考！
+	/// @deprecated
 	INT_PROPERTY(Unknown2, __get_Un2, __set_Un2, 0x78);
+	/// @brief 小喷菇五阶技能属性，子弹的额外基础倍率而非随机倍率
+	T_PROPERTY(float, PuffShroomBaseMultiplier, __get_PuffShroomBaseMultiplier, __set_PuffShroomBaseMultiplier, 0x78);
 	/// @brief 子弹的动画附件的ID
 	INT_PROPERTY(AttachmentID, __get_AttachmentID, __set_AttachmentID, 0x7C);
 	/// @brief 创建该子弹的植物的 ID
@@ -30,7 +33,7 @@ public:
 	T_PROPERTY(float, OriginalY, __get_OriginalY, __set_OriginalY, 0x48);
 	/// @brief 抛射子弹的弹跳计数器
 	T_PROPERTY(byte, BounceCount, __get_BounceCount, __set_BounceCount, 0x85);
-	/// @brief 子弹的特殊层数，如西瓜大小
+	/// @brief 子弹的特殊层数，如西瓜大小，小喷菇随机倍率
 	T_PROPERTY(byte, SpecialStack, __get_SpecialStack, __set_SpecialStack, 0x86);
 	/// @brief 子弹的特殊类型，如火球
 	T_PROPERTY(byte, SpecialType, __get_SpecialType, __set_SpecialType, 0x87);

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../ProjectileAbility.hpp"
 
 namespace ProjectileAbility
@@ -6,19 +6,28 @@ namespace ProjectileAbility
 	class Puff : public BaseProjectile
 	{
 	public:
-		inline static const int damage[6] = { 20, 20, 30, 30, 40, 40 };
+		inline static const int puffshroom_damage[6] = { 20, 30, 30, 40, 40, 40 };
+		inline static const int scaredyshroom_damage[6] = { 20, 20, 30, 30, 40, 40 };
 		inline static const int dark_bonus_damage[6] = { 0, 0, 2, 2, 5, 5 };
 		int OverrideDamage(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
 			switch (proj.SourceType)
 			{
 			case SeedType::Puffshroom:
-				return damage[proj.SourceLevel] * proj.Unknown2;
+			{
+				//special stack表示孢子的倍率
+				int dmg = puffshroom_damage[proj.SourceLevel] * proj.SpecialStack;
+				if (proj.SourceLevel == 5)
+				{
+					dmg = max(0, dmg * proj.PuffShroomBaseMultiplier);
+				}
+				return dmg;
+			}
 			case SeedType::Fumeshroom:
 				return 10;
 			case SeedType::Scaredyshroom:
 			{
-				int total_dmg = damage[proj.SourceLevel];
+				int total_dmg = scaredyshroom_damage[proj.SourceLevel];
 
 				MyPlant owner = MyPlant::GetByID(proj.ParentID);
 				if (owner.isValid())
@@ -57,13 +66,8 @@ namespace ProjectileAbility
 			}
 			if (proj.SourceType == SeedType::Puffshroom)
 			{
-				int sz = proj.Unknown2 ;
-				
-				MyPlant owner = MyPlant::GetByID(proj.ParentID);
-				if (owner.isValid())
-					sz += owner.KillCount;
-
-				return 1 + sz / 10.0f;
+				float result = original_val * sqrtf((int)proj.SpecialStack * (proj.SourceLevel == 5 ? proj.PuffShroomBaseMultiplier : 1.0f)) * 0.6f;
+				return result;
 			}
 
 			return original_val;

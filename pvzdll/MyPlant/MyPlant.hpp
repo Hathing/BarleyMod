@@ -62,6 +62,10 @@ public:
 	INT_PROPERTY(RepeaterNextProjType, __get_RepeaterNextProjType, __set_RepeaterNextProjType, 0x0E0);
 	/// @brief 双发记录自身发射过的子弹种类
 	INT_PROPERTY(ReapeaterRecord, __get_ReapeaterRecord, __set_ReapeaterRecord, 0x0E4); 
+	/// @brief 小喷菇发射孢子的序列记录
+	T_PROPERTY(byte, PuffShroomRecord, __get_PuffShroomRecord, __set_PuffShroomRecord, 0x0E0);
+	/// @brief 小喷菇的大小计数，范围为-10~10
+	INT_PROPERTY(PuffShroomSizeCount, __get_PuffShroomSizeCount, __set_PuffShroomSizeCount, 0x0E4);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 当前体型值

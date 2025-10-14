@@ -155,8 +155,6 @@ bool onPlantUpdateShooter(MyPlant plant)
 {
 	if (plant.Type == SeedType::Cactus && plant.ShootOrProductCountdown == 50)
 		plant.FindTargetAndFire(plant.Row, plant.State == PlantState::CACTUS_SHORT_IDLE ? 1 : 0);
-	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
-		plant.FindTargetAndFire(plant.Row, 0);
 	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35))
 		plant.LaunchThreepeater();
 	return PlantAbility::GetAbility(plant.Type)->onUpdateShooter(plant);
@@ -489,6 +487,13 @@ int onPlantReload(MyPlant plant, int shoot_cd)
 	case SeedType::SplitPea:
 		plant.FindTargetCount = 0;
 		break;
+	case SeedType::Puffshroom:
+	{
+		if (plant.Level == 5 && plant.PuffShroomSizeCount < 0)
+		{
+			return shoot_cd + plant.PuffShroomSizeCount * 14;//初始200，最低60-14=46
+		}
+	}
 	default:
 		break;
 	}
