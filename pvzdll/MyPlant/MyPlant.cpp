@@ -53,6 +53,10 @@ MyPlant MyPlant::GetOwner()
 
 void MyPlant::SetOwner(MyPlant plant)
 {
+	while (plant.OwnerID != 0)
+	{
+		plant = plant.GetOwner();
+	}
 	this->OwnerID = plant.Id;
 }
 

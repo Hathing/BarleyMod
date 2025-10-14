@@ -66,6 +66,10 @@ public:
 	T_PROPERTY(byte, PuffShroomRecord, __get_PuffShroomRecord, __set_PuffShroomRecord, 0x0E0);
 	/// @brief 小喷菇的大小计数，范围为-10~10
 	INT_PROPERTY(PuffShroomSizeCount, __get_PuffShroomSizeCount, __set_PuffShroomSizeCount, 0x0E4);
+	/// @brief 海蘑菇分身的上一个海蘑菇ID，0表示本体
+	INT_PROPERTY(SeaShroomPreviousID, __get_SeaShroomPreviousID, __set_SeaShroomPreviousID, 0x0E0);
+	/// @brief 海蘑菇分身的下一个海蘑菇ID，0表示是最后一株海蘑菇
+	INT_PROPERTY(SeaShroomNextID, __get_SeaShroomNextID, __set_SeaShroomNextID, 0x0E4);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 当前体型值
@@ -80,10 +84,12 @@ public:
 	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
 	/// @brief 是否启用彩蛋皮
 	T_PROPERTY(mybool, EasterSkin, __get_EaS, __set_EaS, 0x10C);
+
 	/// @brief 海蘑菇子编号
 	T_PROPERTY(byte, SubIndex, __get_SuI, __set_SuI, 0x10D);
 	/// @brief 植物的所有者的 ID
 	INT_PROPERTY(OwnerID, __get_SpO, __set_SpO, 0x110);
+
 	/// @brief 当前经验值
 	INT_PROPERTY(Experience, __get_XP, __set_XP, 0x114);
 	/// @brief 当前等级
