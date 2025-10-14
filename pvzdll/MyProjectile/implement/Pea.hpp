@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "../ProjectileAbility.hpp"
 
 namespace ProjectileAbility
@@ -22,18 +22,18 @@ namespace ProjectileAbility
 		}
 		bool onImpact(MyProjectile proj, MyZombie zombie)
 		{
-			//±¬ÁÑ×Óµ¯µÄĞ§¹û
+			//çˆ†è£‚å­å¼¹çš„æ•ˆæœ
 			if (proj.SpecialType == PST_CRACK_PEA)
 			{
-				int crack_num = 2 + proj.SourceLevel / 2;//Õâ¸öÊıÊÇÑ­»·ÓÃµÄ£¬Êµ¼Ê±¬ÁÑ×Óµ¯ÊıÁ¿ = 1 + crack_num * 2
+				int crack_num = 2 + proj.SourceLevel / 2;//è¿™ä¸ªæ•°æ˜¯å¾ªç¯ç”¨çš„ï¼Œå®é™…çˆ†è£‚å­å¼¹æ•°é‡ = 1 + crack_num * 2
 				int x = proj.X, y = proj.Y;
 				constexpr float v = 5.0f;
-				//Ë®Æ½µÄ×Óµ¯
+				//æ°´å¹³çš„å­å¼¹
 				MyProjectile newproj{ Creator::CreateProjectile(ProjectileType::Pea,x,y,0.0f,2.0f) };
 				newproj.DeriveProperty(proj);
 				newproj.MakePiercing(3, v, 0.0f);
 				newproj.SpecialType = PST_SCATTER_PEA;
-				//Ğ±ÏòµÄ×Óµ¯
+				//æ–œå‘çš„å­å¼¹
 				for (int i = crack_num; i > 0; i--)
 				{
 					float rad = 1.14f * i / crack_num;
