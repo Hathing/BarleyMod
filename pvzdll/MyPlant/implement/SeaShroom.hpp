@@ -20,7 +20,8 @@ namespace PlantAbility
 
 		void onCreated(MyPlant plant)
 		{
-			plant.AnotherCounter = 1000 + Creator::Rand(1000);
+			//plant.AnotherCounter = 1000 + Creator::Rand(1000);
+			plant.AnotherCounter = 100;
 			plant.SubIndex = 0;
 		}
 
@@ -171,6 +172,7 @@ namespace PlantAbility
 		}
 		void onDie(MyPlant plant)
 		{
+			bool is_prime = plant.IsPrime();
 			if (plant.SeaShroomPreviousID != 0)
 			{
 				MyPlant::GetByID(plant.SeaShroomPreviousID).SeaShroomNextID = plant.SeaShroomNextID;
@@ -180,10 +182,16 @@ namespace PlantAbility
 				auto next_plant = MyPlant::GetByID(plant.SeaShroomNextID);
 				next_plant.SeaShroomPreviousID = plant.SeaShroomPreviousID;
 				next_plant.SubIndex -= 1;
+
+				int id = next_plant.Id;
+				if (is_prime)
+					next_plant.OwnerID = 0;
 				while (next_plant.SeaShroomNextID != 0)
 				{
 					next_plant = MyPlant::GetByID(next_plant.SeaShroomNextID);
 					next_plant.SubIndex -= 1;
+					if (is_prime)
+						next_plant.OwnerID = id;
 				}
 			}
 			//如果头节点死了，还要处理本体的经验等级问题
