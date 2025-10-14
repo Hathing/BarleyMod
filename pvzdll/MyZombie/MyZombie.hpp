@@ -71,6 +71,8 @@ public:
 	INT_PROPERTY(NewspaperAngerStack, __get_NewspaperAngerStack, __set_NewspaperAngerStack, 0xF0);
 	/// @brief 矿工上次刨根的列数
 	INT_PROPERTY(DiggerLastDigRootColumn, __get_DiggerLastDigRootColumn, __set_DiggerLastDigRootColumnn, 0xF0);
+	/// @brief 舞王和雪橇车相关联僵尸编号数组属性
+	INT_ARRAY_PROPERTY(GetRelatedZombieID, SetRelatedZombieID, 0xF0);
 
 	/// @brief 获取该僵尸掉落的经验值
 	/// @return 掉落的经验值
@@ -123,8 +125,11 @@ public:
 	/// @return 目标植物的Address，没有找到目标则为0。
 	int FindCatapultTarget();
 	/// @brief 投篮车对目标植物开火
-	/// @rparam 目标植物的Address，0表示没有找到目标。
+	/// @param 目标植物的Address，0表示没有找到目标。
 	void ZombieCatapultFire(int targetaddr);
+	/// @brief 调用原版函数，返回雪橇小队中某个僵尸的编号
+	/// @return 该僵尸在小队中的编号，0为队长，-1表示不在小队中。
+	int GetBobsledPosition();
 	/// @brief 盲盒僵尸获取生命分数
 	/// @return 生命分数的分子
 	int GenHpPoint();

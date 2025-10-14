@@ -63,7 +63,16 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	if (zombie.Hypnotized)
 		child_zombie.Hypnotized = true;
 	PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, zombie.Layer + 100, EffectType::IMITATER_TRANSFORMING);
+	
 	child_zombie.X = zombie.X;
+	if (child_zombie.GetBobsledPosition() == 0)
+	{
+		for (int i = 1; i <= 3; i++)
+		{
+			auto zombie_ = PVZ::GetByID<MyZombie>(child_zombie.GetRelatedZombieID(i));
+			zombie_.X = child_zombie.X + 50.0f * i;
+		}
+	}
 
 	if (true)
 	{
