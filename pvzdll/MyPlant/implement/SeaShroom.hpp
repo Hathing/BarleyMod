@@ -20,6 +20,7 @@ namespace PlantAbility
 
 		void onCreated(MyPlant plant)
 		{
+			plant.ShootOrProductInterval = 200;
 			//plant.AnotherCounter = 1000 + Creator::Rand(1000);
 			plant.AnotherCounter = 100;
 			plant.SubIndex = 0;
@@ -148,8 +149,8 @@ namespace PlantAbility
 						plant.AnotherCounter = summon_cooldown[plant.Level];
 						//创建新植物
 						MyPlant newcreep = Creator::CreatePlant(SeedType::Seashroom, plant.Row, plant.Column);
-						//newcreep.Experience = plant.Experience;
-						//newcreep.Level = plant.Level;
+						newcreep.Experience = plant.Experience;
+						newcreep.Level = plant.Level;
 						newcreep.SetOwner(plant);
 						//链表尾插
 						tail_plant.SeaShroomNextID = newcreep.Id;
@@ -194,7 +195,13 @@ namespace PlantAbility
 						next_plant.OwnerID = id;
 				}
 			}
-			//如果头节点死了，还要处理本体的经验等级问题
+		}
+		void onGainXP(MyPlant plant, int val, bool kill_credit)
+		{
+			if (plant.SeaShroomNextID != 0)
+			{
+				MyPlant::GetByID(plant.SeaShroomNextID).AddExperience(val);
+			}
 		}
 		/*
 		void onDie(MyPlant plant)
