@@ -183,6 +183,7 @@
     <ClInclude Include="MyZombie\implement\Zombie.hpp" />
     <ClInclude Include="MyZombie\implement\Zomboni.hpp" />
     <ClInclude Include="MyZombie\implement\ClownZombie.hpp" />
+	<ClInclude Include="MyZombie\implement\ZombieBobsledTeam.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />
     <ClInclude Include="MyZombie\ZombieAbility.hpp" />
     <ClInclude Include="pch.h" />

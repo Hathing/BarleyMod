@@ -53,6 +53,10 @@ MyPlant MyPlant::GetOwner()
 
 void MyPlant::SetOwner(MyPlant plant)
 {
+	while (plant.OwnerID != 0)
+	{
+		plant = plant.GetOwner();
+	}
 	this->OwnerID = plant.Id;
 }
 
@@ -295,6 +299,13 @@ void MyPlant::InitAddProjectile(MyProjectile proj)
 	proj.SourceType = this->Type & 0xFF;
 	proj.SourceLevel = this->Level;
 	proj.ParentID = this->Id;
+}
+
+void MyPlant::SetBodySizeChange(int time)
+{
+	if (this->StretchCounter <= 0)
+		this->StretchCounter = 70;
+	this->BodySizeCountdown += time;
 }
 
 MyPlant MyPlant::GetByID(int id)

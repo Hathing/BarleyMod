@@ -365,6 +365,16 @@ int onZombieTakeDmg(MyZombie zombie,PVZ::DamageFlags dmg_flags,int dmg)
 		}
 		return 0;
 	}
+	//雪橇出场无敌
+	if (zombie.State == ZombieState::BOBSLET_ENTER)
+	{
+		return 0;
+	}
+	//雪橇车领队不能被直接秒杀
+	if (zombie.GetBobsledPosition() == 0)
+	{
+		dmg = min(dmg, zombie.HelmHealth);
+	}
 	return dmg;
 }
 
@@ -760,6 +770,8 @@ void InitZombieEvents()
 	PVZ::Memory::WriteMemory<byte>(0x5263E8, 0xEB);
 	//潜水场内下水
 	PVZ::Memory::WriteMemory<byte>(0x526747, 0x07);
+	//雪橇在冰道外不下车
+	PVZ::Memory::WriteMemory<byte>(0x528214, 0xEB);
 	//覆盖原盲盒开盒
 	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));

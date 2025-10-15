@@ -433,6 +433,52 @@ namespace PVZEvent
 		}
 	};
 
+	/// @brief 植物绘制体型大小事件
+	/// @param 植物，动画
+	class PlantDrawBodySizeEvent : public DLLEventTemplate<0x463E2C, 6, REG_EBP, REG_EBX>
+	{
+	public:
+		PlantDrawBodySizeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantDrawBodySizeEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantDrawBodySizeEvent() : PlantDrawBodySizeEvent("onPlantDrawBodySize") {};
+	};
+	/// @brief 植物绘制影子大小事件
+	/// @param 植物、影子原尺寸
+	/// @return 修改后的影子尺寸
+	class PlantDrawShadowSizeEvent : public DLLEventTemplate<0x465A0A, 8, MEM_ESP_ADD(0x34), REG_EDI>
+	{
+	public:
+		PlantDrawShadowSizeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantDrawShadowSizeEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantDrawShadowSizeEvent() : PlantDrawShadowSizeEvent("onPlantDrawShadowSize") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.fstp_m32_esp_imm8(0x34);
+			//修改原代码中将EDI从plant变为board的代码，改为使用ESI，避免冲突
+			PVZ::Memory::WriteMemory<byte>(0x4659CF, 0x77);
+			PVZ::Memory::WriteMemory<byte>(0x4659D9, 0x8E);
+			PVZ::Memory::WriteMemory<byte>(0x4659E8, 0x86);
+			PVZ::Memory::WriteMemory<byte>(0x4659FD, 0xD6);
+		}
+	};
+
+	/// @brief 植物修正+130伸缩动画时，体型不为1时yoffset的问题
+	/// @param 植物
+	/// @return yoffset使用的植物高度（原版为80.0d）
+	class PlantDrawBodyStretchRectifyEvent : public DLLEventTemplate<0x463B67, 6, REG_EBX>
+	{
+	public:
+		PlantDrawBodyStretchRectifyEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantDrawBodyStretchRectifyEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantDrawBodyStretchRectifyEvent() : PlantDrawBodyStretchRectifyEvent("onPlantDrawBodyStretchRectify") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.popad().push_imm32(0x463B6D).ret();
+		}
+	};
+
 	/// @brief 游戏内按键的事件
 	/// @param Board，Key
 	class TypingEvent : public DLLEventTemplate<0x41B1D0, 6, REG_ECX, REG_EDX>

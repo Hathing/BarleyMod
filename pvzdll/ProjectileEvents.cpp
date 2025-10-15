@@ -20,12 +20,19 @@ int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType
 	if (mydamage == 0)
 		return 0;
 
-	if (zombie.NotDying && !zombie.NotExist)
+	if (!zombie.NotExist)
 	{
 		auto plant = MyPlant::GetByID(proj.ParentID);
 		if (plant.isValid())
 		{
+			//这里可能存在潜在的逻辑漏洞？后续可以留意
 			auto caster = plant.GetOwner();
+			//植物伤害僵尸事件
+			auto event = new PZDamageEvent(zombie,caster,proj.GetDamageFlags(zombie.GetBaseAddress()),mydamage, PVZEvent::PLANTDAMAGETYPE_PROJECTILE);
+			onPlantDamageZombie(event);
+			mydamage = event->damage;
+			delete event;
+			/*
 			if (type == PVZEvent::ProjDmgType::DAMAGE_SINGULAR)
 				zombie.LastDamageSourceID = caster.Id;
 			else
@@ -33,6 +40,7 @@ int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType
 				if (caster.isValid() && caster.Row == zombie.Row)
 					zombie.LastDamageSourceID = caster.Id;
 			}
+			*/
 		}
 	}
 	ProjectileAbility::GetAbility(proj.Type)->onDamageZombie(proj, zombie, type, subtarget_num, mydamage);

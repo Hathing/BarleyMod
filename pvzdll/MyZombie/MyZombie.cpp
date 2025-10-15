@@ -5,14 +5,14 @@ namespace ZombieAbility
 {
 	ZombiePTR pt_factory[] =
 	{
-		new Zombie(), new FlagZombie(), new BaseZombie(), new PoleVaulter(), new BucketHeadZombie(),
-		new NewspaperZombie(), new ScreenDoorZombie(), new BaseZombie(), new DancingZombie(), new BaseZombie(),
-		new BaseZombie(), new SnorkedZombie(), new Zomboni(),    new BaseZombie(), new DolphinRiderZombie(),
-		new ClownZombie(), new BalloonZombie(), new DiggerZombie(), new PogoZombie(), new BaseZombie(),
-		new BungeeZombie(), new BaseZombie(), new CatapultZombie(), new Gargantuar(), new BaseZombie(),
+		new Zombie(),			new FlagZombie(),			new BaseZombie(),		new PoleVaulter(),			new BucketHeadZombie(),
+		new NewspaperZombie(),	new ScreenDoorZombie(),		new BaseZombie(),		new DancingZombie(),		new BaseZombie(),
+		new BaseZombie(),		new SnorkedZombie(),		new Zomboni(),			new ZombieBobsledTeam(),	new DolphinRiderZombie(),
+		new ClownZombie(),		new BalloonZombie(),		new DiggerZombie(),		new PogoZombie(),			new BaseZombie(),
+		new BungeeZombie(),		new BaseZombie(),			new CatapultZombie(),	new Gargantuar(),			new BaseZombie(),
 
-		new BaseZombie(), new PeaZombie(),  new WallNutZombie(), new JalapenoZombie(), new BaseZombie(),
-		new SquashZombie(), new TallNutZombie(), new GigaGargantuar()
+		new BaseZombie(),		new PeaZombie(),			new WallNutZombie(),	new JalapenoZombie(),		new BaseZombie(),
+		new SquashZombie(),		new TallNutZombie(),		new GigaGargantuar()
 	};
 }
 
@@ -171,6 +171,16 @@ void MyZombie::ZombieCatapultFire(int targetaddr)
 		.mov_reg_imm(REG_EAX, targetaddr)
 		.mov_reg_imm(REG_ECX, this->GetBaseAddress())
 		.invoke(0x525730)
+		.ret()
+	);
+}
+
+int MyZombie::GetBobsledPosition()
+{
+	return PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_ECX,this->GetBaseAddress())
+		.invoke(0x5346A0)
+		.mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
 		.ret()
 	);
 }

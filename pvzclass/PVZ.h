@@ -530,8 +530,8 @@ namespace PVZ
 		T_PROPERTY(FLOAT, XScale, __get_XScale, __set_XScale, 0x24);
 		T_PROPERTY(FLOAT, XSlant, __get_XSlant, __set_XSlant, 0x28);
 		T_PROPERTY(FLOAT, XOffset, __get_XOffset, __set_XOffset, 0x2C);
-		T_PROPERTY(FLOAT, YScale, __get_YScale, __set_YScale, 0x30);
-		T_PROPERTY(FLOAT, YSlant, __get_YSlant, __set_YSlant, 0x34);
+		T_PROPERTY(FLOAT, YSlant, __get_YScale, __set_YScale, 0x30);
+		T_PROPERTY(FLOAT, YScale, __get_YSlant, __set_YSlant, 0x34);
 		T_PROPERTY(FLOAT, YOffset, __get_YOffset, __set_YOffset, 0x38);
 		/// @brief 获取该动画的颜色重载。
 		/// @return 颜色

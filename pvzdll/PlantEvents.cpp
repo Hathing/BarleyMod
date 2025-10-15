@@ -22,6 +22,9 @@ void onPlantInitAfter(MyPlant plant)
 	plant.SubIndex = 0;
 	plant.BarleyCounter = 0;
 	plant.FertilizedCounter = 0;
+	plant.BodySize = 1.0f;
+	plant.BodySizeCountdown = 0;
+	plant.HpDisplayCounter = 0;
 
 	auto model = plant.GetAnimationPart1();
 	if (model.isValid())
@@ -57,6 +60,19 @@ void onPlantInitAfter(MyPlant plant)
 
 bool onPlantUpdateAbility(MyPlant plant)
 {
+	//更新体型
+	if (plant.BodySizeCountdown > 0)
+	{
+		plant.BodySizeCountdown -= 1;
+		plant.BodySize += 0.01f;
+	}
+	else if (plant.BodySizeCountdown < 0)
+	{
+		plant.BodySizeCountdown += 1;
+		if (plant.BodySize > 0.01f)
+			plant.BodySize -= 0.01f;
+	}
+
 	auto tmp = PlantAbility::GetAbility(plant.Type)->TickAbility(plant);
 	if (plant.FromBarley)
 	{
@@ -81,10 +97,13 @@ void onPlantDamageZombie(PZDamageEvent* info)
 {
 	if(info->type != PVZEvent::PLANTDAMAGETYPE_CUSTOM)
 		PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
-	if (info->type == PVZEvent::PLANTDAMAGETYPE_AOE && info->plant.Type != SeedType::Squash)
+	//伤害来源标记
+	if (info->zombie.NotDying)
 	{
-		if (info->zombie.NotDying)
+		if (info->plant.Type != SeedType::Squash)
+		{
 			info->zombie.LastDamageSourceID = info->plant.GetOwner().Id;
+		}
 	}
 }
 
@@ -111,6 +130,25 @@ bool onPlantUpdateColor(MyPlant plant, PVZ::Animation anim)
 	return true;
 }
 
+void onPlantDrawBodySize(MyPlant plant, PVZ::Animation anim)
+{
+	float bodysize = plant.BodySize;
+	anim.XOffset -= (bodysize - 1.0f) * plant.Width * 0.5f;
+	anim.YOffset -= (bodysize - 1.0f) * plant.Height;
+	anim.XScale *= bodysize;
+	anim.YScale *= bodysize;
+}
+
+float onPlantDrawBodyStretchRectify(MyPlant plant)
+{
+	return plant.BodySize * 80.0f;
+}
+
+float onPlantDrawShadowSize(MyPlant plant,float original_size)
+{
+	return original_size * plant.BodySize;
+}
+
 int onStarFruitFindTarget(MyPlant plant, MyZombie zombie)
 {
 	return plant.Row == zombie.Row ? 1 : 0;
@@ -120,8 +158,6 @@ bool onPlantUpdateShooter(MyPlant plant)
 {
 	if (plant.Type == SeedType::Cactus && plant.ShootOrProductCountdown == 50)
 		plant.FindTargetAndFire(plant.Row, plant.State == PlantState::CACTUS_SHORT_IDLE ? 1 : 0);
-	if (plant.Type == SeedType::Puffshroom && plant.ShootOrProductCountdown == 50)
-		plant.FindTargetAndFire(plant.Row, 0);
 	if (plant.Type == SeedType::Threepeater && (plant.ShootOrProductCountdown == 35))
 		plant.LaunchThreepeater();
 	return PlantAbility::GetAbility(plant.Type)->onUpdateShooter(plant);
@@ -362,7 +398,7 @@ void onMagnetShroomClearItem(MyPlant plant)
 
 bool onThreepeaterLaunch(MyPlant plant)
 {
-	static const int probability[6] = { 0.01f,0.02f,0.02f,0.03f,0.03f,0.03f };
+	static const float probability[6] = { 0.01f,0.02f,0.02f,0.03f,0.03f,0.03f };
 	if (plant.AnotherCounter <= 0 && plant.ShootOrProductCountdown > 0 && Creator::RandFloat(1.0f) < probability[plant.Level])
 	{
 		int ultra_count = 1;
@@ -454,6 +490,13 @@ int onPlantReload(MyPlant plant, int shoot_cd)
 	case SeedType::SplitPea:
 		plant.FindTargetCount = 0;
 		break;
+	case SeedType::Puffshroom:
+	{
+		if (plant.Level == 5 && plant.PuffShroomSizeCount < 0)
+		{
+			return shoot_cd + plant.PuffShroomSizeCount * 14;//初始200，最低60-14=46
+		}
+	}
 	default:
 		break;
 	}
@@ -488,6 +531,9 @@ void InitPlantEvents()
 	// 植物绘制与动画相关
 	PVZEvent::PlantSpecialAnimateEvent((int)onPlantSpecialAnimate);
 	PVZEvent::PlantUpdateColorEvent((int)onPlantUpdateColor);
+	PVZEvent::PlantDrawBodySizeEvent((int)onPlantDrawBodySize);
+	PVZEvent::PlantDrawShadowSizeEvent((int)onPlantDrawShadowSize);
+	PVZEvent::PlantDrawBodyStretchRectifyEvent((int)onPlantDrawBodyStretchRectify);
 
 	// 植物攻击相关
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
@@ -529,7 +575,7 @@ void InitPlantEvents()
 	PVZEvent::ScardyShroomGrowEvent((int)onScaredyShroomGrow);
 	PVZEvent::ScardyShroomJudgeZombieNearEvent((int)onScaredyShroomJudgeZombieNear);
 
-  PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
+	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
 	//磁力菇只访问+C8 ~ +D8
 	PVZ::Memory::WriteMemory<int>(0x461DA6, 1);

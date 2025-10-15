@@ -62,18 +62,34 @@ public:
 	INT_PROPERTY(RepeaterNextProjType, __get_RepeaterNextProjType, __set_RepeaterNextProjType, 0x0E0);
 	/// @brief 双发记录自身发射过的子弹种类
 	INT_PROPERTY(ReapeaterRecord, __get_ReapeaterRecord, __set_ReapeaterRecord, 0x0E4); 
+	/// @brief 小喷菇发射孢子的序列记录
+	T_PROPERTY(byte, PuffShroomRecord, __get_PuffShroomRecord, __set_PuffShroomRecord, 0x0E0);
+	/// @brief 小喷菇的大小计数，范围为-10~10
+	INT_PROPERTY(PuffShroomSizeCount, __get_PuffShroomSizeCount, __set_PuffShroomSizeCount, 0x0E4);
+	/// @brief 海蘑菇分身的上一个海蘑菇ID，0表示本体
+	INT_PROPERTY(SeaShroomPreviousID, __get_SeaShroomPreviousID, __set_SeaShroomPreviousID, 0x0E0);
+	/// @brief 海蘑菇分身的下一个海蘑菇ID，0表示是最后一株海蘑菇
+	INT_PROPERTY(SeaShroomNextID, __get_SeaShroomNextID, __set_SeaShroomNextID, 0x0E4);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
+	/// @brief 当前体型值
+	T_PROPERTY(float, BodySize, __get_BodySize, __BodySize, 0xF4);
+	/// @brief 体型变化动画倒计时
+	INT_PROPERTY(BodySizeCountdown, __get_BodySizeCountdown, __set_BodySizeCountdown, 0xF8);
+	/// @brief 植物血条显示倒计时
+	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0xFC);
 	/// @brief 减速效果倒计时
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
 	/// @brief 胆小菇击杀次数
 	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
 	/// @brief 是否启用彩蛋皮
 	T_PROPERTY(mybool, EasterSkin, __get_EaS, __set_EaS, 0x10C);
+
 	/// @brief 海蘑菇子编号
 	T_PROPERTY(byte, SubIndex, __get_SuI, __set_SuI, 0x10D);
 	/// @brief 植物的所有者的 ID
 	INT_PROPERTY(OwnerID, __get_SpO, __set_SpO, 0x110);
+
 	/// @brief 当前经验值
 	INT_PROPERTY(Experience, __get_XP, __set_XP, 0x114);
 	/// @brief 当前等级
@@ -84,8 +100,8 @@ public:
 	INT_PROPERTY(BarleyCounter, __get_BaC, __set_BaC, 0x120);
 	/// @brief 肥料倒计时
 	INT_PROPERTY(FertilizedCounter, __get_FertilizedCounter, __set_FertilizedCounter, 0x124);
-	/// @brief 植物血条显示倒计时
-	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0x130);
+	/// @brief 植物伸缩倒计时，原版蘑菇苏醒倒计时
+	INT_PROPERTY(StretchCounter, __get_StretchCounter, __set_StretchCounter, 0x130);
 	/// @brief 是否在 Board 上
 	T_PROPERTY(mybool, OnBoard, __get_OnB, __set_OnB, 0x144);
 	/// @brief 投篮车索敌标记
@@ -151,6 +167,9 @@ public:
 	/// @brief 所有植物通用的初始化标记一个子弹的属性
 	/// @param proj 子弹
 	void InitAddProjectile(MyProjectile proj);
+	/// @brief 植物根据参数time设置体型增大或缩小，每1cs变化1%的体型。会处理剩余时间和伸缩动画。
+	/// @param time 正数表示增大，负数表示缩小
+	void SetBodySizeChange(int time);
 
 	/// @brief 植物受到伤害，封装了各种事件。
 	/// @param source 伤害来源

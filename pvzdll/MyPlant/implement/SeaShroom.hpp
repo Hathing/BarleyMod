@@ -5,6 +5,9 @@ namespace PlantAbility
 {
 	class SeaShroom : public BasePlant
 	{
+		inline static const int summon_cooldown[6] = { 500, 500, 300, 300, 100, 100 };
+		inline static const int summon_limit[6] = { 1, 2, 2, 3, 3, 3 };
+
 		void TransferInfo(MyPlant primary, MyPlant secondary)
 		{
 			secondary.AnotherCounter = primary.AnotherCounter;
@@ -15,6 +18,14 @@ namespace PlantAbility
 			secondary.OwnerID = 0;
 		}
 
+		void onCreated(MyPlant plant)
+		{
+			plant.ShootOrProductInterval = 200;
+			//plant.AnotherCounter = 1000 + Creator::Rand(1000);
+			plant.AnotherCounter = 100;
+			plant.SubIndex = 0;
+		}
+
 		bool OverwritePlantAttackRect(MyPlant plant, bool secondary, PVZ::Rect* rect)
 		{
 			rect->X = plant.ImageX + 60;
@@ -23,6 +34,7 @@ namespace PlantAbility
 			rect->Height = plant.Height;
 			return true;
 		}
+		/*
 		bool TickAbility(MyPlant plant)
 		{
 			static const int cooldown[6] = {12000, 12000, 9000, 9000, 6000, 6000};
@@ -115,6 +127,83 @@ namespace PlantAbility
 
 			return false;
 		}
+		*/
+		bool TickAbility(MyPlant plant)
+		{
+			static const int x_delta[5] = { 0, 24, -14, -26, 18 };
+			static const int y_delta[5] = { 0, -12, -21, 14, 12 };
+			static const int layer_delta[5] = { 0, -24, -36, 10, 10 };
+
+			if (plant.OnBoard && plant.IsPrime())
+			{
+				plant.AnotherCounter--;
+				if (plant.AnotherCounter <= 0)
+				{
+					auto tail_plant = plant;
+					while (tail_plant.SeaShroomNextID != 0)
+					{
+						tail_plant = MyPlant::GetByID(tail_plant.SeaShroomNextID);
+					}
+					if (tail_plant.SubIndex < summon_limit[plant.Level])
+					{
+						plant.AnotherCounter = summon_cooldown[plant.Level];
+						//创建新植物
+						MyPlant newcreep = Creator::CreatePlant(SeedType::Seashroom, plant.Row, plant.Column);
+						newcreep.Experience = plant.Experience;
+						newcreep.Level = plant.Level;
+						newcreep.SetOwner(plant);
+						//链表尾插
+						tail_plant.SeaShroomNextID = newcreep.Id;
+						newcreep.SeaShroomPreviousID = tail_plant.Id;
+						//赋值index
+						int idx = tail_plant.SubIndex + 1;
+						newcreep.ImageX += x_delta[idx];
+						newcreep.ImageY += y_delta[idx];
+						newcreep.Layer += layer_delta[idx];
+						newcreep.SubIndex = idx;
+					}
+					else
+					{
+						plant.AnotherCounter = 100;
+					}
+
+				}
+			}
+			return false;
+		}
+		void onDie(MyPlant plant)
+		{
+			bool is_prime = plant.IsPrime();
+			if (plant.SeaShroomPreviousID != 0)
+			{
+				MyPlant::GetByID(plant.SeaShroomPreviousID).SeaShroomNextID = plant.SeaShroomNextID;
+			}
+			if (plant.SeaShroomNextID != 0)
+			{
+				auto next_plant = MyPlant::GetByID(plant.SeaShroomNextID);
+				next_plant.SeaShroomPreviousID = plant.SeaShroomPreviousID;
+				next_plant.SubIndex -= 1;
+
+				int id = next_plant.Id;
+				if (is_prime)
+					next_plant.OwnerID = 0;
+				while (next_plant.SeaShroomNextID != 0)
+				{
+					next_plant = MyPlant::GetByID(next_plant.SeaShroomNextID);
+					next_plant.SubIndex -= 1;
+					if (is_prime)
+						next_plant.OwnerID = id;
+				}
+			}
+		}
+		void onGainXP(MyPlant plant, int val, bool kill_credit)
+		{
+			if (plant.SeaShroomNextID != 0)
+			{
+				MyPlant::GetByID(plant.SeaShroomNextID).AddExperience(val);
+			}
+		}
+		/*
 		void onDie(MyPlant plant)
 		{
 			if (plant.OnBoard && !plant.OwnerID)
@@ -152,6 +241,8 @@ namespace PlantAbility
 				}
 			}
 		}
+		*/
+		/*
 		void onGainXP(MyPlant plant, int val, bool kill_credit)
 		{
 			if (plant.IsPrime())
@@ -174,5 +265,6 @@ namespace PlantAbility
 			}
 			return;
 		}
+		*/
 	};
 }
