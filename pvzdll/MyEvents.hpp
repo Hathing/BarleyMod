@@ -373,6 +373,72 @@ namespace PVZEvent
 		TangleKelpTargetAfterEvent() : TangleKelpTargetAfterEvent("onTangleKelpTargetAfter") {};
 	};
 
+	/// @brief 倭瓜落地后事件，发生在设置状态与+54之后
+	/// @param 触发事件的倭瓜
+	/// @return False则跳过屏幕震动
+	class SquashFallOnGroundEvent : public BoolDLLEventTemplate<0x460D25, 10, 0x460D43, REG_ESI>
+	{
+	public:
+		SquashFallOnGroundEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		SquashFallOnGroundEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		SquashFallOnGroundEvent() : SquashFallOnGroundEvent("onSquashFallOnGround") {};
+	};
+
+	/// @brief 倭瓜起点X修改的事件
+	/// @param 触发事件的倭瓜
+	/// @return 修改后起点的X位置，负数则保留原版
+	class SquashJumpStartPositionXEvent : public DLLEventTemplate<0x460BEE, 5, REG_ESI>
+	{
+	public:
+		SquashJumpStartPositionXEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		SquashJumpStartPositionXEvent(int address) : DLLEventTemplate() { Init(address); };
+		SquashJumpStartPositionXEvent() : SquashJumpStartPositionXEvent("onSquashJumpStartPositionX") {};
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(4);
+			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX);
+
+			//覆盖掉一处对非禅境花园无用的代码，阻止修改ESI，方便代码使用
+			PVZ::Memory::WriteMemory<int>(0x00460BDC, 0x441F0F66);
+		}
+	};
+
+	/// @brief 倭瓜IDLE状态尝试索敌的事件
+	/// @param 触发事件的倭瓜
+	/// @return True则进行原版索敌，False则直接RET
+	class SquashFindJumpTargetEvent : public DLLEventTemplate<0x4609EA, 6, REG_ESI>
+	{
+	public:
+		SquashFindJumpTargetEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		SquashFindJumpTargetEvent(int address) : DLLEventTemplate() { Init(address); };
+		SquashFindJumpTargetEvent() : SquashFindJumpTargetEvent("onSquashFindJumpTarget") {};
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x460DC2).ret();
+			builder.popad().push_reg(REG_ESI).invoke(0x4607E0).push_imm32(0x4609F0).ret();
+		}
+	};
+
+	/// @brief 倭瓜IDLE状态索敌之后设置准备状态的事件
+	/// @param 触发事件的倭瓜
+	/// @return True则使用原版状态设置，False则直接RET（跳过+3C和+54设置、look动画和音效播放）
+	class SquashSetJumpStateEvent : public DLLEventTemplate<0x460A33, 7, REG_ESI>
+	{
+	public:
+		SquashSetJumpStateEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		SquashSetJumpStateEvent(int address) : DLLEventTemplate() { Init(address); };
+		SquashSetJumpStateEvent() : SquashSetJumpStateEvent("onSquashSetJumpState") {};
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(10).popad().add_reg_imm(REG_ESP, 4).push_imm32(0x460DC2).ret();
+			//索敌失败不是直接RET，而是跳过获取目标僵尸的坐标，这种情况下自身+80=[自身+10]/2
+			PVZ::Memory::WriteMemory<int>(0x4609F4, 0x0000001C);
+		}
+	};
+
 	/// @brief 胆小菇下蹲瞬间事件
 	/// @param 胆小菇
 	/// @return False则不会蹲下

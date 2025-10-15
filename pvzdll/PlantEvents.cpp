@@ -144,6 +144,13 @@ float onPlantDrawBodyStretchRectify(MyPlant plant)
 	return plant.BodySize * 80.0f;
 }
 
+bool onPlantStartBlink(MyPlant plant)
+{
+	if (plant.Type == SeedType::Squash)
+		return false;
+	return true;
+}
+
 float onPlantDrawShadowSize(MyPlant plant,float original_size)
 {
 	return original_size * plant.BodySize;
@@ -522,6 +529,58 @@ bool onScaredyShroomJudgeZombieNear(MyPlant plant, bool IsZombieNear)
 	return IsZombieNear;
 }
 
+static const int squash_jump_time[6] = { 4,4,6,6,8,8 };
+bool onSquashFallOnGround(MyPlant plant)
+{
+	//重置状态
+	plant.State = PlantState::IDLE;
+	plant.mTargetZombieID = 0;
+	plant.PlayIdleAnim(12.0f);
+	
+	//设置跳跃次数
+	plant.SquashJumpCount -= 1;
+	if (plant.SquashJumpCount < 0)
+		plant.SquashJumpCount = squash_jump_time[plant.Level];
+
+	//设置CD
+	if (plant.SquashJumpCount == 0)
+		plant.AttributeCountdown = 400 + Creator::Rand(201);
+	else
+		plant.AttributeCountdown = 10;
+
+	return true;
+}
+
+int onSquashJumpStartPositionX(MyPlant plant)
+{
+	return plant.ImageX;
+}
+
+bool onSquashFindJumpTarget(MyPlant plant)
+{
+	if (plant.AttributeCountdown == 0)
+		return true;
+	return false;
+}
+
+bool onSquashSetJumpState(MyPlant plant)
+{
+	//索敌失败
+	if (plant.mTargetZombieID == 0)
+		plant.mTargetX = plant.ImageX + 80;//向前跳1格
+
+	if (plant.SquashJumpCount == 0)
+		return true;
+
+	plant.State = PlantState::SQUASH_LOOK;
+	plant.AttributeCountdown = 1;
+
+	if (plant.SquashJumpCount == 1)
+		plant.mTargetX = plant.SquashBirthX;
+
+	return false;
+}
+
 void InitPlantEvents()
 {
 	// 植物初始化与销毁相关
@@ -534,6 +593,7 @@ void InitPlantEvents()
 	PVZEvent::PlantDrawBodySizeEvent((int)onPlantDrawBodySize);
 	PVZEvent::PlantDrawShadowSizeEvent((int)onPlantDrawShadowSize);
 	PVZEvent::PlantDrawBodyStretchRectifyEvent((int)onPlantDrawBodyStretchRectify);
+	//PVZEvent::PlantStartBlinkEvent((int)onPlantStartBlink);
 
 	// 植物攻击相关
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
@@ -574,6 +634,11 @@ void InitPlantEvents()
 	PVZEvent::ScardyShroomScaredEvent((int)onScaredyShroomScared);
 	PVZEvent::ScardyShroomGrowEvent((int)onScaredyShroomGrow);
 	PVZEvent::ScardyShroomJudgeZombieNearEvent((int)onScaredyShroomJudgeZombieNear);
+	// 倭瓜
+	PVZEvent::SquashFallOnGroundEvent((int)onSquashFallOnGround);
+	PVZEvent::SquashJumpStartPositionXEvent((int)onSquashJumpStartPositionX);
+	PVZEvent::SquashFindJumpTargetEvent((int)onSquashFindJumpTarget);
+	PVZEvent::SquashSetJumpStateEvent((int)onSquashSetJumpState);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
@@ -587,6 +652,10 @@ void InitPlantEvents()
 	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
 	//水草可以拉陆地僵尸
 	PVZ::Memory::WriteMemory<byte>(0x4677A6, 0xEB);
+	//倭瓜不会二次索敌
+	PVZ::Memory::WriteMemory<byte>(0x460B15, 0xEB);
+	//倭瓜伤害改为穿透盾牌类型
+	PVZ::Memory::WriteMemory<int>(0x4607AE, 2);
 	//植物不再会根据更新+130调用SetSleeping
 	PVZ::Memory::WriteMemory<byte>(0x46320C, 0xEB);
 }

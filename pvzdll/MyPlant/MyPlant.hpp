@@ -70,6 +70,10 @@ public:
 	INT_PROPERTY(SeaShroomPreviousID, __get_SeaShroomPreviousID, __set_SeaShroomPreviousID, 0x0E0);
 	/// @brief 海蘑菇分身的下一个海蘑菇ID，0表示是最后一株海蘑菇
 	INT_PROPERTY(SeaShroomNextID, __get_SeaShroomNextID, __set_SeaShroomNextID, 0x0E4);
+	/// @brief 倭瓜跳跃次数
+	INT_PROPERTY(SquashJumpCount, __get_SquashJumpCount, __set_SquashJumpCount, 0x0E0);
+	/// @brief 倭瓜出生点X记录
+	INT_PROPERTY(SquashBirthX, __get_SquashBirthX, __set_SquashBirthX, 0x0E4);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 当前体型值
