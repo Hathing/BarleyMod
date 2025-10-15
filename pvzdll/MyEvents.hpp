@@ -1384,4 +1384,15 @@ namespace PVZEvent
 		ZombieRemoveIceTrapEvent(int address) : DLLEventTemplate() { Init(address); };
 		ZombieRemoveIceTrapEvent() : DLLEventTemplate() { Init("onZombieRemoveIceTrap"); };
 	};
+
+	/// @brief 原版僵尸跳过啃咬伤害诸如灰烬植物的事件
+	/// @param 触发事件的僵尸、被啃植物
+	/// @return 正数则会被僵尸啃咬，零则不会被僵尸啃咬，负数使用原版判断
+	class ZombieSkipEatPlantEvent : public ThreeStateEventTemplate<0x52FBF1, 6, 0x52FC7B, 0x52FDEE, REG_ESI, REG_EBP>
+	{
+	public:
+		ZombieSkipEatPlantEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		ZombieSkipEatPlantEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+		ZombieSkipEatPlantEvent() : ThreeStateEventTemplate() { Init("onZombieSkipEatPlant"); };
+	};
 };

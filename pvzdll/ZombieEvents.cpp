@@ -78,6 +78,20 @@ int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::Game
 	return damage;
 }
 
+ThreeState::ThreeState onZombieSkipEatPlant(MyZombie zombie, MyPlant plant)
+{
+	switch (plant.Type)
+	{
+	case SeedType::Iceshroom:
+	case SeedType::Blover:
+	case SeedType::Squash:
+		return ThreeState::Enable;
+	default:
+		break;
+	}
+	return ThreeState::None;
+}
+
 bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, MyPlant plant)
 {
 	auto zombietype = zombie.Type;
@@ -713,6 +727,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
 	ZombieEatSoundEvent((int)onZombieEatSound);
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
+	PVZEvent::ZombieSkipEatPlantEvent((int)onZombieSkipEatPlant);
 
 	// 僵尸受击相关
 	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);
