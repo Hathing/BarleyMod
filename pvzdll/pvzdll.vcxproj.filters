@@ -306,9 +306,12 @@
     <ClInclude Include="MyProjectile\implement\ZombiePea.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-	<ClInclude Include="MyZombie\implement\ZombieBobsledTeam.hpp">
-		<Filter>头文件</Filter>
-	</ClInclude>
+    <ClInclude Include="MyZombie\implement\ZombieBobsledTeam.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyZombie\implement\FootballZombie.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

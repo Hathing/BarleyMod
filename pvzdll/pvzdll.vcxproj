@@ -168,6 +168,7 @@
     <ClInclude Include="MyZombie\implement\DiggerZombie.hpp" />
     <ClInclude Include="MyZombie\implement\DolphinRiderZombie.hpp" />
     <ClInclude Include="MyZombie\implement\FlagZombie.hpp" />
+    <ClInclude Include="MyZombie\implement\FootballZombie.hpp" />
     <ClInclude Include="MyZombie\implement\Gargantuar.hpp" />
     <ClInclude Include="MyZombie\implement\Index.hpp" />
     <ClInclude Include="MyZombie\implement\JalapenoZombie.hpp" />
@@ -183,7 +184,7 @@
     <ClInclude Include="MyZombie\implement\Zombie.hpp" />
     <ClInclude Include="MyZombie\implement\Zomboni.hpp" />
     <ClInclude Include="MyZombie\implement\ClownZombie.hpp" />
-	<ClInclude Include="MyZombie\implement\ZombieBobsledTeam.hpp" />
+    <ClInclude Include="MyZombie\implement\ZombieBobsledTeam.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />
     <ClInclude Include="MyZombie\ZombieAbility.hpp" />
     <ClInclude Include="pch.h" />

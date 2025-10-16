@@ -6,6 +6,7 @@
 #include "BucketHeadZombie.hpp"
 #include "NewspaperZombie.hpp"
 #include "ScreendoorZombie.hpp"
+#include "FootballZombie.hpp"
 #include "DancingZombie.hpp"
 #include "SnorkedZombie.hpp"
 #include "Zomboni.hpp"
