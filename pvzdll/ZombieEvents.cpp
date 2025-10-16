@@ -388,6 +388,8 @@ int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 		return 0;
 	if (zombie.State == ZombieState::DIGGER_WALK_RIGHT && zombie.X < 130)
 		return 0;
+	if (zombie.Type == ZombieType::TallnutZombie)
+		return 0;
 	return -1;
 }
 
