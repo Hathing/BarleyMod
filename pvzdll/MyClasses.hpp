@@ -7,6 +7,7 @@
 typedef PVZEvent::PlantDamageZombieEvent::PZDamageInfo<MyPlant, MyZombie> PZDamageEvent;
 
 void onPlantDamageZombie(PZDamageEvent* info);
+int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
 
 namespace PVZ
 {
@@ -39,7 +40,10 @@ namespace PVZ
 			return T(INVALID_BASEADDRESS);
 	}
 
+	/// @brief 植物对僵尸造成伤害
 	void ApplyPZDamage(MyPlant plant, MyZombie zombie, int damage, PVZ::DamageFlags flags = PVZ::DAMAGEF_NONE);
+	/// @brief 僵尸对植物造成伤害
+	void ApplyZPDamage(MyZombie zombie, MyPlant plant, int damage);
 
 	class ZombieDrawPosition
 	{

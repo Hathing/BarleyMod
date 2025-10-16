@@ -75,6 +75,7 @@ void onZombieInitAfter(MyZombie zombie)
 
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
 {
+	plant.HpDisplayCounter = 100;
 	return damage;
 }
 
@@ -86,6 +87,8 @@ ThreeState::ThreeState onZombieSkipEatPlant(MyZombie zombie, MyPlant plant)
 	case SeedType::Blover:
 	case SeedType::Squash:
 		return ThreeState::Enable;
+	case SeedType::Garlic:
+		return ThreeState::Disable;
 	default:
 		break;
 	}
@@ -320,6 +323,13 @@ bool onZombieEatSound(MyZombie zombie, MyPlant plant)
 {
 	if (zombie.Hypnotized)
 		return false;
+
+	if (plant.Type == SeedType::Garlic)
+	{
+		//啃一口掉50血
+		PVZ::ApplyZPDamage(zombie,plant,50);
+	}
+
 	return true;
 }
 

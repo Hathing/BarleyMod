@@ -423,8 +423,7 @@ bool onThreepeaterLaunch(MyPlant plant)
 
 bool onHypnoShroomEaten(MyPlant plant, MyZombie zombie)
 {
-	plant.Hp -= 100;
-	plant.HpDisplayCounter = 100;
+	PVZ::ApplyZPDamage(zombie, plant, 100);
 	return false;
 }
 
