@@ -184,6 +184,7 @@
     <ClInclude Include="MyZombie\implement\TallNutZombie.hpp" />
     <ClInclude Include="MyZombie\implement\WallNutZombie.hpp" />
     <ClInclude Include="MyZombie\implement\Zombie.hpp" />
+    <ClInclude Include="MyZombie\implement\ZombieYeti.hpp" />
     <ClInclude Include="MyZombie\implement\Zomboni.hpp" />
     <ClInclude Include="MyZombie\implement\ClownZombie.hpp" />
     <ClInclude Include="MyZombie\implement\ZombieBobsledTeam.hpp" />

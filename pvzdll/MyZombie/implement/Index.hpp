@@ -15,6 +15,7 @@
 #include "BalloonZombie.hpp"
 #include "DiggerZombie.hpp"
 #include "PogoZombie.hpp"
+#include "ZombieYeti.hpp"
 #include "BungeeZombie.hpp"
 #include "CatapultZombie.hpp"
 #include "Gargantuar.hpp"
