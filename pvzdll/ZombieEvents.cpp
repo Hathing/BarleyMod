@@ -675,6 +675,8 @@ ThreeState::ThreeState IsZombieCanBeChilled(MyZombie zombie)
 	case ZombieType::PogoZombie:
 	case ZombieType::ZombieYeti:
 		return ThreeState::Disable;
+	case ZombieType::FootballZombie:
+		return zombie.FromWave == WAVE_ELITE1 ? ThreeState::Disable : ThreeState::None;
 	default:
 		return ThreeState::None;
 	}
