@@ -73,6 +73,11 @@ void onZombieInitAfter(MyZombie zombie)
 	ZombieAbility::GetAbility(zombie.Type)->onCreated(zombie);
 }
 
+AnimationType::AnimationType GetZombieReanimType(MyZombie zombie, AnimationType::AnimationType type)
+{
+	return ZombieAbility::GetAbility(zombie.Type)->GetReanimType(zombie, type);
+}
+
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
 {
 	return damage;
@@ -700,6 +705,7 @@ void InitZombieEvents()
 {
 	// 僵尸初始化相关
 	ZombieInitAfterEvent((int)onZombieInitAfter);
+	PVZEvent::ZombieGetReanimTypeEvent((int)GetZombieReanimType);
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 
 	// 僵尸绘制相关

@@ -26,6 +26,14 @@ namespace ZombieAbility
 		{
 			return false;
 		}
+		/// @brief 重载僵尸初始化动画时的动画类型
+		/// @param zombie 僵尸
+		/// @param type 默认动画类型
+		/// @return 重载后的动画类型
+		virtual AnimationType::AnimationType GetReanimType(MyZombie zombie, AnimationType::AnimationType type)
+		{
+			return type;
+		}
 	};
 	typedef BaseZombie* ZombiePTR;
 	ZombiePTR GetAbility(ZombieType::ZombieType type);
