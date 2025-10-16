@@ -2,6 +2,7 @@
 #include "../ZombieAbility.hpp"
 #include "Zombie.hpp"
 #include "FlagZombie.hpp"
+#include "RandomZombie.hpp"
 #include "PoleVaulter.hpp"
 #include "BucketHeadZombie.hpp"
 #include "NewspaperZombie.hpp"
