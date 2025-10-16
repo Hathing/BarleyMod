@@ -45,5 +45,6 @@
 #include "ThymeWarp.hpp"
 #include "PeaShooter.hpp"
 #include "GatlingPea.hpp"
+#include "PotatoMine.hpp"
 
 #include "SpecialPlants.hpp"

@@ -100,10 +100,7 @@ void onPlantDamageZombie(PZDamageEvent* info)
 	//伤害来源标记
 	if (info->zombie.NotDying)
 	{
-		if (info->plant.Type != SeedType::Squash)
-		{
-			info->zombie.LastDamageSourceID = info->plant.GetOwner().Id;
-		}
+		info->zombie.LastDamageSourceID = info->plant.GetOwner().Id;
 	}
 }
 
@@ -580,6 +577,34 @@ bool onSquashSetJumpState(MyPlant plant)
 	return false;
 }
 
+bool onPotatoDieFromExplosion(MyPlant plant)
+{
+	if (plant.Type == SeedType::PotatoMine)
+	{
+		plant.AttributeCountdown = 50;
+		plant.State = PlantState::IDLE;
+		plant.PlayIdleAnim(12.0f);
+		return false;
+	}
+	return true;
+}
+
+bool onPotatoExplode(MyPlant plant)
+{
+	auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
+	PVZ::Rect attack_rect;
+	plant.GetPlantAttackRect(0, attack_rect);
+	for (auto& zombie : zombies)
+	{
+		if (zombie.Row == plant.Row && zombie.EffectedBy(PVZ::DRF_GROUND || PVZ::DRF_UNDERGROUND || PVZ::DRF_SUBMERGED || PVZ::DRF_OFF_GROUND || PVZ::DRF_DYING))
+		{
+			if (zombie.X + zombie.Width > attack_rect.X && zombie.X < attack_rect.X + attack_rect.Width)
+				PVZ::ApplyPZDamage(plant, zombie, 1800, PVZ::DAMAGEF_HITS_SHIELD_AND_BODY);
+		}
+	}
+	return false;
+}
+
 void InitPlantEvents()
 {
 	// 植物初始化与销毁相关
@@ -638,6 +663,9 @@ void InitPlantEvents()
 	PVZEvent::SquashJumpStartPositionXEvent((int)onSquashJumpStartPositionX);
 	PVZEvent::SquashFindJumpTargetEvent((int)onSquashFindJumpTarget);
 	PVZEvent::SquashSetJumpStateEvent((int)onSquashSetJumpState);
+	// 土豆雷
+	PVZEvent::PotatoDieFromExplosionEvent((int)onPotatoDieFromExplosion);
+	PVZEvent::PotatoExplodeEvent((int)onPotatoExplode);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 

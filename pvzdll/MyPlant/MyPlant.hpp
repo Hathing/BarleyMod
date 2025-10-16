@@ -160,11 +160,11 @@ public:
 	bool FindTargetAndFire(int row, int PlantWeapon);
 	/// @brief 植物寻找敌人。
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
-	/// @return 僵尸ID，仅仅用于开火的参数
+	/// @return 僵尸addr，仅仅用于开火的参数
 	int FindTargetZombie(int PlantWeapon);
 	/// @brief 植物开火。PVZClass的Shoot()不知道为什么用了会崩溃，这个函数直接调用原版函数466e00
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
-	/// @param targetid 目标僵尸
+	/// @param targetid 目标僵尸的地址
 	void Fire(int PlantWeapon,int targetid);
 	/// @brief 三线射手调用此函数
 	void LaunchThreepeater();
@@ -174,6 +174,11 @@ public:
 	/// @brief 植物根据参数time设置体型增大或缩小，每1cs变化1%的体型。会处理剩余时间和伸缩动画。
 	/// @param time 正数表示增大，负数表示缩小
 	void SetBodySizeChange(int time);
+	/// @brief 调用原版函数，获取植物的攻击矩形。
+	/// @param PlantWeapon 是否使用副武器
+	/// @param rect 用于存储返回值的Rect
+	void GetPlantAttackRect(int PlantWeapon, PVZ::Rect& rect);
+
 
 	/// @brief 植物受到伤害，封装了各种事件。
 	/// @param source 伤害来源

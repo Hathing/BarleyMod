@@ -7,7 +7,7 @@ namespace PlantAbility
 	PlantAbility::PlantPTR pt_factory[] =
 	{
 		new PeaShooter(), new Barley(),	  new NilPlant(),  new WallNut(),
-		new BasePlant(), new SnowPea(),	  new BasePlant(), new Repeater(),
+		new PotatoMine(), new SnowPea(),	  new BasePlant(), new Repeater(),
 
 		new PuffShroom(), new SunShroom(), new FumeShroom(), new NilPlant(),
 		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NilPlant(),
@@ -306,6 +306,11 @@ void MyPlant::SetBodySizeChange(int time)
 	if (this->StretchCounter <= 0)
 		this->StretchCounter = 70;
 	this->BodySizeCountdown += time;
+}
+
+void MyPlant::GetPlantAttackRect(int PlantWeapon, PVZ::Rect& rect)
+{
+	PVZ::Memory::Execute(AsmBuilder().push_imm32(PlantWeapon).mov_reg_imm(REG_EAX, (unsigned int) & rect).mov_reg_imm(REG_ECX, this->GetBaseAddress()).invoke(0x467F90).ret());
 }
 
 MyPlant MyPlant::GetByID(int id)

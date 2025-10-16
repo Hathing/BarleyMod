@@ -1395,4 +1395,29 @@ namespace PVZEvent
 		ZombieSkipEatPlantEvent(int address) : ThreeStateEventTemplate() { Init(address); };
 		ZombieSkipEatPlantEvent() : ThreeStateEventTemplate() { Init("onZombieSkipEatPlant"); };
 	};
+
+
+	/// @brief 土豆雷爆炸产生伤害事件，原版函数直接调用41D8A0
+	/// @param 土豆雷
+	/// @return 是否结算原版爆炸。
+	class PotatoExplodeEvent : public BoolDLLEventTemplate<0x466A5F, 5, 0x466A6F, REG_EBX>
+	{
+	public:
+		PotatoExplodeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PotatoExplodeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PotatoExplodeEvent() : BoolDLLEventTemplate() { Init("onPotatoExplode"); };
+	};
+
+	/// @brief 土豆雷死亡事件
+	/// @note 这一事件之所以和DyingEvent独立，是因为S7DyingEvent用于亡语触发，而土豆雷爆炸死亡不应当算作亡语
+	/// @param 土豆雷
+	/// @return 是否结算原版爆炸。
+	class PotatoDieFromExplosionEvent : public BoolDLLEventTemplate<0x466AAD, 10, 0x466AD1, REG_EBX>
+	{
+	public:
+		PotatoDieFromExplosionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PotatoDieFromExplosionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PotatoDieFromExplosionEvent() : BoolDLLEventTemplate() { Init("onPotatoDieFromExplosion"); };
+	};
+
 };
