@@ -88,6 +88,7 @@ ThreeState::ThreeState onZombieSkipEatPlant(MyZombie zombie, MyPlant plant)
 	case SeedType::Squash:
 		return ThreeState::Enable;
 	case SeedType::Garlic:
+	case SeedType::PotatoMine:
 		return ThreeState::Disable;
 	default:
 		break;
@@ -324,10 +325,23 @@ bool onZombieEatSound(MyZombie zombie, MyPlant plant)
 	if (zombie.Hypnotized)
 		return false;
 
-	if (plant.Type == SeedType::Garlic)
+	switch (plant.Type)
 	{
-		//啃一口掉50血
-		PVZ::ApplyZPDamage(zombie,plant,50);
+	case SeedType::Garlic:
+		PVZ::ApplyZPDamage(zombie, plant, 50);
+		break;
+	case SeedType::PotatoMine:
+	{
+		if (plant.OwnerID == 0 && plant.State == PlantState::POTATO_ARMED)
+		{
+			PVZ::ApplyZPDamage(zombie, plant, 100);
+			//爆炸
+			PVZ::Memory::Execute(AsmBuilder().push_imm32(plant.GetBaseAddress()).invoke(0x4666A0).ret());
+		}
+	}
+		break;
+	default:
+		break;
 	}
 
 	return true;

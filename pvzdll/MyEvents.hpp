@@ -1420,4 +1420,21 @@ namespace PVZEvent
 		PotatoDieFromExplosionEvent() : BoolDLLEventTemplate() { Init("onPotatoDieFromExplosion"); };
 	};
 
+	/// @brief 土豆雷在成功寻找到敌人后的事件
+	/// @param 土豆雷，目标僵尸
+	/// @return True则爆炸，False则不爆炸
+	class PotatoFindTargetAfterEvent : public DLLEventTemplate<0x460013, 6, REG_EAX, REG_EDI>
+	{
+	public:
+		PotatoFindTargetAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PotatoFindTargetAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		PotatoFindTargetAfterEvent() : PotatoFindTargetAfterEvent("onPotatoFindTargetAfter") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x46001F).ret();
+			builder.popad().push_reg(REG_EDI).invoke(0x4666A0).push_imm32(0x460019).ret();
+		}
+	};
+
 };

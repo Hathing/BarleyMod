@@ -605,6 +605,15 @@ bool onPotatoExplode(MyPlant plant)
 	return false;
 }
 
+bool onPotatoFindTargetAfter(MyPlant plant, MyZombie zombie)
+{
+	if (plant.OwnerID == 0)
+	{
+		return false;
+	}
+	return true;
+}
+
 void InitPlantEvents()
 {
 	// 植物初始化与销毁相关
@@ -666,6 +675,7 @@ void InitPlantEvents()
 	// 土豆雷
 	PVZEvent::PotatoDieFromExplosionEvent((int)onPotatoDieFromExplosion);
 	PVZEvent::PotatoExplodeEvent((int)onPotatoExplode);
+	PVZEvent::PotatoFindTargetAfterEvent((int)onPotatoFindTargetAfter);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 

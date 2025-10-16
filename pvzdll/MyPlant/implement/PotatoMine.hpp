@@ -7,7 +7,7 @@ namespace PlantAbility
 	{
 		void onCreated(MyPlant plant)
 		{
-			plant.AttributeCountdown = 100;
+			plant.AttributeCountdown = 0;
 		}
 		void onUpgrade(MyPlant plant)
 		{
@@ -16,7 +16,14 @@ namespace PlantAbility
 
 		bool TickAbility(MyPlant plant)
 		{
-			if (plant.State == PlantState::POTATO_SPROUT_OUT || plant.State == PlantState::POTATO_ARMED)
+			switch (plant.State)
+			{
+			case PlantState::IDLE:
+			{
+
+			}
+			case PlantState::POTATO_SPROUT_OUT:
+			case PlantState::POTATO_ARMED:
 			{
 				if (plant.Level == 5)
 				{
@@ -36,6 +43,10 @@ namespace PlantAbility
 						}
 					}
 				}
+			}
+			break;
+			default:
+				break;
 			}
 			return true;
 		}
