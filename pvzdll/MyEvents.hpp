@@ -133,7 +133,7 @@ namespace PVZEvent
 			Gatling(const char* str) : DLLEventTemplate() { Init(str); };
 			Gatling(int address) : DLLEventTemplate() { Init(address); };
 		};
-		class PeaHead : public DLLEventTemplate<0x5275B6, 6, REG_EAX, REG_EDI>
+		class PeaHead : public DLLEventTemplate<0x5275AF, 7, REG_EAX, REG_EDI>
 		{
 		public:
 			PeaHead(const char* str) : DLLEventTemplate() { Init(str); };
