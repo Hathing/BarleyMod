@@ -26,5 +26,9 @@ namespace ZombieAbility
 				Creator::CreateZombie(ZombieType::PoleVaultingZombie, zombie.Row, 10).X = zombie.X + 20;
 			}
 		}
+		AnimationType::AnimationType GetReanimType(MyZombie zombie, AnimationType::AnimationType type)
+		{
+			return zombie.FromWave == WAVE_ELITE1 ? (AnimationType::AnimationType)0x91 : type;
+		}
 	};
 }

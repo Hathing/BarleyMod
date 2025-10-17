@@ -46,5 +46,9 @@ namespace ZombieAbility
 				draw_pos->ImageOffsetX += 30.0f;
 			return true;
 		}
+		AnimationType::AnimationType GetReanimType(MyZombie zombie, AnimationType::AnimationType type)
+		{
+			return zombie.FromWave == WAVE_ELITE1 ? (AnimationType::AnimationType)0x0A0 : type;
+		}
 	};
 }

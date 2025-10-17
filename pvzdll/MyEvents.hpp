@@ -1386,6 +1386,52 @@ namespace PVZEvent
 		ZombieRemoveIceTrapEvent() : DLLEventTemplate() { Init("onZombieRemoveIceTrap"); };
 	};
 
+	/// @brief 僵尸初始化时，获取动画类型事件
+	/// @param 触发事件的僵尸，默认动画类型
+	/// @return 重载后的动画类型
+	class ZombieGetReanimTypeEvent : public DLLEventTemplate<0x5227C6, 10, REG_EAX, REG_EDI>
+	{
+	public:
+		ZombieGetReanimTypeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieGetReanimTypeEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieGetReanimTypeEvent() : DLLEventTemplate() { Init("GetZombieReanimType"); };
+	};
+
+	/// @brief 僵尸掉头盔的粒子效果处理事件。
+	/// @param 触发事件的僵尸、触发事件的粒子效果。
+	/// @note 结算时机先于原版的大小重载，但该事件无法将其跳过。
+	class ZombieDropHelmParticleEvent : public DLLEventTemplate<0x530FB3, 6, REG_EAX, REG_EBX>
+	{
+	public:
+		ZombieDropHelmParticleEvent() : DLLEventTemplate() { Init("onZombieDropHelmParticle"); };
+		ZombieDropHelmParticleEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieDropHelmParticleEvent(int address) : DLLEventTemplate() { Init(address); };
+	};
+
+	/// @brief 僵尸掉手的粒子效果处理事件。
+	/// @param 触发事件的僵尸、触发事件的粒子效果。
+	/// @note 结算时机后于原版的大小重载和颜色重载。
+	/// @return 是否使用原版的图片重载处理。
+	class ZombieDropArmParticleEvent : public BoolDLLEventTemplate<0x530FB3, 6, 0x52A452, REG_EDI, REG_EBX>
+	{
+	public:
+		ZombieDropArmParticleEvent() : BoolDLLEventTemplate() { Init("onZombieDropArmParticle"); };
+		ZombieDropArmParticleEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieDropArmParticleEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
+	/// @brief 僵尸头盔受到伤害后，调整头盔外观事件。
+	/// @param 触发事件的僵尸、僵尸的本体动画、僵尸头盔受伤程度的三分数。
+	/// @note 只有三分数发生变化时，该事件才会触发。
+	/// @return 是否使用原版的图片重载处理。
+	class ZombieTakeHelmDamageTextureEvent : public BoolDLLEventTemplate<0x5310F8, 6, 0x53111B, REG_EDI, REG_ECX, REG_EBP>
+	{
+	public:
+		ZombieTakeHelmDamageTextureEvent() : BoolDLLEventTemplate() { Init("onZombieDropArmParticle"); };
+		ZombieTakeHelmDamageTextureEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieTakeHelmDamageTextureEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
 	/// @brief 原版僵尸跳过啃咬伤害诸如灰烬植物的事件
 	/// @param 触发事件的僵尸、被啃植物
 	/// @return 正数则会被僵尸啃咬，零则不会被僵尸啃咬，负数使用原版判断

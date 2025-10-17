@@ -5,11 +5,11 @@ namespace ZombieAbility
 {
 	ZombiePTR pt_factory[] =
 	{
-		new Zombie(),			new FlagZombie(),			new BaseZombie(),		new PoleVaulter(),			new BucketHeadZombie(),
-		new NewspaperZombie(),	new ScreenDoorZombie(),		new BaseZombie(),		new DancingZombie(),		new BaseZombie(),
+		new Zombie(),			new FlagZombie(),			new RandomZombie(),		new PoleVaulter(),			new BucketHeadZombie(),
+		new NewspaperZombie(),	new ScreenDoorZombie(),		new FootballZombie(),	new DancingZombie(),		new BaseZombie(),
 		new BaseZombie(),		new SnorkedZombie(),		new Zomboni(),			new ZombieBobsledTeam(),	new DolphinRiderZombie(),
-		new ClownZombie(),		new BalloonZombie(),		new DiggerZombie(),		new PogoZombie(),			new BaseZombie(),
-		new BungeeZombie(),		new BaseZombie(),			new CatapultZombie(),	new Gargantuar(),			new BaseZombie(),
+		new ClownZombie(),		new BalloonZombie(),		new DiggerZombie(),		new PogoZombie(),			new ZombieYeti(),
+		new BungeeZombie(),		new BaseZombie(),			new CatapultZombie(),	new Gargantuar(),			new Imp(),
 
 		new BaseZombie(),		new PeaZombie(),			new WallNutZombie(),	new JalapenoZombie(),		new BaseZombie(),
 		new SquashZombie(),		new TallNutZombie(),		new GigaGargantuar()
