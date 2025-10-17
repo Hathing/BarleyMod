@@ -446,6 +446,21 @@ bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 	return zombie.FromWave < WAVE_ELITE_MASK;
 }
 
+bool onZombieDropArmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
+{
+	ZombieAbility::GetAbility(zombie.Type)->OverrideDropArmParticle(zombie, particle_sys);
+}
+
+void onZombieDropHelmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
+{
+	ZombieAbility::GetAbility(zombie.Type)->OverrideDropHelmParticle(zombie, particle_sys);
+}
+
+bool onZombieUpdateHelmDamageTexture(MyZombie zombie, PVZ::Animation reanim, int partition)
+{
+	return ZombieAbility::GetAbility(zombie.Type)->OverrideHelmDamageTexture(zombie, reanim, partition);
+}
+
 bool OverrideZombieDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
 {
 	return ZombieAbility::GetAbility(zombie.Type)->OverrideDrawPos(zombie, draw_pos);
@@ -710,7 +725,9 @@ void InitZombieEvents()
 
 	// 僵尸绘制相关
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	//这个事件会使僵尸无法绘制，暂时禁用
+	PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
+	PVZEvent::ZombieDropHelmParticleEvent((int)onZombieDropHelmParticle);
+	PVZEvent::ZombieTakeHelmDamageTextureEvent((int)onZombieUpdateHelmDamageTexture);
 	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
 
 	// 僵尸攻击相关
