@@ -1243,7 +1243,7 @@ namespace PVZEvent
 
 	/// @brief 巨人扔小鬼事件
 	/// @param 触发事件的僵尸，僵尸投掷的小鬼
-	class GargantaurThrowAfterEvent : public DLLEventTemplate<0x527148, 7, REG_ESI, MEM_ESP_ADD(0x38)>
+	class GargantaurThrowAfterEvent : public DLLEventTemplate<0x527148, 7, REG_ESI, REG_EBX>
 	{
 	public:
 		GargantaurThrowAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
@@ -1251,6 +1251,7 @@ namespace PVZEvent
 		GargantaurThrowAfterEvent() : DLLEventTemplate() { Init("onGargantaurThrowAfter"); };
 	};
 
+	/// @brief 魅惑巨人丢小鬼修改落点X事件
 	class GargantaurJudgeXFixEvent : public DLLEvent
 	{
 	public:
@@ -1289,9 +1290,9 @@ namespace PVZEvent
 		}
 	};
 
-	/// @brief 巨人僵尸砸植物的事件
+	/// @brief 巨人僵尸正在砸植物的事件
 	/// @param 触发事件的僵尸
-	/// @return 是否砸植物。
+	/// @return False则不砸扁植物，True则使用原版判断（包括寻找目标植物等）。
 	class GargantaurSquishPlantEvent : public DLLEventTemplate<0x526D64, 8, REG_EBX>
 	{
 	public:
@@ -1301,7 +1302,7 @@ namespace PVZEvent
 	protected:
 		virtual void InitExtra(AsmBuilder& builder)
 		{
-			builder.test_al_al().jz_rel(7);
+			builder.test_al_al().jnz_rel(7);
 			builder.popad().push_imm32(0x52724E).ret();
 			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x526D6C).ret();
 		}

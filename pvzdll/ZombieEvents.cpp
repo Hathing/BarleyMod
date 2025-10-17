@@ -585,8 +585,9 @@ bool IsGatlingZombieShoot(MyZombie zombie)
 
 void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
 {
-	imp.DecelerateCountdown = zombie.DecelerateCountdown;
+	//减速倒计时在之前代码里已经被继承过，无需重复
 	imp.FrostStack = zombie.FrostStack;
+	imp.UpdateAnimSpeed();
 	if (zombie.Hypnotized)
 	{
 		imp.Hypnotized = true;
@@ -612,10 +613,12 @@ void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
 
 int onGargantaurJudgeSquish(MyZombie zombie)
 {
+	//空投巨人不能砸植物
 	if (zombie.ZombieHeight == 9)
 		return 0;
-	if (zombie.FindZombieTarget().isValid())
-		return 1;
+	//巨人似乎不能直接用这个函数寻找僵尸？
+	//if (zombie.FindZombieTarget().isValid())
+		//return 1;
 	if (zombie.Hypnotized)
 		return 0;
 	return -1;
