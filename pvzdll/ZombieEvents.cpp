@@ -456,6 +456,11 @@ void onZombieDropHelmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_s
 	ZombieAbility::GetAbility(zombie.Type)->OverrideDropHelmParticle(zombie, particle_sys);
 }
 
+bool onZombieUpdateHelmDamageTexture(MyZombie zombie, PVZ::Animation reanim, int partition)
+{
+	return ZombieAbility::GetAbility(zombie.Type)->OverrideHelmDamageTexture(zombie, reanim, partition);
+}
+
 bool OverrideZombieDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
 {
 	return ZombieAbility::GetAbility(zombie.Type)->OverrideDrawPos(zombie, draw_pos);
@@ -722,6 +727,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
 	PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
 	PVZEvent::ZombieDropHelmParticleEvent((int)onZombieDropHelmParticle);
+	PVZEvent::ZombieTakeHelmDamageTextureEvent((int)onZombieUpdateHelmDamageTexture);
 	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
 
 	// 僵尸攻击相关

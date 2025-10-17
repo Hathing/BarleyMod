@@ -49,6 +49,10 @@ namespace ZombieAbility
 		{
 			return;
 		}
+		virtual bool OverrideHelmDamageTexture(MyZombie zombie, PVZ::Animation reanim, int partition)
+		{
+			return true;
+		}
 	};
 	typedef BaseZombie* ZombiePTR;
 	ZombiePTR GetAbility(ZombieType::ZombieType type);

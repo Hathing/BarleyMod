@@ -1352,4 +1352,16 @@ namespace PVZEvent
 		ZombieDropArmParticleEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieDropArmParticleEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
+
+	/// @brief 僵尸头盔受到伤害后，调整头盔外观事件。
+	/// @param 触发事件的僵尸、僵尸的本体动画、僵尸头盔受伤程度的三分数。
+	/// @note 只有三分数发生变化时，该事件才会触发。
+	/// @return 是否使用原版的图片重载处理。
+	class ZombieTakeHelmDamageTextureEvent : public BoolDLLEventTemplate<0x5310F8, 6, 0x53111B, REG_EDI, REG_ECX, REG_EBP>
+	{
+	public:
+		ZombieTakeHelmDamageTextureEvent() : BoolDLLEventTemplate() { Init("onZombieDropArmParticle"); };
+		ZombieTakeHelmDamageTextureEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieTakeHelmDamageTextureEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
 };
