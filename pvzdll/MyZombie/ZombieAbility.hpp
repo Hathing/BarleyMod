@@ -34,6 +34,14 @@ namespace ZombieAbility
 		{
 			return type;
 		}
+		/// @brief 调整僵尸生成掉手臂粒子效果
+		/// @param zombie 僵尸
+		/// @param particle_sys 粒子系统
+		/// @return 是否使用原版的图片重载
+		virtual bool OverrideDropArmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
+		{
+			return true;
+		}
 		/// @brief 调整僵尸生成掉头盔粒子效果
 		/// @param zombie 僵尸
 		/// @param particle_sys 粒子系统

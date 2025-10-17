@@ -446,6 +446,11 @@ bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 	return zombie.FromWave < WAVE_ELITE_MASK;
 }
 
+bool onZombieDropArmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
+{
+	ZombieAbility::GetAbility(zombie.Type)->OverrideDropArmParticle(zombie, particle_sys);
+}
+
 void onZombieDropHelmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
 {
 	ZombieAbility::GetAbility(zombie.Type)->OverrideDropHelmParticle(zombie, particle_sys);
@@ -715,6 +720,7 @@ void InitZombieEvents()
 
 	// 僵尸绘制相关
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
+	PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
 	PVZEvent::ZombieDropHelmParticleEvent((int)onZombieDropHelmParticle);
 	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
 
