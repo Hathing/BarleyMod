@@ -1329,4 +1329,15 @@ namespace PVZEvent
 		ZombieGetReanimTypeEvent(int address) : DLLEventTemplate() { Init(address); };
 		ZombieGetReanimTypeEvent() : DLLEventTemplate() { Init("GetZombieReanimType"); };
 	};
+
+	/// @brief 僵尸掉头盔的粒子效果处理事件。
+	/// @param 触发事件的僵尸、触发事件的粒子效果。
+	/// @note 结算时机先于原版的大小重载，但该事件无法将其跳过。
+	class ZombieDropHelmParticleEvent : public DLLEventTemplate<0x530FB3, 6, REG_EAX, REG_EBX>
+	{
+	public:
+		ZombieDropHelmParticleEvent() : DLLEventTemplate() { Init("onZombieDropHelmParticle"); };
+		ZombieDropHelmParticleEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieDropHelmParticleEvent(int address) : DLLEventTemplate() { Init(address); };
+	};
 };

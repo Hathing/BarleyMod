@@ -34,6 +34,13 @@ namespace ZombieAbility
 		{
 			return type;
 		}
+		/// @brief 调整僵尸生成掉头盔粒子效果
+		/// @param zombie 僵尸
+		/// @param particle_sys 粒子系统
+		virtual void OverrideDropHelmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
+		{
+			return;
+		}
 	};
 	typedef BaseZombie* ZombiePTR;
 	ZombiePTR GetAbility(ZombieType::ZombieType type);

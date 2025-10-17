@@ -16,5 +16,9 @@ namespace ZombieAbility
 				zombie.GetAnimation().SetImageOverride((char*)0x668ED4, *((PVZ::Image*)0x6FF024));
 			}
 		}
+		void OverrideDropHelmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
+		{
+			particle_sys.OverrideImage(*((PVZ::Image*)0x6FF02C));
+		}
 	};
 }
