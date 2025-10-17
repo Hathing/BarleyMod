@@ -341,3 +341,8 @@ healthchecksdb
 
 # doxygen generated files
 doxygen/
+
+testA.bat
+*.lnk
+*.CT
+*.exe
