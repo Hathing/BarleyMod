@@ -45,10 +45,10 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		case ZombieType::Gigagargantuar:
 			elite_type = -1;
 			break;
-		case ZombieType::FootballZombie:
-			if (elite_type > 0)
-				elite_type = 2;
-			break;
+		//case ZombieType::FootballZombie:
+		//	if (elite_type > 0)
+		//		elite_type = 2;
+		//	break;
 		case ZombieType::FlagZombie:
 		case ZombieType::ScreenDoorZombie:
 			elite_type = Creator::Rand(3);

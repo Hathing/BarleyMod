@@ -24,7 +24,15 @@ namespace ZombieAbility
 		/// @return 是否执行原版对 BodyY 和 ClipRect 的设定
 		virtual bool OverrideDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
 		{
-			return false;
+			return true;
+		}
+		/// @brief 重载僵尸初始化动画时的动画类型
+		/// @param zombie 僵尸
+		/// @param type 默认动画类型
+		/// @return 重载后的动画类型
+		virtual AnimationType::AnimationType GetReanimType(MyZombie zombie, AnimationType::AnimationType type)
+		{
+			return type;
 		}
 	};
 	typedef BaseZombie* ZombiePTR;
