@@ -74,6 +74,8 @@ public:
 	INT_PROPERTY(SquashJumpCount, __get_SquashJumpCount, __set_SquashJumpCount, 0x0E0);
 	/// @brief 倭瓜出生点X记录
 	INT_PROPERTY(SquashBirthX, __get_SquashBirthX, __set_SquashBirthX, 0x0E4);
+	/// @brief 倭瓜出生图层序数记录
+	INT_PROPERTY(SquashBirthLayer, __get_SquashBirthLayer, __set_SquashBirthLayer, 0x0E8);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 当前体型值

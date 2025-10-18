@@ -535,9 +535,12 @@ bool onSquashFallOnGround(MyPlant plant)
 	
 	//设置跳跃次数
 	plant.SquashJumpCount -= 1;
+	//最后一跳，重置跳跃次数和图层
 	if (plant.SquashJumpCount < 0)
+	{
 		plant.SquashJumpCount = squash_jump_time[plant.Level];
-
+		plant.Layer = plant.SquashBirthLayer;
+	}
 	//设置CD
 	if (plant.SquashJumpCount == 0)
 		plant.AttributeCountdown = 400 + Creator::Rand(201);
