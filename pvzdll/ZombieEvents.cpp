@@ -303,6 +303,12 @@ bool onZombieUpdateAbility(MyZombie zombie)
 		zombie.IsNotWalkingFlag = true;
 		zombie.StartWalkAnim(20);
 	}
+	//气球自动爆炸
+	if (zombie.Type == ZombieType::BalloonZombie && zombie.X < 316.0f)
+	{
+		//Call LandFlyer
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).push_imm32(0).invoke(0x525B60).ret());
+	}
 	// 空投的车类不更新
 	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
 }
@@ -501,8 +507,11 @@ int onZombieFindTargetInterval(MyZombie zombie)
 
 int onZombieEffectedByDamageRange(MyZombie zombie, PVZ::DamageRangeFlags drf)
 {
+	float height = zombie.Height;
+	if (zombie.Type == ZombieType::BalloonZombie)
+		height += 10.0f;
 	//高空僵尸会被视为飞行范围内
-	if (zombie.Height >= 30.0f)
+	if (height >= 30.0f)
 	{
 		if ((drf & PVZ::DRF_FLYING) == 0)
 			return 0;
@@ -862,7 +871,8 @@ void InitZombieEvents()
 
 	// 僵尸绘制相关
 	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
+	//橄榄球在此事件中有崩溃
+	//PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
 	PVZEvent::ZombieDropHelmParticleEvent((int)onZombieDropHelmParticle);
 	PVZEvent::ZombieTakeHelmDamageTextureEvent((int)onZombieUpdateHelmDamageTexture);
 	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
@@ -939,6 +949,9 @@ void InitZombieEvents()
 	PVZ::Memory::WriteMemory<byte>(0x526747, 0x07);
 	//雪橇在冰道外不下车
 	PVZ::Memory::WriteMemory<byte>(0x528214, 0xEB);
+	//气球是否被DRF_FLYING影响，不再取决于原版的IsFlying函数
+	PVZ::Memory::WriteMemory<byte>(0x531C4B, 0xEB);
+	PVZ::Memory::WriteMemory<byte>(0x531C4C, 0x0D);
 	//覆盖原盲盒开盒
 	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));

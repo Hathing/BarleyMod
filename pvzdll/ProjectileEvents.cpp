@@ -12,10 +12,6 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int
 
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
 {
-	//这行代码是S6就有的，意义不明，先搬过来
-	if (zombie.State == ZombieState::BALLOON_FLYING)
-		return -1;
-
 	int mydamage = ProjectileAbility::GetAbility(proj.Type)->OverrideDamage(proj, zombie, type, subtarget_num, damage);
 	if (mydamage == 0)
 		return 0;
