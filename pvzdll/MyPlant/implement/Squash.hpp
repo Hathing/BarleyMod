@@ -9,6 +9,8 @@ namespace PlantAbility
 		{
 			plant.Hp = 500;
 			plant.MaxHp = 500;
+			plant.AttributeCountdown = 300;
+			plant.SquashBirthX = plant.ImageX;
 		}
 	};
 }

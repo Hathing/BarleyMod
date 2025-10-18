@@ -111,6 +111,9 @@
     <ClInclude Include="MyPlant\implement\DarkShroom.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+	<ClInclude Include="MyPlant\implement\PotatoMine.hpp">
+		<Filter>头文件</Filter>
+	</ClInclude>
     <ClInclude Include="MyProjectile\MyProjectile.hpp">
       <Filter>头文件</Filter>
     </ClInclude>

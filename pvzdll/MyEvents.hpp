@@ -373,6 +373,72 @@ namespace PVZEvent
 		TangleKelpTargetAfterEvent() : TangleKelpTargetAfterEvent("onTangleKelpTargetAfter") {};
 	};
 
+	/// @brief 倭瓜落地后事件，发生在设置状态与+54之后
+	/// @param 触发事件的倭瓜
+	/// @return False则跳过屏幕震动
+	class SquashFallOnGroundEvent : public BoolDLLEventTemplate<0x460D25, 10, 0x460D43, REG_ESI>
+	{
+	public:
+		SquashFallOnGroundEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		SquashFallOnGroundEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		SquashFallOnGroundEvent() : SquashFallOnGroundEvent("onSquashFallOnGround") {};
+	};
+
+	/// @brief 倭瓜起点X修改的事件
+	/// @param 触发事件的倭瓜
+	/// @return 修改后起点的X位置，负数则保留原版
+	class SquashJumpStartPositionXEvent : public DLLEventTemplate<0x460BEE, 5, REG_ESI>
+	{
+	public:
+		SquashJumpStartPositionXEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		SquashJumpStartPositionXEvent(int address) : DLLEventTemplate() { Init(address); };
+		SquashJumpStartPositionXEvent() : SquashJumpStartPositionXEvent("onSquashJumpStartPositionX") {};
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(4);
+			builder.mov_mem_esp_add_imm8_reg(0x1C, REG_EAX);
+
+			//覆盖掉一处对非禅境花园无用的代码，阻止修改ESI，方便代码使用
+			PVZ::Memory::WriteMemory<int>(0x00460BDC, 0x441F0F66);
+		}
+	};
+
+	/// @brief 倭瓜IDLE状态尝试索敌的事件
+	/// @param 触发事件的倭瓜
+	/// @return True则进行原版索敌，False则直接RET
+	class SquashFindJumpTargetEvent : public DLLEventTemplate<0x4609EA, 6, REG_ESI>
+	{
+	public:
+		SquashFindJumpTargetEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		SquashFindJumpTargetEvent(int address) : DLLEventTemplate() { Init(address); };
+		SquashFindJumpTargetEvent() : SquashFindJumpTargetEvent("onSquashFindJumpTarget") {};
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x460DC2).ret();
+			builder.popad().push_reg(REG_ESI).invoke(0x4607E0).push_imm32(0x4609F0).ret();
+		}
+	};
+
+	/// @brief 倭瓜IDLE状态索敌之后设置准备状态的事件
+	/// @param 触发事件的倭瓜
+	/// @return True则使用原版状态设置，False则直接RET（跳过+3C和+54设置、look动画和音效播放）
+	class SquashSetJumpStateEvent : public DLLEventTemplate<0x460A33, 7, REG_ESI>
+	{
+	public:
+		SquashSetJumpStateEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		SquashSetJumpStateEvent(int address) : DLLEventTemplate() { Init(address); };
+		SquashSetJumpStateEvent() : SquashSetJumpStateEvent("onSquashSetJumpState") {};
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(10).popad().add_reg_imm(REG_ESP, 4).push_imm32(0x460DC2).ret();
+			//索敌失败不是直接RET，而是跳过获取目标僵尸的坐标，这种情况下自身+80=[自身+10]/2
+			PVZ::Memory::WriteMemory<int>(0x4609F4, 0x0000001C);
+		}
+	};
+
 	/// @brief 胆小菇下蹲瞬间事件
 	/// @param 胆小菇
 	/// @return False则不会蹲下
@@ -1177,7 +1243,7 @@ namespace PVZEvent
 
 	/// @brief 巨人扔小鬼事件
 	/// @param 触发事件的僵尸，僵尸投掷的小鬼
-	class GargantaurThrowAfterEvent : public DLLEventTemplate<0x527148, 7, REG_ESI, MEM_ESP_ADD(0x38)>
+	class GargantaurThrowAfterEvent : public DLLEventTemplate<0x527148, 7, REG_ESI, REG_EBX>
 	{
 	public:
 		GargantaurThrowAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
@@ -1185,6 +1251,7 @@ namespace PVZEvent
 		GargantaurThrowAfterEvent() : DLLEventTemplate() { Init("onGargantaurThrowAfter"); };
 	};
 
+	/// @brief 魅惑巨人丢小鬼修改落点X事件
 	class GargantaurJudgeXFixEvent : public DLLEvent
 	{
 	public:
@@ -1223,9 +1290,9 @@ namespace PVZEvent
 		}
 	};
 
-	/// @brief 巨人僵尸砸植物的事件
+	/// @brief 巨人僵尸正在砸植物的事件
 	/// @param 触发事件的僵尸
-	/// @return 是否砸植物。
+	/// @return False则不砸扁植物，True则使用原版判断（包括寻找目标植物等）。
 	class GargantaurSquishPlantEvent : public DLLEventTemplate<0x526D64, 8, REG_EBX>
 	{
 	public:
@@ -1235,7 +1302,7 @@ namespace PVZEvent
 	protected:
 		virtual void InitExtra(AsmBuilder& builder)
 		{
-			builder.test_al_al().jz_rel(7);
+			builder.test_al_al().jnz_rel(7);
 			builder.popad().push_imm32(0x52724E).ret();
 			builder.popad().push(0).push_reg(REG_EBX).invoke(0x52E780).push_imm32(0x526D6C).ret();
 		}
@@ -1364,4 +1431,79 @@ namespace PVZEvent
 		ZombieTakeHelmDamageTextureEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieTakeHelmDamageTextureEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
+
+	/// @brief 原版僵尸跳过啃咬伤害诸如灰烬植物的事件
+	/// @param 触发事件的僵尸、被啃植物
+	/// @return 正数则会被僵尸啃咬，零则不会被僵尸啃咬，负数使用原版判断
+	class ZombieSkipEatPlantEvent : public ThreeStateEventTemplate<0x52FBF1, 6, 0x52FC7B, 0x52FDEE, REG_ESI, REG_EBP>
+	{
+	public:
+		ZombieSkipEatPlantEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		ZombieSkipEatPlantEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+		ZombieSkipEatPlantEvent() : ThreeStateEventTemplate() { Init("onZombieSkipEatPlant"); };
+	};
+
+
+	/// @brief 土豆雷爆炸产生伤害事件，原版函数直接调用41D8A0
+	/// @param 土豆雷
+	/// @return 是否结算原版爆炸。
+	class PotatoExplodeEvent : public BoolDLLEventTemplate<0x466A5F, 5, 0x466A6F, REG_EBX>
+	{
+	public:
+		PotatoExplodeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PotatoExplodeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PotatoExplodeEvent() : BoolDLLEventTemplate() { Init("onPotatoExplode"); };
+	};
+
+	/// @brief 土豆雷死亡事件
+	/// @note 这一事件之所以和DyingEvent独立，是因为S7DyingEvent用于亡语触发，而土豆雷爆炸死亡不应当算作亡语
+	/// @param 土豆雷
+	/// @return 是否结算原版爆炸。
+	class PotatoDieFromExplosionEvent : public BoolDLLEventTemplate<0x466AAD, 10, 0x466AD1, REG_EBX>
+	{
+	public:
+		PotatoDieFromExplosionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PotatoDieFromExplosionEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PotatoDieFromExplosionEvent() : BoolDLLEventTemplate() { Init("onPotatoDieFromExplosion"); };
+	};
+
+	/// @brief 土豆雷在成功寻找到敌人后的事件
+	/// @param 土豆雷，目标僵尸
+	/// @return True则爆炸，False则不爆炸
+	class PotatoFindTargetAfterEvent : public DLLEventTemplate<0x460013, 6, REG_EAX, REG_EDI>
+	{
+	public:
+		PotatoFindTargetAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PotatoFindTargetAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		PotatoFindTargetAfterEvent() : PotatoFindTargetAfterEvent("onPotatoFindTargetAfter") {};
+	protected:
+		virtual void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x46001F).ret();
+			builder.popad().push_reg(REG_EDI).invoke(0x4666A0).push_imm32(0x460019).ret();
+		}
+	};
+
+	/// @brief 原版僵尸IsNotWalking的事件
+	/// @param 触发事件的僵尸
+	/// @return 正数则会判断僵尸禁止移动，零则判断可以移动，负数使用原版判断
+	class ZombieIsNotWalkingEvent : public ThreeStateEventTemplate<0x52A611, 6, 0x52A7A4, 0x52A79A, REG_EAX>
+	{
+	public:
+		ZombieIsNotWalkingEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		ZombieIsNotWalkingEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+		ZombieIsNotWalkingEvent() : ThreeStateEventTemplate() { Init("onZombieIsNotWalking"); };
+	};
+
+	/// @brief 僵尸在调用StartWalkAnim时，播放动画前的事件
+	/// @param 触发事件的僵尸、僵尸的动画、混合时间
+	/// @return False则跳过原版播放，True则使用原版播放。
+	class ZombieStartPlayWalkAnimEvent : public BoolDLLEventTemplate<0x52F325, 6, 0x52F340, REG_ESI, REG_EBX, REG_EDI>
+	{
+	public:
+		ZombieStartPlayWalkAnimEvent() : BoolDLLEventTemplate() { Init("onZombieStartPlayWalkAnim"); };
+		ZombieStartPlayWalkAnimEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieStartPlayWalkAnimEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
 };

@@ -6,35 +6,35 @@ namespace PlantAbility
 {
 	PlantAbility::PlantPTR pt_factory[] =
 	{
-		new PeaShooter(), new Barley(),	  new NilPlant(),  new WallNut(),
-		new BasePlant(), new SnowPea(),	  new BasePlant(), new Repeater(),
+		new PeaShooter(),			new Barley(),				new NilPlant(),				new WallNut(),
+		new PotatoMine(),			new SnowPea(),				new BasePlant(),			new Repeater(),
 
-		new PuffShroom(), new SunShroom(), new FumeShroom(), new NilPlant(),
-		new HypnoShroom(), new ScaredyShroom(), new IceShroom(), new NilPlant(),
+		new PuffShroom(),			new SunShroom(),			new FumeShroom(),			new NilPlant(),
+		new HypnoShroom(),			new ScaredyShroom(),		new IceShroom(),			new NilPlant(),
 
-		new DiamondShroom(), new Squash(), new Threepeater(), new TangleKelp(),
-		new NilPlant(),  new Spikeweed(), new Torchwood(), new TallNut(),
+		new DiamondShroom(),		new Squash(),				new Threepeater(),			new TangleKelp(),
+		new NilPlant(),				new Spikeweed(),			new Torchwood(),			new TallNut(),
 
-		new SeaShroom(), new Plantern(),  new Cactus(),    new Blover(),
-		new SplitPea(),  new Starfruit(), new NilPlant(),  new MagnetShroom(),
+		new SeaShroom(),			new Plantern(),				new Cactus(),				new Blover(),
+		new SplitPea(),				new Starfruit(),			new NilPlant(),				new MagnetShroom(),
 
-		new CabbagePult(), new NilPlant(), new KernelPult(), new NilPlant(),
-		new Garlic(),	 new UmbrellaLeaf(), new Marigold(), new MelonPult(),
+		new CabbagePult(),			new NilPlant(),				new KernelPult(),			new NilPlant(),
+		new Garlic(),				new UmbrellaLeaf(),			new Marigold(),				new MelonPult(),
 
-		new GatlingPea(), new RestingBarley(), new GloomShroom(), new Cattail(),
-		new WinterMelon(), new GoldMagnet(), new SpikeRock(), new NoEasterSkinPlant(),
+		new GatlingPea(),			new RestingBarley(),		new GloomShroom(),			new Cattail(),
+		new WinterMelon(),			new GoldMagnet(),			new SpikeRock(),			new NoEasterSkinPlant(),
 
-		new NoEasterSkinPlant(), new Explode_O_Nut(), new NoEasterSkinPlant(), new Endoflame(),
-		new LeftRepeater(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new NoEasterSkinPlant(),	new Explode_O_Nut(),		new NoEasterSkinPlant(),	new Endoflame(),
+		new LeftRepeater(),			new BasePlant(),			new BasePlant(),			new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(),			new BasePlant(),			new BasePlant(),			new BasePlant(),
+		new BasePlant(),			new BasePlant(),			new BasePlant(),			new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
+		new BasePlant(),			new BasePlant(),			new BasePlant(),			new BasePlant(),
+		new BasePlant(),			new BasePlant(),			new BasePlant(),			new BasePlant(),
 
-		new BasePlant(), new BasePlant(), new BasePlant(), new BasePlant(),
-		new SpringEquinoxVine(), new DarkShroom(), new Mangosteen(), new ThymeWarp(),
+		new BasePlant(),			new BasePlant(),			new BasePlant(),			new BasePlant(),
+		new SpringEquinoxVine(),	new DarkShroom(),			new Mangosteen(),			new ThymeWarp(),
 	};
 }
 
@@ -306,6 +306,15 @@ void MyPlant::SetBodySizeChange(int time)
 	if (this->StretchCounter <= 0)
 		this->StretchCounter = 70;
 	this->BodySizeCountdown += time;
+}
+
+void MyPlant::GetPlantAttackRect(int PlantWeapon, PVZ::Rect& rect)
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32(PlantWeapon)
+		.mov_reg_imm(REG_EAX, (unsigned int) & rect)
+		.mov_reg_imm(REG_ECX, this->GetBaseAddress())
+		.invoke(0x467F90).ret());
 }
 
 MyPlant MyPlant::GetByID(int id)

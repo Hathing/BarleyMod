@@ -209,23 +209,29 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
 	{
-		int row = plant.Row, col = plant.Column, hp = plant.Hp, max_hp = plant.MaxHp;
-		float hp_ratio = (float)hp / (float)max_hp;
-		int x = board.GridToXPixel(row, col), y = board.GridToYPixel(row, col);
-		int ix=0, iy=0;
-		//绘制血条
-		if (plant.HpDisplayCounter>0 || plant.EatenCounter>0 || hp_ratio<0.33f)
+		if (plant.OwnerID == 0)
 		{
-			ix = x + 9;
-			iy = y + 60;
-			MyDrawImage(ix, iy, GraphicsID, 0x6FF0A0);
-			TodDrawImageScaledF(hp_ratio, 1.0f, (float)ix, (float)iy, GraphicsID, 0x6FF09C);
-			MyDrawImage(ix, iy, GraphicsID, 0x6FF0A4);
+			int row = plant.Row, col = plant.Column, hp = plant.Hp, max_hp = plant.MaxHp;
+			float hp_ratio = (float)hp / (float)max_hp;
+
+			//int x = board.GridToXPixel(row, col), y = board.GridToYPixel(row, col);
+			int x = plant.ImageX, y = plant.ImageY;
+
+			int ix = 0, iy = 0;
+			//绘制血条
+			if (plant.HpDisplayCounter > 0 || hp_ratio < 0.33f)
+			{
+				ix = x + 9;
+				iy = y + 60;
+				MyDrawImage(ix, iy, GraphicsID, 0x6FF0A0);
+				TodDrawImageScaledF(hp_ratio, 1.0f, (float)ix, (float)iy, GraphicsID, 0x6FF09C);
+				MyDrawImage(ix, iy, GraphicsID, 0x6FF0A4);
+			}
+			//绘制等级图标
+			ix = x - 20;
+			iy = y + 55;
+			MyDrawImage(ix, iy, GraphicsID, 0x6FF084 + 4 * plant.Level);
 		}
-		//绘制等级图标
-		ix = x - 20;
-		iy = y + 55;
-		MyDrawImage(ix, iy, GraphicsID, 0x6FF084 + 4 * plant.Level);
 	}
 }
 
@@ -256,9 +262,15 @@ void onTyping(MyBoard board, char key)
 
 bool onBoardCallPlantUpdate(MyPlant plant)
 {
+	//血条倒计时
+	if (plant.HpDisplayCounter > 0)
+		plant.HpDisplayCounter -= 1;
+
+	//被动技能，无视减速等效果
 	if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)
 		PlantAbility::GetAbility(plant.Type)->TickPassive(plant);
 
+	//肥料加速100%
 	if (plant.FertilizedCounter > 0)
 	{
 		plant.FertilizedCounter -= 1;

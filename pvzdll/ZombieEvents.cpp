@@ -58,6 +58,7 @@ void onZombieInitAfter(MyZombie zombie)
 	if (zombie.Type != ZombieType::BalloonZombie)
 		zombie.SourceID = 0;
 	zombie.SourceLevel = 0;
+	zombie.IsNotWalkingFlag = false;
 	zombie.GhostFlameMark = 0;
 
 	zombie.VariantType = 0;
@@ -80,7 +81,25 @@ AnimationType::AnimationType GetZombieReanimType(MyZombie zombie, AnimationType:
 
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
 {
+	plant.HpDisplayCounter = 100;
 	return damage;
+}
+
+ThreeState::ThreeState onZombieSkipEatPlant(MyZombie zombie, MyPlant plant)
+{
+	switch (plant.Type)
+	{
+	case SeedType::Iceshroom:
+	case SeedType::Blover:
+	case SeedType::Squash:
+		return ThreeState::Enable;
+	case SeedType::Garlic:
+	case SeedType::PotatoMine:
+		return ThreeState::Disable;
+	default:
+		break;
+	}
+	return ThreeState::None;
 }
 
 bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, MyPlant plant)
@@ -275,6 +294,12 @@ bool onZombieUpdateAbility(MyZombie zombie)
 			}
 		}
 	}
+	//高坚果出场6S后停止运动
+	if (zombie.Type == ZombieType::TallnutZombie && !zombie.IsNotWalking() && zombie.ExistedTime > 600)
+	{
+		zombie.IsNotWalkingFlag = true;
+		zombie.StartWalkAnim(20);
+	}
 	// 空投的车类不更新
 	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
 }
@@ -311,6 +336,26 @@ bool onZombieEatSound(MyZombie zombie, MyPlant plant)
 {
 	if (zombie.Hypnotized)
 		return false;
+
+	switch (plant.Type)
+	{
+	case SeedType::Garlic:
+		PVZ::ApplyZPDamage(zombie, plant, 50);
+		break;
+	case SeedType::PotatoMine:
+	{
+		if (plant.OwnerID == 0 && plant.State == PlantState::POTATO_ARMED)
+		{
+			PVZ::ApplyZPDamage(zombie, plant, 100);
+			//爆炸
+			PVZ::Memory::Execute(AsmBuilder().push_imm32(plant.GetBaseAddress()).invoke(0x4666A0).ret());
+		}
+	}
+		break;
+	default:
+		break;
+	}
+
 	return true;
 }
 
@@ -349,11 +394,30 @@ void onZombieFallOnGround(MyZombie zombie)
 	}
 }
 
+ThreeState::ThreeState onZombieIsNotWalking(MyZombie zombie)
+{
+	if (zombie.IsNotWalkingFlag)
+		return ThreeState::Enable;
+	return ThreeState::None;
+}
+
+bool onZombieStartPlayWalkAnim(MyZombie zombie, PVZ::Animation anim,int blendtime)
+{
+	if (zombie.Type == ZombieType::TallnutZombie && zombie.IsNotWalking())
+	{
+		zombie.PlayAnim("anim_idle", 12.0f, blendtime, 0);
+		return false;
+	}
+	return true;
+}
+
 int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 {
 	if (zombie.IsLaunched)
 		return 0;
 	if (zombie.State == ZombieState::DIGGER_WALK_RIGHT && zombie.X < 130)
+		return 0;
+	if (zombie.Type == ZombieType::TallnutZombie)
 		return 0;
 	return -1;
 }
@@ -448,7 +512,7 @@ bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 
 bool onZombieDropArmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
 {
-	ZombieAbility::GetAbility(zombie.Type)->OverrideDropArmParticle(zombie, particle_sys);
+	return ZombieAbility::GetAbility(zombie.Type)->OverrideDropArmParticle(zombie, particle_sys);
 }
 
 void onZombieDropHelmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
@@ -565,8 +629,9 @@ bool IsGatlingZombieShoot(MyZombie zombie)
 
 void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
 {
-	imp.DecelerateCountdown = zombie.DecelerateCountdown;
+	//减速倒计时在之前代码里已经被继承过，无需重复
 	imp.FrostStack = zombie.FrostStack;
+	imp.UpdateAnimSpeed();
 	if (zombie.Hypnotized)
 	{
 		imp.Hypnotized = true;
@@ -592,10 +657,12 @@ void onGargantaurThrowAfter(MyZombie zombie, MyZombie imp)
 
 int onGargantaurJudgeSquish(MyZombie zombie)
 {
+	//空投巨人不能砸植物
 	if (zombie.ZombieHeight == 9)
 		return 0;
-	if (zombie.FindZombieTarget().isValid())
-		return 1;
+	//巨人似乎不能直接用这个函数寻找僵尸？
+	//if (zombie.FindZombieTarget().isValid())
+		//return 1;
 	if (zombie.Hypnotized)
 		return 0;
 	return -1;
@@ -738,6 +805,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
 	ZombieEatSoundEvent((int)onZombieEatSound);
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
+	PVZEvent::ZombieSkipEatPlantEvent((int)onZombieSkipEatPlant);
 
 	// 僵尸受击相关
 	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);
@@ -753,6 +821,8 @@ void InitZombieEvents()
 	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
 	PVZEvent::ZombieUpdateFallingEvent((int)onZombieUpdateFalling);
 	PVZEvent::ZombieFallOnGroundEvent((int)onZombieFallOnGround);
+	PVZEvent::ZombieIsNotWalkingEvent((int)onZombieIsNotWalking);
+	PVZEvent::ZombieStartPlayWalkAnimEvent((int)onZombieStartPlayWalkAnim);
 
 	// 僵尸特性相关
 	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);
