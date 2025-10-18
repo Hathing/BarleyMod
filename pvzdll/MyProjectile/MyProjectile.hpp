@@ -37,8 +37,8 @@ public:
 	T_PROPERTY(byte, SpecialStack, __get_SpecialStack, __set_SpecialStack, 0x86);
 	/// @brief 子弹的特殊类型，如火球
 	T_PROPERTY(byte, SpecialType, __get_SpecialType, __set_SpecialType, 0x87);
-	/// @brief 穿透子弹的“幽灵子弹”的地址（非ID）
-	INT_PROPERTY(GhostAddr, __get_GhostID, __set_GhostID, 0x88);
+	/// @brief 穿透子弹的“幽灵子弹”的ID
+	INT_PROPERTY(GhostID, __get_GhostID, __set_GhostID, 0x88);
 
 	/// @brief “幽灵子弹”最大可穿透数量
 	INT_PROPERTY(PiercingMaxCount, __get_PiercingMaxCount, __set_PiercingMaxCount, 0x68);

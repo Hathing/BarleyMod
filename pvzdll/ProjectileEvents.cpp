@@ -76,9 +76,9 @@ bool onProjectileRemove(MyProjectile proj)
 		return true;
 	}
 	// 处理穿透子弹
-	if (proj.Motion == MotionType::Piercing && proj.GhostAddr != 0)
+	if (proj.Motion == MotionType::Piercing && proj.GhostID != 0)
 	{
-		MyProjectile ghost{ proj.GhostAddr };
+		MyProjectile ghost = PVZ::GetByID<MyProjectile>(proj.GhostID);
 		ghost.PiercingCount += 1;
 		if (ghost.PiercingCount < ghost.PiercingMaxCount)
 			return true;
@@ -232,9 +232,9 @@ bool onProjectileImpact(MyProjectile proj, MyZombie zombie)
 		effect2.OverrideScale(2.0f);
 		PVZ::CreateParticleSystem(proj.X, proj.Y, proj.Layer + 100, EffectType::ICE_SHROOM_EXPLODED);
 	}
-	if (proj.Motion == MotionType::Piercing && proj.GhostAddr!=0 && zombie.isValid())
+	if (proj.Motion == MotionType::Piercing && proj.GhostID!=0 && zombie.isValid())
 	{
-		MyProjectile ghost{ proj.GhostAddr };
+		MyProjectile ghost = PVZ::GetByID<MyProjectile>(proj.GhostID);
 		ghost.SetPiercingID(ghost.PiercingCount, zombie.Id);
 	}
 	return ProjectileAbility::GetAbility(proj.Type)->onImpact(proj, zombie);
@@ -250,9 +250,9 @@ bool onProjectileSkipUpdateAndDraw(MyProjectile proj)
 
 bool onProjectileFindZombieTargetSkip(MyProjectile proj, MyZombie zombie)
 {
-	if (proj.Motion == MotionType::Piercing && proj.GhostAddr != 0)
+	if (proj.Motion == MotionType::Piercing && proj.GhostID != 0)
 	{
-		MyProjectile ghost{ proj.GhostAddr };
+		MyProjectile ghost = PVZ::GetByID<MyProjectile>(proj.GhostID);
 		for (int i = 0; i < ghost.PiercingCount; i++)
 		{
 			if (ghost.GetPiercingID(i) == zombie.Id)
