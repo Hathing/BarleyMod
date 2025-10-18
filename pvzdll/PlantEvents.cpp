@@ -566,7 +566,16 @@ bool onSquashSetJumpState(MyPlant plant)
 {
 	//索敌失败
 	if (plant.mTargetZombieID == 0)
-		plant.mTargetX = plant.ImageX + 80;//向前跳1格
+	{
+		if (plant.ImageX < 760)
+		{
+			plant.mTargetX = plant.ImageX + 80;//向前跳1格
+		}
+		else
+		{
+			plant.mTargetX = 760;
+		}
+	}
 
 	if (plant.SquashJumpCount == 0)
 		return true;
