@@ -403,7 +403,7 @@ ThreeState::ThreeState onZombieIsNotWalking(MyZombie zombie)
 
 bool onZombieStartPlayWalkAnim(MyZombie zombie, PVZ::Animation anim,int blendtime)
 {
-	if (zombie.IsNotWalking())
+	if (zombie.Type == ZombieType::TallnutZombie && zombie.IsNotWalking())
 	{
 		zombie.PlayAnim("anim_idle", 12.0f, blendtime, 0);
 		return false;
