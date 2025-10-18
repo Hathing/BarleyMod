@@ -30,12 +30,16 @@ namespace PlantAbility
 					//吸引范围内的僵尸
 					PVZ::Rect attack_rect;
 					plant.GetPlantAttackRect(0, attack_rect);
+					//吸引半径略大于爆炸半径
+					attack_rect.X -= 40;
+					attack_rect.Width += 80;
 					auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
 					for (auto& zombie : zombies)
 					{
 						if (zombie.Row == plant.Row && zombie.EffectedBy(PVZ::DRF_GROUND || PVZ::DRF_UNDERGROUND || PVZ::DRF_SUBMERGED || PVZ::DRF_OFF_GROUND || PVZ::DRF_DYING))
 						{
-							if (zombie.X + zombie.Width > attack_rect.X - 40 && zombie.X < attack_rect.X + attack_rect.Width + 40)
+							auto zombie_rect = zombie.GetActualRect();
+							if (PVZ::GetXOverlap(zombie_rect, attack_rect) >= 0)
 							{
 								int center = plant.ImageX;
 								zombie.X = center + (zombie.X - center) * 0.95f;

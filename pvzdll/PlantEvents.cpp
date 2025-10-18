@@ -598,7 +598,8 @@ bool onPotatoExplode(MyPlant plant)
 	{
 		if (zombie.Row == plant.Row && zombie.EffectedBy(PVZ::DRF_GROUND || PVZ::DRF_UNDERGROUND || PVZ::DRF_SUBMERGED || PVZ::DRF_OFF_GROUND || PVZ::DRF_DYING))
 		{
-			if (zombie.X + zombie.Width > attack_rect.X && zombie.X < attack_rect.X + attack_rect.Width)
+			auto zombie_rect = zombie.GetActualRect();
+			if (PVZ::GetXOverlap(zombie_rect, attack_rect) >= 0)
 				PVZ::ApplyPZDamage(plant, zombie, 1800, PVZ::DAMAGEF_HITS_SHIELD_AND_BODY);
 		}
 	}

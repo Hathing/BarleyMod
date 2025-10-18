@@ -488,7 +488,7 @@ bool onPoleVaulterHalfJump(MyZombie zombie, MyPlant plant)
 
 bool onZombieDropArmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
 {
-	ZombieAbility::GetAbility(zombie.Type)->OverrideDropArmParticle(zombie, particle_sys);
+	return ZombieAbility::GetAbility(zombie.Type)->OverrideDropArmParticle(zombie, particle_sys);
 }
 
 void onZombieDropHelmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
