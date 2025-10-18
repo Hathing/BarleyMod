@@ -34,7 +34,7 @@ public:
 	/// @brief 魅惑菇鬼火标记
 	T_PROPERTY(byte, GhostFlameMark, __get_GhFM, __set_GhFM, 0x106);
 	/// @brief 盲盒僵尸被魅惑菇召唤时，魅惑菇的等级
-	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0xF0);
+	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0xED);
 	/// @brief 僵尸是否停止移动
 	T_PROPERTY(bool, IsNotWalkingFlag, __get_IsNotWalkingFlag, __set_IsNotWalkingFlag, 0x107);
 	/// @brief 僵尸受攻击的动画附件的ID
