@@ -7,7 +7,7 @@ namespace PlantAbility
 	{
 		void onCreated(MyPlant plant)
 		{
-			plant.AttributeCountdown = 0;
+			plant.AttributeCountdown = 1000;
 		}
 		void onUpgrade(MyPlant plant)
 		{

@@ -1506,4 +1506,15 @@ namespace PVZEvent
 		ZombieStartPlayWalkAnimEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
 
+	/// @brief 矿工僵尸挖地时是否可索敌植物的事件
+	/// @param 矿工僵尸，植物
+	/// @return True则可索敌，False则不可索敌
+	/// @note 该事件会覆盖掉原版中矿工僵尸挖地可啃咬IDLE土豆雷的特性，需要的话请自行添加条件
+	class DiggerZombieUndergroundFindTargetEvent : public DiversionEventTemplate<0x52E569, 5, 0x52E770, 0x52E578, REG_ESI, REG_EBP>
+	{
+	public:
+		DiggerZombieUndergroundFindTargetEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		DiggerZombieUndergroundFindTargetEvent(int address) : DiversionEventTemplate() { Init(address); };
+		DiggerZombieUndergroundFindTargetEvent() : DiggerZombieUndergroundFindTargetEvent("onDiggerZombieUndergroundFindTarget") {};
+	};
 };

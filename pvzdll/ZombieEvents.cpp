@@ -277,6 +277,8 @@ bool onZombieUpdateAbility(MyZombie zombie)
 	{
 		zombie.AttributeCountdown = 0;
 	}
+	/*
+	* 矿工刨根的旧代码，实际功能已移动至onDiggerZombieUndergroundFindTarget中
 	if (zombie.Type == ZombieType::DiggerZombie && zombie.State==ZombieState::DIGGER_DIG)
 	{
 		int col = board.PixelToGridXKeepOnBoard(zombie.X + 80.0f, zombie.Y);
@@ -294,6 +296,7 @@ bool onZombieUpdateAbility(MyZombie zombie)
 			}
 		}
 	}
+	*/
 	//高坚果出场6S后停止运动
 	if (zombie.Type == ZombieType::TallnutZombie && !zombie.IsNotWalking() && zombie.ExistedTime > 600)
 	{
@@ -499,9 +502,11 @@ int onZombieFindTargetInterval(MyZombie zombie)
 int onZombieEffectedByDamageRange(MyZombie zombie, PVZ::DamageRangeFlags drf)
 {
 	//高空僵尸会被视为飞行范围内
-	if (zombie.Height > 20.0f && (drf & PVZ::DRF_FLYING) == 0)
-		return 0;
-
+	if (zombie.Height >= 30.0f)
+	{
+		if ((drf & PVZ::DRF_FLYING) == 0)
+			return 0;
+	}
 	return -1;
 }
 
@@ -726,6 +731,71 @@ bool onJalapenoHeadBurnBefore(MyZombie zombie)
 	return false;
 }
 
+bool onDiggerZombieUndergroundFindTarget(MyZombie zombie, MyPlant plant)
+{
+	if (plant.Type == SeedType::Pumpkin)
+		return false;
+	// 对于会移动的植物，不应该让矿工记录挖根列数
+	if (plant.Type == SeedType::Squash)
+		return false;
+	if (plant.Type == SeedType::Spickweed)
+	{
+		zombie.DiggerLoseAxe();
+		return false;
+	}
+
+	if (plant.Column != zombie.DiggerLastDigRootColumn)
+	{
+		zombie.DiggerLastDigRootColumn = plant.Column;
+		// 对本格内所有植物造成伤害
+		auto plants = zombie.GetBoard().GetAllPlants<MyPlant>();
+		std::vector<MyPlant> dug_plants{};
+		bool has_bottom_protect = false;
+		bool lose_axe = false;
+		for (auto& plant_ : plants)
+		{
+			if (plant_.Row == plant.Row && plant_.Column == plant.Column)
+			{
+				switch (plant_.Type)
+				{
+				case SeedType::Pumpkin:
+				case SeedType::CoffeeBean:
+				case SeedType::GraveBuster:
+				// 可移动植物不会被挖根
+				case SeedType::Squash:
+				case SeedType::Spickweed:
+					break;
+				// S6中睡莲被晶钻菇夺舍了，暂时先去掉
+				// case SeedType::LilyPad:
+				case SeedType::FlowerPot:
+					has_bottom_protect = true;
+					break;
+				case SeedType::Wallnut:
+				case SeedType::Tallnut:
+				case SeedType::Explodenut:
+				case SeedType::Spikerock:
+				case SeedType::PotatoMine:
+					lose_axe = true;
+				default:
+					dug_plants.push_back(plant_);
+					break;
+				}
+			}
+		}
+		if (!has_bottom_protect)
+		{
+			for (auto& plant_ : dug_plants)
+			{
+				PVZ::ApplyZPDamage(zombie, plant_, 15);
+			}
+		}
+		if (lose_axe)
+			zombie.DiggerLoseAxe();
+	}
+	//无论挖不挖根，矿工都不应当停下来啃咬植物，因此总是返回false。
+	return false;
+}
+
 bool onPogoUpdateActions(MyZombie zombie)
 {
 	/*
@@ -847,6 +917,8 @@ void InitZombieEvents()
 	PVZEvent::PogoUpdateActionsEvent((int)onPogoUpdateActions);
 	// 辣椒头僵尸
 	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
+	// 矿工僵尸
+	PVZEvent::DiggerZombieUndergroundFindTargetEvent((int)onDiggerZombieUndergroundFindTarget);
 
 	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
 	PVZEvent::ZombieChillEvent((int)onZombieChilled);
