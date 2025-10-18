@@ -58,6 +58,7 @@ void onZombieInitAfter(MyZombie zombie)
 	if (zombie.Type != ZombieType::BalloonZombie)
 		zombie.SourceID = 0;
 	zombie.SourceLevel = 0;
+	zombie.IsNotWalkingFlag = false;
 	zombie.GhostFlameMark = 0;
 
 	zombie.VariantType = 0;
@@ -293,6 +294,12 @@ bool onZombieUpdateAbility(MyZombie zombie)
 			}
 		}
 	}
+	//高坚果出场6S后停止运动
+	if (zombie.Type == ZombieType::TallnutZombie && !zombie.IsNotWalking() && zombie.ExistedTime > 600)
+	{
+		zombie.IsNotWalkingFlag = true;
+		zombie.StartWalkAnim(20);
+	}
 	// 空投的车类不更新
 	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
 }
@@ -385,6 +392,23 @@ void onZombieFallOnGround(MyZombie zombie)
 		zombie.FallSpeed = 0.0f;
 		zombie.PickRandomSpeed();
 	}
+}
+
+ThreeState::ThreeState onZombieIsNotWalking(MyZombie zombie)
+{
+	if (zombie.IsNotWalkingFlag)
+		return ThreeState::Enable;
+	return ThreeState::None;
+}
+
+bool onZombieStartPlayWalkAnim(MyZombie zombie, PVZ::Animation anim,int blendtime)
+{
+	if (zombie.IsNotWalking())
+	{
+		zombie.PlayAnim("anim_idle", 12.0f, blendtime, 0);
+		return false;
+	}
+	return true;
 }
 
 int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
@@ -797,6 +821,8 @@ void InitZombieEvents()
 	PVZEvent::ZombieWalkOutOfWaterEvent((int)onZombieWalkOutOfWater);
 	PVZEvent::ZombieUpdateFallingEvent((int)onZombieUpdateFalling);
 	PVZEvent::ZombieFallOnGroundEvent((int)onZombieFallOnGround);
+	PVZEvent::ZombieIsNotWalkingEvent((int)onZombieIsNotWalking);
+	PVZEvent::ZombieStartPlayWalkAnimEvent((int)onZombieStartPlayWalkAnim);
 
 	// 僵尸特性相关
 	ZombieUpdatePlayingEvent((int)onZombieUpdatePlaying);

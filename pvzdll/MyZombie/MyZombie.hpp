@@ -33,8 +33,10 @@ public:
 	T_PROPERTY(mybool, IceBounded, __get_IcB, __set_IcB, 0x105);
 	/// @brief 魅惑菇鬼火标记
 	T_PROPERTY(byte, GhostFlameMark, __get_GhFM, __set_GhFM, 0x106);
-	/// @brief 被魅惑菇召唤时，魅惑菇的等级
-	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0x107);
+	/// @brief 盲盒僵尸被魅惑菇召唤时，魅惑菇的等级
+	T_PROPERTY(byte, SourceLevel, __get_SoL, __set_SoL, 0xF0);
+	/// @brief 僵尸是否停止移动
+	T_PROPERTY(bool, IsNotWalkingFlag, __get_IsNotWalkingFlag, __set_IsNotWalkingFlag, 0x107);
 	/// @brief 僵尸受攻击的动画附件的ID
 	INT_PROPERTY(HitReanimID, __get_HitReanimID, __set_HitReanimID, 0x110);
 	/// @brief 僵尸的掉落速度，原版中只有小鬼和水族馆僵尸使用该指针；负数表示下落，正数表示上升
@@ -71,6 +73,7 @@ public:
 	INT_PROPERTY(NewspaperAngerStack, __get_NewspaperAngerStack, __set_NewspaperAngerStack, 0xF0);
 	/// @brief 矿工上次刨根的列数
 	INT_PROPERTY(DiggerLastDigRootColumn, __get_DiggerLastDigRootColumn, __set_DiggerLastDigRootColumnn, 0xF0);
+	
 	/// @brief 舞王和雪橇车相关联僵尸编号数组属性
 	INT_ARRAY_PROPERTY(GetRelatedZombieID, SetRelatedZombieID, 0xF0);
 
@@ -93,6 +96,15 @@ public:
 
 	/// @brief 使僵尸停止啃咬
 	void StopEating();
+	/// @brief 使僵尸播放行走动画
+	/// @param blendtime 混合的时长
+	void StartWalkAnim(int blendtime = 0);
+	/// @brief 使僵尸播放指定动画
+	/// @param trackname 轨道名
+	/// @param animrate 动画速率，0则不变
+	/// @param blendtime 混合时间
+	/// @param looptype 循环类型
+	void PlayAnim(const char* trackname, float animrate = 0.0f, int blendtime = 0, int looptype = 0);
 	/// @brief 重置僵尸的速度
 	void PickRandomSpeed();
 	/// @brief 让僵尸从土里或者泳池里冒出来，通常在生成后调用该函数
@@ -115,6 +127,10 @@ public:
 	/// @brief 僵尸被击退
 	/// @note 使用前请先在函数外处理对气球等空中僵尸的判断
 	void KnockBack(float xspeed);
+
+	/// @brief 判断僵尸是否禁止移动
+	/// @return 是则返回True
+	bool IsNotWalking();
 
 	/// @brief 判断僵尸是否被水草缠住
 	/// @return 是则返回True

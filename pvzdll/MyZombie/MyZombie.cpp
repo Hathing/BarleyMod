@@ -64,6 +64,23 @@ void MyZombie::StopEating()
 	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EDI,this->GetBaseAddress()).invoke(0x52F440).ret());
 }
 
+void MyZombie::StartWalkAnim(int blendtime)
+{
+	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_ESI, blendtime).mov_reg_imm(REG_EAX, this->GetBaseAddress()).invoke(0x52F2E0).ret());
+}
+
+void MyZombie::PlayAnim(const char* trackname, float animrate, int blendtime, int looptype)
+{
+	PVZ::Memory::WriteArray<const char>(PVZ::Memory::Variable + 100, trackname, std::strlen(trackname) + 1);
+	PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32(*(unsigned int*)&animrate)
+		.push_imm32(blendtime)
+		.push_imm32(looptype)
+		.push_imm32(PVZ::Memory::Variable + 100)
+		.mov_reg_imm(REG_EDI, this->GetBaseAddress())
+		.invoke(0x528B00).ret());
+}
+
 void MyZombie::PickRandomSpeed()
 {
 	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, this->GetBaseAddress()).invoke(0x524A70).ret());
@@ -133,6 +150,17 @@ void MyZombie::KnockBack(float xspeed)
 		this->IsLaunched = 1;
 		this->Speed = xspeed;
 	}
+}
+
+bool MyZombie::IsNotWalking()
+{
+	int result = PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_EAX, this->GetBaseAddress())
+		.invoke(0x52A610)
+		.mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret()
+	);
+	return result & 0x000000FF;
 }
 
 bool MyZombie::IsTangleKelpTarget()

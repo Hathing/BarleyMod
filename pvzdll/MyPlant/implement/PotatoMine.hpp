@@ -22,6 +22,7 @@ namespace PlantAbility
 			{
 
 			}
+			break;
 			case PlantState::POTATO_SPROUT_OUT:
 			case PlantState::POTATO_ARMED:
 			{

@@ -1484,4 +1484,26 @@ namespace PVZEvent
 		}
 	};
 
+	/// @brief 原版僵尸IsNotWalking的事件
+	/// @param 触发事件的僵尸
+	/// @return 正数则会判断僵尸禁止移动，零则判断可以移动，负数使用原版判断
+	class ZombieIsNotWalkingEvent : public ThreeStateEventTemplate<0x52A611, 6, 0x52A7A4, 0x52A79A, REG_EAX>
+	{
+	public:
+		ZombieIsNotWalkingEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		ZombieIsNotWalkingEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+		ZombieIsNotWalkingEvent() : ThreeStateEventTemplate() { Init("onZombieIsNotWalking"); };
+	};
+
+	/// @brief 僵尸在调用StartWalkAnim时，播放动画前的事件
+	/// @param 触发事件的僵尸、僵尸的动画、混合时间
+	/// @return False则跳过原版播放，True则使用原版播放。
+	class ZombieStartPlayWalkAnimEvent : public BoolDLLEventTemplate<0x52F325, 6, 0x52F340, REG_ESI, REG_EBX, REG_EDI>
+	{
+	public:
+		ZombieStartPlayWalkAnimEvent() : BoolDLLEventTemplate() { Init("onZombieStartPlayWalkAnim"); };
+		ZombieStartPlayWalkAnimEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieStartPlayWalkAnimEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
 };
