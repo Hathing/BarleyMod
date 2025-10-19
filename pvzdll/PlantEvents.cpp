@@ -627,6 +627,26 @@ bool onPotatoFindTargetAfter(MyPlant plant, MyZombie zombie)
 	return true;
 }
 
+bool onTorchwoodFindProjectileBefore(MyPlant plant)
+{
+	if (plant.AttributeCountdown > 0)
+		return false;
+	return true;
+}
+
+bool onTorchwoodFindProjectile(MyPlant plant, MyProjectile proj)
+{
+	if (plant.AttributeCountdown > 0)
+		return false;
+	return true;
+}
+
+bool onTorchwoodConvertProjectile(MyPlant plant, MyProjectile proj)
+{
+	plant.AttributeCountdown += 5;
+	return true;
+}
+
 void InitPlantEvents()
 {
 	// 植物初始化与销毁相关
@@ -689,6 +709,10 @@ void InitPlantEvents()
 	PVZEvent::PotatoDieFromExplosionEvent((int)onPotatoDieFromExplosion);
 	PVZEvent::PotatoExplodeEvent((int)onPotatoExplode);
 	PVZEvent::PotatoFindTargetAfterEvent((int)onPotatoFindTargetAfter);
+	// 火炬树桩
+	PVZEvent::TorchwoodFindProjectileBeforeEvent((int)onTorchwoodFindProjectileBefore);
+	PVZEvent::TorchwoodFindProjectileEvent((int)onTorchwoodFindProjectile);
+	PVZEvent::TorchwoodConvertProjectileEvent((int)onTorchwoodConvertProjectile);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 

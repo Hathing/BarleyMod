@@ -1530,4 +1530,66 @@ namespace PVZEvent
 		DiggerZombieUndergroundFindTargetEvent(int address) : DiversionEventTemplate() { Init(address); };
 		DiggerZombieUndergroundFindTargetEvent() : DiggerZombieUndergroundFindTargetEvent("onDiggerZombieUndergroundFindTarget") {};
 	};
+
+	/// @brief 火炬树桩在寻找子弹碰撞前的事件
+	/// @param 火炬树桩
+	/// @return False则不会寻找子弹过火
+	class TorchwoodFindProjectileBeforeEvent : public BoolDLLEventTemplate<0x46061F, 6, 0x4606E7, REG_EBX>
+	{
+	public:
+		TorchwoodFindProjectileBeforeEvent() : BoolDLLEventTemplate() { Init("onTorchwoodFindProjectileBefore"); };
+		TorchwoodFindProjectileBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		TorchwoodFindProjectileBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
+	/// @brief 火炬树桩在寻找子弹碰撞时的事件
+	/// @param 火炬树桩，遍历的子弹
+	/// @return False则子弹跳过过火
+	class TorchwoodFindProjectileEvent : public BoolDLLEventTemplate<0x460654, 6, 0x4606D0, REG_ESI, REG_EBX>
+	{
+	public:
+		TorchwoodFindProjectileEvent() : BoolDLLEventTemplate() { Init("onTorchwoodFindProjectile"); };
+		TorchwoodFindProjectileEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		TorchwoodFindProjectileEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
+	/// @brief 子弹被火炬树桩过火前的事件
+	/// @param 火炬树桩、子弹
+	/// @return False则该子弹不过火
+	class TorchwoodConvertProjectileEvent
+	{
+	private:
+		class TorchwoodConvertPeaToFireballEvent : public BoolDLLEventTemplate<0x4606B2, 5, 0x4606D0, REG_ESI, REG_EAX>
+		{
+		public:
+			TorchwoodConvertPeaToFireballEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			TorchwoodConvertPeaToFireballEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			TorchwoodConvertPeaToFireballEvent() : BoolDLLEventTemplate() { Init("onTorchwoodConvertPeaToFireball"); };
+		};
+		class TorchwoodConvertSnowPeaToPeaEvent : public BoolDLLEventTemplate<0x4606C6, 5, 0x4606D0, REG_ESI, REG_ECX>
+		{
+		public:
+			TorchwoodConvertSnowPeaToPeaEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			TorchwoodConvertSnowPeaToPeaEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			TorchwoodConvertSnowPeaToPeaEvent() : BoolDLLEventTemplate() { Init("onTorchwoodConvertSnowPeaToPea"); };
+		};
+		TorchwoodConvertPeaToFireballEvent* part1;
+		TorchwoodConvertSnowPeaToPeaEvent* part2;
+	public:
+		TorchwoodConvertProjectileEvent()
+		{
+			TorchwoodConvertProjectileEvent(PVZ::Memory::GetProcAddress("onTorchwoodConvertProjectile"));
+		}
+		TorchwoodConvertProjectileEvent(int address)
+		{
+			part1 = new TorchwoodConvertPeaToFireballEvent(address);
+			part2 = new TorchwoodConvertSnowPeaToPeaEvent(address);
+		}
+		void end()
+		{
+			part1->end();
+			part2->end();
+		}
+	};
+
 };
