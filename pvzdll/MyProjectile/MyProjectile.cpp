@@ -81,7 +81,7 @@ void MyProjectile::MakePiercing(int piercingnum,float xspeed,float yspeed)
 void MyProjectile::DeriveProperty(MyProjectile proj)
 {
 	this->Row = proj.Row;
-	this->DamageAbility = proj.DamageAbility;
+	//this->DamageAbility = proj.DamageAbility;
 	this->SourceType = proj.SourceType;
 	this->SourceLevel = proj.SourceLevel;
 	this->ParentID = proj.ParentID;

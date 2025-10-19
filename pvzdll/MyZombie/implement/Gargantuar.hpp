@@ -24,13 +24,7 @@ namespace ZombieAbility
 	public:
 		void onCreated(MyZombie zombie)
 		{
-			MyBoard board = zombie.GetBoard();
-			if (board.isValid())
-			{
-				int tmp = max(7000, 4000 + board.MatchTimer / 40);
-				zombie.HelmHealth = tmp;
-				zombie.HelmMaxHealth = tmp;
-			}
+			return;
 		}
 		bool OverrideDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
 		{

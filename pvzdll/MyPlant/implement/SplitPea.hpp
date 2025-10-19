@@ -30,7 +30,7 @@ namespace PlantAbility
 		{
 			if (PlantWeapon == 0)
 			{
-				proj.SpecialType = PST_CRACK_PEA;
+				//proj.SpecialType = PST_CRACK_PEA;
 				if (plant.AnotherCounter > 0)
 				{
 					//锁血、高亮
@@ -42,23 +42,27 @@ namespace PlantAbility
 					newproj1.DeriveProperty(proj);
 					newproj1.Motion = MotionType::Slide;
 					newproj1.YSpeed = -0.75f;
-					newproj1.SpecialType = PST_CRACK_PEA;
+					//newproj1.SpecialType = PST_CRACK_PEA;
 					MyProjectile newproj2{ Creator::CreateProjectile(ProjectileType::Pea,x-5,y,0.0f,2.0f) };
 					newproj2.DeriveProperty(proj);
 					newproj2.Motion = MotionType::Slide;
 					newproj2.YSpeed = 0.75f;
-					newproj2.SpecialType = PST_CRACK_PEA;
+					//newproj2.SpecialType = PST_CRACK_PEA;
 					MyProjectile newproj3{ Creator::CreateProjectile(ProjectileType::Pea,x-15,y,0.0f,2.0f) };
 					newproj3.DeriveProperty(proj);
 					newproj3.Motion = MotionType::Slide;
 					newproj3.YSpeed = -1.5f;
-					newproj3.SpecialType = PST_CRACK_PEA;
+					//newproj3.SpecialType = PST_CRACK_PEA;
 					MyProjectile newproj4{ Creator::CreateProjectile(ProjectileType::Pea,x-15,y,0.0f,2.0f) };
 					newproj4.DeriveProperty(proj);
 					newproj4.Motion = MotionType::Slide;
 					newproj4.YSpeed = 1.5f;
-					newproj4.SpecialType = PST_CRACK_PEA;
+					//newproj4.SpecialType = PST_CRACK_PEA;
 				}
+			}
+			else
+			{
+				proj.SpecialType = PST_CRACK_PEA;
 			}
 			return true;
 		}
