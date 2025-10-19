@@ -88,6 +88,7 @@ void onRandomZombieDropHelm(MyZombie zombie)
 			child_zombie.Speed = (child_zombie.X - 200.0f) / flyingtime;
 			child_zombie.Speed += (Creator::Rand(11) - 5) * 0.2f;
 			child_zombie.FallSpeed = 0.025f * flyingtime;
+			child_zombie.PlayAnim("anim_thrown", 18.0f, 0, 3);
 		}
 	}
 
