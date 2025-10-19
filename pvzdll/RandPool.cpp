@@ -31,8 +31,6 @@ void onRandomZombieDropHelm(MyZombie zombie)
 		if (type == ZombieType::DrZomboss)type = ZombieType::PeashooterZombie;//僵王换豌豆
 		if (type == ZombieType::BungeeZombie)type = ZombieType::WallnutZombie;//蹦极换坚果
 
-		type = ZombieType::Imp;
-
 		switch (type)
 		{
 		case ZombieType::Zombie:

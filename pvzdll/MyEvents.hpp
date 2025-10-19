@@ -895,6 +895,7 @@ namespace PVZEvent
 	/// @attention 注意不是所有状态的僵尸都会经过这个位置，这个位置适用于新增绘制
 	/// @param 僵尸、动画，原R,G,B,A（均为int，0~255）
 	/// @return True则使用原版颜色，False则跳过原版颜色。
+	/// @deprecated 请使用ZombieSetColorEvent
 	class ZombieUpdateColorEvent : public BoolDLLEventTemplate<0x52D3F6, 7, 0x52D429, MEM_ESP_ADD(0x4C), REG_EDX, REG_ECX, REG_EAX, REG_EBX, REG_ESI>
 	{
 	public:
@@ -902,6 +903,18 @@ namespace PVZEvent
 		ZombieUpdateColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieUpdateColorEvent() : ZombieUpdateColorEvent("onZombieUpdateColor") {};
 	};
+
+	/// @brief 僵尸修改绘制颜色事件
+	/// @param 僵尸、动画、ESP栈指针（使用请详见函数）
+	/// @return True则使用原版颜色，False则跳过原版颜色。
+	class ZombieSetColorEvent : public BoolDLLEventTemplate<0x52D3EA, 8, 0x52D429, REG_ESP, REG_EBX, REG_ESI>
+	{
+	public:
+		ZombieSetColorEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieSetColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieSetColorEvent() : ZombieSetColorEvent("onZombieSetColor") {};
+	};
+
 	/// @brief 子弹初始化完成事件
 	/// @note 此时 ImageX 和 ImageY 均未初始化
 	/// @param 触发事件的子弹

@@ -200,6 +200,7 @@ void onZombieUpdatePlaying(MyZombie zombie)
 	return;
 }
 
+/// @deprecated
 bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,int blue,int alpha)
 {
 	if (zombie.Hypnotized && zombie.HpPoint >= 4)
@@ -265,6 +266,18 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	}
 	return true;
 }
+
+bool onZombieSetColor(MyZombie zombie, PVZ::Animation anim, unsigned int stack_pointer)
+{
+	bool draw_additive_color = PVZ::Memory::ReadMemory<bool>(stack_pointer + 0x2F);
+	PVZ::Color* original_base_color = (PVZ::Color*)((void*)(stack_pointer + 0x50));
+	PVZ::Color* original_additive_color = (PVZ::Color*)((void*)(stack_pointer + 0x40));
+	anim.SetColor(*original_base_color);
+	anim.SetAdditiveColor(*original_additive_color);
+	anim.DrawAdditiveColor = draw_additive_color;
+	return false;
+}
+
 
 bool onZombieUpdateAbility(MyZombie zombie)
 {
@@ -870,7 +883,8 @@ void InitZombieEvents()
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 
 	// 僵尸绘制相关
-	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
+	PVZEvent::ZombieSetColorEvent((int)onZombieSetColor);
+	///PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
 	//橄榄球在此事件中有崩溃
 	//PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
 	PVZEvent::ZombieDropHelmParticleEvent((int)onZombieDropHelmParticle);
