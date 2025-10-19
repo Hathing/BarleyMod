@@ -283,14 +283,14 @@ bool onZombieSetColor(MyZombie zombie, PVZ::Animation anim, unsigned int stack_p
 			ratio += 0.015f * min(zombie.PoisonStack, 40);
 			original_base_color->Red = 100 + (255 - 100) * (1.0f - ratio);
 			original_base_color->Blue = 255 * (1.0f - ratio);
-			original_additive_color->Green = original_additive_color->Red * (1.0f - ratio) + 255 * ratio;
-			original_additive_color->Red = original_additive_color->Green * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			original_additive_color->Green = original_additive_color->Green * (1.0f - ratio) + 255 * ratio;
+			original_additive_color->Red = original_additive_color->Red * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
 			break;
 		case 2:
 			ratio += 0.02f * zombie.FrostStack;
 			original_base_color->Green = 100 + (255 - 100) * (1.0f - ratio);
 			original_base_color->Red = 255 * (1.0f - ratio);
-			original_additive_color->Blue = original_additive_color->Red * (1.0f - ratio) + 255 * ratio;
+			original_additive_color->Blue = original_additive_color->Blue * (1.0f - ratio) + 255 * ratio;
 			original_additive_color->Green = original_additive_color->Green * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
 			break;
 		case 3:

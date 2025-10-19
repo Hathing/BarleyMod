@@ -45,45 +45,7 @@ inline void UpdatePoisonApply(MyBoard& board)
 		auto zombies = board.GetAllZombies<MyZombie>();
 		for (auto& zombie : zombies)
 		{
-			switch (zombie.ColorFlag)
-			{
-			case 1:
-				{
-				if (zombie.FrostStack)
-					zombie.ColorFlag = 2;
-				else if (zombie.FlameStack)
-					zombie.ColorFlag = 3;
-				break;
-				}
-			case 2:
-				{
-				if (zombie.FlameStack)
-					zombie.ColorFlag = 3;
-				else if (zombie.PoisonStack)
-					zombie.ColorFlag = 1;
-				break;
-				}
-			case 3:
-				{
-				if (zombie.PoisonStack)
-					zombie.ColorFlag = 1;
-				else if (zombie.FrostStack)
-					zombie.ColorFlag = 2;
-				break;
-				}
-			default:
-				{
-				if (zombie.PoisonStack)
-					zombie.ColorFlag = 1;
-				else if (zombie.FrostStack)
-					zombie.ColorFlag = 2;
-				else if (zombie.FlameStack)
-					zombie.ColorFlag = 3;
-				else
-					zombie.ColorFlag = 0;
-				break;
-				}
-			}
+			zombie.ShiftColorFlag();
 		}
 	}
 }
@@ -123,6 +85,7 @@ void onBoardUpdateGameObject(MyBoard board)
 	UpdatePlantExistCount(board);
 	
 	/*
+	* 已被移至 onBoardCallPlantUpdate
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
 		if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)
