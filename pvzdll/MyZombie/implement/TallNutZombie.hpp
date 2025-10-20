@@ -21,13 +21,14 @@ namespace ZombieAbility
 		}
 		bool OverrideHelmDamageTexture(MyZombie zombie, PVZ::Animation reanim, int partition)
 		{
+			auto head = zombie.GetSpecialHeadAnimation();
 			switch (partition)
 			{
 			case 1:
-				reanim.SetImageOverride("common_idle", *((PVZ::Image*)0x6A7200));
+				head.SetImageOverride("common_idle", *((PVZ::Image*)0x6A7200));
 				return false;
 			case 2:
-				reanim.SetImageOverride("common_idle", *((PVZ::Image*)0x6A77D8));
+				head.SetImageOverride("common_idle", *((PVZ::Image*)0x6A77D8));
 				return false;
 			default:
 				return false;
