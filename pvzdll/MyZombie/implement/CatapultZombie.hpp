@@ -26,6 +26,8 @@ namespace ZombieAbility
 
 				auto effect = head.AttachTo(track.GetAttachmentID(), 0, 0);
 				effect.GetOffset().ScaleRotateTransformMatrix(80.0f, 0, 0.2f, -0.8f, 0.8f);
+
+				zombie.InvulnerableDuration = 9999999;
 			}
 		}
 	};
