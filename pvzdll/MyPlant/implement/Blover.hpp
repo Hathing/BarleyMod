@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../PlantAbility.hpp"
 #include "SpecialPlants.hpp"
 
@@ -14,20 +14,22 @@ namespace PlantAbility
 		void onCreated(MyPlant plant)
 		{
 			plant.SubClass = 2;
-			plant.BloverIsWorking = true;
+			plant.BloverIsWorking = false;
+			plant.BloverIsFevering = false;
 			plant.SetMaxHealth(max_health[0]);
 		}
 		bool TickAbility(MyPlant plant)
 		{
-
-
 			if (plant.BloverIsWorking)
 			{
 				plant.BloverAccelerateTime++;
+				if (plant.Level >= 5 && plant.BloverAccelerateTime > 6000)
+					plant.BloverIsFevering = true;
 			
 				if (plant.Hp < plant.MaxHp / 2)
 				{
 					plant.BloverIsWorking = false;
+					plant.BloverIsFevering = false;
 					auto anim = plant.GetAnimationPart1();
 					anim.SetFramesForLayer("anim_idle");
 					anim.LoopType = 0;
@@ -41,6 +43,18 @@ namespace PlantAbility
 					plant.BloverIsWorking = true;
 					auto anim = plant.GetAnimationPart1();
 					anim.Play("anim_blow",10,3,18.0f);
+				}
+			}
+			if (plant.BloverIsFevering)
+			{
+				//暂时用植物发光代替绘制
+				if ((plant.BloverAccelerateTime / 5) % 2 == 1)
+				{
+					plant.Light(999);
+				}
+				else
+				{
+					plant.Light(0);
 				}
 			}
 
