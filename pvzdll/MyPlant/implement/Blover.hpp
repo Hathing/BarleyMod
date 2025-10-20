@@ -23,9 +23,11 @@ namespace PlantAbility
 			if (plant.BloverIsWorking)
 			{
 				plant.BloverAccelerateTime++;
-				if (plant.Level >= 5 && plant.BloverAccelerateTime > 6000)
+				if (plant.Level >= 5 && !plant.BloverIsFevering && plant.BloverAccelerateTime > 6000)
+				{
 					plant.BloverIsFevering = true;
-			
+					plant.GetAnimationPart1().Speed = 36.0f;
+				}
 				if (plant.Hp < plant.MaxHp / 2)
 				{
 					plant.BloverIsWorking = false;
