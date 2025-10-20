@@ -72,7 +72,6 @@ bool MyPlant::IsToolPlant()
 	auto type = this->Type;
 	return type == SeedType::Iceshroom
 		|| type == SeedType::TangleKelp
-		|| type == SeedType::Torchwood
 		|| type == SeedType::UmbrellaLeaf
 		|| type == SeedType::CobCannon;
 }

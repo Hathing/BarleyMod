@@ -638,7 +638,48 @@ bool onTorchwoodFindProjectile(MyPlant plant, MyProjectile proj)
 {
 	if (plant.AttributeCountdown > 0)
 		return false;
-	return true;
+	
+	float probability = Creator::RandFloat(1.0f);
+	int level = plant.Level;
+	bool high_class_convert = false;
+
+	switch (proj.Type)
+	{
+	case ProjectileType::Pea:
+		//豌豆过火
+		high_class_convert = (level < 2 ? false : (probability < (level < 4 ? 0.1f : 0.2f)));
+		if (high_class_convert && proj.SpecialType == PST_NONE)
+			proj.SpecialType = PST_ORANGE_FIREBALL;
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, plant.Column).mov_reg_imm(REG_ECX, proj.GetBaseAddress()).invoke(0x46ECB0).ret());
+		break;
+	case ProjectileType::SnowPea:
+		//冰豌豆过火
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EBX, plant.Column).mov_reg_imm(REG_EAX, proj.GetBaseAddress()).invoke(0x46EE00).ret());
+		break;
+	case ProjectileType::FirePea:
+		//火球过火
+		high_class_convert = (level < 2 ? false : (probability < (level < 4 ? 0.2f : 0.4f)));
+		if (high_class_convert && proj.SpecialType == PST_NONE)
+		{
+			proj.SpecialType = PST_ORANGE_FIREBALL;
+			//修改颜色
+			auto attachment = PVZ::GetByID<PVZ::Attachment>(proj.AttachmentID);
+			onFireballInitColor(proj, attachment.GetAnimation());
+		}
+		else
+		{
+			return false;
+		}
+		break;
+	default:
+		//非可过火子弹直接RET
+		return false;
+	}
+	//可过火子弹，如果成功过火，触发火炬过火效果
+	plant.AttributeCountdown = 5;
+
+
+	return false;
 }
 
 bool onTorchwoodConvertProjectile(MyPlant plant, MyProjectile proj)
@@ -712,7 +753,6 @@ void InitPlantEvents()
 	// 火炬树桩
 	PVZEvent::TorchwoodFindProjectileBeforeEvent((int)onTorchwoodFindProjectileBefore);
 	PVZEvent::TorchwoodFindProjectileEvent((int)onTorchwoodFindProjectile);
-	PVZEvent::TorchwoodConvertProjectileEvent((int)onTorchwoodConvertProjectile);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 

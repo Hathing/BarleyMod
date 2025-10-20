@@ -1542,20 +1542,36 @@ namespace PVZEvent
 		TorchwoodFindProjectileBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
 
-	/// @brief 火炬树桩在寻找子弹碰撞时的事件
+	/// @brief 火炬树桩在寻找子弹碰撞时的事件，发生在行数判断和矩形重合判断之后
+	/// @note 原版中，夹在行数判断和矩形判断中间的类型判断被跳过
 	/// @param 火炬树桩，遍历的子弹
-	/// @return False则子弹跳过过火
-	class TorchwoodFindProjectileEvent : public BoolDLLEventTemplate<0x460654, 6, 0x4606D0, REG_ESI, REG_EBX>
+	/// @return True则继续进行原版判断（豌豆过火、冰豌过火），False则跳过原版判断
+	class TorchwoodFindProjectileEvent : public DLLEventTemplate<0x4606AB, 7, REG_ESI, REG_EBX>
 	{
 	public:
-		TorchwoodFindProjectileEvent() : BoolDLLEventTemplate() { Init("onTorchwoodFindProjectile"); };
-		TorchwoodFindProjectileEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
-		TorchwoodFindProjectileEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		TorchwoodFindProjectileEvent() : DLLEventTemplate() { Init("onTorchwoodFindProjectile"); };
+		TorchwoodFindProjectileEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		TorchwoodFindProjectileEvent(int address) : DLLEventTemplate() { Init(address); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			//跳过原版的类型判断
+			PVZ::Memory::WriteMemory<byte>(0x46065C, 0xEB);
+			PVZ::Memory::WriteMemory<byte>(0x46065D, 0x0A);
+			PVZ::Memory::WriteMemory<byte>(0x46065E, 0x90);
+
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x4606D0).ret().popad()
+				.mov_reg_mem_reg_add_imm(REG_EBX,REG_ESI,0x5C)
+				.test_reg_reg(REG_EBX,REG_EBX).jne_rel(9)
+				.mov_reg_mem_reg_add_imm(REG_EAX, REG_EBP, 0x08).push_imm32(0x4606B2).ret()
+				.push_imm32(0x4606BE).ret();
+		}
 	};
 
 	/// @brief 子弹被火炬树桩过火前的事件
 	/// @param 火炬树桩、子弹
 	/// @return False则该子弹不过火
+	/// @deprecated 这个事件虽然能用，但无法满足S7火球过火的需求
 	class TorchwoodConvertProjectileEvent
 	{
 	private:
@@ -1591,5 +1607,4 @@ namespace PVZEvent
 			part2->end();
 		}
 	};
-
 };
