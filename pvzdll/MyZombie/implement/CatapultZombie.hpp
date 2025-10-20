@@ -31,5 +31,9 @@ namespace ZombieAbility
 				zombie.InvulnerableDuration = 9999999;
 			}
 		}
+		bool TickAbility(MyZombie zombie)
+		{
+			return zombie.ZombieHeight != 9;
+		}
 	};
 }

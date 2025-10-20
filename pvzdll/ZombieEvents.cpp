@@ -268,8 +268,6 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 
 bool onZombieUpdateAbility(MyZombie zombie)
 {
-	if (zombie.Hypnotized && zombie.Type == ZombieType::Zomboin)
-		return false;
 	//这里是所有僵尸在未定身时必经的更新
 	MyBoard board = zombie.GetBoard();
 	//小丑僵尸爆炸
@@ -300,8 +298,7 @@ bool onZombieUpdateAbility(MyZombie zombie)
 		zombie.IsNotWalkingFlag = true;
 		zombie.StartWalkAnim(20);
 	}
-	// 空投的车类不更新
-	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
+	return ZombieAbility::GetAbility(zombie.Type)->TickAbility(zombie);;
 }
 
 bool onClownZombiePop(MyZombie zombie, int x, int y)
