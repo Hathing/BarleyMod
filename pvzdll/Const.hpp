@@ -14,6 +14,12 @@ namespace SeedType
 	const Type2 ThymeWarp = (Type2)0x4F;
 }
 
+namespace ZombieType
+{
+	typedef ZombieType Type2;
+	constexpr Type2 RandomZombie = ConeheadZombie;
+}
+
 namespace ProjectileType
 {
 	typedef ProjectileType Type2;
