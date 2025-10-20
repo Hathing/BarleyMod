@@ -27,6 +27,15 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 结算一次植物的自回复，默认结算周期为100cs
+		/// @note 此函数的调用不受植物加速减速的影响。
+		/// @param plant 植物
+		virtual void SelfHeal(MyPlant plant)
+		{
+			//大部分植物每秒回复1点HP
+			plant.Heal(1);
+			return;
+		}
 		/// @brief 重载植物的攻击范围
 		/// @param plant 植物
 		/// @param secondary 是否使用副武器（裂荚射手左向、仙人掌对空等） 

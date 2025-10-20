@@ -742,6 +742,7 @@ bool onGargantaurSquishPlant(MyZombie attacker)
 		auto zombies = attacker.GetBoard().GetAllZombies<MyZombie>();
 		for (auto myzombie : zombies)
 		{
+			//为什么是不等于 而不是等于？
 			if (attacker.Hypnotized != myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
 				continue;
 			auto rect = myzombie.GetActualRect();

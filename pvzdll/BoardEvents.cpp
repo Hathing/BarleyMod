@@ -5,6 +5,7 @@ void InitPlantExistCount(MyBoard& board)
 {
 	std::fill(MyBoard::GoldMagnetFactors.begin(), MyBoard::GoldMagnetFactors.end(), 1.0f);
 	std::fill(MyBoard::IceShroomCounts.begin(), MyBoard::IceShroomCounts.end(), false);
+	std::fill(MyBoard::BloverAccelerateCounts.begin(), MyBoard::BloverAccelerateCounts.end(), 0);
 }
 
 void onBoardInit(MyBoard board)
@@ -58,12 +59,30 @@ void UpdatePlantExistCount(MyBoard& board)
 	{
 		const int row = plant.Row, level = plant.Level;
 		const auto type = plant.Type;
-		if (type == SeedType::GoldMagnet)
+
+		switch (type)
 		{
-			if (level >= 5)MyBoard::GoldMagnetFactors[row] *= 2.0f;
-			else MyBoard::GoldMagnetFactors[row] *= 1.5f;
+		case SeedType::GoldMagnet:
+			{
+				if (level >= 5)MyBoard::GoldMagnetFactors[row] *= 2.0f;
+				else MyBoard::GoldMagnetFactors[row] *= 1.5f;
+			}
+			break;
+		case SeedType::Iceshroom:
+			MyBoard::IceShroomCounts[row] = true;
+			break;
+		case SeedType::Blover:
+			{
+				if (plant.BloverIsWorking && plant.AttributeCountdown == 0)
+				{
+					MyBoard::BloverAccelerateCounts[row] += 1;
+					plant.AttributeCountdown = (plant.BloverIsFevering ? 2 : 4);
+				}
+			}
+			break;
+		default:
+			break;
 		}
-		if (type == SeedType::Iceshroom) MyBoard::IceShroomCounts[row] = true;
 	}
 }
 
@@ -81,6 +100,14 @@ void UpdateMatch(MyBoard& board)
 
 void onBoardUpdateGameObject(MyBoard board)
 {
+	board.Timer10cs++;
+	if (board.Timer10cs == 10)
+		board.Timer10cs = 0;
+
+	board.Timer1s++;
+	if (board.Timer1s == 100)
+		board.Timer1s = 0;
+
 	UpdatePoisonApply(board);
 	UpdatePlantExistCount(board);
 	
@@ -182,7 +209,7 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 
 			int ix = 0, iy = 0;
 			//绘制血条
-			if (plant.HpDisplayCounter > 0 || hp_ratio < 0.33f)
+			if (plant.Type==SeedType::Blover || plant.HpDisplayCounter > 0 || hp_ratio < 0.33f)
 			{
 				ix = x + 9;
 				iy = y + 60;
@@ -223,6 +250,11 @@ void onTyping(MyBoard board, char key)
 	}
 }
 
+inline void UpdatePlant(MyPlant& plant)
+{
+	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, plant.GetBaseAddress()).invoke(0x463E40).ret());
+}
+
 bool onBoardCallPlantUpdate(MyPlant plant)
 {
 	//血条倒计时
@@ -231,13 +263,33 @@ bool onBoardCallPlantUpdate(MyPlant plant)
 
 	//被动技能，无视减速等效果
 	if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)
-		PlantAbility::GetAbility(plant.Type)->TickPassive(plant);
-
-	//肥料加速100%
-	if (plant.FertilizedCounter > 0)
 	{
-		plant.FertilizedCounter -= 1;
-		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, plant.GetBaseAddress()).invoke(0x463E40).ret());
+		auto plant_prototype = PlantAbility::GetAbility(plant.Type);
+		MyBoard board = plant.GetBoard();
+		if (board.Timer1s == 0)
+		{
+			//自回复
+			plant_prototype->SelfHeal(plant);
+		}
+		//使用被动技能
+		plant_prototype->TickPassive(plant);
+
+		//三叶草加速除了三叶草之外的植物
+		if (plant.Type != SeedType::Blover)
+		{
+			int time = MyBoard::BloverAccelerateCounts[plant.Row];
+			while (time > 0)
+			{
+				time--;
+				UpdatePlant(plant);
+			}
+		}
+		//肥料加速100%
+		if (plant.FertilizedCounter > 0)
+		{
+			plant.FertilizedCounter -= 1;
+			UpdatePlant(plant);
+		}
 	}
 	return true;
 }

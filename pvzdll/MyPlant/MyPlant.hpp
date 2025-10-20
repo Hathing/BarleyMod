@@ -76,6 +76,12 @@ public:
 	INT_PROPERTY(SquashBirthX, __get_SquashBirthX, __set_SquashBirthX, 0x0E4);
 	/// @brief 倭瓜出生图层序数记录
 	INT_PROPERTY(SquashBirthLayer, __get_SquashBirthLayer, __set_SquashBirthLayer, 0x0E8);
+	/// @brief 三叶草加速总计时
+	INT_PROPERTY(BloverAccelerateTime, __get_BloverAccelerateTime, __set_BloverAccelerateTime, 0x0E0);
+	/// @brief 三叶草是否处于超频
+	T_PROPERTY(bool,BloverIsFevering, __get_BloverIsFevering, __set_BloverIsFevering, 0x0E4);
+	/// @brief 三叶草是否处于工作状态
+	T_PROPERTY(bool, BloverIsWorking, __get_BloverIsWorking, __set_BloverIsWorking, 0x0E5);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 当前体型值
