@@ -773,4 +773,6 @@ void InitPlantEvents()
 	PVZ::Memory::WriteMemory<int>(0x4607AE, 2);
 	//植物不再会根据更新+130调用SetSleeping
 	PVZ::Memory::WriteMemory<byte>(0x46320C, 0xEB);
+	//寒冰菇被碾压时不再爆炸
+	PVZ::Memory::WriteMemory<byte>(0x462BF1, 0x18);
 }
