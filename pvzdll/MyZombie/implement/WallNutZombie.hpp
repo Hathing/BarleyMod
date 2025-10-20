@@ -11,6 +11,12 @@ namespace ZombieAbility
 			auto model = zombie.GetSpecialHeadAnimation();
 			model.AssignRenderGroupToPrefix(-1, "awake");
 			model.AssignRenderGroupToPrefix(-1, "easter");
+
+			if (zombie.VariantType == ZombieVariantType::GarlicHead)
+			{
+				zombie.HelmHealth = 720;
+				zombie.HelmMaxHealth = 720;
+			}
 		}
 		bool OverrideHelmDamageTexture(MyZombie zombie, PVZ::Animation reanim, int partition)
 		{
