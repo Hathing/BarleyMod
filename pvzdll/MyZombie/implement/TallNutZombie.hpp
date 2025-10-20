@@ -19,5 +19,20 @@ namespace ZombieAbility
 			zombie.ShieldMaxHealth = 1100;
 			zombie.AttachShield();
 		}
+		bool OverrideHelmDamageTexture(MyZombie zombie, PVZ::Animation reanim, int partition)
+		{
+			switch (partition)
+			{
+			case 1:
+				reanim.SetImageOverride("common_idle", *((PVZ::Image*)0x6A7200));
+				return false;
+			case 2:
+				reanim.SetImageOverride("common_idle", *((PVZ::Image*)0x6A77D8));
+				return false;
+			default:
+				return false;
+			}
+			return false;
+		}
 	};
 }
