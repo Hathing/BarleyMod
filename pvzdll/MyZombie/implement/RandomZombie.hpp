@@ -6,6 +6,16 @@ namespace ZombieAbility
 	class RandomZombie : public BaseZombie
 	{
 	public:
+		void onCreated(MyZombie zombie)
+		{
+			if (zombie.FromWave == WAVE_ELITE1)
+			{
+				zombie.HelmHealth = 1100;
+				zombie.HelmMaxHealth = 1100;
+			}
+			zombie.BodyHealth = 1799;
+			zombie.BodyMaxHealth = 1799;
+		}
 		AnimationType::AnimationType GetReanimType(MyZombie zombie, AnimationType::AnimationType type)
 		{
 			return zombie.FromWave == WAVE_ELITE1 ? (AnimationType::AnimationType)0x93 : type;
