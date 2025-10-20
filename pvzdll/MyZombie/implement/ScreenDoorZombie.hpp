@@ -22,5 +22,23 @@ namespace ZombieAbility
 				return type;
 			}
 		}
+		bool OverrideHelmDamageTexture(MyZombie zombie, PVZ::Animation reanim, int partition)
+		{
+			if (zombie.FromWave == WAVE_ELITE1)
+			{
+				switch (partition)
+				{
+				case 1:
+					reanim.SetImageOverride("anim_cone", *((PVZ::Image*)0x6FF160));
+					return false;
+				case 2:
+					reanim.SetImageOverride("anim_cone", *((PVZ::Image*)0x6FF164));
+					return false;
+				default:
+					return false;
+				}
+			}
+			return true;
+		}
 	};
 }
