@@ -659,8 +659,9 @@ bool onTorchwoodFindProjectile(MyPlant plant, MyProjectile proj)
 	case ProjectileType::FirePea:
 		//火球过火
 		high_class_convert = (level < 2 ? false : (probability < (level < 4 ? 0.2f : 0.4f)));
-		if (high_class_convert && proj.SpecialType == PST_NONE)
+		if (high_class_convert && proj.SpecialType == PST_NONE && proj.LastOnFireColumn != plant.Column)
 		{
+			proj.LastOnFireColumn = plant.Column;
 			proj.SpecialType = PST_ORANGE_FIREBALL;
 			//修改颜色
 			auto attachment = PVZ::GetByID<PVZ::Attachment>(proj.AttachmentID);

@@ -20,6 +20,8 @@ public:
 	INT_PROPERTY(Unknown2, __get_Un2, __set_Un2, 0x78);
 	/// @brief 小喷菇五阶技能属性，子弹的额外基础倍率而非随机倍率
 	T_PROPERTY(float, PuffShroomBaseMultiplier, __get_PuffShroomBaseMultiplier, __set_PuffShroomBaseMultiplier, 0x78);
+	/// @brief 豌豆和火球最后一次过火的列号
+	INT_PROPERTY(LastOnFireColumn, __get_LastOnFireColumn, __set_LastOnFireColumn, 0x78);
 	/// @brief 子弹的动画附件的ID
 	INT_PROPERTY(AttachmentID, __get_AttachmentID, __set_AttachmentID, 0x7C);
 	/// @brief 创建该子弹的植物的 ID
