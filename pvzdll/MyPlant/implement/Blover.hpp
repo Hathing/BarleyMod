@@ -6,10 +6,56 @@ namespace PlantAbility
 {
 	class Blover : public NoEasterSkinPlant
 	{
-		inline static const int max_health[6] = { 300, 450, 450, 600, 600, 600 };
+		inline static const int max_health[6] = { 600, 600, 600, 600, 600, 600 };
 		void onUpgrade(MyPlant plant)
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
+		}
+		void onCreated(MyPlant plant)
+		{
+			plant.SubClass = 2;
+			plant.BloverIsWorking = true;
+			plant.SetMaxHealth(max_health[0]);
+		}
+		bool TickAbility(MyPlant plant)
+		{
+
+
+			if (plant.BloverIsWorking)
+			{
+				plant.BloverAccelerateTime++;
+			
+				if (plant.Hp < plant.MaxHp / 2)
+				{
+					plant.BloverIsWorking = false;
+					auto anim = plant.GetAnimationPart1();
+					anim.SetFramesForLayer("anim_idle");
+					anim.LoopType = 0;
+					plant.BloverAccelerateTime = 0;
+				}
+			}
+			else
+			{
+				if (plant.Hp >= plant.MaxHp)
+				{
+					plant.BloverIsWorking = true;
+					auto anim = plant.GetAnimationPart1();
+					anim.Play("anim_blow",10,3,18.0f);
+				}
+			}
+
+			return true;
+		}
+		void SelfHeal(MyPlant plant)
+		{
+			if (plant.BloverIsWorking)
+			{
+				plant.Hp -= 2;
+			}
+			else
+			{
+				plant.Heal(2);
+			}
 		}
 	};
 }
