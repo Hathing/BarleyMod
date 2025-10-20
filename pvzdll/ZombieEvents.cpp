@@ -730,23 +730,25 @@ int onGargantaurJudgeSquish(MyZombie zombie)
 
 bool onGargantaurSquishPlant(MyZombie attacker)
 {
-	auto atk_rect = attacker.GetActualAttackRect();
-	int damage = 0;
-	if (attacker.Type == ZombieType::Gargantuar)
-		damage = attacker.BodyMaxHealth <= 3000 ? 900 : 1200;
-	else if (attacker.Type == ZombieType::Gigagargantuar)
-		damage = attacker.BodyMaxHealth <= 6000 ? 900 : 1800;
-
-	auto zombies = attacker.GetBoard().GetAllZombies<MyZombie>();
-	for (auto myzombie : zombies)
+	if (attacker.Hypnotized)
 	{
-		if (attacker.Hypnotized != myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
-			continue;
-		auto rect = myzombie.GetActualRect();
-		if (PVZ::GetXOverlap(atk_rect, rect) >= -30)
-			myzombie.Hit(damage);
-	}
+		auto atk_rect = attacker.GetActualAttackRect();
+		int damage = 0;
+		if (attacker.Type == ZombieType::Gargantuar)
+			damage = attacker.BodyMaxHealth <= 3000 ? 900 : 1200;
+		else if (attacker.Type == ZombieType::Gigagargantuar)
+			damage = attacker.BodyMaxHealth <= 6000 ? 900 : 1800;
 
+		auto zombies = attacker.GetBoard().GetAllZombies<MyZombie>();
+		for (auto myzombie : zombies)
+		{
+			if (attacker.Hypnotized != myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
+				continue;
+			auto rect = myzombie.GetActualRect();
+			if (PVZ::GetXOverlap(atk_rect, rect) >= -30)
+				myzombie.Hit(damage);
+		}
+	}
 	return !attacker.Hypnotized;
 }
 
