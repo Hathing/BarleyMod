@@ -1641,4 +1641,15 @@ namespace PVZEvent
 		ZombieYuckyFaceChangeRowBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieYuckyFaceChangeRowBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
+
+	/// @brief 僵尸更新啃咬时动画速度的事件
+	/// @param 僵尸
+	/// @return False则跳过原版修改动画速率
+	class ZombieUpdateEatingAnimSpeedEvent : public BoolDLLEventTemplate<0x52F105, 6, 0x52F13C, REG_ESI>
+	{
+	public:
+		ZombieUpdateEatingAnimSpeedEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateEatingAnimSpeed"); };
+		ZombieUpdateEatingAnimSpeedEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieUpdateEatingAnimSpeedEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
 };

@@ -495,6 +495,17 @@ void onZombieEatPlant(MyZombie zombie, MyPlant plant)
 	}
 }
 
+bool onZombieUpdateEatingAnimSpeed(MyZombie zombie)
+{
+	if (zombie.Type == ZombieType::NewspaperZombie)
+	{
+		float rate = 36.0f * (1.0f + zombie.NewspaperAngerStack / 10.0f);
+		PVZ::Memory::Execute(AsmBuilder().push_float(rate).mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).invoke(0x52EFF0).ret());
+		return false;
+	}
+	return true;
+}
+
 bool onZombieWalkIntoWater(MyZombie zombie)
 {
 	if (!zombie.InWater && zombie.IsTangleKelpTarget())
@@ -622,8 +633,15 @@ int onZombieFindTargetInterval(MyZombie zombie)
 	int cd = zombie.ExistedTime * 100;
 	//引入寒意百分比减速
 	int interval = 400 / (FROST_DECELERATE(zombie));
+	//原版减速，间隔翻倍
 	if (zombie.DecelerateCountdown > 0)
 		interval *= 2;
+	//读报满层怒气最高造成三倍伤害
+	if (zombie.Type == ZombieType::NewspaperZombie)
+	{
+		interval = interval / (1.0f + zombie.NewspaperAngerStack / 10.0f);
+	}
+
 
 	if (cd % interval < 100)
 		return 1;
@@ -1019,6 +1037,7 @@ void InitZombieEvents()
 	PVZEvent::ZombieFinishYuckyFaceEvent((int)onZombieFinishYuckyFace);
 	PVZEvent::ZombieYuckyFaceChangeRowBeforeEvent((int)onZombieYuckyFaceChangeRowBefore);
 	ZombieEatEvent((int)onZombieEatPlant);
+	PVZEvent::ZombieUpdateEatingAnimSpeedEvent((int)onZombieUpdateEatingAnimSpeed);
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
 	PVZEvent::ZombieSkipEatPlantEvent((int)onZombieSkipEatPlant);
 
