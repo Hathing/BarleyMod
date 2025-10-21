@@ -907,6 +907,7 @@ namespace PVZEvent
 	/// @brief 僵尸修改绘制颜色事件
 	/// @param 僵尸、动画、ESP栈指针（使用请详见函数）
 	/// @return True则使用原版颜色，False则跳过原版颜色。
+	/// @deprecated 已改为使用PVZClass的DrawZombieReanimEvent
 	class ZombieSetColorEvent : public BoolDLLEventTemplate<0x52D3EA, 8, 0x52D429, REG_ESP, REG_EBX, REG_ESI>
 	{
 	public:

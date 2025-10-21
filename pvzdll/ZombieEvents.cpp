@@ -267,6 +267,54 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	return true;
 }
 
+int onDrawZombieReanim(MyZombie zombie, PVZ::Animation anim)
+{
+	bool draw_additive_color = anim.DrawAdditiveColor;
+	auto original_base_color = anim.GetColor();
+	auto original_additive_color = anim.GetAdditiveColor();
+
+	auto colorflag = zombie.ColorFlag;
+	if (colorflag)
+	{
+		float ratio = 0.4f;//取值范围为0.4~1
+		switch (colorflag)
+		{
+		case 1:
+			ratio += 0.015f * min(zombie.PoisonStack, 40);
+			original_base_color.Red = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color.Blue = 255 * (1.0f - ratio);
+			original_additive_color.Green = original_additive_color.Green * (1.0f - ratio) + 255 * ratio;
+			original_additive_color.Red = original_additive_color.Red * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		case 2:
+			ratio += 0.02f * zombie.FrostStack;
+			original_base_color.Green = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color.Red = 255 * (1.0f - ratio);
+			original_additive_color.Blue = original_additive_color.Blue * (1.0f - ratio) + 255 * ratio;
+			original_additive_color.Green = original_additive_color.Green * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		case 3:
+			ratio += 0.001f * min(zombie.FlameStack, 600);
+			original_base_color.Green = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color.Blue = 255 * (1.0f - ratio);
+			original_additive_color.Red = original_additive_color.Red * (1.0f - ratio) + 255 * ratio;
+			original_additive_color.Green = original_additive_color.Green * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		default:
+			break;
+		}
+		draw_additive_color = true;
+	}
+	anim.SetColor(original_base_color);
+	anim.SetAdditiveColor(original_additive_color);
+	anim.DrawAdditiveColor = draw_additive_color;
+
+	if (zombie.ShieldType != 0)
+		return 1;
+	return 0;
+}
+
+/// @deprecated
 bool onZombieSetColor(MyZombie zombie, PVZ::Animation anim, unsigned int stack_pointer)
 {
 	bool draw_additive_color = PVZ::Memory::ReadMemory<bool>(stack_pointer + 0x2F);
@@ -919,7 +967,8 @@ void InitZombieEvents()
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 
 	// 僵尸绘制相关
-	PVZEvent::ZombieSetColorEvent((int)onZombieSetColor);
+	DrawZombieReanimEvent((int)onDrawZombieReanim);
+	//PVZEvent::ZombieSetColorEvent((int)onZombieSetColor);
 	///PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
 	//橄榄球在此事件中有崩溃
 	//PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
