@@ -1426,7 +1426,7 @@ namespace PVZEvent
 	/// @param 触发事件的僵尸、触发事件的粒子效果。
 	/// @note 结算时机后于原版的大小重载和颜色重载。
 	/// @return 是否使用原版的图片重载处理。
-	class ZombieDropArmParticleEvent : public BoolDLLEventTemplate<0x530FB3, 6, 0x52A452, REG_EDI, REG_EBX>
+	class ZombieDropArmParticleEvent : public BoolDLLEventTemplate<0x52A3B1, 6, 0x52A452, REG_EDI, REG_EBX>
 	{
 	public:
 		ZombieDropArmParticleEvent() : BoolDLLEventTemplate() { Init("onZombieDropArmParticle"); };

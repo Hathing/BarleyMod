@@ -8,8 +8,19 @@ namespace ZombieAbility
 	public:
 		void onCreated(MyZombie zombie)
 		{
-			if (zombie.FromWave == WAVE_ELITE1)
+			auto model = zombie.GetAnimation();
+			switch (zombie.FromWave)
+			{
+			case 1:
+				model.SetImageOverride("Zombie_flag", *((PVZ::Image*)0x6FF0C4));
+				break;
+			case 2:
+				model.SetImageOverride("Zombie_flag", *((PVZ::Image*)0x6FF0BC));
 				zombie.InvulnerableDuration = 502;
+				break;
+			default:
+				break;
+			}
 		}
 		AnimationType::AnimationType GetReanimType(MyZombie zombie, AnimationType::AnimationType type)
 		{
