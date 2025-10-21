@@ -24,7 +24,7 @@ namespace PlantAbility
 		}
 		int GetDamageRangeFlags(MyPlant plant, int weapon_type)
 		{
-			return int(PVZ::DRF_OFF_GROUND | PVZ::DRF_FLYING | PVZ::DRF_GROUND | PVZ::DRF_SUBMERGED);
+			return int(PVZ::DRF_FLYING | PVZ::DRF_GROUND | PVZ::DRF_SUBMERGED);
 		}
 	};
 }
