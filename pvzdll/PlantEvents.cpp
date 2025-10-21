@@ -11,6 +11,7 @@ void onPlantInitAfter(MyPlant plant)
 	plant.EasterSkin = false;
 	plant.HealCounter = 0;
 	plant.AnotherCounter = 0;
+	plant.StunCountdown = 0;
 	plant.ChillCountdown = 0;
 	plant.KillCount = 0;
 	plant.Experience = 0;
@@ -56,6 +57,13 @@ void onPlantInitAfter(MyPlant plant)
 	}
 
 	PlantAbility::GetAbility(plant.Type)->onCreated(plant);
+}
+
+bool onPlantUpdateAcitveAbilityBefore(MyPlant plant)
+{
+	if (plant.StunCountdown > 0)
+		return false;
+	return true;
 }
 
 bool onPlantUpdateAbility(MyPlant plant)
@@ -721,6 +729,7 @@ void InitPlantEvents()
 	PVZEvent::PlantDyingEvent((int)onPlantDying);
 
 	// 植物特性相关
+	PVZEvent::PlantUpdateAcitveAbilityBeforeEvent((int)onPlantUpdateAcitveAbilityBefore);
 	PlantUpdateAbilityEvent((int)onPlantUpdateAbility);
 	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
 	// 磁力菇
@@ -773,6 +782,8 @@ void InitPlantEvents()
 	PVZ::Memory::WriteMemory<int>(0x4607AE, 2);
 	//植物不再会根据更新+130调用SetSleeping
 	PVZ::Memory::WriteMemory<byte>(0x46320C, 0xEB);
+	//植物不再会根据更新+130播放音效
+	PVZ::Memory::WriteMemory<byte>(0x4631B1, 0xEB);
 	//寒冰菇被碾压时不再爆炸
 	PVZ::Memory::WriteMemory<byte>(0x462BF1, 0x18);
 }

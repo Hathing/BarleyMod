@@ -1607,4 +1607,16 @@ namespace PVZEvent
 			part2->end();
 		}
 	};
+
+	/// @brief 植物更新所有主动技能前的事件
+	/// @note 发生在原版UpdateAbility中，更新消失倒计时、苏醒倒计时之后，其余所有主动技能更新之前。
+	/// @param 植物
+	/// @return False则跳过所有主动技能更新
+	class PlantUpdateAcitveAbilityBeforeEvent : public BoolDLLEventTemplate<0x463217, 7, 0x463410, REG_EDI>
+	{
+	public:
+		PlantUpdateAcitveAbilityBeforeEvent() : BoolDLLEventTemplate() { Init("onPlantUpdateAcitveAbilityBefore"); };
+		PlantUpdateAcitveAbilityBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantUpdateAcitveAbilityBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
 };

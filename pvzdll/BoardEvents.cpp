@@ -260,6 +260,9 @@ bool onBoardCallPlantUpdate(MyPlant plant)
 	//血条倒计时
 	if (plant.HpDisplayCounter > 0)
 		plant.HpDisplayCounter -= 1;
+	//晕眩倒计时
+	if (plant.StunCountdown > 0)
+		plant.StunCountdown -= 1;
 
 	//被动技能，无视减速等效果
 	if (plant.OnBoard && !plant.Squash && !plant.Sleeping && plant.mOnBungee == 0)

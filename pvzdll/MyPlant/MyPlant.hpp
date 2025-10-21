@@ -90,6 +90,8 @@ public:
 	INT_PROPERTY(BodySizeCountdown, __get_BodySizeCountdown, __set_BodySizeCountdown, 0xF8);
 	/// @brief 植物血条显示倒计时
 	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0xFC);
+	/// @brief 晕眩效果倒计时（>0时植物跳过主动技能更新）
+	INT_PROPERTY(StunCountdown, __get_StunCountdown, __set_StunCountdown, 0x100);
 	/// @brief 减速效果倒计时
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
 	/// @brief 胆小菇击杀次数
