@@ -11,14 +11,6 @@ namespace ZombieAbility
 			auto model = zombie.GetAnimation();
 			model.AssignRenderGroupToPrefix(-1, "anim_bucket");
 			model.AssignRenderGroupToPrefix(-1, "anim_screendoor");
-
-			MyBoard board = zombie.GetBoard();
-			if (board.isValid())
-			{
-				int tmp = max(3500, 2000 + board.MatchTimer / 80);
-				zombie.HelmHealth = tmp;
-				zombie.HelmMaxHealth = tmp;
-			}
 		}
 		bool OverrideDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
 		{
@@ -32,13 +24,7 @@ namespace ZombieAbility
 	public:
 		void onCreated(MyZombie zombie)
 		{
-			MyBoard board = zombie.GetBoard();
-			if (board.isValid())
-			{
-				int tmp = max(7000, 4000 + board.MatchTimer / 40);
-				zombie.HelmHealth = tmp;
-				zombie.HelmMaxHealth = tmp;
-			}
+			return;
 		}
 		bool OverrideDrawPos(MyZombie zombie, PVZ::ZombieDrawPosition* draw_pos)
 		{

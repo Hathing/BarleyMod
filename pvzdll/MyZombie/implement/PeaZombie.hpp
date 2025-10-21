@@ -15,8 +15,9 @@ namespace ZombieAbility
 
 			if (!zombie.VariantType)
 			{
-				model.AssignRenderGroupToPrefix(0, "anim_bucket");
-				model.AssignRenderGroupToPrefix(-1, "anim_hair");
+				auto anim = zombie.GetAnimation();
+				anim.AssignRenderGroupToPrefix(0, "anim_bucket");
+				anim.AssignRenderGroupToPrefix(-1, "anim_hair");
 				zombie.HelmType = HelmType::Bucket;
 				zombie.HelmHealth = 1100;
 				zombie.HelmMaxHealth = 1100;

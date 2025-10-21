@@ -72,7 +72,7 @@ void MyProjectile::MakePiercing(int piercingnum,float xspeed,float yspeed)
 	ghostproj.PiercingMaxCount = max(min(piercingnum, 8), 1);//穿透数不能<1，不能>8
 	ghostproj.PiercingCount = 0;
 
-	this->GhostAddr = ghostaddr;
+	this->GhostID = ghostproj.Id;
 	this->Motion = MotionType::Piercing;
 	this->XSpeed = xspeed;
 	this->YSpeed = yspeed;
@@ -81,6 +81,7 @@ void MyProjectile::MakePiercing(int piercingnum,float xspeed,float yspeed)
 void MyProjectile::DeriveProperty(MyProjectile proj)
 {
 	this->Row = proj.Row;
+	//this->DamageAbility = proj.DamageAbility;
 	this->SourceType = proj.SourceType;
 	this->SourceLevel = proj.SourceLevel;
 	this->ParentID = proj.ParentID;

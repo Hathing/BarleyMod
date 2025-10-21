@@ -23,16 +23,15 @@ namespace PlantAbility
 						plant.SetMaxHealth(plant.MaxHp + (myplant.MaxHp >> 2));
 			}
 		}
-		void TickPassive(MyPlant plant)
+		void SelfHeal(MyPlant plant)
 		{
 			if (plant.Level >= MyPlant::MAX_LEVEL)
 			{
-				plant.HealCounter++;
-				if (plant.HealCounter >= 5)
-				{
-					plant.HealCounter = 0;
-					plant.Heal(1);
-				}
+				plant.Heal(20);
+			}
+			else
+			{
+				BasePlant::SelfHeal(plant);
 			}
 		}
 	};

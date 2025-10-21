@@ -65,12 +65,30 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	PVZ::CreateParticleSystem(zombie.X + 40.0f, zombie.Y + 65.0f, zombie.Layer + 100, EffectType::IMITATER_TRANSFORMING);
 	
 	child_zombie.X = zombie.X;
+	//雪橇小队修正X坐标
 	if (child_zombie.GetBobsledPosition() == 0)
 	{
 		for (int i = 1; i <= 3; i++)
 		{
 			auto zombie_ = PVZ::GetByID<MyZombie>(child_zombie.GetRelatedZombieID(i));
 			zombie_.X = child_zombie.X + 50.0f * i;
+		}
+	}
+	//小鬼向前飞跃
+	if (child_zombie.Type == ZombieType::Imp)
+	{
+		if (child_zombie.X > 280.0f)
+		{
+			child_zombie.Height = 5.0f;
+			child_zombie.State = ZombieState::IMP_FLYING;
+
+			float flyingtime = 0.8f + Creator::RandFloat(0.4f);//单位为秒
+			flyingtime *= 100.0f;
+
+			child_zombie.Speed = (child_zombie.X - 200.0f) / flyingtime;
+			child_zombie.Speed += (Creator::Rand(11) - 5) * 0.2f;
+			child_zombie.FallSpeed = 0.025f * flyingtime;
+			child_zombie.PlayAnim("anim_thrown", 18.0f, 0, 3);
 		}
 	}
 

@@ -47,6 +47,55 @@ void MyZombie::FlyAway(float factor)
 	}
 }
 
+void MyZombie::ShiftColorFlag()
+{
+	switch (this->ColorFlag)
+	{
+	case 1:
+	{
+		if (this->FrostStack)
+			this->ColorFlag = 2;
+		else if (this->FlameStack > 0)
+			this->ColorFlag = 3;
+		else if (this->PoisonStack <= 0)
+			this->ColorFlag = 0;
+		break;
+	}
+	case 2:
+	{
+		if (this->FlameStack > 0)
+			this->ColorFlag = 3;
+		else if (this->PoisonStack > 0)
+			this->ColorFlag = 1;
+		else if (this->FrostStack == 0)
+			this->ColorFlag = 0;
+		break;
+	}
+	case 3:
+	{
+		if (this->PoisonStack > 0)
+			this->ColorFlag = 1;
+		else if (this->FrostStack)
+			this->ColorFlag = 2;
+		else if (this->FlameStack <= 0)
+			this->ColorFlag = 0;
+		break;
+	}
+	default:
+	{
+		if (this->PoisonStack > 0)
+			this->ColorFlag = 1;
+		else if (this->FrostStack)
+			this->ColorFlag = 2;
+		else if (this->FlameStack > 0)
+			this->ColorFlag = 3;
+		else
+			this->ColorFlag = 0;
+		break;
+	}
+	}
+}
+
 MyZombie MyZombie::FindZombieTarget()
 {
 	int targetaddr = PVZ::Memory::Execute(AsmBuilder().push_imm32(this->GetBaseAddress()).invoke(0x52E840).mov_mem_reg(Memory::Variable, REG_EAX).ret());

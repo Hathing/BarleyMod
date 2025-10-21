@@ -520,6 +520,8 @@ namespace PVZ
 		T_PROPERTY(FLOAT, CycleRate, __get_CycleRate, __set_CycleRate, 4);
 		/// @brief 播放速率
 		T_PROPERTY(FLOAT, Speed, __get_Speed, __set_Speed, 8);
+		/// @brief 循环类型
+		INT_PROPERTY(LoopType, __get_LoopType, __set_LoopType, 0x10);
 		/// @brief 是否已移除
 		T_PROPERTY(BOOLEAN, NotExist, __get_NotExist, __set_NotExist, 0x14);
 		/// @brief 起始帧

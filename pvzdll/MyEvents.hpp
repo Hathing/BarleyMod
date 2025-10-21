@@ -895,6 +895,7 @@ namespace PVZEvent
 	/// @attention 注意不是所有状态的僵尸都会经过这个位置，这个位置适用于新增绘制
 	/// @param 僵尸、动画，原R,G,B,A（均为int，0~255）
 	/// @return True则使用原版颜色，False则跳过原版颜色。
+	/// @deprecated 请使用ZombieSetColorEvent
 	class ZombieUpdateColorEvent : public BoolDLLEventTemplate<0x52D3F6, 7, 0x52D429, MEM_ESP_ADD(0x4C), REG_EDX, REG_ECX, REG_EAX, REG_EBX, REG_ESI>
 	{
 	public:
@@ -902,6 +903,19 @@ namespace PVZEvent
 		ZombieUpdateColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ZombieUpdateColorEvent() : ZombieUpdateColorEvent("onZombieUpdateColor") {};
 	};
+
+	/// @brief 僵尸修改绘制颜色事件
+	/// @param 僵尸、动画、ESP栈指针（使用请详见函数）
+	/// @return True则使用原版颜色，False则跳过原版颜色。
+	/// @deprecated 已改为使用PVZClass的DrawZombieReanimEvent
+	class ZombieSetColorEvent : public BoolDLLEventTemplate<0x52D3EA, 8, 0x52D429, REG_ESP, REG_EBX, REG_ESI>
+	{
+	public:
+		ZombieSetColorEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieSetColorEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ZombieSetColorEvent() : ZombieSetColorEvent("onZombieSetColor") {};
+	};
+
 	/// @brief 子弹初始化完成事件
 	/// @note 此时 ImageX 和 ImageY 均未初始化
 	/// @param 触发事件的子弹
@@ -1506,4 +1520,104 @@ namespace PVZEvent
 		ZombieStartPlayWalkAnimEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
 
+	/// @brief 矿工僵尸挖地时是否可索敌植物的事件
+	/// @param 矿工僵尸，植物
+	/// @return True则可索敌，False则不可索敌
+	/// @note 该事件会覆盖掉原版中矿工僵尸挖地可啃咬IDLE土豆雷的特性，需要的话请自行添加条件
+	class DiggerZombieUndergroundFindTargetEvent : public DiversionEventTemplate<0x52E569, 5, 0x52E770, 0x52E578, REG_ESI, REG_EBP>
+	{
+	public:
+		DiggerZombieUndergroundFindTargetEvent(const char* str) : DiversionEventTemplate() { Init(str); };
+		DiggerZombieUndergroundFindTargetEvent(int address) : DiversionEventTemplate() { Init(address); };
+		DiggerZombieUndergroundFindTargetEvent() : DiggerZombieUndergroundFindTargetEvent("onDiggerZombieUndergroundFindTarget") {};
+	};
+
+	/// @brief 火炬树桩在寻找子弹碰撞前的事件
+	/// @param 火炬树桩
+	/// @return False则不会寻找子弹过火
+	class TorchwoodFindProjectileBeforeEvent : public BoolDLLEventTemplate<0x46061F, 6, 0x4606E7, REG_EBX>
+	{
+	public:
+		TorchwoodFindProjectileBeforeEvent() : BoolDLLEventTemplate() { Init("onTorchwoodFindProjectileBefore"); };
+		TorchwoodFindProjectileBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		TorchwoodFindProjectileBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
+	/// @brief 火炬树桩在寻找子弹碰撞时的事件，发生在行数判断和矩形重合判断之后
+	/// @note 原版中，夹在行数判断和矩形判断中间的类型判断被跳过
+	/// @param 火炬树桩，遍历的子弹
+	/// @return True则继续进行原版判断（豌豆过火、冰豌过火），False则跳过原版判断
+	class TorchwoodFindProjectileEvent : public DLLEventTemplate<0x4606AB, 7, REG_ESI, REG_EBX>
+	{
+	public:
+		TorchwoodFindProjectileEvent() : DLLEventTemplate() { Init("onTorchwoodFindProjectile"); };
+		TorchwoodFindProjectileEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		TorchwoodFindProjectileEvent(int address) : DLLEventTemplate() { Init(address); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			//跳过原版的类型判断
+			PVZ::Memory::WriteMemory<byte>(0x46065C, 0xEB);
+			PVZ::Memory::WriteMemory<byte>(0x46065D, 0x0A);
+			PVZ::Memory::WriteMemory<byte>(0x46065E, 0x90);
+
+			builder.test_al_al().jnz_rel(7).popad().push_imm32(0x4606D0).ret().popad()
+				.mov_reg_mem_reg_add_imm(REG_EBX,REG_ESI,0x5C)
+				.test_reg_reg(REG_EBX,REG_EBX).jne_rel(9)
+				.mov_reg_mem_reg_add_imm(REG_EAX, REG_EBP, 0x08).push_imm32(0x4606B2).ret()
+				.push_imm32(0x4606BE).ret();
+		}
+	};
+
+	/// @brief 子弹被火炬树桩过火前的事件
+	/// @param 火炬树桩、子弹
+	/// @return False则该子弹不过火
+	/// @deprecated 这个事件虽然能用，但无法满足S7火球过火的需求
+	class TorchwoodConvertProjectileEvent
+	{
+	private:
+		class TorchwoodConvertPeaToFireballEvent : public BoolDLLEventTemplate<0x4606B2, 5, 0x4606D0, REG_ESI, REG_EAX>
+		{
+		public:
+			TorchwoodConvertPeaToFireballEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			TorchwoodConvertPeaToFireballEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			TorchwoodConvertPeaToFireballEvent() : BoolDLLEventTemplate() { Init("onTorchwoodConvertPeaToFireball"); };
+		};
+		class TorchwoodConvertSnowPeaToPeaEvent : public BoolDLLEventTemplate<0x4606C6, 5, 0x4606D0, REG_ESI, REG_ECX>
+		{
+		public:
+			TorchwoodConvertSnowPeaToPeaEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			TorchwoodConvertSnowPeaToPeaEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			TorchwoodConvertSnowPeaToPeaEvent() : BoolDLLEventTemplate() { Init("onTorchwoodConvertSnowPeaToPea"); };
+		};
+		TorchwoodConvertPeaToFireballEvent* part1;
+		TorchwoodConvertSnowPeaToPeaEvent* part2;
+	public:
+		TorchwoodConvertProjectileEvent()
+		{
+			TorchwoodConvertProjectileEvent(PVZ::Memory::GetProcAddress("onTorchwoodConvertProjectile"));
+		}
+		TorchwoodConvertProjectileEvent(int address)
+		{
+			part1 = new TorchwoodConvertPeaToFireballEvent(address);
+			part2 = new TorchwoodConvertSnowPeaToPeaEvent(address);
+		}
+		void end()
+		{
+			part1->end();
+			part2->end();
+		}
+	};
+
+	/// @brief 植物更新所有主动技能前的事件
+	/// @note 发生在原版UpdateAbility中，更新消失倒计时、苏醒倒计时之后，其余所有主动技能更新之前。
+	/// @param 植物
+	/// @return False则跳过所有主动技能更新
+	class PlantUpdateAcitveAbilityBeforeEvent : public BoolDLLEventTemplate<0x463217, 7, 0x463410, REG_EDI>
+	{
+	public:
+		PlantUpdateAcitveAbilityBeforeEvent() : BoolDLLEventTemplate() { Init("onPlantUpdateAcitveAbilityBefore"); };
+		PlantUpdateAcitveAbilityBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantUpdateAcitveAbilityBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
 };

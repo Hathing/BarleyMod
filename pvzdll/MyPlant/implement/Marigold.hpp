@@ -31,7 +31,7 @@ namespace PlantAbility
 						auto plants = plant.GetBoard().GetAllPlants<MyPlant>();
 						for (auto& plant_ : plants)
 						{
-							if (!plant_.NotExist && plant_.Row == plant.Row && !plant_.Squash && plant_.IsXPRecipient() && plant_.IsPrime())
+							if (!plant_.NotExist && plant_.Row == plant.Row && !plant_.Squash && plant_.IsPrime())
 							{
 								bool notfull = (plant_.Hp < plant_.MaxHp);
 								if (!priority && notfull)
