@@ -9,7 +9,7 @@ namespace ZombieAbility
 		{
 			zombie.BodyHealth = 650;
 			zombie.BodyMaxHealth = 650;
-			zombie.SummonCounter = 3;
+			zombie.SummonCounter = 5;
 
 			if (zombie.FromWave == WAVE_ELITE1)
 			{
@@ -26,7 +26,14 @@ namespace ZombieAbility
 
 				auto effect = head.AttachTo(track.GetAttachmentID(), 0, 0);
 				effect.GetOffset().ScaleRotateTransformMatrix(80.0f, 0, 0.2f, -0.8f, 0.8f);
+
+				zombie.SummonCounter = 2;
+				zombie.InvulnerableDuration = 9999999;
 			}
+		}
+		bool TickAbility(MyZombie zombie)
+		{
+			return zombie.ZombieHeight != 9;
 		}
 	};
 }

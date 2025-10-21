@@ -21,5 +21,9 @@ namespace ZombieAbility
 				draw_pos->ImageOffsetX -= 120.0f;
 			return true;
 		}
+		bool TickAbility(MyZombie zombie)
+		{
+			return !zombie.Hypnotized && zombie.ZombieHeight != 9;
+		}
 	};
 }

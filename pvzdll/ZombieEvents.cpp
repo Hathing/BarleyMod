@@ -362,8 +362,6 @@ bool onZombieSetColor(MyZombie zombie, PVZ::Animation anim, unsigned int stack_p
 
 bool onZombieUpdateAbility(MyZombie zombie)
 {
-	if (zombie.Hypnotized && zombie.Type == ZombieType::Zomboin)
-		return false;
 	//这里是所有僵尸在未定身时必经的更新
 	MyBoard board = zombie.GetBoard();
 	//小丑僵尸爆炸
@@ -403,8 +401,7 @@ bool onZombieUpdateAbility(MyZombie zombie)
 		//Call LandFlyer
 		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).push_imm32(0).invoke(0x525B60).ret());
 	}
-	// 空投的车类不更新
-	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
+	return ZombieAbility::GetAbility(zombie.Type)->TickAbility(zombie);
 }
 
 bool onClownZombiePop(MyZombie zombie, int x, int y)
@@ -970,8 +967,7 @@ void InitZombieEvents()
 	DrawZombieReanimEvent((int)onDrawZombieReanim);
 	//PVZEvent::ZombieSetColorEvent((int)onZombieSetColor);
 	///PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	//橄榄球在此事件中有崩溃
-	//PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
+	PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
 	PVZEvent::ZombieDropHelmParticleEvent((int)onZombieDropHelmParticle);
 	PVZEvent::ZombieTakeHelmDamageTextureEvent((int)onZombieUpdateHelmDamageTexture);
 	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);

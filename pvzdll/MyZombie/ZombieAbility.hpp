@@ -18,6 +18,14 @@ namespace ZombieAbility
 		{
 			return;
 		}
+		/// @brief 僵尸更新技能时，先调用该函数。
+		/// @param zombie 僵尸
+		/// @return 是否更新原版行为动作
+		/// @retval false 完全跳过原版的任何行为动作，这会导致原生技能失效。
+		virtual bool TickAbility(MyZombie zombie)
+		{
+			return true;
+		}
 		/// @brief 重载僵尸的绘制位置
 		/// @param zombie 僵尸
 		/// @param draw_pos 僵尸的绘制位置
