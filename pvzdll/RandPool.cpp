@@ -15,6 +15,12 @@ static const ZombieType::ZombieType hypno_pool[] =
 
 void onRandomZombieDropHelm(MyZombie zombie)
 {
+	if (zombie.Type == ZombieType::FootballZombie)
+	{
+		//橄榄球受伤掉头盔时，冲刺时间清空
+		zombie.FootballZombieChargeTime = 0;
+		return;
+	}
 	if (zombie.Type != ZombieType::ConeheadZombie)
 		return;
 

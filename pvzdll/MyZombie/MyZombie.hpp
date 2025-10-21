@@ -73,6 +73,8 @@ public:
 	INT_PROPERTY(NewspaperAngerStack, __get_NewspaperAngerStack, __set_NewspaperAngerStack, 0xF0);
 	/// @brief 矿工上次刨根的列数
 	INT_PROPERTY(DiggerLastDigRootColumn, __get_DiggerLastDigRootColumn, __set_DiggerLastDigRootColumnn, 0xF0);
+	/// @brief 橄榄球僵尸冲刺时间
+	INT_PROPERTY(FootballZombieChargeTime, __get_FootballZombieChargeTime, __set_FootballZombieChargeTime, 0xF0);
 	
 	/// @brief 舞王和雪橇车相关联僵尸编号数组属性
 	INT_ARRAY_PROPERTY(GetRelatedZombieID, SetRelatedZombieID, 0xF0);
