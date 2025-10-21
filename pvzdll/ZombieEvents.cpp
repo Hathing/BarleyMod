@@ -200,6 +200,7 @@ void onZombieUpdatePlaying(MyZombie zombie)
 	return;
 }
 
+/// @deprecated
 bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,int blue,int alpha)
 {
 	if (zombie.Hypnotized && zombie.HpPoint >= 4)
@@ -266,6 +267,99 @@ bool onZombieUpdateColor(MyZombie zombie,PVZ::Animation anim,int red,int green,i
 	return true;
 }
 
+int onDrawZombieReanim(MyZombie zombie, PVZ::Animation anim)
+{
+	bool draw_additive_color = anim.DrawAdditiveColor;
+	auto original_base_color = anim.GetColor();
+	auto original_additive_color = anim.GetAdditiveColor();
+
+	auto colorflag = zombie.ColorFlag;
+	if (colorflag)
+	{
+		float ratio = 0.4f;//取值范围为0.4~1
+		switch (colorflag)
+		{
+		case 1:
+			ratio += 0.015f * min(zombie.PoisonStack, 40);
+			original_base_color.Red = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color.Blue = 255 * (1.0f - ratio);
+			original_additive_color.Green = original_additive_color.Green * (1.0f - ratio) + 255 * ratio;
+			original_additive_color.Red = original_additive_color.Red * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		case 2:
+			ratio += 0.02f * zombie.FrostStack;
+			original_base_color.Green = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color.Red = 255 * (1.0f - ratio);
+			original_additive_color.Blue = original_additive_color.Blue * (1.0f - ratio) + 255 * ratio;
+			original_additive_color.Green = original_additive_color.Green * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		case 3:
+			ratio += 0.001f * min(zombie.FlameStack, 600);
+			original_base_color.Green = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color.Blue = 255 * (1.0f - ratio);
+			original_additive_color.Red = original_additive_color.Red * (1.0f - ratio) + 255 * ratio;
+			original_additive_color.Green = original_additive_color.Green * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		default:
+			break;
+		}
+		draw_additive_color = true;
+	}
+	anim.SetColor(original_base_color);
+	anim.SetAdditiveColor(original_additive_color);
+	anim.DrawAdditiveColor = draw_additive_color;
+
+	if (zombie.ShieldType != 0)
+		return 1;
+	return 0;
+}
+
+/// @deprecated
+bool onZombieSetColor(MyZombie zombie, PVZ::Animation anim, unsigned int stack_pointer)
+{
+	bool draw_additive_color = PVZ::Memory::ReadMemory<bool>(stack_pointer + 0x2F);
+	PVZ::Color* original_base_color = (PVZ::Color*)((void*)(stack_pointer + 0x50));
+	PVZ::Color* original_additive_color = (PVZ::Color*)((void*)(stack_pointer + 0x40));
+
+	auto colorflag = zombie.ColorFlag;
+	if (colorflag)
+	{
+		float ratio = 0.4f;//取值范围为0.4~1
+		switch (colorflag)
+		{
+		case 1:
+			ratio += 0.015f * min(zombie.PoisonStack, 40);
+			original_base_color->Red = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color->Blue = 255 * (1.0f - ratio);
+			original_additive_color->Green = original_additive_color->Green * (1.0f - ratio) + 255 * ratio;
+			original_additive_color->Red = original_additive_color->Red * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		case 2:
+			ratio += 0.02f * zombie.FrostStack;
+			original_base_color->Green = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color->Red = 255 * (1.0f - ratio);
+			original_additive_color->Blue = original_additive_color->Blue * (1.0f - ratio) + 255 * ratio;
+			original_additive_color->Green = original_additive_color->Green * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		case 3:
+			ratio += 0.001f * min(zombie.FlameStack, 600);
+			original_base_color->Green = 100 + (255 - 100) * (1.0f - ratio);
+			original_base_color->Blue = 255 * (1.0f - ratio);
+			original_additive_color->Red = original_additive_color->Red * (1.0f - ratio) + 255 * ratio;
+			original_additive_color->Green = original_additive_color->Green * (1.0f - (100 / 255.0f) * ratio) + 100 * ratio;
+			break;
+		default:
+			break;
+		}
+		draw_additive_color = true;
+	}
+	anim.SetColor(*original_base_color);
+	anim.SetAdditiveColor(*original_additive_color);
+	anim.DrawAdditiveColor = draw_additive_color;
+	return false;
+}
+
+
 bool onZombieUpdateAbility(MyZombie zombie)
 {
 	if (zombie.Hypnotized && zombie.Type == ZombieType::Zomboin)
@@ -277,6 +371,8 @@ bool onZombieUpdateAbility(MyZombie zombie)
 	{
 		zombie.AttributeCountdown = 0;
 	}
+	/*
+	* 矿工刨根的旧代码，实际功能已移动至onDiggerZombieUndergroundFindTarget中
 	if (zombie.Type == ZombieType::DiggerZombie && zombie.State==ZombieState::DIGGER_DIG)
 	{
 		int col = board.PixelToGridXKeepOnBoard(zombie.X + 80.0f, zombie.Y);
@@ -294,11 +390,18 @@ bool onZombieUpdateAbility(MyZombie zombie)
 			}
 		}
 	}
+	*/
 	//高坚果出场6S后停止运动
 	if (zombie.Type == ZombieType::TallnutZombie && !zombie.IsNotWalking() && zombie.ExistedTime > 600)
 	{
 		zombie.IsNotWalkingFlag = true;
 		zombie.StartWalkAnim(20);
+	}
+	//气球自动爆炸
+	if (zombie.Type == ZombieType::BalloonZombie && zombie.X < 316.0f)
+	{
+		//Call LandFlyer
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).push_imm32(0).invoke(0x525B60).ret());
 	}
 	// 空投的车类不更新
 	return zombie.ZombieHeight != 9 || (zombie.Type != ZombieType::CatapultZombie && zombie.Type != ZombieType::Zomboin);
@@ -498,10 +601,15 @@ int onZombieFindTargetInterval(MyZombie zombie)
 
 int onZombieEffectedByDamageRange(MyZombie zombie, PVZ::DamageRangeFlags drf)
 {
+	float height = zombie.Height;
+	if (zombie.Type == ZombieType::BalloonZombie)
+		height += 10.0f;
 	//高空僵尸会被视为飞行范围内
-	if (zombie.Height > 20.0f && (drf & PVZ::DRF_FLYING) == 0)
-		return 0;
-
+	if (height >= 30.0f)
+	{
+		if ((drf & PVZ::DRF_FLYING) == 0)
+			return 0;
+	}
 	return -1;
 }
 
@@ -670,23 +778,26 @@ int onGargantaurJudgeSquish(MyZombie zombie)
 
 bool onGargantaurSquishPlant(MyZombie attacker)
 {
-	auto atk_rect = attacker.GetActualAttackRect();
-	int damage = 0;
-	if (attacker.Type == ZombieType::Gargantuar)
-		damage = attacker.BodyMaxHealth <= 3000 ? 900 : 1200;
-	else if (attacker.Type == ZombieType::Gigagargantuar)
-		damage = attacker.BodyMaxHealth <= 6000 ? 900 : 1800;
-
-	auto zombies = attacker.GetBoard().GetAllZombies<MyZombie>();
-	for (auto myzombie : zombies)
+	if (attacker.Hypnotized)
 	{
-		if (attacker.Hypnotized != myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
-			continue;
-		auto rect = myzombie.GetActualRect();
-		if (PVZ::GetXOverlap(atk_rect, rect) >= -30)
-			myzombie.Hit(damage);
-	}
+		auto atk_rect = attacker.GetActualAttackRect();
+		int damage = 0;
+		if (attacker.Type == ZombieType::Gargantuar)
+			damage = attacker.BodyMaxHealth <= 3000 ? 900 : 1200;
+		else if (attacker.Type == ZombieType::Gigagargantuar)
+			damage = attacker.BodyMaxHealth <= 6000 ? 900 : 1800;
 
+		auto zombies = attacker.GetBoard().GetAllZombies<MyZombie>();
+		for (auto myzombie : zombies)
+		{
+			//为什么是不等于 而不是等于？
+			if (attacker.Hypnotized != myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
+				continue;
+			auto rect = myzombie.GetActualRect();
+			if (PVZ::GetXOverlap(atk_rect, rect) >= -30)
+				myzombie.Hit(damage);
+		}
+	}
 	return !attacker.Hypnotized;
 }
 
@@ -723,6 +834,71 @@ bool onJalapenoHeadBurnBefore(MyZombie zombie)
 	summoned.BodyHealth *= amplify;
 	summoned.BodyMaxHealth *= amplify;
 	summoned.RiseFromGrave(zombie.Row,board.PixelToGridX(zombie.X,zombie.Y));
+	return false;
+}
+
+bool onDiggerZombieUndergroundFindTarget(MyZombie zombie, MyPlant plant)
+{
+	if (plant.Type == SeedType::Pumpkin)
+		return false;
+	// 对于会移动的植物，不应该让矿工记录挖根列数
+	if (plant.Type == SeedType::Squash)
+		return false;
+	if (plant.Type == SeedType::Spickweed)
+	{
+		zombie.DiggerLoseAxe();
+		return false;
+	}
+
+	if (plant.Column != zombie.DiggerLastDigRootColumn)
+	{
+		zombie.DiggerLastDigRootColumn = plant.Column;
+		// 对本格内所有植物造成伤害
+		auto plants = zombie.GetBoard().GetAllPlants<MyPlant>();
+		std::vector<MyPlant> dug_plants{};
+		bool has_bottom_protect = false;
+		bool lose_axe = false;
+		for (auto& plant_ : plants)
+		{
+			if (plant_.Row == plant.Row && plant_.Column == plant.Column)
+			{
+				switch (plant_.Type)
+				{
+				case SeedType::Pumpkin:
+				case SeedType::CoffeeBean:
+				case SeedType::GraveBuster:
+				// 可移动植物不会被挖根
+				case SeedType::Squash:
+				case SeedType::Spickweed:
+					break;
+				// S6中睡莲被晶钻菇夺舍了，暂时先去掉
+				// case SeedType::LilyPad:
+				case SeedType::FlowerPot:
+					has_bottom_protect = true;
+					break;
+				case SeedType::Wallnut:
+				case SeedType::Tallnut:
+				case SeedType::Explodenut:
+				case SeedType::Spikerock:
+				case SeedType::PotatoMine:
+					lose_axe = true;
+				default:
+					dug_plants.push_back(plant_);
+					break;
+				}
+			}
+		}
+		if (!has_bottom_protect)
+		{
+			for (auto& plant_ : dug_plants)
+			{
+				PVZ::ApplyZPDamage(zombie, plant_, 15);
+			}
+		}
+		if (lose_axe)
+			zombie.DiggerLoseAxe();
+	}
+	//无论挖不挖根，矿工都不应当停下来啃咬植物，因此总是返回false。
 	return false;
 }
 
@@ -791,8 +967,11 @@ void InitZombieEvents()
 	PVZEvent::LoadPlainZombieReanimBeforeEvent((int)onLoadPlainZombieReanimBefore);
 
 	// 僵尸绘制相关
-	PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
-	PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
+	DrawZombieReanimEvent((int)onDrawZombieReanim);
+	//PVZEvent::ZombieSetColorEvent((int)onZombieSetColor);
+	///PVZEvent::ZombieUpdateColorEvent((int)onZombieUpdateColor);
+	//橄榄球在此事件中有崩溃
+	//PVZEvent::ZombieDropArmParticleEvent((int)onZombieDropArmParticle);
 	PVZEvent::ZombieDropHelmParticleEvent((int)onZombieDropHelmParticle);
 	PVZEvent::ZombieTakeHelmDamageTextureEvent((int)onZombieUpdateHelmDamageTexture);
 	PVZEvent::ZombieOverrideDrawPosEvent((int)OverrideZombieDrawPos);
@@ -847,6 +1026,8 @@ void InitZombieEvents()
 	PVZEvent::PogoUpdateActionsEvent((int)onPogoUpdateActions);
 	// 辣椒头僵尸
 	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
+	// 矿工僵尸
+	PVZEvent::DiggerZombieUndergroundFindTargetEvent((int)onDiggerZombieUndergroundFindTarget);
 
 	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
 	PVZEvent::ZombieChillEvent((int)onZombieChilled);
@@ -867,6 +1048,9 @@ void InitZombieEvents()
 	PVZ::Memory::WriteMemory<byte>(0x526747, 0x07);
 	//雪橇在冰道外不下车
 	PVZ::Memory::WriteMemory<byte>(0x528214, 0xEB);
+	//气球是否被DRF_FLYING影响，不再取决于原版的IsFlying函数
+	PVZ::Memory::WriteMemory<byte>(0x531C4B, 0xEB);
+	PVZ::Memory::WriteMemory<byte>(0x531C4C, 0x0D);
 	//覆盖原盲盒开盒
 	static constexpr byte asm_revert_1[] = {MOV_PTR_EUX_ADD(REG_EBX, 0x0C4, 0)};
 	PVZ::Memory::WriteArray<const byte>(0x530FC4, STRING(asm_revert_1));

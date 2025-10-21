@@ -11,6 +11,7 @@ void onPlantInitAfter(MyPlant plant)
 	plant.EasterSkin = false;
 	plant.HealCounter = 0;
 	plant.AnotherCounter = 0;
+	plant.StunCountdown = 0;
 	plant.ChillCountdown = 0;
 	plant.KillCount = 0;
 	plant.Experience = 0;
@@ -56,6 +57,13 @@ void onPlantInitAfter(MyPlant plant)
 	}
 
 	PlantAbility::GetAbility(plant.Type)->onCreated(plant);
+}
+
+bool onPlantUpdateAcitveAbilityBefore(MyPlant plant)
+{
+	if (plant.StunCountdown > 0)
+		return false;
+	return true;
 }
 
 bool onPlantUpdateAbility(MyPlant plant)
@@ -535,9 +543,12 @@ bool onSquashFallOnGround(MyPlant plant)
 	
 	//设置跳跃次数
 	plant.SquashJumpCount -= 1;
+	//最后一跳，重置跳跃次数和图层
 	if (plant.SquashJumpCount < 0)
+	{
 		plant.SquashJumpCount = squash_jump_time[plant.Level];
-
+		plant.Layer = plant.SquashBirthLayer;
+	}
 	//设置CD
 	if (plant.SquashJumpCount == 0)
 		plant.AttributeCountdown = 400 + Creator::Rand(201);
@@ -563,7 +574,16 @@ bool onSquashSetJumpState(MyPlant plant)
 {
 	//索敌失败
 	if (plant.mTargetZombieID == 0)
-		plant.mTargetX = plant.ImageX + 80;//向前跳1格
+	{
+		if (plant.ImageX < 760)
+		{
+			plant.mTargetX = plant.ImageX + 80;//向前跳1格
+		}
+		else
+		{
+			plant.mTargetX = 760;
+		}
+	}
 
 	if (plant.SquashJumpCount == 0)
 		return true;
@@ -615,6 +635,68 @@ bool onPotatoFindTargetAfter(MyPlant plant, MyZombie zombie)
 	return true;
 }
 
+bool onTorchwoodFindProjectileBefore(MyPlant plant)
+{
+	if (plant.AttributeCountdown > 0)
+		return false;
+	return true;
+}
+
+bool onTorchwoodFindProjectile(MyPlant plant, MyProjectile proj)
+{
+	if (plant.AttributeCountdown > 0)
+		return false;
+	
+	float probability = Creator::RandFloat(1.0f);
+	int level = plant.Level;
+	bool high_class_convert = false;
+
+	switch (proj.Type)
+	{
+	case ProjectileType::Pea:
+		//豌豆过火
+		high_class_convert = (level < 2 ? false : (probability < (level < 4 ? 0.1f : 0.2f)));
+		if (high_class_convert && proj.SpecialType == PST_NONE)
+			proj.SpecialType = PST_ORANGE_FIREBALL;
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, plant.Column).mov_reg_imm(REG_ECX, proj.GetBaseAddress()).invoke(0x46ECB0).ret());
+		break;
+	case ProjectileType::SnowPea:
+		//冰豌豆过火
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EBX, plant.Column).mov_reg_imm(REG_EAX, proj.GetBaseAddress()).invoke(0x46EE00).ret());
+		break;
+	case ProjectileType::FirePea:
+		//火球过火
+		high_class_convert = (level < 2 ? false : (probability < (level < 4 ? 0.2f : 0.4f)));
+		if (high_class_convert && proj.SpecialType == PST_NONE && proj.LastOnFireColumn != plant.Column)
+		{
+			proj.LastOnFireColumn = plant.Column;
+			proj.SpecialType = PST_ORANGE_FIREBALL;
+			//修改颜色
+			auto attachment = PVZ::GetByID<PVZ::Attachment>(proj.AttachmentID);
+			onFireballInitColor(proj, attachment.GetAnimation());
+		}
+		else
+		{
+			return false;
+		}
+		break;
+	default:
+		//非可过火子弹直接RET
+		return false;
+	}
+	//可过火子弹，如果成功过火，触发火炬过火效果
+	plant.AttributeCountdown = 5;
+
+
+	return false;
+}
+
+bool onTorchwoodConvertProjectile(MyPlant plant, MyProjectile proj)
+{
+	plant.AttributeCountdown += 5;
+	return true;
+}
+
 void InitPlantEvents()
 {
 	// 植物初始化与销毁相关
@@ -647,6 +729,7 @@ void InitPlantEvents()
 	PVZEvent::PlantDyingEvent((int)onPlantDying);
 
 	// 植物特性相关
+	PVZEvent::PlantUpdateAcitveAbilityBeforeEvent((int)onPlantUpdateAcitveAbilityBefore);
 	PlantUpdateAbilityEvent((int)onPlantUpdateAbility);
 	PVZEvent::SingleUsePlantUpdateEvent((int)onSingleUsePlantUpdate);
 	// 磁力菇
@@ -677,6 +760,9 @@ void InitPlantEvents()
 	PVZEvent::PotatoDieFromExplosionEvent((int)onPotatoDieFromExplosion);
 	PVZEvent::PotatoExplodeEvent((int)onPotatoExplode);
 	PVZEvent::PotatoFindTargetAfterEvent((int)onPotatoFindTargetAfter);
+	// 火炬树桩
+	PVZEvent::TorchwoodFindProjectileBeforeEvent((int)onTorchwoodFindProjectileBefore);
+	PVZEvent::TorchwoodFindProjectileEvent((int)onTorchwoodFindProjectile);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 
@@ -696,4 +782,8 @@ void InitPlantEvents()
 	PVZ::Memory::WriteMemory<int>(0x4607AE, 2);
 	//植物不再会根据更新+130调用SetSleeping
 	PVZ::Memory::WriteMemory<byte>(0x46320C, 0xEB);
+	//植物不再会根据更新+130播放音效
+	PVZ::Memory::WriteMemory<byte>(0x4631B1, 0xEB);
+	//寒冰菇被碾压时不再爆炸
+	PVZ::Memory::WriteMemory<byte>(0x462BF1, 0x18);
 }

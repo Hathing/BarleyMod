@@ -27,7 +27,8 @@ namespace ProjectileAbility
 			{
 				int crack_num = 2 + proj.SourceLevel / 2;//这个数是循环用的，实际爆裂子弹数量 = 1 + crack_num * 2
 				int x = proj.X, y = proj.Y;
-				constexpr float v = 5.0f;
+				float v = (proj.Motion == MotionType::LeftSlide ? -5.0f : 5.0f);
+
 				//水平的子弹
 				MyProjectile newproj{ Creator::CreateProjectile(ProjectileType::Pea,x,y,0.0f,2.0f) };
 				newproj.DeriveProperty(proj);

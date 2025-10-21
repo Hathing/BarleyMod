@@ -11,6 +11,7 @@ namespace PlantAbility
 			plant.MaxHp = 500;
 			plant.AttributeCountdown = 300;
 			plant.SquashBirthX = plant.ImageX;
+			plant.SquashBirthLayer = plant.Layer;
 		}
 	};
 }

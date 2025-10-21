@@ -72,7 +72,6 @@ bool MyPlant::IsToolPlant()
 	auto type = this->Type;
 	return type == SeedType::Iceshroom
 		|| type == SeedType::TangleKelp
-		|| type == SeedType::Torchwood
 		|| type == SeedType::UmbrellaLeaf
 		|| type == SeedType::CobCannon;
 }
@@ -146,6 +145,9 @@ void MyPlant::Upgrade()
 
 int MyPlant::Heal(int val)
 {
+	if (this->Type == SeedType::Blover && this->BloverIsFevering)
+		return 0;
+
 	int overflow = 0;
 	this->Hp += val;
 	if (this->Hp > this->MaxHp)

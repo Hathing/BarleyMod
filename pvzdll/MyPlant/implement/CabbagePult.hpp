@@ -15,5 +15,9 @@ namespace PlantAbility
 		{
 			plant.ShootOrProductInterval = interval[plant.Level];
 		}
+		int GetDamageRangeFlags(MyPlant plant, int weapon_type)
+		{
+			return int(PVZ::DRF_FLYING | PVZ::DRF_GROUND | PVZ::DRF_SUBMERGED);
+		}
 	};
 }

@@ -74,6 +74,14 @@ public:
 	INT_PROPERTY(SquashJumpCount, __get_SquashJumpCount, __set_SquashJumpCount, 0x0E0);
 	/// @brief 倭瓜出生点X记录
 	INT_PROPERTY(SquashBirthX, __get_SquashBirthX, __set_SquashBirthX, 0x0E4);
+	/// @brief 倭瓜出生图层序数记录
+	INT_PROPERTY(SquashBirthLayer, __get_SquashBirthLayer, __set_SquashBirthLayer, 0x0E8);
+	/// @brief 三叶草加速总计时
+	INT_PROPERTY(BloverAccelerateTime, __get_BloverAccelerateTime, __set_BloverAccelerateTime, 0x0E0);
+	/// @brief 三叶草是否处于超频
+	T_PROPERTY(bool,BloverIsFevering, __get_BloverIsFevering, __set_BloverIsFevering, 0x0E4);
+	/// @brief 三叶草是否处于工作状态
+	T_PROPERTY(bool, BloverIsWorking, __get_BloverIsWorking, __set_BloverIsWorking, 0x0E5);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 当前体型值
@@ -82,6 +90,8 @@ public:
 	INT_PROPERTY(BodySizeCountdown, __get_BodySizeCountdown, __set_BodySizeCountdown, 0xF8);
 	/// @brief 植物血条显示倒计时
 	INT_PROPERTY(HpDisplayCounter, __get_HealthDisplayCounter, __set_HealthDisplayCounter, 0xFC);
+	/// @brief 晕眩效果倒计时（>0时植物跳过主动技能更新）
+	INT_PROPERTY(StunCountdown, __get_StunCountdown, __set_StunCountdown, 0x100);
 	/// @brief 减速效果倒计时
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
 	/// @brief 胆小菇击杀次数

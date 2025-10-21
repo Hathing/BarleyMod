@@ -20,6 +20,8 @@ public:
 	INT_PROPERTY(Unknown2, __get_Un2, __set_Un2, 0x78);
 	/// @brief 小喷菇五阶技能属性，子弹的额外基础倍率而非随机倍率
 	T_PROPERTY(float, PuffShroomBaseMultiplier, __get_PuffShroomBaseMultiplier, __set_PuffShroomBaseMultiplier, 0x78);
+	/// @brief 豌豆和火球最后一次过火的列号
+	INT_PROPERTY(LastOnFireColumn, __get_LastOnFireColumn, __set_LastOnFireColumn, 0x78);
 	/// @brief 子弹的动画附件的ID
 	INT_PROPERTY(AttachmentID, __get_AttachmentID, __set_AttachmentID, 0x7C);
 	/// @brief 创建该子弹的植物的 ID
@@ -37,8 +39,8 @@ public:
 	T_PROPERTY(byte, SpecialStack, __get_SpecialStack, __set_SpecialStack, 0x86);
 	/// @brief 子弹的特殊类型，如火球
 	T_PROPERTY(byte, SpecialType, __get_SpecialType, __set_SpecialType, 0x87);
-	/// @brief 穿透子弹的“幽灵子弹”的地址（非ID）
-	INT_PROPERTY(GhostAddr, __get_GhostID, __set_GhostID, 0x88);
+	/// @brief 穿透子弹的“幽灵子弹”的ID
+	INT_PROPERTY(GhostID, __get_GhostID, __set_GhostID, 0x88);
 
 	/// @brief “幽灵子弹”最大可穿透数量
 	INT_PROPERTY(PiercingMaxCount, __get_PiercingMaxCount, __set_PiercingMaxCount, 0x68);

@@ -6,8 +6,10 @@
 
 typedef PVZEvent::PlantDamageZombieEvent::PZDamageInfo<MyPlant, MyZombie> PZDamageEvent;
 
+// 需要在不同Class的Events.cpp中相互调用的函数，在此处声明。
 void onPlantDamageZombie(PZDamageEvent* info);
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
+void onFireballInitColor(MyProjectile proj, PVZ::Animation anim);
 
 namespace PVZ
 {
