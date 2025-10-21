@@ -462,6 +462,18 @@ bool onZombieEatSound(MyZombie zombie, MyPlant plant)
 	return true;
 }
 
+void onZombieFinishYuckyFace(MyZombie zombie)
+{
+	//啃完大蒜后5s中毒
+	zombie.AddPoison(30);
+}
+
+bool onZombieYuckyFaceChangeRowBefore(MyZombie zombie)
+{
+	zombie.IsWalkingBackwards = 1;
+	return false;
+}
+
 bool onZombieWalkIntoWater(MyZombie zombie)
 {
 	if (!zombie.InWater && zombie.IsTangleKelpTarget())
@@ -983,6 +995,8 @@ void InitZombieEvents()
 	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
 	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
 	ZombieEatSoundEvent((int)onZombieEatSound);
+	PVZEvent::ZombieFinishYuckyFaceEvent((int)onZombieFinishYuckyFace);
+	PVZEvent::ZombieYuckyFaceChangeRowBeforeEvent((int)onZombieYuckyFaceChangeRowBefore);
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
 	PVZEvent::ZombieSkipEatPlantEvent((int)onZombieSkipEatPlant);
 
@@ -1064,4 +1078,6 @@ void InitZombieEvents()
 	// 掉铁桶不露头发
 	PVZ::Memory::WriteMemory<WORD>(0x461775, Creator::makeshort(0xEB, 0x38));
 	PVZ::Memory::WriteMemory<WORD>(0x530EEA, Creator::makeshort(0xEB, 0x0C));
+	//啃完大蒜500cs后才解除YuckyFace
+	PVZ::Memory::WriteMemory<int>(0x52B727, 0x000001F4);
 }
