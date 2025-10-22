@@ -15,5 +15,25 @@ namespace PlantAbility
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
 		}
+		void TickPassive(MyPlant plant)
+		{
+			auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
+			for (auto zombie : zombies)
+				if (zombie.Row == plant.Row && (zombie.State == ZombieState::POLE_VALUTING_JUMPPING
+						|| zombie.State == ZombieState::POGO_JUMP_ACROSS
+						|| zombie.State == ZombieState::DOPHIN_JUMP
+						|| zombie.State == ZombieState::SNORKEL_JUMP_IN_THE_POOL
+						|| zombie.State == ZombieState::BALLOON_FALLING))
+					if (plant.ImageX - zombie.X < 80 && plant.ImageX - zombie.X > 160)
+					{
+						zombie.Blowaway = 1;
+						zombie.Layer = 0x61A80 + zombie.Row * 10000;
+
+						Creator::CreateUpperSound(UpperSoundType::FutureOn);
+						plant.CreateEffect();
+					}
+
+			return;
+		}
 	};
 }
