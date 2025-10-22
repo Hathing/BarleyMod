@@ -63,6 +63,10 @@ bool onPlantUpdateAcitveAbilityBefore(MyPlant plant)
 {
 	if (plant.StunCountdown > 0)
 		return false;
+	MyBoard board = plant.GetBoard();
+	if (!board.EnablePlantAbility)
+		return false;
+
 	return true;
 }
 

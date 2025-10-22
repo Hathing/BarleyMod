@@ -15,6 +15,8 @@ void onBoardInit(MyBoard board)
 	board.MatchRunning = false;
 	board.MatchTimer = 0;
 
+	board.EnablePlantAbility = false;
+
 	board.PoisonCounter = 1;
 	board.ZombieColorShiftCounter = 1;
 	InitPlantExistCount(board);
@@ -234,6 +236,13 @@ void onTyping(MyBoard board, char key)
 		{
 		case 'P':
 			board.MatchRunning = !board.MatchRunning;
+			break;
+		case 'S':
+			board.EnablePlantAbility = !board.EnablePlantAbility;
+			if (board.EnablePlantAbility)
+				Creator::CreateCaption(STRING("Plant abilities switched on"), CaptionStyle::Bottom,100);
+			else
+				Creator::CreateCaption(STRING("Plant abilities switched off"), CaptionStyle::Bottom,100);
 			break;
 		case 'F':
 		{
