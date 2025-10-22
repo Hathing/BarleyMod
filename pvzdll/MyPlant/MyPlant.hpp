@@ -148,7 +148,9 @@ public:
 	bool CanUpgrade();
 	/// @brief 升级的基本事件,如创建升级动画
 	void Upgrade();
-
+	/// @brief 植物被眩晕
+	/// @param stun_time 眩晕的时长
+	void Stun(int stun_time);
 	/// @brief 治疗植物
 	/// @note 不会超出生命值上限。
 	/// @param val 治疗量

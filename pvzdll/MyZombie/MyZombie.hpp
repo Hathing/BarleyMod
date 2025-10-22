@@ -69,10 +69,12 @@ public:
 	/// @brief 最近受到伤害的来源植物 ID
 	INT_PROPERTY(LastDamageSourceID, __get_LaDSID, __set_LaDSID, 0x148);
 	
-	/// @brief 读报的怒气层数，掉报纸期间每受到一次伤害就增加一层
+	/// @brief 读报的怒气层数，掉报纸期间每受到一次伤害就增加一层，上限20层
 	INT_PROPERTY(NewspaperAngerStack, __get_NewspaperAngerStack, __set_NewspaperAngerStack, 0xF0);
 	/// @brief 矿工上次刨根的列数
 	INT_PROPERTY(DiggerLastDigRootColumn, __get_DiggerLastDigRootColumn, __set_DiggerLastDigRootColumnn, 0xF0);
+	/// @brief 橄榄球僵尸冲刺时间
+	INT_PROPERTY(FootballZombieChargeTime, __get_FootballZombieChargeTime, __set_FootballZombieChargeTime, 0xF0);
 	
 	/// @brief 舞王和雪橇车相关联僵尸编号数组属性
 	INT_ARRAY_PROPERTY(GetRelatedZombieID, SetRelatedZombieID, 0xF0);

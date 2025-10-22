@@ -143,6 +143,12 @@ void MyPlant::Upgrade()
 	this->Heal(this->MaxHp / 5);
 }
 
+void MyPlant::Stun(int stun_time)
+{
+	if (stun_time > 0)
+		this->StunCountdown += stun_time;
+}
+
 int MyPlant::Heal(int val)
 {
 	if (this->Type == SeedType::Blover && this->BloverIsFevering)

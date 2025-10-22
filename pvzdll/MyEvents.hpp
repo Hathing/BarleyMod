@@ -1620,4 +1620,36 @@ namespace PVZEvent
 		PlantUpdateAcitveAbilityBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		PlantUpdateAcitveAbilityBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
+
+	/// @brief 僵尸解除YuckyFace的事件
+	/// @param 触发事件的僵尸
+	class ZombieFinishYuckyFaceEvent : public DLLEventTemplate<0x52B736, 7, REG_EDI>
+	{
+	public:
+		ZombieFinishYuckyFaceEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ZombieFinishYuckyFaceEvent(int address) : DLLEventTemplate() { Init(address); };
+		ZombieFinishYuckyFaceEvent() : DLLEventTemplate() { Init("onZombieFinishYuckyFace"); };
+	};
+
+	/// @brief 僵尸啃完大蒜准备换行前的事件
+	/// @param 僵尸
+	/// @return False则跳过原版僵尸换行
+	class ZombieYuckyFaceChangeRowBeforeEvent : public BoolDLLEventTemplate<0x52B818, 6, 0x52B92B, REG_EDI>
+	{
+	public:
+		ZombieYuckyFaceChangeRowBeforeEvent() : BoolDLLEventTemplate() { Init("onZombieYuckyFaceChangeRowBefore"); };
+		ZombieYuckyFaceChangeRowBeforeEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieYuckyFaceChangeRowBeforeEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
+	/// @brief 僵尸更新啃咬时动画速度的事件
+	/// @param 僵尸
+	/// @return False则跳过原版修改动画速率
+	class ZombieUpdateEatingAnimSpeedEvent : public BoolDLLEventTemplate<0x52F105, 6, 0x52F13C, REG_ESI>
+	{
+	public:
+		ZombieUpdateEatingAnimSpeedEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateEatingAnimSpeed"); };
+		ZombieUpdateEatingAnimSpeedEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ZombieUpdateEatingAnimSpeedEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
 };

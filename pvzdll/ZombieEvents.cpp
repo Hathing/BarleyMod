@@ -137,6 +137,10 @@ float onZombieUpdateWalkingSpeed(MyZombie zombie, float velocity)
 	//撑杆僵尸正常跑
 	if (zombie.State == ZombieState::POLE_VALUTING_RUNNING)
 		v *= 2.0f;
+	//橄榄球冲刺加速
+	if (zombie.Type == ZombieType::FootballZombie && zombie.HelmType != HelmType::None)
+		v += zombie.FootballZombieChargeTime * 0.004f;
+	//冰道加速
 	if (zombie.X > zombie.GetBoard().GetIcetrace().GetX(zombie.Row) - 40 && zombie.EffectedBy(PVZ::DRF_GROUND))
 		v *= 2.0f;
 	//击飞或击退则使用+34位移
@@ -401,6 +405,10 @@ bool onZombieUpdateAbility(MyZombie zombie)
 		//Call LandFlyer
 		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).push_imm32(0).invoke(0x525B60).ret());
 	}
+	if (zombie.Type == ZombieType::FootballZombie && zombie.HelmType != HelmType::None)
+	{
+		zombie.FootballZombieChargeTime++;
+	}
 	return ZombieAbility::GetAbility(zombie.Type)->TickAbility(zombie);
 }
 
@@ -456,6 +464,42 @@ bool onZombieEatSound(MyZombie zombie, MyPlant plant)
 		break;
 	}
 
+	return true;
+}
+
+void onZombieFinishYuckyFace(MyZombie zombie)
+{
+	//啃完大蒜后5s中毒
+	zombie.AddPoison(30);
+}
+
+bool onZombieYuckyFaceChangeRowBefore(MyZombie zombie)
+{
+	zombie.IsWalkingBackwards = 1;
+	return false;
+}
+
+void onZombieEatPlant(MyZombie zombie, MyPlant plant)
+{
+	if (zombie.Type == ZombieType::FootballZombie && zombie.HelmType != HelmType::None)
+	{
+		//基于头盔生命值和冲刺时间对植物造成眩晕
+		//具体公式：冲刺时间*(1+头盔血量百分比)/2
+		plant.Stun(zombie.FootballZombieChargeTime*(0.5f+zombie.HelmHealth*0.5f/zombie.HelmMaxHealth));
+		//橄榄撞完后掉头盔
+		zombie.Hit(zombie.HelmHealth);
+		zombie.FootballZombieChargeTime = 0;
+	}
+}
+
+bool onZombieUpdateEatingAnimSpeed(MyZombie zombie)
+{
+	if (zombie.Type == ZombieType::NewspaperZombie)
+	{
+		float rate = 36.0f * (1.0f + zombie.NewspaperAngerStack / 10.0f);
+		PVZ::Memory::Execute(AsmBuilder().push_float(rate).mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).invoke(0x52EFF0).ret());
+		return false;
+	}
 	return true;
 }
 
@@ -586,8 +630,15 @@ int onZombieFindTargetInterval(MyZombie zombie)
 	int cd = zombie.ExistedTime * 100;
 	//引入寒意百分比减速
 	int interval = 400 / (FROST_DECELERATE(zombie));
+	//原版减速，间隔翻倍
 	if (zombie.DecelerateCountdown > 0)
 		interval *= 2;
+	//读报满层怒气最高造成三倍伤害
+	if (zombie.Type == ZombieType::NewspaperZombie)
+	{
+		interval = interval / (1.0f + zombie.NewspaperAngerStack / 10.0f);
+	}
+
 
 	if (cd % interval < 100)
 		return 1;
@@ -979,6 +1030,10 @@ void InitZombieEvents()
 	PVZEvent::ZombieCheckSquishEvent((int)onZombieCheckSquish);
 	PVZEvent::ZombieAddProjectileEvent((int)onZombieAddProj);
 	ZombieEatSoundEvent((int)onZombieEatSound);
+	PVZEvent::ZombieFinishYuckyFaceEvent((int)onZombieFinishYuckyFace);
+	PVZEvent::ZombieYuckyFaceChangeRowBeforeEvent((int)onZombieYuckyFaceChangeRowBefore);
+	ZombieEatEvent((int)onZombieEatPlant);
+	PVZEvent::ZombieUpdateEatingAnimSpeedEvent((int)onZombieUpdateEatingAnimSpeed);
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
 	PVZEvent::ZombieSkipEatPlantEvent((int)onZombieSkipEatPlant);
 
@@ -1060,4 +1115,6 @@ void InitZombieEvents()
 	// 掉铁桶不露头发
 	PVZ::Memory::WriteMemory<WORD>(0x461775, Creator::makeshort(0xEB, 0x38));
 	PVZ::Memory::WriteMemory<WORD>(0x530EEA, Creator::makeshort(0xEB, 0x0C));
+	//啃完大蒜500cs后才解除YuckyFace
+	PVZ::Memory::WriteMemory<int>(0x52B727, 0x000001F4);
 }
