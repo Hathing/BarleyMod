@@ -8,6 +8,17 @@ namespace ProjectileAbility
 	public:
 		int OverrideDamage(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
+			switch (damage_type)
+			{
+			case PVZEvent::DAMAGE_SINGULAR:
+				return 20;
+			case PVZEvent::DAMAGE_SPLASH_PRIMARY:
+				return 20;
+			case PVZEvent::DAMAGE_SPLASH_SECONDARY:
+				return 5;
+			default:
+				break;
+			}
 			return ori_dmg;
 		}
 		void onDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
