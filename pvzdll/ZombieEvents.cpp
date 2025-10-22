@@ -197,11 +197,13 @@ float onZombieApplyAnimSpeed(MyZombie zombie, PVZ::Animation anim, float rate)
 void onZombieUpdatePlaying(MyZombie zombie)
 {
 	//僵尸的总更新，无视黄油和冻结
-	if (!zombie.Hypnotized)
+
+	//僵尸坠落更新移动至总更新位置，避免因冻结/黄油而停止坠落
+	if (zombie.ZombieHeight == 7)
 	{
-		return;
+		//UpdateZombieFalling
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_ESI,zombie.GetBaseAddress()).invoke(0x529770).ret());
 	}
-	return;
 }
 
 /// @deprecated
@@ -1117,4 +1119,6 @@ void InitZombieEvents()
 	PVZ::Memory::WriteMemory<WORD>(0x530EEA, Creator::makeshort(0xEB, 0x0C));
 	//啃完大蒜500cs后才解除YuckyFace
 	PVZ::Memory::WriteMemory<int>(0x52B727, 0x000001F4);
+	//跳过UpdateZombieAction中UpdateZombieFalling
+	PVZ::Memory::WriteMemory<byte>(0x52B162, 0xEB);
 }
