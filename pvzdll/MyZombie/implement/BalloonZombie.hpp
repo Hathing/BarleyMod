@@ -20,5 +20,18 @@ namespace ZombieAbility
 		{
 			return zombie.FromWave == WAVE_ELITE1 ? (AnimationType::AnimationType)0x95 : type;
 		}
+		bool TickAbility(MyZombie zombie)
+		{
+			if (zombie.State == ZombieState::BALLOON_FLYING)
+			{
+				//气球自动爆炸
+				if ((zombie.X < 316.0f) || bool(zombie.Hypnotized))
+				{
+					//Call LandFlyer
+					PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).push_imm32(0).invoke(0x525B60).ret());
+				}
+			}
+			return true;
+		}
 	};
 }

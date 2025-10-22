@@ -10,6 +10,14 @@ namespace ZombieAbility
 		{
 			return zombie.FromWave == WAVE_ELITE1 ? (AnimationType::AnimationType)0x66 : type;
 		}
+		bool TickAbility(MyZombie zombie)
+		{
+			if (zombie.HelmType != HelmType::None)
+			{
+				zombie.FootballZombieChargeTime++;
+			}
+			return true;
+		}
 		bool OverrideDropArmParticle(MyZombie zombie, PVZ::TodParticleSystem particle_sys)
 		{
 			if (zombie.FromWave == WAVE_ELITE1)

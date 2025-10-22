@@ -366,49 +366,6 @@ bool onZombieSetColor(MyZombie zombie, PVZ::Animation anim, unsigned int stack_p
 
 bool onZombieUpdateAbility(MyZombie zombie)
 {
-	//这里是所有僵尸在未定身时必经的更新
-	MyBoard board = zombie.GetBoard();
-	//小丑僵尸爆炸
-	if (zombie.Type == ZombieType::JackintheboxZombie && zombie.State == ZombieState::JACKBOX_WALKING && ((!zombie.Hypnotized && zombie.IsWalkingBackwards == 0) || (zombie.Hypnotized && zombie.X > 725.0f)))
-	{
-		zombie.AttributeCountdown = 0;
-	}
-	/*
-	* 矿工刨根的旧代码，实际功能已移动至onDiggerZombieUndergroundFindTarget中
-	if (zombie.Type == ZombieType::DiggerZombie && zombie.State==ZombieState::DIGGER_DIG)
-	{
-		int col = board.PixelToGridXKeepOnBoard(zombie.X + 80.0f, zombie.Y);
-		if (col < zombie.DiggerLastDigRootColumn)
-		{
-			zombie.DiggerLastDigRootColumn = col;
-			PlantOnLawn dug_plants{};
-			board.GetPlantsOnLawn(col, zombie.Row, dug_plants);
-			MyPlant dugplant = dug_plants.MainPlant;
-			if (dugplant.isValid())
-			{
-				dugplant.HpDisplayCounter = 100;
-				if (dugplant.Type == SeedType::Spikerock)
-					zombie.DiggerLoseAxe();
-			}
-		}
-	}
-	*/
-	//高坚果出场6S后停止运动
-	if (zombie.Type == ZombieType::TallnutZombie && !zombie.IsNotWalking() && zombie.ExistedTime > 600)
-	{
-		zombie.IsNotWalkingFlag = true;
-		zombie.StartWalkAnim(20);
-	}
-	//气球自动爆炸
-	if (zombie.Type == ZombieType::BalloonZombie && zombie.X < 316.0f)
-	{
-		//Call LandFlyer
-		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).push_imm32(0).invoke(0x525B60).ret());
-	}
-	if (zombie.Type == ZombieType::FootballZombie && zombie.HelmType != HelmType::None)
-	{
-		zombie.FootballZombieChargeTime++;
-	}
 	return ZombieAbility::GetAbility(zombie.Type)->TickAbility(zombie);
 }
 
