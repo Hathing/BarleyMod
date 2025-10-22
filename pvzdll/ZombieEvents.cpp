@@ -366,13 +366,6 @@ bool onZombieSetColor(MyZombie zombie, PVZ::Animation anim, unsigned int stack_p
 
 bool onZombieUpdateAbility(MyZombie zombie)
 {
-	//小丑僵尸爆炸
-	//高坚果出场6S后停止运动
-	if (zombie.Type == ZombieType::TallnutZombie && !zombie.IsNotWalking() && zombie.ExistedTime > 600)
-	{
-		zombie.IsNotWalkingFlag = true;
-		zombie.StartWalkAnim(20);
-	}
 	return ZombieAbility::GetAbility(zombie.Type)->TickAbility(zombie);
 }
 
