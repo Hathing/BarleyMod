@@ -399,10 +399,6 @@ bool onZombieUpdateAbility(MyZombie zombie)
 		zombie.IsNotWalkingFlag = true;
 		zombie.StartWalkAnim(20);
 	}
-	if (zombie.Type == ZombieType::FootballZombie && zombie.HelmType != HelmType::None)
-	{
-		zombie.FootballZombieChargeTime++;
-	}
 	return ZombieAbility::GetAbility(zombie.Type)->TickAbility(zombie);
 }
 
