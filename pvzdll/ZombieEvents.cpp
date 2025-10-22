@@ -399,12 +399,6 @@ bool onZombieUpdateAbility(MyZombie zombie)
 		zombie.IsNotWalkingFlag = true;
 		zombie.StartWalkAnim(20);
 	}
-	//气球自动爆炸
-	if (zombie.Type == ZombieType::BalloonZombie && zombie.X < 316.0f)
-	{
-		//Call LandFlyer
-		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).push_imm32(0).invoke(0x525B60).ret());
-	}
 	if (zombie.Type == ZombieType::FootballZombie && zombie.HelmType != HelmType::None)
 	{
 		zombie.FootballZombieChargeTime++;
