@@ -367,10 +367,6 @@ bool onZombieSetColor(MyZombie zombie, PVZ::Animation anim, unsigned int stack_p
 bool onZombieUpdateAbility(MyZombie zombie)
 {
 	//小丑僵尸爆炸
-	if (zombie.Type == ZombieType::JackintheboxZombie && zombie.State == ZombieState::JACKBOX_WALKING && ((!zombie.Hypnotized && zombie.IsWalkingBackwards == 0) || (zombie.Hypnotized && zombie.X > 725.0f)))
-	{
-		zombie.AttributeCountdown = 0;
-	}
 	//高坚果出场6S后停止运动
 	if (zombie.Type == ZombieType::TallnutZombie && !zombie.IsNotWalking() && zombie.ExistedTime > 600)
 	{
