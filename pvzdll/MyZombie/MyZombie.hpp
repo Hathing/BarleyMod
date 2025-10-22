@@ -87,6 +87,8 @@ public:
 
 	/// @brief 根据盾的类型设置相应动画轨道的绘制分组。
 	void AttachShield();
+	/// @brief 给僵尸的动画轨道附加水草
+	void AttachSeaweed(const char* trackName, float x, float y, float scale=1.0f);
 
 	/// @brief 僵尸飞到屏幕右侧外
 	/// @param factor 被击飞后水平速度的因子，取负数让僵尸反向飞出屏幕，但是这个参数理论来说没啥用？

@@ -15,7 +15,7 @@ void onBoardInit(MyBoard board)
 	board.MatchRunning = false;
 	board.MatchTimer = 0;
 
-	board.EnablePlantAbility = false;
+	board.EnablePlantAbility = true;
 
 	board.PoisonCounter = 1;
 	board.ZombieColorShiftCounter = 1;

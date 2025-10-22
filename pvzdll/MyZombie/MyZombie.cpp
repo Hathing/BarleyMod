@@ -38,6 +38,21 @@ void MyZombie::AttachShield()
 	);
 }
 
+void MyZombie::AttachSeaweed(const char* trackName, float x, float y, float scale)
+{
+	PVZ::Memory::WriteArray<const char>(PVZ::Memory::Variable + 100, trackName, std::strlen(trackName) + 1);
+	auto particles = PVZ::CreateParticleSystem(0.0f,0.0f,0,EffectType::SEAWEED_IN_CORAL_THREE);
+	particles.OverrideScale(scale);
+	auto anim = this->GetAnimation();
+	PVZ::Memory::Execute(AsmBuilder()
+		.push_float(y).push_float(x).push_imm32(particles.GetBaseAddress())
+		.mov_reg_imm(REG_EAX, PVZ::Memory::Variable + 100)
+		.mov_reg_imm(REG_ECX, anim.GetBaseAddress())
+		.invoke(0x473070)
+		.ret()
+	);
+}
+
 void MyZombie::FlyAway(float factor)
 {
 	if (!this->Blowaway)
