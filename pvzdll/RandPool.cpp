@@ -4,7 +4,7 @@ bool CLOWN_ZOMBIE_POP_FLAG = false;
 
 static const ZombieType::ZombieType hypno_pool[] =
 {
-	ZombieType::Zombie,				ZombieType::FlagZombie,			ZombieType::ConeheadZombie,									ZombieType::BucketheadZombie,
+	ZombieType::Undying,			ZombieType::FlagZombie,			ZombieType::ConeheadZombie,									ZombieType::BucketheadZombie,
 	ZombieType::NewspaperZombie,	ZombieType::ScreenDoorZombie,	ZombieType::FootballZombie, ZombieType::DancingZombie,		ZombieType::BackupDancer,
 	ZombieType::DuckyTubeZombie,									ZombieType::Zomboin,		ZombieType::ZombieBobsledTeam,
 	ZombieType::JackintheboxZombie,	ZombieType::BalloonZombie,		ZombieType::DiggerZombie,									ZombieType::ZombieYeti,
@@ -39,7 +39,7 @@ void onRandomZombieDropHelm(MyZombie zombie)
 
 		switch (type)
 		{
-		case ZombieType::Zombie:
+		case ZombieType::Undying:
 		case ZombieType::NewspaperZombie:
 		case ZombieType::JackintheboxZombie:
 		case ZombieType::PogoZombie:
