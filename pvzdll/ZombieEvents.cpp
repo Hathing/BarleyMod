@@ -82,6 +82,10 @@ AnimationType::AnimationType GetZombieReanimType(MyZombie zombie, AnimationType:
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
 {
 	plant.HpDisplayCounter = 100;
+
+	if (plant.Type == SeedType::Spikerock && source_type == GameObjectType::OBJECT_TYPE_NONE && damage == 50)
+		damage = 200;
+
 	return damage;
 }
 
