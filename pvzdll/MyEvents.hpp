@@ -127,7 +127,7 @@ namespace PVZEvent
 	class ZombieAddProjectileEvent
 	{
 	private:
-		class Gatling : public DLLEventTemplate<0x527A98, 7, REG_ESI, MEM_ESP_ADD(0x28)>
+		class Gatling : public DLLEventTemplate<0x527A91, 7, REG_ESI, MEM_ESP_ADD(0x28)>
 		{
 		public:
 			Gatling(const char* str) : DLLEventTemplate() { Init(str); };
