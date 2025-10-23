@@ -8,7 +8,7 @@ namespace PlantAbility
 	{
 		void onKill(MyPlant plant, MyZombie zombie)
 		{
-			plant.KillCount++;
+			plant.ScaredyShroomKillCount++;
 		}
 	};
 }
