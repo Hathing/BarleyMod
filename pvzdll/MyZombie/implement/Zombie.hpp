@@ -3,7 +3,7 @@
 
 namespace ZombieAbility
 {
-	class Zombie : public BaseZombie
+	class Undying : public BaseZombie
 	{
 	public:
 		void onCreated(MyZombie zombie)
