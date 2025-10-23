@@ -86,7 +86,8 @@ int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::Game
 		MyProjectile proj{ source.GetBaseAddress()};
 		if (proj.Type == ProjectileType::ZombiePea && proj.SpecialType == PST_LADDER_ZOMBIEPEA)
 		{
-			Creator::CreateLadder(plant.Row, plant.Column);
+			if (plant.Type != SeedType::Squash)
+				Creator::CreateLadder(plant.Row, plant.Column);
 			damage = 50;
 		}
 	}
