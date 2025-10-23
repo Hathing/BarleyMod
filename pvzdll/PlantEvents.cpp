@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
+#include "MyZombie/ZombieAbility.hpp"
 #include <cmath>
 
 void onPlantInitAfter(MyPlant plant)
@@ -109,8 +110,9 @@ void onPlantDamageZombie(PZDamageEvent* info)
 {
 	if(info->type != PVZEvent::PLANTDAMAGETYPE_CUSTOM)
 		PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
+	ZombieAbility::GetAbility(info->zombie.Type)->OverwritePZDamage(info);
 	//伤害来源标记
-	if (info->zombie.NotDying)
+	if (info->zombie.NotDying && info->damage > 0)
 	{
 		info->zombie.LastDamageSourceID = info->plant.GetOwner().Id;
 	}
@@ -620,7 +622,7 @@ bool onPotatoExplode(MyPlant plant)
 	plant.GetPlantAttackRect(0, attack_rect);
 	for (auto& zombie : zombies)
 	{
-		if (zombie.Row == plant.Row && zombie.EffectedBy(PVZ::DRF_GROUND || PVZ::DRF_UNDERGROUND || PVZ::DRF_SUBMERGED || PVZ::DRF_OFF_GROUND || PVZ::DRF_DYING))
+		if (zombie.Row == plant.Row && zombie.EffectedBy(PVZ::DRF_GROUND | PVZ::DRF_UNDERGROUND | PVZ::DRF_SUBMERGED | PVZ::DRF_OFF_GROUND | PVZ::DRF_DYING))
 		{
 			auto zombie_rect = zombie.GetActualRect();
 			if (PVZ::GetXOverlap(zombie_rect, attack_rect) >= 0)

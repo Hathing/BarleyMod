@@ -35,5 +35,15 @@ namespace ZombieAbility
 			}
 			return false;
 		}
+		bool TickAbility(MyZombie zombie)
+		{
+			//高坚果出场6S后停止运动
+			if (!zombie.IsNotWalking() && zombie.ExistedTime > 600)
+			{
+				zombie.IsNotWalkingFlag = true;
+				zombie.StartWalkAnim(20);
+			}
+			return true;
+		}
 	};
 }

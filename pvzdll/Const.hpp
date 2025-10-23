@@ -17,6 +17,7 @@ namespace SeedType
 namespace ZombieType
 {
 	typedef ZombieType Type2;
+	constexpr Type2 Undying = Zombie;
 	constexpr Type2 RandomZombie = ConeheadZombie;
 }
 
