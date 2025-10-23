@@ -7,6 +7,11 @@ namespace ZombieAbility
 	{
 		void onCreated(MyZombie zombie)
 		{
+			zombie.BodyHealth = 270;
+			zombie.BodyMaxHealth = 270;
+			zombie.ShieldHealth = 150;
+			zombie.ShieldMaxHealth = 150;
+
 			if (zombie.FromWave >= WAVE_ELITE_MASK)
 			{
 				zombie.BodyHealth = 360;
