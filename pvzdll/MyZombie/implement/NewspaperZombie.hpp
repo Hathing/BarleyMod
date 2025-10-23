@@ -17,5 +17,17 @@ namespace ZombieAbility
 		{
 			return zombie.FromWave == WAVE_ELITE1 ? (AnimationType::AnimationType)0x0A2 : type;
 		}
+		void OverwritePZDamage(PZDamageEvent* info)
+		{
+			int flag = info->flags;
+			if (flag & PVZ::DAMAGEF_BYPASSES_SHIELD)
+				flag -= PVZ::DAMAGEF_BYPASSES_SHIELD;
+			if (flag & PVZ::DAMAGEF_HITS_SHIELD_AND_BODY)
+				flag -= PVZ::DAMAGEF_HITS_SHIELD_AND_BODY;
+
+			info->flags = (PVZ::DamageFlags)flag;
+
+			return;
+		}
 	};
 }

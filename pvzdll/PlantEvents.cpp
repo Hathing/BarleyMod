@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "MyPlant/PlantAbility.hpp"
+#include "MyZombie/ZombieAbility.hpp"
 #include <cmath>
 
 void onPlantInitAfter(MyPlant plant)
@@ -105,8 +106,9 @@ void onPlantDamageZombie(PZDamageEvent* info)
 {
 	if(info->type != PVZEvent::PLANTDAMAGETYPE_CUSTOM)
 		PlantAbility::GetAbility(info->plant.Type)->OverwritePZDamage(info);
+	ZombieAbility::GetAbility(info->zombie.Type)->OverwritePZDamage(info);
 	//伤害来源标记
-	if (info->zombie.NotDying)
+	if (info->zombie.NotDying && info->damage > 0)
 	{
 		info->zombie.LastDamageSourceID = info->plant.GetOwner().Id;
 	}
