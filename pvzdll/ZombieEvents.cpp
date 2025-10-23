@@ -81,6 +81,16 @@ AnimationType::AnimationType GetZombieReanimType(MyZombie zombie, AnimationType:
 
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
 {
+	if (source_type == GameObjectType::OBJECT_TYPE_PROJECTILE)
+	{
+		MyProjectile proj{ source.GetBaseAddress()};
+		if (proj.Type == ProjectileType::ZombiePea && proj.SpecialType == PST_LADDER_ZOMBIEPEA)
+		{
+			Creator::CreateLadder(plant.Row, plant.Column);
+			damage = 50;
+		}
+	}
+
 	plant.HpDisplayCounter = 100;
 
 	if (plant.Type == SeedType::Spikerock && source_type == GameObjectType::OBJECT_TYPE_NONE && damage == 50)
@@ -913,6 +923,28 @@ bool onDiggerZombieUndergroundFindTarget(MyZombie zombie, MyPlant plant)
 	return false;
 }
 
+bool onLadderZombieTryPutLadder(MyZombie zombie, MyPlant plant)
+{
+	if (!plant.isValid())
+	{
+		//丢出梯子
+		MyProjectile proj = Creator::CreateProjectile(ProjectileType::ZombiePea, zombie.ImageX, zombie.ImageY + 50 - zombie.Height, 0, 0);
+		proj.Row = zombie.Row;
+		proj.DamageAbility = 0;
+		proj.Motion = MotionType::LeftSlide;
+		proj.Layer = zombie.Layer + 100;
+		proj.SpecialType = PST_LADDER_ZOMBIEPEA;
+		//播放音效
+		Creator::CreateUpperSound(UpperSoundType::PlaceLadder);
+		//移除梯子
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).invoke(0x5330E0).ret());
+		
+		return false;
+	}
+
+	return true;
+}
+
 bool onPogoUpdateActions(MyZombie zombie)
 {
 	/*
@@ -1042,6 +1074,8 @@ void InitZombieEvents()
 	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
 	// 矿工僵尸
 	PVZEvent::DiggerZombieUndergroundFindTargetEvent((int)onDiggerZombieUndergroundFindTarget);
+	// 梯子僵尸
+	PVZEvent::LadderZombieTryPlaceLadderEvent((int)onLadderZombieTryPutLadder);
 
 	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
 	PVZEvent::ZombieChillEvent((int)onZombieChilled);

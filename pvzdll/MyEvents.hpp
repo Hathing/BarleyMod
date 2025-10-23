@@ -213,6 +213,17 @@ namespace PVZEvent
 		ProjectileFindZombieTargetSkipEvent() : ProjectileFindZombieTargetSkipEvent("onProjectileFindZombieTarget") {};
 	};
 
+	/// @brief 僵尸豌豆子弹跳过寻找碰撞植物的事件
+	/// @param 僵尸豌豆子弹，正在遍历的植物
+	/// @return False则不碰撞该植物
+	class ProjectileFindPlantTargetSkipEvent : public BoolDLLEventTemplate<0x46CAF6, 6, 0x46CAD0, REG_ESI, REG_EBP>
+	{
+	public:
+		ProjectileFindPlantTargetSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileFindPlantTargetSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileFindPlantTargetSkipEvent() : ProjectileFindPlantTargetSkipEvent("onProjectileFindPlantTargetSkip") {};
+	};
+
 	/// @brief 子弹更新穿透运动的事件，实际上充当一个跳转到+58=7的运动更新的作用
 	/// @param 子弹
 	/// @return False则跳到+58=7的位置，True则原版更新
@@ -1651,5 +1662,26 @@ namespace PVZEvent
 		ZombieUpdateEatingAnimSpeedEvent() : BoolDLLEventTemplate() { Init("onZombieUpdateEatingAnimSpeed"); };
 		ZombieUpdateEatingAnimSpeedEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ZombieUpdateEatingAnimSpeedEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+	};
+
+	/// @brief 扶梯僵尸状态为搭梯时，在尝试索敌后的事件
+	/// @param 僵尸、植物（可能为NULL）
+	/// @return True则触发原版判定（有植物就在植物格子上放梯子并进入爬梯状态，没植物就继续前进），Flase则直接返回，不作任何修改
+	class LadderZombieTryPlaceLadderEvent : public DLLEventTemplate<0x52A9E4, 6, REG_EAX, REG_EBX>
+	{
+	public:
+		LadderZombieTryPlaceLadderEvent() : DLLEventTemplate() { Init("onLadderZombieTryPlaceLadder"); };
+		LadderZombieTryPlaceLadderEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		LadderZombieTryPlaceLadderEvent(int address) : DLLEventTemplate() { Init(address); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7)
+				.popad().push_imm32(0x52AA1F).ret()
+				.popad().mov_reg_reg(REG_ESI, REG_EAX)
+				.test_reg_reg(REG_ESI,REG_ESI).jnz_rel(6)
+				.push_imm32(0x52AA25).ret()
+				.push_imm32(0x52A9EA).ret();
+		}
 	};
 };
