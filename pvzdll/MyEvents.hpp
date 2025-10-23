@@ -1684,4 +1684,15 @@ namespace PVZEvent
 				.push_imm32(0x52A9EA).ret();
 		}
 	};
+
+	/// @brief 海豚僵尸冲刺时判断是否下马的事件
+	/// @param 僵尸
+	/// @return 正数则下马，0则不下马，负数则使用原版判断
+	class DophinRiderJudgeJumpEvent : public ThreeStateEventTemplate<0x52642F, 7, 0x526459, 0x52670F, REG_EDI>
+	{
+	public:
+		DophinRiderJudgeJumpEvent() : ThreeStateEventTemplate() { Init("onDophinRiderJudgeJump"); };
+		DophinRiderJudgeJumpEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		DophinRiderJudgeJumpEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+	};
 };

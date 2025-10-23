@@ -946,6 +946,15 @@ bool onLadderZombieTryPutLadder(MyZombie zombie, MyPlant plant)
 	return true;
 }
 
+ThreeState::ThreeState onDophinRiderJudgeJump(MyZombie zombie)
+{
+	if (zombie.BodyHealth < zombie.BodyMaxHealth * 0.66f)
+	{
+		return ThreeState::Enable;
+	}
+	return ThreeState::None;
+}
+
 bool onPogoUpdateActions(MyZombie zombie)
 {
 	/*
@@ -1077,6 +1086,8 @@ void InitZombieEvents()
 	PVZEvent::DiggerZombieUndergroundFindTargetEvent((int)onDiggerZombieUndergroundFindTarget);
 	// 梯子僵尸
 	PVZEvent::LadderZombieTryPlaceLadderEvent((int)onLadderZombieTryPutLadder);
+	// 海豚僵尸
+	PVZEvent::DophinRiderJudgeJumpEvent((int)onDophinRiderJudgeJump);
 
 	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
 	PVZEvent::ZombieChillEvent((int)onZombieChilled);
