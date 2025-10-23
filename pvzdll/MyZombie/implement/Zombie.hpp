@@ -29,5 +29,18 @@ namespace ZombieAbility
 				zombie.InvulnerableDuration = 1002;
 			}
 		}
+		void onKilled(MyZombie zombie)
+		{
+			if (zombie.FromWave != WAVE_ELITE2 && !zombie.Hypnotized)
+			{
+				MyBoard board = zombie.GetBoard();
+				if (board.MatchRunning)
+				{
+					MyZombie creep = board.AddZombieInRow(ZombieType::Undying, zombie.Row, zombie.FromWave);
+					creep.RiseFromGrave(creep.Row, 11);
+					creep.X = 900;
+				}
+			}
+		}
 	};
 }
