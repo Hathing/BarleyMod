@@ -618,7 +618,7 @@ bool onPotatoExplode(MyPlant plant)
 	plant.GetPlantAttackRect(0, attack_rect);
 	for (auto& zombie : zombies)
 	{
-		if (zombie.Row == plant.Row && zombie.EffectedBy(PVZ::DRF_GROUND || PVZ::DRF_UNDERGROUND || PVZ::DRF_SUBMERGED || PVZ::DRF_OFF_GROUND || PVZ::DRF_DYING))
+		if (zombie.Row == plant.Row && zombie.EffectedBy(PVZ::DRF_GROUND | PVZ::DRF_UNDERGROUND | PVZ::DRF_SUBMERGED | PVZ::DRF_OFF_GROUND | PVZ::DRF_DYING))
 		{
 			auto zombie_rect = zombie.GetActualRect();
 			if (PVZ::GetXOverlap(zombie_rect, attack_rect) >= 0)
