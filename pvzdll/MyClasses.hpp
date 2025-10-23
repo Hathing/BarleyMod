@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "MyBoard.hpp"
 #include "MyPlant/MyPlant.hpp"
 #include "MyProjectile/MyProjectile.hpp"
@@ -9,6 +9,7 @@ typedef PVZEvent::PlantDamageZombieEvent::PZDamageInfo<MyPlant, MyZombie> PZDama
 // 需要在不同Class的Events.cpp中相互调用的函数，在此处声明。
 void onPlantDamageZombie(PZDamageEvent* info);
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
+/// @todo 将此函数改为 MyProjectile 的成员函数
 void onFireballInitColor(MyProjectile proj, PVZ::Animation anim);
 
 namespace PVZ

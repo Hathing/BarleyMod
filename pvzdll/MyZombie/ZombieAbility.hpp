@@ -26,6 +26,13 @@ namespace ZombieAbility
 		{
 			return true;
 		}
+		/// @brief 僵尸受到植物造成的伤害时，先执行此函数
+		/// @note 时机在植物重载伤害之后。
+		/// @param info 伤害信息
+		virtual void OverwritePZDamage(PZDamageEvent* info)
+		{
+			return;
+		}
 		/// @brief 重载僵尸的绘制位置
 		/// @param zombie 僵尸
 		/// @param draw_pos 僵尸的绘制位置

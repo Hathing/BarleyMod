@@ -3,7 +3,7 @@
 
 namespace ZombieAbility
 {
-	class Zombie : public BaseZombie
+	class Undying : public BaseZombie
 	{
 	public:
 		void onCreated(MyZombie zombie)
@@ -27,6 +27,19 @@ namespace ZombieAbility
 				effect.GetOffset().ScaleRotateTransformMatrix(63.0f, 22.0f, 0.2f, -0.8f, 0.8f);
 
 				zombie.InvulnerableDuration = 1002;
+			}
+		}
+		void onKilled(MyZombie zombie)
+		{
+			if (zombie.FromWave != WAVE_ELITE2 && !zombie.Hypnotized)
+			{
+				MyBoard board = zombie.GetBoard();
+				if (board.MatchRunning)
+				{
+					MyZombie creep = board.AddZombieInRow(ZombieType::Undying, zombie.Row, zombie.FromWave);
+					creep.RiseFromGrave(creep.Row, 11);
+					creep.X = 900;
+				}
 			}
 		}
 	};

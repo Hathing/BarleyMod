@@ -5,7 +5,7 @@ namespace PlantAbility
 {
 	class SpikeRock : public BasePlant
 	{
-		inline static const int max_health[6] = { 500, 1000, 1000, 1500, 1500, 1500 };
+		inline static const int max_health[6] = { 1000, 1500, 1500, 2000, 2000, 2000 };
 		void onCreated(MyPlant plant)
 		{
 			plant.SetMaxHealth(max_health[plant.Level]);
