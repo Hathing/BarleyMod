@@ -788,4 +788,6 @@ void InitPlantEvents()
 	PVZ::Memory::WriteMemory<byte>(0x4631B1, 0xEB);
 	//寒冰菇被碾压时不再爆炸
 	PVZ::Memory::WriteMemory<byte>(0x462BF1, 0x18);
+	//毁灭菇不留痕
+	PVZ::Memory::WriteMemory<int>(0x466887, 1);
 }
