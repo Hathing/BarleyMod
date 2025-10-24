@@ -26,18 +26,20 @@ namespace ProjectileAbility
 				.invoke(0x41D8A0).ret());
 			*/
 			// 只炸本行僵尸
-			/*
 			MyBoard board = proj.GetBoard();
+			auto proj_rect = proj.GetRect();
 			auto zombies = board.GetAllZombies<MyZombie>();
 			for (auto& zombie : zombies)
 			{
 				if (zombie.Row == proj.Row && !zombie.Hypnotized)
 				{
-					
+					auto zombie_rect = zombie.GetActualRect();
+					if (PVZ::GetXOverlap(zombie_rect, proj_rect) > 0)
+					{
+						zombie.Blast();
+					}
 				}
-
 			}
-			*/
 			return true;
 		}
 	};
