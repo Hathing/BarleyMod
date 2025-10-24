@@ -13,5 +13,10 @@ namespace PlantAbility
 			plant.SquashBirthX = plant.ImageX;
 			plant.SquashBirthLayer = plant.Layer;
 		}
+		void OverwritePZDamage(PZDamageEvent* info)
+		{
+			info->flags = PVZ::DAMAGEF_HITS_SHIELD_AND_BODY;
+			return;
+		}
 	};
 }

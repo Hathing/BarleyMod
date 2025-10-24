@@ -57,7 +57,16 @@ bool onCreateAtlas(AnimationType::AnimationType type, PVZ::BaseClass def)
 	}
 }
 
+void onReanimCacheDrawFrame(PVZ::Animation model)
+{
+	model.AssignRenderGroupToPrefix(-1, "easter");
+	model.AssignRenderGroupToPrefix(-1, "awake");
+	model.AssignRenderGroupToPrefix(-1, "special");
+	return;
+}
+
 void InitResourceEvents()
 {
 	PVZEvent::CreateAtlasEvent((int)onCreateAtlas);
+	PVZEvent::ReanimCacheDrawFrameEvent((int)onReanimCacheDrawFrame);
 }

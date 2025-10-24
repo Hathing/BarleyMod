@@ -1664,6 +1664,15 @@ namespace PVZEvent
 		ZombieUpdateEatingAnimSpeedEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
 
+	/// @brief 动画制图时，初始化动画事件
+	/// @param 触发事件的动画
+	class ReanimCacheDrawFrameEvent : public DLLEventTemplate<0x46F1C1, 5, REG_EBX>
+	{
+	public:
+		ReanimCacheDrawFrameEvent() : DLLEventTemplate() { Init("onReanimCacheDrawFrame"); };
+		ReanimCacheDrawFrameEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		ReanimCacheDrawFrameEvent(int address) : DLLEventTemplate() { Init(address); };
+  }
 	/// @brief 扶梯僵尸状态为搭梯时，在尝试索敌后的事件
 	/// @param 僵尸、植物（可能为NULL）
 	/// @return True则触发原版判定（有植物就在植物格子上放梯子并进入爬梯状态，没植物就继续前进），Flase则直接返回，不作任何修改
