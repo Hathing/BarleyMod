@@ -253,6 +253,16 @@ void onPlantPultMultiple(MyPlant plant,int PlantWeapon)
 		break;
 	case SeedType::Kernelpult:
 		{
+			if (plant.Level >= 5)
+			{
+				if (Creator::RandFloat(1.0f) < plant.ButterHitCount * 0.002f)
+				{
+					plant.ButterHitCount = 0;
+					plant.KernelPreparingCannon = true;
+					plant.Fire(PlantWeapon, plant.FindTargetZombie(PlantWeapon));
+					return;
+				}
+			}
 			int fire_count = kernelpult_scatter_count[plant.Level];
 			plant.KernelRandomFire = true;
 			while(fire_count>0)
@@ -521,6 +531,16 @@ bool IsKernelPultCastButter(MyPlant plant)
 	return Creator::Rand(KernelPultProcPartition[plant.Level]) == 0;
 }
 
+int onKernelPultSetProjectileType(MyPlant plant, int PlantWeapon)
+{
+	if (plant.KernelPreparingCannon)
+	{
+		plant.KernelPreparingCannon = false;
+		return 11;
+	}
+	return -1;
+}
+
 bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
 {
 	return true;
@@ -781,6 +801,7 @@ void InitPlantEvents()
 	// 玉米投手
 	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
 	PVZEvent::PlantPultSetSpeedAfterEvent((int)onPlantPultSetSpeedAfter);
+	PVZEvent::KernelPultSetProjectileTypeEvent((int)onKernelPultSetProjectileType);
 	// 胆小菇
 	PVZEvent::ScardyShroomScaredEvent((int)onScaredyShroomScared);
 	PVZEvent::ScardyShroomGrowEvent((int)onScaredyShroomGrow);

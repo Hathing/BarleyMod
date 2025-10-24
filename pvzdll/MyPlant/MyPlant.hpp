@@ -88,6 +88,8 @@ public:
 	INT_PROPERTY(ButterHitCount, __get_ButterHitCount, __set_ButterHitCount, 0xE0);
 	/// @brief 玉米投手是否使用随机弹道
 	T_PROPERTY(bool, KernelRandomFire, __get_KernelRandomFire, __set_KernelRandomFire, 0x0E4);
+	/// @brief 玉米投手下一发是否是玉米大炮
+	T_PROPERTY(bool, KernelPreparingCannon, __get_KernelPreparingCannon, __set_KernelPreparingCannon, 0x0E5);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 当前体型值

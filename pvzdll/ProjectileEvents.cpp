@@ -172,6 +172,8 @@ void onPlantAddProjDamageRangeFlags(MyProjectile proj, MyPlant plant)
 {
 	if (proj.Type == ProjectileType::WinterMelon && proj.SpecialType == PST_CANNON_WINTERMELON)
 		proj.DamageAbility = 0;
+	if (proj.Type == ProjectileType::CobCannon)
+		proj.DamageAbility = 0;
 }
 
 bool onProjectileImpact(MyProjectile proj, MyZombie zombie)
