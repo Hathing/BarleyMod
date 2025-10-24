@@ -86,3 +86,20 @@ void MyProjectile::DeriveProperty(MyProjectile proj)
 	this->SourceLevel = proj.SourceLevel;
 	this->ParentID = proj.ParentID;
 }
+
+PVZ::Rect MyProjectile::GetRect()
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_ECX, PVZ::Memory::Variable)
+		.mov_reg_imm(REG_ESI, this->GetBaseAddress())
+		.invoke(0x46EBC0)
+		.ret());
+
+	PVZ::Rect tmp = PVZ::Rect();
+	tmp.X = *((int*)PVZ::Memory::Variable);
+	tmp.Y = *((int*)(PVZ::Memory::Variable + 4));
+	tmp.Width = *((int*)(PVZ::Memory::Variable + 8));
+	tmp.Height = *((int*)(PVZ::Memory::Variable + 0x0C));
+
+	return tmp;
+}
