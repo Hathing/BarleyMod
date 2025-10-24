@@ -66,8 +66,23 @@ void UpdatePlantExistCount(MyBoard& board)
 		{
 		case SeedType::GoldMagnet:
 			{
-				if (level >= 5)MyBoard::GoldMagnetFactors[row] *= 2.0f;
-				else MyBoard::GoldMagnetFactors[row] *= 1.5f;
+				switch (level)
+				{
+				case 0:
+				case 1:
+					MyBoard::GoldMagnetFactors[row] *= 1.5f;
+					break;
+				case 2:
+				case 3:
+					MyBoard::GoldMagnetFactors[row] *= 1.75f;
+					break;
+				case 4:
+				case 5:
+					MyBoard::GoldMagnetFactors[row] *= 2.0f;
+					break;
+				default:
+					break;
+				}
 			}
 			break;
 		case SeedType::Iceshroom:

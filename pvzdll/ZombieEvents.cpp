@@ -12,6 +12,7 @@ void onZombieDropLoot(MyZombie zombie)
 	if (zombie.Type == ZombieType::DrZomboss)
 		return;
 	
+	// 毒层扩散
 	if (zombie.PoisonStack >= 10)
 	{
 		int spread_stack = zombie.PoisonStack >> 2;
@@ -22,28 +23,64 @@ void onZombieDropLoot(MyZombie zombie)
 				myzombie.PoisonStack += spread_stack;
 	}
 
+	// 击杀植物的经验分配
 	if (!zombie.Hypnotized)
 	{
+		MyBoard board = zombie.GetBoard();
 		int bounty_xp = zombie.GetBountyXP();
+		int row = zombie.Row;
+		bool has_source = false;
+
 		auto attacker = MyPlant::GetByID(zombie.LastDamageSourceID).GetOwner();
 
 		if (attacker.isValid() && attacker.IsXPRecipient())
 		{
 			PlantAbility::GetAbility(attacker.Type)->onKill(attacker, zombie);
+			has_source = true;
+			row = attacker.Row;
+		}
+		// 吸金磁倍率
+		bounty_xp *= MyBoard::GoldMagnetFactors[row];
+		// 击杀者获得80%经验
+		if (has_source)
+		{
 			attacker.AddExperience(bounty_xp * 4 / 5, true);
 			bounty_xp -= (bounty_xp * 4 / 5);
 		}
-
-		auto plants = zombie.GetBoard().GetAllPlants<MyPlant>();
-		int plant_cnt = 0;
-		for (auto plant : plants)
-			if (plant.Row == zombie.Row && plant.IsXPRecipient())
-				plant_cnt++;
-		if (plant_cnt <= 0) return;
+		// 经验平分给本行其他植物
+		auto plants = board.GetAllPlants<MyPlant>();
+		// 计算本行有多少可分配经验的植物与五阶吸金磁
+		int plant_cnt = 0, lv5_gold_magnets = 0;
+		for (auto& plant : plants)
+		{
+			if (plant.Row == row)
+			{
+				if(plant.IsXPRecipient())
+					plant_cnt++;
+				if (plant.Type == SeedType::GoldMagnet && plant.Level >= 5)
+					lv5_gold_magnets++;
+			}
+		}
+		if (plant_cnt <= 0)
+			plant_cnt = 1;
+		// 植物获得经验与治疗
 		bounty_xp /= plant_cnt;
-		for (auto plant : plants)
-			if (plant.Row == zombie.Row && plant.IsXPRecipient())
-				plant.AddExperience(bounty_xp);
+		int heal_val = bounty_xp * lv5_gold_magnets / 500;
+		for (auto& plant : plants)
+		{
+			if (plant.Row == row)
+			{
+				if (plant.IsXPRecipient())
+					plant.AddExperience(bounty_xp);
+				// 即使满级植物也能吃到五阶吸金磁的治疗
+				if (heal_val > 0)
+				{
+					plant.Heal(heal_val);
+					// 特效
+					plant.Flash();
+				}
+			}
+		}
 	}
 }
 
