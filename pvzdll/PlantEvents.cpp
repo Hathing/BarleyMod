@@ -780,8 +780,6 @@ void InitPlantEvents()
 	PVZ::Memory::WriteMemory<byte>(0x4677A6, 0xEB);
 	//倭瓜不会二次索敌
 	PVZ::Memory::WriteMemory<byte>(0x460B15, 0xEB);
-	//倭瓜伤害改为穿透盾牌类型
-	PVZ::Memory::WriteMemory<int>(0x4607AE, 2);
 	//植物不再会根据更新+130调用SetSleeping
 	PVZ::Memory::WriteMemory<byte>(0x46320C, 0xEB);
 	//植物不再会根据更新+130播放音效
