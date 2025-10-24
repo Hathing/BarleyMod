@@ -1705,4 +1705,23 @@ namespace PVZEvent
 		DophinRiderJudgeJumpEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
 		DophinRiderJudgeJumpEvent(int address) : ThreeStateEventTemplate() { Init(address); };
 	};
+
+	/// @brief 投手发射子弹时，子弹计算完速度的事件
+	/// @param 植物，子弹
+	class PlantPultSetSpeedAfterEvent : public DLLEventTemplate<0x46754C, 7, REG_EAX, REG_EBP>
+	{
+	public:
+		PlantPultSetSpeedAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantPultSetSpeedAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantPultSetSpeedAfterEvent() : DLLEventTemplate() { Init("onPlantPultSetSpeedAfter"); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			// 修改几个会跳转到事件注入点RET的地址
+			PVZ::Memory::WriteMemory<int>(0x466E2B, 0x000005FD);
+			PVZ::Memory::WriteMemory<int>(0x467325, 0x00000103);
+			PVZ::Memory::WriteMemory<int>(0x4673B5, 0x00000073);
+		}
+	};
+
 };

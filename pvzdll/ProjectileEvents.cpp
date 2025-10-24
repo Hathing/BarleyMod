@@ -352,4 +352,6 @@ void InitProjectileEvents()
 
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);
+	//黄油定身时间缩短为2s
+	PVZ::Memory::WriteMemory<int>(0x532741, 200);
 }
