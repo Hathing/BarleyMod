@@ -14,7 +14,6 @@ void onPlantInitAfter(MyPlant plant)
 	plant.AnotherCounter = 0;
 	plant.StunCountdown = 0;
 	plant.ChillCountdown = 0;
-	plant.KillCount = 0;
 	plant.Experience = 0;
 	plant.Level = 0;
 	plant.RelatedPlantID1 = 0;
@@ -64,6 +63,10 @@ bool onPlantUpdateAcitveAbilityBefore(MyPlant plant)
 {
 	if (plant.StunCountdown > 0)
 		return false;
+	MyBoard board = plant.GetBoard();
+	if (!board.EnablePlantAbility)
+		return false;
+
 	return true;
 }
 

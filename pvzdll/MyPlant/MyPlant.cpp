@@ -147,6 +147,8 @@ void MyPlant::Stun(int stun_time)
 {
 	if (stun_time > 0)
 		this->StunCountdown += stun_time;
+	else
+		this->StunCountdown = stun_time;
 }
 
 int MyPlant::Heal(int val)

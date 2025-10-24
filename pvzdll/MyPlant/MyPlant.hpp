@@ -11,9 +11,9 @@ public:
 	
 	/// @brief 是否由大麦生成
 	T_PROPERTY(mybool, FromBarley, __get_FrB, __set_FrB, 0x064);
-	/// @brief 第一个与该植物相关的场地物件的 ID
+	/// @brief 春分藤第一个与该植物相关的场地物件的 ID
 	INT_PROPERTY(RelatedGriditemID1, __get_ReGID1, __set_ReGID1, 0x068);
-	/// @brief 第二个与该植物相关的场地物件的 ID
+	/// @brief 春分藤第二个与该植物相关的场地物件的 ID
 	INT_PROPERTY(RelatedGriditemID2, __get_ReGID2, __set_ReGID2, 0x06C);
 	/// @brief 被啃50cs倒计时
 	INT_PROPERTY(EatenCounter, __get_EatenCounter, __set_EatenCounter, 0x0B4);
@@ -82,6 +82,8 @@ public:
 	T_PROPERTY(bool,BloverIsFevering, __get_BloverIsFevering, __set_BloverIsFevering, 0x0E4);
 	/// @brief 三叶草是否处于工作状态
 	T_PROPERTY(bool, BloverIsWorking, __get_BloverIsWorking, __set_BloverIsWorking, 0x0E5);
+	/// @brief 胆小菇击杀次数
+	INT_PROPERTY(ScaredyShroomKillCount, __get_KiC, __set_KiC, 0xE0);
 	/// @brief 生命恢复计时器
 	INT_PROPERTY(HealCounter, __get_HeC, __set_HeC, 0x0F0);
 	/// @brief 当前体型值
@@ -94,8 +96,6 @@ public:
 	INT_PROPERTY(StunCountdown, __get_StunCountdown, __set_StunCountdown, 0x100);
 	/// @brief 减速效果倒计时
 	INT_PROPERTY(ChillCountdown, __get_ChC, __set_ChC, 0x104);
-	/// @brief 胆小菇击杀次数
-	INT_PROPERTY(KillCount, __get_KiC, __set_KiC, 0x108);
 	/// @brief 是否启用彩蛋皮
 	T_PROPERTY(mybool, EasterSkin, __get_EaS, __set_EaS, 0x10C);
 

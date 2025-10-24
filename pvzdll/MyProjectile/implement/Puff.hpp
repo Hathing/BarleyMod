@@ -31,7 +31,7 @@ namespace ProjectileAbility
 
 				MyPlant owner = MyPlant::GetByID(proj.ParentID);
 				if (owner.isValid())
-					total_dmg += (owner.KillCount * 4);
+					total_dmg += (owner.ScaredyShroomKillCount * 4);
 
 				return total_dmg;
 			}

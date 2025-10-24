@@ -9,7 +9,7 @@ namespace ZombieAbility
 		new NewspaperZombie(),	new ScreenDoorZombie(),		new FootballZombie(),	new DancingZombie(),		new BaseZombie(),
 		new BaseZombie(),		new SnorkedZombie(),		new Zomboni(),			new ZombieBobsledTeam(),	new DolphinRiderZombie(),
 		new ClownZombie(),		new BalloonZombie(),		new DiggerZombie(),		new PogoZombie(),			new ZombieYeti(),
-		new BungeeZombie(),		new BaseZombie(),			new CatapultZombie(),	new Gargantuar(),			new Imp(),
+		new BungeeZombie(),		new LadderZombie(),			new CatapultZombie(),	new Gargantuar(),			new Imp(),
 
 		new BaseZombie(),		new PeaZombie(),			new WallNutZombie(),	new JalapenoZombie(),		new BaseZombie(),
 		new SquashZombie(),		new TallNutZombie(),		new GigaGargantuar()
@@ -34,6 +34,21 @@ void MyZombie::AttachShield()
 	PVZ::Memory::Execute(AsmBuilder()
 		.mov_reg_imm(REG_EAX, this->GetBaseAddress())
 		.invoke(0x533000)
+		.ret()
+	);
+}
+
+void MyZombie::AttachSeaweed(const char* trackName, float x, float y, float scale)
+{
+	PVZ::Memory::WriteArray<const char>(PVZ::Memory::Variable + 100, trackName, std::strlen(trackName) + 1);
+	auto particles = PVZ::CreateParticleSystem(0.0f,0.0f,0,EffectType::SEAWEED_IN_CORAL_THREE);
+	particles.OverrideScale(scale);
+	auto anim = this->GetAnimation();
+	PVZ::Memory::Execute(AsmBuilder()
+		.push_float(y).push_float(x).push_imm32(particles.GetBaseAddress())
+		.mov_reg_imm(REG_EAX, PVZ::Memory::Variable + 100)
+		.mov_reg_imm(REG_ECX, anim.GetBaseAddress())
+		.invoke(0x473070)
 		.ret()
 	);
 }
@@ -162,8 +177,11 @@ void MyZombie::AddPoison(int num)
 		this->ColorFlag = 1;
 }
 
-void MyZombie::AddFlame(int num)
+bool MyZombie::AddFlame(int num)
 {
+	if (!this->ColorFlag)
+		this->ColorFlag = 3;
+
 	this->FlameStack += num;
 	//燃烬效果
 	if (this->ShieldType == ShieldType::ZombieAccessoriesType2None && this->FlameStack > this->BodyHealth + this->HelmHealth)
@@ -171,9 +189,9 @@ void MyZombie::AddFlame(int num)
 		if (this->BodyHealth >= 1800)
 			this->BodyHealth = 1799;
 		this->Blast();
+		return true;
 	}
-	if (!this->ColorFlag)
-		this->ColorFlag = 3;
+	return false;
 }
 
 void MyZombie::Launch(float xspeed, float yspeed, float startheight)

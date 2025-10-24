@@ -87,6 +87,8 @@ public:
 
 	/// @brief 根据盾的类型设置相应动画轨道的绘制分组。
 	void AttachShield();
+	/// @brief 给僵尸的动画轨道附加水草
+	void AttachSeaweed(const char* trackName, float x, float y, float scale=1.0f);
 
 	/// @brief 僵尸飞到屏幕右侧外
 	/// @param factor 被击飞后水平速度的因子，取负数让僵尸反向飞出屏幕，但是这个参数理论来说没啥用？
@@ -123,7 +125,8 @@ public:
 	void AddPoison(int num);
 	/// @brief 增加燃烬值
 	/// @param num 增加的数值
-	void AddFlame(int num);
+	/// @return 僵尸被化灰则返回True
+	bool AddFlame(int num);
 
 	/// @brief 僵尸被击飞
 	/// @note 使用前请先在函数外处理对气球等空中僵尸的判断
