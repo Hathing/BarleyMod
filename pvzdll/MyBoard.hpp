@@ -23,6 +23,8 @@ public:
 	T_PROPERTY(byte, Timer10cs, __get_Timer10cs, __set_Timer10cs, 0x5805);
 	/// @brief 周期为1s的计时器
 	T_PROPERTY(byte, Timer1s, __get_Timer1s, __set_Timer1s, 0x5806);
+	/// @brief 植物可以更新技能
+	T_PROPERTY(bool, EnablePlantAbility, __get_EnablePlantAbility, __set_EnablePlantAbility, 0x5807);
 	/// @brief 僵尸毒结算倒计时
 	T_PROPERTY(byte, PoisonCounter, __get_PoC, __set_PoC, 0x165);
 	/// @brief 僵尸颜色显示切换计时

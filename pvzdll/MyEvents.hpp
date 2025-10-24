@@ -127,7 +127,7 @@ namespace PVZEvent
 	class ZombieAddProjectileEvent
 	{
 	private:
-		class Gatling : public DLLEventTemplate<0x527A98, 7, REG_ESI, MEM_ESP_ADD(0x28)>
+		class Gatling : public DLLEventTemplate<0x527A91, 7, REG_ESI, MEM_ESP_ADD(0x28)>
 		{
 		public:
 			Gatling(const char* str) : DLLEventTemplate() { Init(str); };
@@ -211,6 +211,17 @@ namespace PVZEvent
 		ProjectileFindZombieTargetSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
 		ProjectileFindZombieTargetSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ProjectileFindZombieTargetSkipEvent() : ProjectileFindZombieTargetSkipEvent("onProjectileFindZombieTarget") {};
+	};
+
+	/// @brief 僵尸豌豆子弹跳过寻找碰撞植物的事件
+	/// @param 僵尸豌豆子弹，正在遍历的植物
+	/// @return False则不碰撞该植物
+	class ProjectileFindPlantTargetSkipEvent : public BoolDLLEventTemplate<0x46CAF6, 6, 0x46CAD0, REG_ESI, REG_EBP>
+	{
+	public:
+		ProjectileFindPlantTargetSkipEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileFindPlantTargetSkipEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileFindPlantTargetSkipEvent() : ProjectileFindPlantTargetSkipEvent("onProjectileFindPlantTargetSkip") {};
 	};
 
 	/// @brief 子弹更新穿透运动的事件，实际上充当一个跳转到+58=7的运动更新的作用
@@ -1661,5 +1672,36 @@ namespace PVZEvent
 		ReanimCacheDrawFrameEvent() : DLLEventTemplate() { Init("onReanimCacheDrawFrame"); };
 		ReanimCacheDrawFrameEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		ReanimCacheDrawFrameEvent(int address) : DLLEventTemplate() { Init(address); };
+  }
+	/// @brief 扶梯僵尸状态为搭梯时，在尝试索敌后的事件
+	/// @param 僵尸、植物（可能为NULL）
+	/// @return True则触发原版判定（有植物就在植物格子上放梯子并进入爬梯状态，没植物就继续前进），Flase则直接返回，不作任何修改
+	class LadderZombieTryPlaceLadderEvent : public DLLEventTemplate<0x52A9E4, 6, REG_EAX, REG_EBX>
+	{
+	public:
+		LadderZombieTryPlaceLadderEvent() : DLLEventTemplate() { Init("onLadderZombieTryPlaceLadder"); };
+		LadderZombieTryPlaceLadderEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		LadderZombieTryPlaceLadderEvent(int address) : DLLEventTemplate() { Init(address); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_al_al().jnz_rel(7)
+				.popad().push_imm32(0x52AA1F).ret()
+				.popad().mov_reg_reg(REG_ESI, REG_EAX)
+				.test_reg_reg(REG_ESI,REG_ESI).jnz_rel(6)
+				.push_imm32(0x52AA25).ret()
+				.push_imm32(0x52A9EA).ret();
+		}
+	};
+
+	/// @brief 海豚僵尸冲刺时判断是否下马的事件
+	/// @param 僵尸
+	/// @return 正数则下马，0则不下马，负数则使用原版判断
+	class DophinRiderJudgeJumpEvent : public ThreeStateEventTemplate<0x52642F, 7, 0x526459, 0x52670F, REG_EDI>
+	{
+	public:
+		DophinRiderJudgeJumpEvent() : ThreeStateEventTemplate() { Init("onDophinRiderJudgeJump"); };
+		DophinRiderJudgeJumpEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		DophinRiderJudgeJumpEvent(int address) : ThreeStateEventTemplate() { Init(address); };
 	};
 };

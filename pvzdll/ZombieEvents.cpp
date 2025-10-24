@@ -81,6 +81,17 @@ AnimationType::AnimationType GetZombieReanimType(MyZombie zombie, AnimationType:
 
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage)
 {
+	if (source_type == GameObjectType::OBJECT_TYPE_PROJECTILE)
+	{
+		MyProjectile proj{ source.GetBaseAddress()};
+		if (proj.Type == ProjectileType::ZombiePea && proj.SpecialType == PST_LADDER_ZOMBIEPEA)
+		{
+			if (plant.Type != SeedType::Squash)
+				Creator::CreateLadder(plant.Row, plant.Column);
+			damage = 50;
+		}
+	}
+
 	plant.HpDisplayCounter = 100;
 
 	if (plant.Type == SeedType::Spikerock && source_type == GameObjectType::OBJECT_TYPE_NONE && damage == 50)
@@ -201,11 +212,13 @@ float onZombieApplyAnimSpeed(MyZombie zombie, PVZ::Animation anim, float rate)
 void onZombieUpdatePlaying(MyZombie zombie)
 {
 	//僵尸的总更新，无视黄油和冻结
-	if (!zombie.Hypnotized)
+
+	//僵尸坠落更新移动至总更新位置，避免因冻结/黄油而停止坠落
+	if (zombie.ZombieHeight == 7)
 	{
-		return;
+		//UpdateZombieFalling
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_ESI,zombie.GetBaseAddress()).invoke(0x529770).ret());
 	}
-	return;
 }
 
 /// @deprecated
@@ -911,6 +924,37 @@ bool onDiggerZombieUndergroundFindTarget(MyZombie zombie, MyPlant plant)
 	return false;
 }
 
+bool onLadderZombieTryPutLadder(MyZombie zombie, MyPlant plant)
+{
+	if (!plant.isValid())
+	{
+		//丢出梯子
+		MyProjectile proj = Creator::CreateProjectile(ProjectileType::ZombiePea, zombie.ImageX, zombie.ImageY + 50 - zombie.Height, 0, 0);
+		proj.Row = zombie.Row;
+		proj.DamageAbility = 0;
+		proj.Motion = MotionType::LeftSlide;
+		proj.Layer = zombie.Layer + 100;
+		proj.SpecialType = PST_LADDER_ZOMBIEPEA;
+		//播放音效
+		Creator::CreateUpperSound(UpperSoundType::PlaceLadder);
+		//移除梯子
+		PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_EAX, zombie.GetBaseAddress()).invoke(0x5330E0).ret());
+		
+		return false;
+	}
+
+	return true;
+}
+
+ThreeState::ThreeState onDophinRiderJudgeJump(MyZombie zombie)
+{
+	if (zombie.BodyHealth < zombie.BodyMaxHealth * 0.66f)
+	{
+		return ThreeState::Enable;
+	}
+	return ThreeState::None;
+}
+
 bool onPogoUpdateActions(MyZombie zombie)
 {
 	/*
@@ -1040,6 +1084,10 @@ void InitZombieEvents()
 	PVZEvent::JalapenoHeadBurnBeforeEvent((int)onJalapenoHeadBurnBefore);
 	// 矿工僵尸
 	PVZEvent::DiggerZombieUndergroundFindTargetEvent((int)onDiggerZombieUndergroundFindTarget);
+	// 梯子僵尸
+	PVZEvent::LadderZombieTryPlaceLadderEvent((int)onLadderZombieTryPutLadder);
+	// 海豚僵尸
+	PVZEvent::DophinRiderJudgeJumpEvent((int)onDophinRiderJudgeJump);
 
 	PVZEvent::ZombieCanBeChilledEvent((int)IsZombieCanBeChilled);
 	PVZEvent::ZombieChillEvent((int)onZombieChilled);
@@ -1078,4 +1126,6 @@ void InitZombieEvents()
 	PVZ::Memory::WriteMemory<WORD>(0x530EEA, Creator::makeshort(0xEB, 0x0C));
 	//啃完大蒜500cs后才解除YuckyFace
 	PVZ::Memory::WriteMemory<int>(0x52B727, 0x000001F4);
+	//跳过UpdateZombieAction中UpdateZombieFalling
+	PVZ::Memory::WriteMemory<byte>(0x52B162, 0xEB);
 }

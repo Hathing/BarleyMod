@@ -151,6 +151,9 @@ void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
 	case PST_PURPLE_FIREBALL:
 		anim.SetColor({ 0x70,0x00,0xFF,0xFF });
 		break;
+	case PST_BLACK_FIREBALL:
+		anim.SetColor({ 0x10,0x10,0x10,0xFF });
+		break;
 	default:
 		break;
 	}
@@ -262,6 +265,24 @@ bool onProjectileFindZombieTargetSkip(MyProjectile proj, MyZombie zombie)
 	return true;
 }
 
+bool onProjectileFindPlantTargetSkip(MyProjectile proj, MyPlant plant)
+{
+	if (proj.SpecialType == PST_LADDER_ZOMBIEPEA)
+	{
+		if (plant.OwnerID != 0)
+			return false;
+
+		MyBoard board = proj.GetBoard();
+		auto griditems = board.GetAllGriditems<PVZ::Griditem>();
+		for (auto& griditem : griditems)
+		{
+			if (griditem.Type == GriditemType::GriditemLadder && griditem.Row == plant.Row && griditem.Column == plant.Column)
+				return false;
+		}
+	}
+	return true;
+}
+
 bool onProjectileUpdatePiercingMotion(MyProjectile proj)
 {
 	if (proj.Motion == MotionType::Piercing)
@@ -273,7 +294,7 @@ bool onProjectileUpdatePiercingMotion(MyProjectile proj)
 
 bool onProjectileUpdateLeftMotion(MyProjectile proj)
 {
-	if (proj.X <= 10.0f)
+	if (proj.X <= 10.0f && proj.Type != ProjectileType::ZombiePea)
 	{
 		proj.Motion = MotionType::Direct;
 		/*
@@ -318,6 +339,7 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileCheckExpireEvent((int)IsProjExpire);
 	PVZEvent::ProjectileHitDiversionEvent((int)onProjectileDivert);
 	PVZEvent::ProjectileFindZombieTargetSkipEvent((int)onProjectileFindZombieTargetSkip);
+	PVZEvent::ProjectileFindPlantTargetSkipEvent((int)onProjectileFindPlantTargetSkip);
 
 	// 子弹碰撞效果相关
 	PVZEvent::ProjectileImpactEvent((int)onProjectileImpact);

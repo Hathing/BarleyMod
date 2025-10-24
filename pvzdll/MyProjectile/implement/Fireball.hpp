@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../ProjectileAbility.hpp"
 
 namespace ProjectileAbility
@@ -8,6 +8,17 @@ namespace ProjectileAbility
 	public:
 		int OverrideDamage(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
+			switch (damage_type)
+			{
+			case PVZEvent::DAMAGE_SINGULAR:
+				return 20;
+			case PVZEvent::DAMAGE_SPLASH_PRIMARY:
+				return 20;
+			case PVZEvent::DAMAGE_SPLASH_SECONDARY:
+				return 5;
+			default:
+				break;
+			}
 			return ori_dmg;
 		}
 		void onDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
@@ -26,10 +37,28 @@ namespace ProjectileAbility
 			case PST_PURPLE_FIREBALL:
 				zombie.AddPoison(20);
 				break;
+			case PST_BLACK_FIREBALL:
+				zombie.AddFlame(100);
+				break;
 			default:
 				zombie.AddFlame(20);
 				break;
 			}
+		}
+		bool onImpact(MyProjectile proj, MyZombie zombie)
+		{
+			if (proj.SpecialType == PST_BLACK_FIREBALL)
+			{
+				if (zombie.isValid())
+				{
+					//音效和特效
+					//....
+
+					bool isburnt = zombie.AddFlame(500);
+					return !isburnt;
+				}
+			}
+			return true;
 		}
 	};
 }
