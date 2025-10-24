@@ -9,6 +9,9 @@ namespace ProjectileAbility
 	public:
 		int OverrideDamage(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
+			if (proj.SourceType == SeedType::DarkShroom)
+				return 20;
+
 			if (damage_type == PVZEvent::ProjDmgType::DAMAGE_SPLASH_PRIMARY)
 				return ori_dmg + proj.SpecialStack * 20;
 			else if (damage_type == PVZEvent::ProjDmgType::DAMAGE_SPLASH_SECONDARY)
