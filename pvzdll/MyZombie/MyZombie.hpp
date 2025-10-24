@@ -125,7 +125,8 @@ public:
 	void AddPoison(int num);
 	/// @brief 增加燃烬值
 	/// @param num 增加的数值
-	void AddFlame(int num);
+	/// @return 僵尸被化灰则返回True
+	bool AddFlame(int num);
 
 	/// @brief 僵尸被击飞
 	/// @note 使用前请先在函数外处理对气球等空中僵尸的判断

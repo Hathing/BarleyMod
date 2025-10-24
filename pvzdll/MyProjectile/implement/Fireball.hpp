@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../ProjectileAbility.hpp"
 
 namespace ProjectileAbility
@@ -37,10 +37,28 @@ namespace ProjectileAbility
 			case PST_PURPLE_FIREBALL:
 				zombie.AddPoison(20);
 				break;
+			case PST_BLACK_FIREBALL:
+				zombie.AddFlame(100);
+				break;
 			default:
 				zombie.AddFlame(20);
 				break;
 			}
+		}
+		bool onImpact(MyProjectile proj, MyZombie zombie)
+		{
+			if (proj.SpecialType == PST_BLACK_FIREBALL)
+			{
+				if (zombie.isValid())
+				{
+					//音效和特效
+					//....
+
+					bool isburnt = zombie.AddFlame(500);
+					return !isburnt;
+				}
+			}
+			return true;
 		}
 	};
 }

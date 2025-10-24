@@ -151,6 +151,9 @@ void onFireballInitColor(MyProjectile proj, PVZ::Animation anim)
 	case PST_PURPLE_FIREBALL:
 		anim.SetColor({ 0x70,0x00,0xFF,0xFF });
 		break;
+	case PST_BLACK_FIREBALL:
+		anim.SetColor({ 0x10,0x10,0x10,0xFF });
+		break;
 	default:
 		break;
 	}

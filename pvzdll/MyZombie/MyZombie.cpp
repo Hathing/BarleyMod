@@ -177,8 +177,11 @@ void MyZombie::AddPoison(int num)
 		this->ColorFlag = 1;
 }
 
-void MyZombie::AddFlame(int num)
+bool MyZombie::AddFlame(int num)
 {
+	if (!this->ColorFlag)
+		this->ColorFlag = 3;
+
 	this->FlameStack += num;
 	//燃烬效果
 	if (this->ShieldType == ShieldType::ZombieAccessoriesType2None && this->FlameStack > this->BodyHealth + this->HelmHealth)
@@ -186,9 +189,9 @@ void MyZombie::AddFlame(int num)
 		if (this->BodyHealth >= 1800)
 			this->BodyHealth = 1799;
 		this->Blast();
+		return true;
 	}
-	if (!this->ColorFlag)
-		this->ColorFlag = 3;
+	return false;
 }
 
 void MyZombie::Launch(float xspeed, float yspeed, float startheight)
