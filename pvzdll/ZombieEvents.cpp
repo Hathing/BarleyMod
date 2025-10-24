@@ -33,11 +33,14 @@ void onZombieDropLoot(MyZombie zombie)
 
 		auto attacker = MyPlant::GetByID(zombie.LastDamageSourceID).GetOwner();
 
-		if (attacker.isValid() && attacker.IsXPRecipient())
+		if (attacker.isValid())
 		{
-			PlantAbility::GetAbility(attacker.Type)->onKill(attacker, zombie);
-			has_source = true;
 			row = attacker.Row;
+			PlantAbility::GetAbility(attacker.Type)->onKill(attacker, zombie);
+			if (attacker.IsXPRecipient())
+			{
+				has_source = true;
+			}
 		}
 		// 吸金磁倍率
 		bounty_xp *= MyBoard::GoldMagnetFactors[row];
