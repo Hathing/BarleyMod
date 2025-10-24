@@ -360,6 +360,6 @@ void InitProjectileEvents()
 	static const float cobcannon_collide_ground_height = 40.0f;
 	PVZ::Memory::WriteMemory<int>(0x46D672, (unsigned int)((void*)&cobcannon_collide_ground_height));
 	//加农炮碰地特效贴图坐标修改
-	static const double cobcannon_collide_effect_yoffset = 120.0f;
+	static const double cobcannon_collide_effect_yoffset = 120.0;
 	PVZ::Memory::WriteMemory<int>(0x46E14F, (unsigned int)((void*)&cobcannon_collide_effect_yoffset));
 }
