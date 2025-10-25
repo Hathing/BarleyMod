@@ -6,6 +6,7 @@ namespace PlantAbility
 	class PotatoMine : public BasePlant
 	{
 		inline static const int explode_range[6] = { 120, 120, 160, 160, 200, 200 };
+		inline static const int max_health[6] = { 300, 450, 450, 600, 600, 600 };
 		void onCreated(MyPlant plant)
 		{
 			plant.AttributeCountdown = 1;
@@ -13,7 +14,7 @@ namespace PlantAbility
 		}
 		void onUpgrade(MyPlant plant)
 		{
-			return;
+			plant.SetMaxHealth(max_health[plant.Level]);
 		}
 
 		bool TickAbility(MyPlant plant)
