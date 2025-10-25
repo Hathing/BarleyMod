@@ -167,6 +167,13 @@ namespace PlantAbility
 		{
 			return -1;
 		}
+		/// @brief 植物被碾压时触发的事件
+		/// @param plant 植物
+		/// @return false则植物不被压扁
+		virtual bool onSquished(MyPlant plant, MyZombie zombie)
+		{
+			return true;
+		}
 		/// @brief 获取植物索敌优先级
 		/// @param plant 植物
 		/// @param zombie 目标僵尸

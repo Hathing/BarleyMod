@@ -159,21 +159,22 @@ ThreeState::ThreeState onZombieSkipEatPlant(MyZombie zombie, MyPlant plant)
 
 bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, MyPlant plant)
 {
+	if (plant.OwnerID != 0)
+		return false;
+
+	bool plant_squished = PlantAbility::GetAbility(plant.Type)->onSquished(plant, zombie);
 	auto zombietype = zombie.Type;
-	auto planttype = plant.Type;
-	if (zombietype == ZombieType::Zomboin || zombietype == ZombieType::CatapultZombie)
+
+	if (!plant_squished)
 	{
-		if (planttype == SeedType::Wallnut || planttype == SeedType::Tallnut)
+		//车类触发碾压时，如果植物没有被压扁，车类被击退
+		if (zombietype == ZombieType::Zomboin || zombietype == ZombieType::CatapultZombie)
 		{
 			zombie.X += 50.0f;//击退距离
-			//这里应该将 僵尸伤害植物 和 植物伤害僵尸 和 子弹伤害僵尸 分别封装成一个函数，避免某些原本该触发的事件未触发
-			zombie.Hit(200, PVZ::DAMAGEF_NONE);
-			int damage = onPlantTakeDamage(plant, zombie, GameObjectType::OBJECT_TYPE_NONE, 500);//这里object type没有僵尸？
-			plant.Hp -= damage;//植物碾压受伤
-			return false;
+			PVZ::ApplyPZDamage(plant, zombie, 200, PVZ::DAMAGEF_NONE);
 		}
 	}
-	return true;
+	return plant_squished;
 }
 
 void onLoadPlainZombieReanimBefore(MyZombie zombie)
