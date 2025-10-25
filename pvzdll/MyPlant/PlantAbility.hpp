@@ -174,6 +174,15 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		/// @brief 植物在游戏内触发亡语的事件
+		/// @note 对于碾压消失事件，如果涉及复活或无敌，注意重置植物的消失倒计时，避免持续触发亡语。
+		/// @param plant 植物
+		/// @param dyingtype 死因
+		/// @return false则植物不死亡
+		virtual bool onDying(MyPlant plant, PlantDyingType dyingtype)
+		{
+			return true;
+		}
 		/// @brief 获取植物索敌优先级
 		/// @param plant 植物
 		/// @param zombie 目标僵尸
