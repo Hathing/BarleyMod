@@ -543,6 +543,8 @@ int onKernelPultSetProjectileType(MyPlant plant, int PlantWeapon)
 
 bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
 {
+	//对于碾压消失事件，如果涉及复活或无敌，注意重置植物的消失倒计时，避免持续触发亡语。
+
 	if (plant.Type == SeedType::Explodenut)
 	{
 		//创建爆炸
@@ -585,7 +587,9 @@ bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
 			//回满血
 			PlantAbility::GetAbility(plant.Type)->onCreated(plant);
 			plant.HpDisplayCounter = 100;
-
+			//重置状态
+			plant.BloverDisappearCountdown = 200;
+			plant.Squash = false;
 			//等级降低
 			plant.Level--;
 			plant.Experience = (plant.Level <= 0 ? 0 : PlantAbility::PLANT_LEVEL_EXP[plant.Type][plant.Level]);
