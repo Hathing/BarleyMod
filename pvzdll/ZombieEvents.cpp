@@ -577,6 +577,10 @@ int onZombieCanTargetPlant(MyZombie zombie, MyPlant plant, int AttackType)
 		return 0;
 	if (zombie.Type == ZombieType::TallnutZombie)
 		return 0;
+
+	if (plant.Type == SeedType::PotatoMine && plant.OwnerID != 0)
+		return 0;
+
 	return -1;
 }
 
