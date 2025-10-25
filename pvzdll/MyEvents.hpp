@@ -1740,4 +1740,30 @@ namespace PVZEvent
 				.mov_mem_esp_add_imm8_reg(0x30, REG_EAX).popad().push_imm32(0x466F2D).ret();
 		}
 	};
+
+	/// @brief 黄油优先命中被控时间短于0.5s的僵尸
+	class ButterHitZombiePriorityEvent : public DLLEvent
+	{
+	public:
+		ButterHitZombiePriorityEvent()
+		{
+			hookAddress = 0x46CE40;
+			rawlen = 7;
+			BYTE code[] =
+			{
+				0x8B,0x7C,0x24,0x64,// mov edi,[esp+64]
+				0x83,0x7F,0x5C,0x0C,// cmp dword ptr[edi + 5C],0x0C
+				JNE,0x10,
+				//0x8B,0x4C,0x24,0x38,// mov ecx,[esp + 38]
+				//0x8B,0x89,0xB0,0x00,0x00,0x00,// mov ecx,[ecx + 000000B0]
+				//0x39,0x8E,0xB0,0x00,0x00,0x00,// cmp[esi + 000000B0],ecx
+
+				0x83,0xBE,0xB0,0x00,0x00,0x00,0x32,// cmp dword ptr[esi + 000000B0],#50
+				JLE,7,
+				POPAD,PUSHDWORD(0x46CE54),RET
+
+			};
+			start(STRING(code));
+		}
+	};
 };

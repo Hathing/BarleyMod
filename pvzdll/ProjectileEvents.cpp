@@ -352,6 +352,9 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
 	PVZEvent::ProjectileUpdateLeftMotionEvent((int)onProjectileUpdateLeftMotion);
 
+	// 黄油
+	PVZEvent::ButterHitZombiePriorityEvent();
+
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);
 	//黄油定身时间缩短为2s
