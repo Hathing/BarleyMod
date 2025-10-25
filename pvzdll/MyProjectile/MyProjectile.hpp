@@ -78,4 +78,6 @@ public:
 	/// @brief 从其他子弹上面继承部分初始化属性
 	/// @param proj 其他子弹
 	void DeriveProperty(MyProjectile proj);
+	/// @brief 获取子弹的判定范围的矩形
+	PVZ::Rect GetRect();
 };

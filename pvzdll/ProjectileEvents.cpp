@@ -172,6 +172,8 @@ void onPlantAddProjDamageRangeFlags(MyProjectile proj, MyPlant plant)
 {
 	if (proj.Type == ProjectileType::WinterMelon && proj.SpecialType == PST_CANNON_WINTERMELON)
 		proj.DamageAbility = 0;
+	if (proj.Type == ProjectileType::CobCannon)
+		proj.DamageAbility = 0;
 }
 
 bool onProjectileImpact(MyProjectile proj, MyZombie zombie)
@@ -350,6 +352,17 @@ void InitProjectileEvents()
 	PVZEvent::ProjectileSlideMotionEvent((int)onProjectileSlideMotion);
 	PVZEvent::ProjectileUpdateLeftMotionEvent((int)onProjectileUpdateLeftMotion);
 
+	// 黄油
+	PVZEvent::ButterHitZombiePriorityEvent();
+
 	//冰豌豆和冰瓜不附加原版减速
 	PVZ::Memory::WriteMemory<byte>(0x46D2A1, 0);
+	//黄油定身时间缩短为2s
+	PVZ::Memory::WriteMemory<int>(0x532741, 200);
+	//加农炮碰地距离变低
+	static const float cobcannon_collide_ground_height = 40.0f;
+	PVZ::Memory::WriteMemory<int>(0x46D672, (unsigned int)((void*)&cobcannon_collide_ground_height));
+	//加农炮碰地特效贴图坐标修改
+	static const double cobcannon_collide_effect_yoffset = 120.0;
+	PVZ::Memory::WriteMemory<int>(0x46E14F, (unsigned int)((void*)&cobcannon_collide_effect_yoffset));
 }

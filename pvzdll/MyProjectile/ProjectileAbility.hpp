@@ -1,7 +1,5 @@
 #pragma once
-#include "MyProjectile.hpp"
-#include "../MyPlant/MyPlant.hpp"
-#include "../MyZombie/MyZombie.hpp"
+#include "../MyClasses.hpp"
 
 namespace ProjectileAbility
 {

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../ProjectileAbility.hpp"
 
 namespace ProjectileAbility
@@ -16,6 +16,18 @@ namespace ProjectileAbility
 		}
 		bool onImpact(MyProjectile proj, MyZombie zombie)
 		{
+			//给玉米增加层数
+			auto owner = PVZ::GetByID<MyPlant>(proj.ParentID);
+			if (owner.isValid())
+			{
+				if (owner.Type == SeedType::Kernelpult)
+				{
+					if(zombie.isValid())
+						owner.ButterHitCount++;
+				}
+			}
+
+			//大黄油特性
 			if (proj.SpecialStack == 1)
 			{
 				auto zombies = proj.GetBoard().GetAllZombies<MyZombie>();

@@ -1672,7 +1672,8 @@ namespace PVZEvent
 		ReanimCacheDrawFrameEvent() : DLLEventTemplate() { Init("onReanimCacheDrawFrame"); };
 		ReanimCacheDrawFrameEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		ReanimCacheDrawFrameEvent(int address) : DLLEventTemplate() { Init(address); };
-  }
+	};
+
 	/// @brief 扶梯僵尸状态为搭梯时，在尝试索敌后的事件
 	/// @param 僵尸、植物（可能为NULL）
 	/// @return True则触发原版判定（有植物就在植物格子上放梯子并进入爬梯状态，没植物就继续前进），Flase则直接返回，不作任何修改
@@ -1703,5 +1704,66 @@ namespace PVZEvent
 		DophinRiderJudgeJumpEvent() : ThreeStateEventTemplate() { Init("onDophinRiderJudgeJump"); };
 		DophinRiderJudgeJumpEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
 		DophinRiderJudgeJumpEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+	};
+
+	/// @brief 投手发射子弹时，子弹计算完速度的事件
+	/// @param 植物，子弹
+	class PlantPultSetSpeedAfterEvent : public DLLEventTemplate<0x46754C, 7, REG_EAX, REG_EBP>
+	{
+	public:
+		PlantPultSetSpeedAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		PlantPultSetSpeedAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+		PlantPultSetSpeedAfterEvent() : DLLEventTemplate() { Init("onPlantPultSetSpeedAfter"); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			// 修改几个会跳转到事件注入点RET的地址
+			PVZ::Memory::WriteMemory<int>(0x466E2B, 0x000005FD);
+			PVZ::Memory::WriteMemory<int>(0x467325, 0x00000103);
+			PVZ::Memory::WriteMemory<int>(0x4673B5, 0x00000073);
+		}
+	};
+
+	/// @brief 修改玉米投手发射子弹类型的事件
+	/// @param 植物、PlantWeapon
+	/// @return 负数则调用原版（由PlantWeapon决定是玉米或者黄油），非负数表示子弹类型编号
+	class KernelPultSetProjectileTypeEvent : public DLLEventTemplate<0x466EE5, 8, REG_EBX, REG_EBP>
+	{
+	public:
+		KernelPultSetProjectileTypeEvent() : DLLEventTemplate() { Init("onKernelPultSetProjectileType"); };
+		KernelPultSetProjectileTypeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		KernelPultSetProjectileTypeEvent(int address) : DLLEventTemplate() { Init(address); };
+	protected:
+		void InitExtra(AsmBuilder& builder)
+		{
+			builder.test_reg_reg(REG_EAX, REG_EAX).js_rel(11)
+				.mov_mem_esp_add_imm8_reg(0x30, REG_EAX).popad().push_imm32(0x466F2D).ret();
+		}
+	};
+
+	/// @brief 黄油优先命中被控时间短于0.5s的僵尸
+	class ButterHitZombiePriorityEvent : public DLLEvent
+	{
+	public:
+		ButterHitZombiePriorityEvent()
+		{
+			hookAddress = 0x46CE40;
+			rawlen = 7;
+			BYTE code[] =
+			{
+				0x8B,0x7C,0x24,0x64,// mov edi,[esp+64]
+				0x83,0x7F,0x5C,0x0C,// cmp dword ptr[edi + 5C],0x0C
+				JNE,0x10,
+				//0x8B,0x4C,0x24,0x38,// mov ecx,[esp + 38]
+				//0x8B,0x89,0xB0,0x00,0x00,0x00,// mov ecx,[ecx + 000000B0]
+				//0x39,0x8E,0xB0,0x00,0x00,0x00,// cmp[esi + 000000B0],ecx
+
+				0x83,0xBE,0xB0,0x00,0x00,0x00,0x32,// cmp dword ptr[esi + 000000B0],#50
+				JLE,7,
+				POPAD,PUSHDWORD(0x46CE54),RET
+
+			};
+			start(STRING(code));
+		}
 	};
 };

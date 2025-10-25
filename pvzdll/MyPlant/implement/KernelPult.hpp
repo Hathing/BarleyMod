@@ -5,21 +5,35 @@ namespace PlantAbility
 {
 	class KernelPult : public BasePlant
 	{
-		inline static const int max_health[6] = { 300, 600, 600, 1000, 1000, 1000 };
+		void onCreated(MyPlant plant)
+		{
+			plant.KernelRandomFire = false;
+			plant.ButterHitCount = 0;
+			plant.KernelPreparingCannon = false;
+		}
 		void onUpgrade(MyPlant plant)
 		{
-			plant.SetMaxHealth(max_health[plant.Level]);
+			return;
 		}
 		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{
+			if (proj.Type == ProjectileType::CobCannon)
+			{
+				proj.RotationSpeed = -0.2f;
+				proj.X -= 35.0f;
+				proj.Height -= 80.0f;
+			}
+			else
+			{
+				proj.BounceCount = 1;
+			}
+			/*
 			if (proj.Type == ProjectileType::Butter && plant.Level == MyPlant::MAX_LEVEL && plant.Hp >= 800)
 			{
 				plant.Hp -= 50;
 				proj.SpecialStack = 1;
-			}
-			else
-				proj.BounceCount = 5;
-
+			}	
+			*/
 			return true;
 		}
 		int GetDamageRangeFlags(MyPlant plant, int weapon_type)
