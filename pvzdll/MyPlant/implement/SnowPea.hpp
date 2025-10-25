@@ -14,5 +14,11 @@ namespace PlantAbility
 		{
 			plant.ShootOrProductInterval = interval[plant.Level];
 		}
+		bool onUpdateShooter(MyPlant plant)
+		{
+			if (plant.ShootOrProductCountdown == 40)
+				plant.FindTargetAndFire(plant.Row, 0);
+			return true;
+		}
 	};
 }
