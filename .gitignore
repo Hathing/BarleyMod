@@ -346,3 +346,5 @@ testA.bat
 *.lnk
 *.CT
 *.exe
+
+compiled/

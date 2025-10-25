@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../PlantAbility.hpp"
 
 namespace PlantAbility
@@ -79,6 +79,12 @@ namespace PlantAbility
 				plant.UltraCount = 0;
 				plant.AnotherCounter = 440;//大招时长
 			}
+			return true;
+		}
+		bool onUpdateShooter(MyPlant plant)
+		{
+			if (plant.ShootOrProductCountdown == 40)
+				plant.FindTargetAndFire(plant.Row, 0);
 			return true;
 		}
 	};

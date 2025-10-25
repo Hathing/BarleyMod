@@ -263,5 +263,11 @@ namespace PlantAbility
 			return;
 		}
 		*/
+		bool onUpdateShooter(MyPlant plant)
+		{
+			if (plant.ShootOrProductCountdown == 40 && plant.IsPrime())
+				plant.FindTargetAndFire(plant.Row, 0);
+			return true;
+		}
 	};
 }
