@@ -543,8 +543,57 @@ int onKernelPultSetProjectileType(MyPlant plant, int PlantWeapon)
 
 bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
 {
-	return true;
+	if (plant.Type == SeedType::Explodenut)
+	{
+		//创建爆炸
+		Creator::CreateLowerSound(LowerSoundType::CherryExplode);
+		Creator::CreateLowerSound(LowerSoundType::Juice);
+		PVZ::CreateParticleSystem(plant.ImageX + 40, plant.ImageY + 50, 0x61A80, EffectType::CHERRY_BOMB_EXPLODED);
+		MyBoard board = plant.GetBoard();
+		PVZ::Rect explode_rect{ plant.ImageX - 80,plant.ImageY,200,plant.Height };
+		auto zombies = board.GetAllZombies<MyZombie>();
+		for (auto& zombie : zombies)
+		{
+			if (zombie.Row == plant.Row && !zombie.Hypnotized)
+			{
+				auto zombie_rect = zombie.GetActualRect();
+				if (PVZ::GetXOverlap(zombie_rect, explode_rect) > 0)
+				{
+					zombie.Blast();
+				}
+			}
+		}
+		if (plant.Level > 0)
+		{
+			if (plant.Level >= 5 && plant.AttributeCountdown <= 0)
+			{
+				plant.AttributeCountdown = 18000;//3分钟CD
+				//辣椒爆炸
+				Creator::CreateLowerSound(LowerSoundType::JalapenoExplode);
+				Creator::CreateLowerSound(LowerSoundType::Juice);
+				PVZ::Memory::Execute(AsmBuilder()
+					.push_imm32(plant.Row)
+					.mov_reg_imm(REG_EBX, board.GetBaseAddress())
+					.invoke(0x41D450).ret());
+				PVZ::Memory::Execute(AsmBuilder()
+					.push_imm32(plant.Row)
+					.mov_reg_imm(REG_EDI, plant.GetBaseAddress())
+					.invoke(0x4664B0).ret());
+				board.GetIcetrace().SetDisappearCountdown(plant.Row, 20);
+			}
 
+			//回满血
+			PlantAbility::GetAbility(plant.Type)->onCreated(plant);
+			plant.HpDisplayCounter = 100;
+
+			//等级降低
+			plant.Level--;
+			plant.Experience = (plant.Level <= 0 ? 0 : PlantAbility::PLANT_LEVEL_EXP[plant.Type][plant.Level]);
+			return false;
+		}
+	}
+
+	return true;
 }
 
 int onPlantReload(MyPlant plant, int shoot_cd)

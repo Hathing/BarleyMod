@@ -40,5 +40,9 @@ namespace PlantAbility
 
 			return false;
 		}
+		int GetDamageRangeFlags(MyPlant plant, int weapon_type)
+		{
+			return int(PVZ::DRF_ALL);
+		}
 	};
 }
