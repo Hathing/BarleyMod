@@ -561,6 +561,7 @@ int onPlantReload(MyPlant plant, int shoot_cd)
 			return shoot_cd + plant.PuffShroomSizeCount * 14;//初始200，最低60-14=46
 		}
 	}
+		break;
 	case SeedType::Scaredyshroom:
 	{
 		plant.ShootOrProductInterval -= 5;
