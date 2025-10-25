@@ -64,7 +64,6 @@ namespace PlantAbility
 			}
 			break;
 			case PlantState::POTATO_SPROUT_OUT:
-			case PlantState::POTATO_ARMED:
 			{
 				if (plant.OwnerID != 0 && plant.Level == 5)
 				{
@@ -87,6 +86,15 @@ namespace PlantAbility
 							}
 						}
 					}
+				}
+			}
+			break;
+			case PlantState::POTATO_ARMED:
+			{
+				if (plant.OwnerID != 0)
+				{
+					//小雷直接爆炸
+					PVZ::Memory::Execute(AsmBuilder().push_imm32(plant.GetBaseAddress()).invoke(0x4666A0).ret());
 				}
 			}
 			break;
