@@ -43,7 +43,7 @@ void onZombieDropLoot(MyZombie zombie)
 			}
 		}
 		// 吸金磁倍率
-		bounty_xp *= MyBoard::GoldMagnetFactors[row];
+		bounty_xp = bounty_xp * MyBoard::GoldMagnetFactors[row];
 		// 击杀者获得80%经验
 		if (has_source)
 		{

@@ -82,6 +82,8 @@ namespace PlantAbility
 				return false;
 			if (plant.FromBarley)
 				return false;
+			if (plant.OwnerID != 0)
+				return false;
 			if (plant.Type == SeedType::Seashroom && !plant.IsPrime())
 				return false;
 			return plant.Level < MyPlant::MAX_LEVEL || plant.IsToolPlant();

@@ -108,33 +108,7 @@ void MyPlant::Upgrade()
 			this->EnableEasterSkin();
 		else
 		{
-			auto model = this->GetAnimationPart1();
-			if (model.isValid())
-			{
-				model.AssignRenderGroupToPrefix(-1, "common");
-				model.AssignRenderGroupToPrefix(0, "awake");
-			}
-
-			model = this->GetAnimationPart2();
-			if (model.isValid())
-			{
-				model.AssignRenderGroupToPrefix(-1, "common");
-				model.AssignRenderGroupToPrefix(0, "awake");
-			}
-
-			model = this->GetAnimationPart3();
-			if (model.isValid())
-			{
-				model.AssignRenderGroupToPrefix(-1, "common");
-				model.AssignRenderGroupToPrefix(0, "awake");
-			}
-
-			model = this->GetAnimationPart4();
-			if (model.isValid())
-			{
-				model.AssignRenderGroupToPrefix(-1, "common");
-				model.AssignRenderGroupToPrefix(0, "awake");
-			}	
+			this->EnableAwakenSkin();
 		}
 	}
 
@@ -142,6 +116,39 @@ void MyPlant::Upgrade()
 
 	this->Heal(this->MaxHp / 5);
 }
+
+
+void MyPlant::EnableAwakenSkin()
+{
+	auto model = this->GetAnimationPart1();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "common");
+		model.AssignRenderGroupToPrefix(0, "awake");
+	}
+
+	model = this->GetAnimationPart2();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "common");
+		model.AssignRenderGroupToPrefix(0, "awake");
+	}
+
+	model = this->GetAnimationPart3();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "common");
+		model.AssignRenderGroupToPrefix(0, "awake");
+	}
+
+	model = this->GetAnimationPart4();
+	if (model.isValid())
+	{
+		model.AssignRenderGroupToPrefix(-1, "common");
+		model.AssignRenderGroupToPrefix(0, "awake");
+	}
+}
+
 
 void MyPlant::Stun(int stun_time)
 {
@@ -325,6 +332,26 @@ void MyPlant::GetPlantAttackRect(int PlantWeapon, PVZ::Rect& rect)
 		.mov_reg_imm(REG_EAX, (unsigned int) & rect)
 		.mov_reg_imm(REG_ECX, this->GetBaseAddress())
 		.invoke(0x467F90).ret());
+}
+
+MyPlant MyPlant::CreateChildPlant(SeedType::SeedType seedtype)
+{
+	if (seedtype == SeedType::None)
+		seedtype = this->Type;
+	MyPlant child = Creator::CreatePlant(seedtype, this->Row, this->Column);
+
+	child.SetOwner(*this);
+	child.Experience = this->Experience;
+	child.Level = this->Level;
+	if (child.Level >= MyPlant::MAX_LEVEL)
+	{
+		if (this->EasterSkin)
+			child.EnableEasterSkin();
+		else
+			child.EnableAwakenSkin();
+	}
+
+	return child;
 }
 
 MyPlant MyPlant::GetByID(int id)
