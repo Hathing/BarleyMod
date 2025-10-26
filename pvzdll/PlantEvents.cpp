@@ -543,7 +543,7 @@ int onKernelPultSetProjectileType(MyPlant plant, int PlantWeapon)
 
 bool onPlantDying(MyPlant plant, PlantDyingType dying_type)
 {
-	bool dying = PlantAbility::GetAbility(plant.Type)->onDying(plant, dyingtype);
+	bool dying = PlantAbility::GetAbility(plant.Type)->onDying(plant, dying_type);
 	if (dying)
 	{
 		auto plants = plant.GetBoard().GetAllPlants<MyPlant>();

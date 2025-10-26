@@ -44,9 +44,9 @@ namespace PlantAbility
 		{
 			return int(PVZ::DRF_ALL);
 		}
+		/*
 		bool onSquished(MyPlant plant, MyZombie zombie)
 		{
-
 			bool disappear = onDying(plant, DYING_DISAPPEARING);
 			if (disappear)
 			{
@@ -54,6 +54,7 @@ namespace PlantAbility
 			}
 			return false;
 		}
+		*/
 		bool onDying(MyPlant plant, PlantDyingType dyingtype)
 		{
 			//创建爆炸
@@ -97,13 +98,20 @@ namespace PlantAbility
 				PlantAbility::GetAbility(plant.Type)->onCreated(plant);
 				plant.HpDisplayCounter = 100;
 				//重置状态
-				plant.BloverDisappearCountdown = 200;
-				plant.Squash = false;
+				//plant.BloverDisappearCountdown = 200;
+				//plant.Squash = false;
 				//等级降低
 				plant.Level--;
 				plant.Experience = (plant.Level <= 0 ? 0 : PlantAbility::PLANT_LEVEL_EXP[plant.Type][plant.Level]);
 				return false;
 			}
+			//如果是被压扁而死，不设置压扁状态，而是直接消失
+			if (dyingtype == DYING_SQUISHED)
+			{
+				plant.Remove();
+				return false;
+			}
+
 			return true;
 		}
 	};
