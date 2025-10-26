@@ -543,6 +543,7 @@ int onKernelPultSetProjectileType(MyPlant plant, int PlantWeapon)
 
 bool onPlantDying(MyPlant plant, PlantDyingType dying_type)
 {
+	return PlantAbility::GetAbility(plant.Type)->onDying(plant, dyingtype);
 	auto plants = plant.GetBoard().GetAllPlants<MyPlant>();
 	for (auto myplant : plants)
 		if (myplant.Row == plant.Row && myplant.Id != plant.Id)
@@ -665,9 +666,9 @@ bool onSquashSetJumpState(MyPlant plant)
 
 bool onPotatoDieFromExplosion(MyPlant plant)
 {
-	if (plant.Type == SeedType::PotatoMine)
+	if (plant.Type == SeedType::PotatoMine && plant.OwnerID == 0)
 	{
-		plant.AttributeCountdown = 50;
+		plant.AttributeCountdown = 1;
 		plant.State = PlantState::IDLE;
 		plant.PlayIdleAnim(12.0f);
 		return false;
@@ -680,13 +681,16 @@ bool onPotatoExplode(MyPlant plant)
 	auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
 	PVZ::Rect attack_rect;
 	plant.GetPlantAttackRect(0, attack_rect);
+	int damage = 1800;
+	if (plant.OwnerID != 0)
+		damage = 600;
 	for (auto& zombie : zombies)
 	{
 		if (zombie.Row == plant.Row && zombie.EffectedBy(PVZ::DRF_GROUND | PVZ::DRF_UNDERGROUND | PVZ::DRF_SUBMERGED | PVZ::DRF_OFF_GROUND | PVZ::DRF_DYING))
 		{
 			auto zombie_rect = zombie.GetActualRect();
 			if (PVZ::GetXOverlap(zombie_rect, attack_rect) >= 0)
-				PVZ::ApplyPZDamage(plant, zombie, 1800, PVZ::DAMAGEF_HITS_SHIELD_AND_BODY);
+				PVZ::ApplyPZDamage(plant, zombie, damage, PVZ::DAMAGEF_HITS_SHIELD_AND_BODY);
 		}
 	}
 	return false;

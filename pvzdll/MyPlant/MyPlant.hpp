@@ -172,6 +172,8 @@ public:
 	void AddExperience(int val, bool kill_credit = false);
 	/// @brief 启用彩蛋皮
 	void EnableEasterSkin();
+	/// @brief 启用觉醒皮肤
+	void EnableAwakenSkin();
 	/// @brief 植物索敌并准备开火。只有除了三线和杨桃的攻击型植物才应当使用这个函数
 	/// @param row 索敌行
 	/// @param PlantWeapon 大多数植物=0，裂荚后射、仙人掌在地面射、玉米黄油等，则=1
@@ -198,6 +200,10 @@ public:
 	/// @param rect 用于存储返回值的Rect
 	void GetPlantAttackRect(int PlantWeapon, PVZ::Rect& rect);
 
+
+	/// @brief 基于自身，产生一个子植物/分身。
+	/// @return 新植物
+	MyPlant CreateChildPlant(SeedType::SeedType seedtype = SeedType::None);
 
 	/// @brief 植物受到伤害，封装了各种事件。
 	/// @param source 伤害来源

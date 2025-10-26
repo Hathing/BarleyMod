@@ -148,10 +148,7 @@ namespace PlantAbility
 					{
 						plant.AnotherCounter = summon_cooldown[plant.Level];
 						//创建新植物
-						MyPlant newcreep = Creator::CreatePlant(SeedType::Seashroom, plant.Row, plant.Column);
-						newcreep.Experience = plant.Experience;
-						newcreep.Level = plant.Level;
-						newcreep.SetOwner(plant);
+						MyPlant newcreep = plant.CreateChildPlant();
 						//链表尾插
 						tail_plant.SeaShroomNextID = newcreep.Id;
 						newcreep.SeaShroomPreviousID = tail_plant.Id;
