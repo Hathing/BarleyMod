@@ -181,7 +181,7 @@ bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, 
 			return false;
 		}
 	}
-	return true;
+	return PlantAbility::GetAbility(planttype)->onSquishedByZombie(plant, zombie);
 }
 
 void onLoadPlainZombieReanimBefore(MyZombie zombie)

@@ -174,6 +174,14 @@ namespace PlantAbility
 		{
 			return original_priority;
 		}
+		/// @brief 植物即将被僵尸碾压时，结算此事件
+		/// @param plant 植物
+		/// @param zombie 僵尸
+		/// @return 是否被碾压
+		virtual bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
+		{
+			return true;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetAbility(SeedType::SeedType type);
