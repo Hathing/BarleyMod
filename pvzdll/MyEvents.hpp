@@ -1457,15 +1457,15 @@ namespace PVZEvent
 		ZombieTakeHelmDamageTextureEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 	};
 
-	/// @brief 原版僵尸跳过啃咬伤害诸如灰烬植物的事件
+	/// @brief 判断僵尸对植物的啃咬伤害是否被免疫事件
 	/// @param 触发事件的僵尸、被啃植物
-	/// @return 正数则会被僵尸啃咬，零则不会被僵尸啃咬，负数使用原版判断
-	class ZombieSkipEatPlantEvent : public ThreeStateEventTemplate<0x52FBF1, 6, 0x52FC7B, 0x52FDEE, REG_ESI, REG_EBP>
+	/// @return 正数则强制不免疫，零则强制免疫，负数使用原版判断
+	class ZombieEatPlantNoDmgEvent : public ThreeStateEventTemplate<0x52FBF1, 6, 0x52FC7B, 0x52FDEE, REG_ESI, REG_EBP>
 	{
 	public:
-		ZombieSkipEatPlantEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
-		ZombieSkipEatPlantEvent(int address) : ThreeStateEventTemplate() { Init(address); };
-		ZombieSkipEatPlantEvent() : ThreeStateEventTemplate() { Init("onZombieSkipEatPlant"); };
+		ZombieEatPlantNoDmgEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		ZombieEatPlantNoDmgEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+		ZombieEatPlantNoDmgEvent() : ThreeStateEventTemplate() { Init("JudgeZombieEatPlantNoDmg"); };
 	};
 
 

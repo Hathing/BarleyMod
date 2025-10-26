@@ -157,13 +157,21 @@ ThreeState::ThreeState onZombieSkipEatPlant(MyZombie zombie, MyPlant plant)
 	return ThreeState::None;
 }
 
+/// @todo 检查此函数的击退是否要换为函数形式
 bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, MyPlant plant)
 {
 	if (plant.OwnerID != 0)
 		return false;
 
-	bool plant_squished = PlantAbility::GetAbility(plant.Type)->onSquished(plant, zombie);
+	bool plant_squished = PlantAbility::GetAbility(plant.Type)->onSquishedByZombie(plant, zombie);
 	auto zombietype = zombie.Type;
+	auto planttype = plant.Type;
+
+	if (plant.DamageAbsorption)
+	{
+		plant.DamageAbsorption = 0;
+		return false;
+	}
 
 	if (!plant_squished)
 	{
@@ -1085,7 +1093,7 @@ void InitZombieEvents()
 	ZombieEatEvent((int)onZombieEatPlant);
 	PVZEvent::ZombieUpdateEatingAnimSpeedEvent((int)onZombieUpdateEatingAnimSpeed);
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
-	PVZEvent::ZombieSkipEatPlantEvent((int)onZombieSkipEatPlant);
+	PVZEvent::ZombieEatPlantNoDmgEvent((int)onZombieSkipEatPlant);
 
 	// 僵尸受击相关
 	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);

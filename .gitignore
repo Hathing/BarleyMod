@@ -348,3 +348,5 @@ testA.bat
 *.exe
 
 compiled/
+data/
+fonts/

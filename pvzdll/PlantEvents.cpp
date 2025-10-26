@@ -541,9 +541,17 @@ int onKernelPultSetProjectileType(MyPlant plant, int PlantWeapon)
 	return -1;
 }
 
-bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
+bool onPlantDying(MyPlant plant, PlantDyingType dying_type)
 {
 	return PlantAbility::GetAbility(plant.Type)->onDying(plant, dyingtype);
+	auto plants = plant.GetBoard().GetAllPlants<MyPlant>();
+	for (auto myplant : plants)
+		if (myplant.Row == plant.Row && myplant.Id != plant.Id)
+			if(PlantAbility::GetAbility(myplant.Type)->onPlantDying(myplant, plant, dying_type))
+				return false;
+
+	return PlantAbility::GetAbility(plant.Type)->onPlantDying(plant, plant, dying_type);
+
 }
 
 int onPlantReload(MyPlant plant, int shoot_cd)
@@ -560,6 +568,7 @@ int onPlantReload(MyPlant plant, int shoot_cd)
 			return shoot_cd + plant.PuffShroomSizeCount * 14;//初始200，最低60-14=46
 		}
 	}
+		break;
 	case SeedType::Scaredyshroom:
 	{
 		plant.ShootOrProductInterval -= 5;

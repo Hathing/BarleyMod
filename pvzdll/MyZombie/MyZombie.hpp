@@ -20,6 +20,7 @@ public:
 	/// @deprecated 请使用 WAVE_ELITE 系列常量和 FromWave 替代之。
 	T_PROPERTY(byte, EliteType, __get_ElT, __set_ElT, 0x72);
 	/// @brief 是否受钢地刺影响，啃食伤害减半
+	/// @deprecated 相关机制已被移除
 	T_PROPERTY(BOOLEAN, IsWeak, __get_IsW, __set_IsW, 0x73);
 	/// @brief 燃烬层数过去使用的地址
 	/// @deprecated 已转移至FlameStack属性，不再使用该指针，该属性仅用于协助阅读CT！
