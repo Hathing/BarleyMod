@@ -157,10 +157,18 @@ ThreeState::ThreeState onZombieSkipEatPlant(MyZombie zombie, MyPlant plant)
 	return ThreeState::None;
 }
 
+/// @todo 检查此函数的击退是否要换为函数形式
 bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, MyPlant plant)
 {
 	auto zombietype = zombie.Type;
 	auto planttype = plant.Type;
+
+	if (plant.DamageAbsorption)
+	{
+		plant.DamageAbsorption = 0;
+		return false;
+	}
+
 	if (zombietype == ZombieType::Zomboin || zombietype == ZombieType::CatapultZombie)
 	{
 		if (planttype == SeedType::Wallnut || planttype == SeedType::Tallnut)
