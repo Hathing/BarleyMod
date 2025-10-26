@@ -6,11 +6,35 @@ namespace PlantAbility
 {
 	class Plantern : public NoEasterSkinPlant
 	{
+		inline static const int max_health[6] = { 300, 450, 450, 600, 600, 600 };
+		inline static const int heal_cooldown[6] = { 6000, 6000, 4800, 4800, 3600, 3600 };
+		inline static constexpr int respawn_cooldown = 18000;
 		void onCreated(MyPlant plant)
 		{
-			plant.Hp = 4000;
-			plant.MaxHp = 4000;
-			plant.RespawnType = SeedType::None;
+			plant.Hp = max_health[0];
+			plant.MaxHp = max_health[0];
+			plant.AttributeCountdown = Creator::Rand(heal_cooldown[0]);
+			plant.AnotherCounter = 0;
+		}
+		void onUpgrade(MyPlant plant)
+		{
+			plant.SetMaxHealth(max_health[plant.Level]);
+		}
+		bool TickAbility(MyPlant plant)
+		{
+			if (!plant.OnBoard)
+				return false;
+			if (!plant.AttributeCountdown)
+			{
+				plant.AttributeCountdown = heal_cooldown[plant.Level];
+				auto plants = plant.GetBoard().GetAllPlants<MyPlant>();
+				for (auto myplant : plants)
+					if (myplant.Row == plant.Row)
+						myplant.Heal(100);
+			}
+			if (plant.AnotherCounter > 0)
+				plant.AnotherCounter -= 1;
+			return false;
 		}
 		bool onAnimate(MyPlant plant)
 		{
@@ -26,6 +50,25 @@ namespace PlantAbility
 				model.AssignRenderGroupToPrefix(partition < 5 ? -1 : 0, "Plantern_leaf5");
 			}
 			return false;
+		}
+		bool onPlantDying(MyPlant caster, MyPlant dying_plant, PlantDyingType dying_reason)
+		{
+			if (caster.Level >= MyPlant::MAX_LEVEL)
+			{
+				caster.Hp -= 4;
+				caster.Light(50);
+				dying_plant.Light(50);
+				return false;
+			}
+
+			if (caster.Hp > 0)
+			{
+				caster.Hp = 0;
+				caster.AnotherCounter = respawn_cooldown;
+				return false;
+			}
+
+			return true;
 		}
 	};
 }

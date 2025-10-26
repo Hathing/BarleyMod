@@ -39,6 +39,7 @@ public:
 	/// @brief 植物每次重置+58后，在下一次重置+58之前FindTarget的次数，用于处理多连发植物开大概率的判断，目前只有裂荚在用
 	T_PROPERTY(byte, FindTargetCount, __get_FindTargetCount, __set_FindTargetCount, 0xED);
 	/// @brief 路灯花复活植物类型
+	/// @deprecated 路灯花复活已重做，不再使用该成员
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);
 	/// @brief 第一个与该植物相关的植物的 ID
 	INT_PROPERTY(RelatedPlantID1, __get_RePID1, __set_RePID1, 0x0E0);
