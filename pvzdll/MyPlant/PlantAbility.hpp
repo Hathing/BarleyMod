@@ -182,6 +182,16 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		/// @brief 有同行植物即将死亡时，先结算此事件
+		/// @note 此函数才是应该结算亡语的函数。
+		/// @param caster 植物
+		/// @param dying_plant 即将死亡的植物，可能与 caster 不同 
+		/// @param dying_reason 死因
+		/// @return 植物是否死亡
+		virtual bool onPlantDying(MyPlant caster, MyPlant dying_plant, PlantDyingType dying_reason)
+		{
+			return true;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetAbility(SeedType::SeedType type);

@@ -541,9 +541,15 @@ int onKernelPultSetProjectileType(MyPlant plant, int PlantWeapon)
 	return -1;
 }
 
-bool onPlantDying(MyPlant plant, PlantDyingType dyingtype)
+bool onPlantDying(MyPlant plant, PlantDyingType dying_type)
 {
-	return true;
+	auto plants = plant.GetBoard().GetAllPlants<MyPlant>();
+	for (auto myplant : plants)
+		if (myplant.Row == plant.Row && myplant.Id != plant.Id)
+			if(PlantAbility::GetAbility(myplant.Type)->onPlantDying(myplant, plant, dying_type))
+				return false;
+
+	return PlantAbility::GetAbility(plant.Type)->onPlantDying(plant, plant, dying_type);
 
 }
 
