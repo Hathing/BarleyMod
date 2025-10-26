@@ -53,6 +53,9 @@ namespace PlantAbility
 		}
 		bool onPlantDying(MyPlant caster, MyPlant dying_plant, PlantDyingType dying_reason)
 		{
+			if (caster.Id == dying_plant.Id)
+				return true;
+
 			if (caster.Level >= MyPlant::MAX_LEVEL)
 			{
 				caster.Hp -= 4;
