@@ -1080,7 +1080,7 @@ void InitZombieEvents()
 	ZombieEatEvent((int)onZombieEatPlant);
 	PVZEvent::ZombieUpdateEatingAnimSpeedEvent((int)onZombieUpdateEatingAnimSpeed);
 	PlantTakeDamageEvent((int)onPlantTakeDamage);
-	PVZEvent::ZombieSkipEatPlantEvent((int)onZombieSkipEatPlant);
+	PVZEvent::ZombieEatPlantNoDmgEvent((int)onZombieSkipEatPlant);
 
 	// 僵尸受击相关
 	PVZEvent::ZombieEffectedByDamageRangeEvent((int)onZombieEffectedByDamageRange);
