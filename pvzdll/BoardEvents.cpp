@@ -10,8 +10,6 @@ void InitPlantExistCount(MyBoard& board)
 
 void onBoardInit(MyBoard board)
 {
-	board.GetPVZApp().FreePlantingCheat = true;
-
 	board.MatchRunning = false;
 	board.MatchTimer = 0;
 
@@ -334,4 +332,14 @@ void InitBoardEvents()
 	PVZ::Memory::WriteMemory<byte>(0x413E4B, 0x00);
 	//白天关卡暂停天降阳光
 	PVZ::Memory::WriteMemory<byte>(0x413B82, 0x00);
+	//自由种植
+	PVZ::Memory::WriteMemory<byte>(0x40FE30, 0x81);
+	//卡片无CD
+	PVZ::Memory::WriteMemory<byte>(0x488250, 0xEB);
+	PVZ::Memory::WriteMemory<byte>(0x487296, 0x70);
+	//卡片无视阳光
+	PVZ::Memory::WriteMemory<int>(0x41BAB0, 0x04C201B0);
+	PVZ::Memory::WriteMemory<byte>(0x41BAB4, 0x00);
+	PVZ::Memory::WriteMemory<int>(0x41BA60, 0x90C301B0);
+
 }
