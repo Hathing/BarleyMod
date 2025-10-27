@@ -163,7 +163,7 @@ void MyDrawImage(int x, int y, int Graphics, MyImage image)
 	PVZ::Memory::Execute(AsmBuilder()
 		.push_imm32(y).push_imm32(x)
 		.mov_reg_imm(REG_EAX, Graphics)
-		.mov_reg_imm(REG_EBX, image)
+		.mov_reg_imm(REG_EBX, image.GetBaseAddress())
 		.invoke(0x587150)
 		.ret()
 	);
@@ -208,7 +208,7 @@ byte __asm__MyDrawString[71]
 	INVOKE(0x587120),
 	RET
 };
-//这个函数暂时有问题，原因未知
+/// @deprecated
 void MyDrawString(int x, int y, const std::string& string, int GraphicsAddr)
 {
 	SETARG(__asm__MyDrawString, 7) = GraphicsAddr;
@@ -218,12 +218,28 @@ void MyDrawString(int x, int y, const std::string& string, int GraphicsAddr)
 	Memory::Execute(STRING(__asm__MyDrawString));
 }
 
-
-void onBoardDrawImage(int GraphicsID, MyBoard board)
+void MyDrawString(int x, int y, const char* text, int Graphics)
 {
-	//DrawString(200, 200, "啊啊啊啊", GraphicsID);
+	auto str = Draw::ToString(text);
+	Draw::DrawString(x, y, str, Graphics);
+	//销毁字符串
+	DestroyPString(str);
+}
 
-	//MyDrawImage(200, 300, GraphicsID, IMAGE_TEST);
+
+void onBoardDrawImage(int Graphics, MyBoard board)
+{
+	//拷贝一份Graphics用于新绘制
+	int new_graphics = PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32(Graphics)
+		.invoke(0x586C30)
+		.mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret()
+	);
+	//设置字体
+	PVZ::Memory::WriteMemory<DWORD>(new_graphics + 0x40, PVZ::Memory::ReadMemory<DWORD>(0x6A74B0));
+
+	MyDrawString(200, 300, "120English Chinese\xD1\xAA\xCC\xF5\xB5\xD7", new_graphics);
 
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
@@ -242,16 +258,25 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 			{
 				ix = x + 9;
 				iy = y + 60;
-				MyDrawImage(ix, iy, GraphicsID, (DWORD)0x6FF0A0);
-				TodDrawImageScaledF(hp_ratio, 1.0f, (float)ix, (float)iy, GraphicsID, 0x6FF09C);
-				MyDrawImage(ix, iy, GraphicsID, (DWORD)0x6FF0A4);
+				//MyDrawImage(ix, iy, Graphics, (DWORD)0x6FF0A0);
+				MyDrawImage(ix, iy, new_graphics, NewImage::HP_BAR_BASE);
+				TodDrawImageScaledF(hp_ratio, 1.0f, (float)ix, (float)iy, Graphics, 0x6FF09C);
+				//MyDrawImage(ix, iy, Graphics, (DWORD)0x6FF0A4);
+				MyDrawImage(ix, iy, new_graphics, NewImage::HP_BAR_BORDER);
 			}
 			//绘制等级图标
 			ix = x - 20;
 			iy = y + 55;
-			MyDrawImage(ix, iy, GraphicsID, (DWORD)(0x6FF084 + 4 * plant.Level));
+			//MyDrawImage(ix, iy, Graphics, (DWORD)(0x6FF084 + 4 * plant.Level));
+			MyDrawImage(ix, iy, new_graphics, NewImage::PLANT_LEVELS[plant.Level]);
 		}
 	}
+	//释放Graphics
+	PVZ::Memory::Execute(AsmBuilder()
+		.mov_reg_imm(REG_ECX, new_graphics)
+		.invoke(0x586B10)
+		.ret()
+	);
 }
 
 void onTyping(MyBoard board, char key)
