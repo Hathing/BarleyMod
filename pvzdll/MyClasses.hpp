@@ -12,6 +12,8 @@ int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::Game
 /// @todo 将此函数改为 MyProjectile 的成员函数
 void onFireballInitColor(MyProjectile proj, PVZ::Animation anim);
 
+void DestroyPString(Draw::PString string);
+
 namespace PVZ
 {
 	template<typename T>

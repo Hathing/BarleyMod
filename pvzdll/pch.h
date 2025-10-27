@@ -5,6 +5,7 @@
 #include "Const.hpp"
 #include "MyEvents.hpp"
 #include "MyClasses.hpp"
+#include "MyResources.hpp"
 
 void init();
 void InitResourceEvents();

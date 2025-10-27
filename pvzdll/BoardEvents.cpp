@@ -148,13 +148,25 @@ byte __asm__MyDrawImage[35]
 	RET
 };
 
-void MyDrawImage(int x, int y, int GraphicsID, int ImageAddr)
+/// @deprecated 后续代码请使用该函数的重载。
+void MyDrawImage(int x, int y, int GraphicsID, DWORD ImageAddr)
 {
 	SETARG(__asm__MyDrawImage, 1) = y;
 	SETARG(__asm__MyDrawImage, 6) = x;
 	SETARG(__asm__MyDrawImage, 12) = ImageAddr;
 	SETARG(__asm__MyDrawImage, 17) = GraphicsID;
 	Memory::Execute(STRING(__asm__MyDrawImage));
+}
+
+void MyDrawImage(int x, int y, int Graphics, MyImage image)
+{
+	PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32(y).push_imm32(x)
+		.mov_reg_imm(REG_EAX, Graphics)
+		.mov_reg_imm(REG_EBX, image)
+		.invoke(0x587150)
+		.ret()
+	);
 }
 
 byte __asm__TodDrawImageScaledF[48]
@@ -211,6 +223,8 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 {
 	//DrawString(200, 200, "啊啊啊啊", GraphicsID);
 
+	//MyDrawImage(200, 300, GraphicsID, IMAGE_TEST);
+
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
 	{
@@ -228,14 +242,14 @@ void onBoardDrawImage(int GraphicsID, MyBoard board)
 			{
 				ix = x + 9;
 				iy = y + 60;
-				MyDrawImage(ix, iy, GraphicsID, 0x6FF0A0);
+				MyDrawImage(ix, iy, GraphicsID, (DWORD)0x6FF0A0);
 				TodDrawImageScaledF(hp_ratio, 1.0f, (float)ix, (float)iy, GraphicsID, 0x6FF09C);
-				MyDrawImage(ix, iy, GraphicsID, 0x6FF0A4);
+				MyDrawImage(ix, iy, GraphicsID, (DWORD)0x6FF0A4);
 			}
 			//绘制等级图标
 			ix = x - 20;
 			iy = y + 55;
-			MyDrawImage(ix, iy, GraphicsID, 0x6FF084 + 4 * plant.Level);
+			MyDrawImage(ix, iy, GraphicsID, (DWORD)(0x6FF084 + 4 * plant.Level));
 		}
 	}
 }

@@ -1781,4 +1781,14 @@ namespace PVZEvent
 			start(STRING(code));
 		}
 	};
+
+	/// @brief 初始化LawnApp时的事件
+	/// @param LawnApp*
+	class AppInitAfterEvent : public DLLEventTemplate<0x452282, 7, REG_EBP>
+	{
+	public:
+		AppInitAfterEvent() : DLLEventTemplate() { Init("onAppInitAfter"); };
+		AppInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		AppInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
+	};
 };

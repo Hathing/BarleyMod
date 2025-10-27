@@ -14,3 +14,8 @@ void PVZ::ApplyZPDamage(MyZombie zombie, MyPlant plant, int damage)
 	plant.Hp -= mydmg;
 	//这里可以增加死亡判断，自定义死亡类型，否则植物会在原版总更新中因HP < 0 而死。
 }
+
+void DestroyPString(Draw::PString string)
+{
+	PVZ::Memory::Execute(AsmBuilder().mov_reg_imm(REG_ECX, string).invoke(0x404420).ret());
+}
