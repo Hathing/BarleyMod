@@ -1194,6 +1194,17 @@ namespace PVZEvent
 		PlantDyingFromJalapenoHeadEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		PlantDyingFromJalapenoHeadEvent() : BoolDLLEventTemplate() { Init("onPlantDyingFromJalapenoHead"); };
 	};
+	/// @brief 植物因被压扁而触发的事件。
+	/// @note 尽管严格来说这里不是调用Plant::Die()的位置，但植物应当在此处触发相应亡语，并决定是否被压扁并设置状态和消失倒计时。即：逻辑上植物死亡发生在被压扁的瞬间
+	/// @param 触发事件的植物。
+	/// @return 该植物是否被压扁。
+	class PlantDyingFromSquishedEvent : public BoolDLLEventTemplate<0x462B80, 6, 0x462CD0, CONST_VAL(DYING_SQUISHED), MEM_ESP_ADD(0x28)>
+	{
+	public:
+		PlantDyingFromSquishedEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		PlantDyingFromSquishedEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		PlantDyingFromSquishedEvent() : BoolDLLEventTemplate() { Init("onPlantDyingFromSquished"); };
+	};
 
 	/// @brief 植物在游戏中因各种原因而被移除的事件。
 	/// @param 触发事件的植物、死亡原因类型PlantDyingType。
@@ -1203,10 +1214,12 @@ namespace PVZEvent
 	private:
 		PlantDyingFromLowHealthEvent* part1;
 		PlantDyingFromEatenEvent* part2;
-		PlantDyingFromDisappearingEvent* part3;
+		//该事件作为处理碾压消失事件时，目前被PlantDyingFromSquishedEvent代替；作为一次性植物消失事件时，目前一次性植物直接消失时不触发亡语。
+		//PlantDyingFromDisappearingEvent* part3;
 		//亡语重复问题，暂时禁用该事件
 		//SpikerockDyingFromSmashedEvent* part4;
 		PlantDyingFromJalapenoHeadEvent* part5;
+		PlantDyingFromSquishedEvent* part6;
 	public:
 		PlantDyingEvent()
 		{
@@ -1216,17 +1229,19 @@ namespace PVZEvent
 		{
 			part1 = new PlantDyingFromLowHealthEvent(address);
 			part2 = new PlantDyingFromEatenEvent(address);
-			part3 = new PlantDyingFromDisappearingEvent(address);
+			//part3 = new PlantDyingFromDisappearingEvent(address);
 			//part4 = new SpikerockDyingFromSmashedEvent(address);
 			part5 = new PlantDyingFromJalapenoHeadEvent(address);
+			part6 = new PlantDyingFromSquishedEvent(address);
 		}
 		void end()
 		{
 			part1->end();
 			part2->end();
-			part3->end();
+			//part3->end();
 			//part4->end();
 			part5->end();
+			part6->end();
 		}
 	};
 
@@ -1765,5 +1780,15 @@ namespace PVZEvent
 			};
 			start(STRING(code));
 		}
+	};
+
+	/// @brief 初始化LawnApp时的事件
+	/// @param LawnApp*
+	class AppInitAfterEvent : public DLLEventTemplate<0x452282, 7, REG_EBP>
+	{
+	public:
+		AppInitAfterEvent() : DLLEventTemplate() { Init("onAppInitAfter"); };
+		AppInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		AppInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
 	};
 };

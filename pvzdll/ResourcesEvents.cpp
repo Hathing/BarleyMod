@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 
 bool onCreateAtlas(AnimationType::AnimationType type, PVZ::BaseClass def)
 {
@@ -65,8 +65,15 @@ void onReanimCacheDrawFrame(PVZ::Animation model)
 	return;
 }
 
+void onAppInitAfter(PVZ::PVZApp app)
+{
+	ImportNewResources(app);
+	app.FreePlantingCheat = true;
+}
+
 void InitResourceEvents()
 {
 	PVZEvent::CreateAtlasEvent((int)onCreateAtlas);
 	PVZEvent::ReanimCacheDrawFrameEvent((int)onReanimCacheDrawFrame);
+	PVZEvent::AppInitAfterEvent((int)onAppInitAfter);
 }

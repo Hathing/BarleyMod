@@ -93,6 +93,7 @@
     <ClInclude Include="MyBoard.hpp" />
     <ClInclude Include="Const.hpp" />
     <ClInclude Include="MyClasses.hpp" />
+    <ClInclude Include="MyResources.hpp" />
     <ClInclude Include="MyEvents.hpp" />
     <ClInclude Include="MyPlant\implement\Barley.hpp" />
     <ClInclude Include="MyPlant\implement\Blover.hpp" />
@@ -118,7 +119,7 @@
     <ClInclude Include="MyPlant\implement\MelonPult.hpp" />
     <ClInclude Include="MyPlant\implement\SpecialPlants.hpp" />
     <ClInclude Include="MyPlant\implement\PeaShooter.hpp" />
-	<ClInclude Include="MyPlant\implement\PotatoMine.hpp" />
+    <ClInclude Include="MyPlant\implement\PotatoMine.hpp" />
     <ClInclude Include="MyPlant\implement\Plantern.hpp" />
     <ClInclude Include="MyPlant\implement\PuffShroom.hpp" />
     <ClInclude Include="MyPlant\implement\Repeater.hpp" />
@@ -189,7 +190,7 @@
     <ClInclude Include="MyZombie\implement\Zomboni.hpp" />
     <ClInclude Include="MyZombie\implement\ClownZombie.hpp" />
     <ClInclude Include="MyZombie\implement\ZombieBobsledTeam.hpp" />
-	<ClInclude Include="MyZombie\implement\LadderZombie.hpp" />
+    <ClInclude Include="MyZombie\implement\LadderZombie.hpp" />
     <ClInclude Include="MyZombie\MyZombie.hpp" />
     <ClInclude Include="MyZombie\ZombieAbility.hpp" />
     <ClInclude Include="pch.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="MyClasses.cpp" />
     <ClCompile Include="MyPlant\MyPlant.cpp" />
     <ClCompile Include="MyProjectile\MyProjectile.cpp" />
+    <ClCompile Include="MyResources.cpp" />
     <ClCompile Include="MyZombie\MyZombie.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

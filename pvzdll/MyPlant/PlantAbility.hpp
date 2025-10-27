@@ -170,6 +170,7 @@ namespace PlantAbility
 		/// @brief 植物被碾压时触发的事件
 		/// @param plant 植物
 		/// @return false则植物不被压扁
+		/// @deprecated 请使用onSquishedByZombie
 		virtual bool onSquished(MyPlant plant, MyZombie zombie)
 		{
 			return true;
