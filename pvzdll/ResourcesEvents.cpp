@@ -68,6 +68,7 @@ void onReanimCacheDrawFrame(PVZ::Animation model)
 void onAppInitAfter(PVZ::PVZApp app)
 {
 	ImportNewResources(app);
+	app.FreePlantingCheat = true;
 }
 
 void InitResourceEvents()
