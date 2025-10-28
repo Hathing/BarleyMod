@@ -203,7 +203,7 @@ public:
 
 	/// @brief 基于自身，产生一个子植物/分身。
 	/// @return 新植物
-	MyPlant CreateChildPlant(SeedType::SeedType seedtype = SeedType::None);
+	MyPlant CreateChildPlant(SeedType::SeedType seedtype = SeedType::None, bool noisless = false);
 
 	/// @brief 植物受到伤害，封装了各种事件。
 	/// @param source 伤害来源

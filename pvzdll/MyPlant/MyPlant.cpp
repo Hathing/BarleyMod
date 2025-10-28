@@ -334,11 +334,15 @@ void MyPlant::GetPlantAttackRect(int PlantWeapon, PVZ::Rect& rect)
 		.invoke(0x467F90).ret());
 }
 
-MyPlant MyPlant::CreateChildPlant(SeedType::SeedType seedtype)
+MyPlant MyPlant::CreateChildPlant(SeedType::SeedType seedtype, bool noiseless)
 {
 	if (seedtype == SeedType::None)
 		seedtype = this->Type;
-	MyPlant child = Creator::CreatePlant(seedtype, this->Row, this->Column);
+	MyPlant child{ NULL };
+	if (noiseless)
+		child = NoiselessCreatePlant(seedtype, this->Row, this->Column);
+	else
+		child = Creator::CreatePlant(seedtype, this->Row, this->Column);
 
 	child.SetOwner(*this);
 	child.Experience = this->Experience;
