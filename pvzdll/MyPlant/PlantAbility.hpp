@@ -167,14 +167,6 @@ namespace PlantAbility
 		{
 			return -1;
 		}
-		/// @brief 植物被碾压时触发的事件
-		/// @param plant 植物
-		/// @return false则植物不被压扁
-		/// @deprecated 请使用onSquishedByZombie
-		virtual bool onSquished(MyPlant plant, MyZombie zombie)
-		{
-			return true;
-		}
 		/// @brief 植物在游戏内触发亡语的事件
 		/// @note 对于碾压消失事件，如果涉及复活或无敌，注意重置植物的消失倒计时，避免持续触发亡语。
 		/// @param plant 植物
