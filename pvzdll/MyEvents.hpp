@@ -1753,8 +1753,8 @@ namespace PVZEvent
 	protected:
 		void InitExtra(AsmBuilder& builder)
 		{
-			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(7);
-			builder.mov_mem_esp_add_imm8_reg(0x30, REG_EAX).popad();
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(4);
+			builder.mov_mem_esp_add_imm8_reg(0x30, REG_EAX);
 		}
 	};
 
