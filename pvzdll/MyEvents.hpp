@@ -1497,9 +1497,11 @@ namespace PVZEvent
 
 	/// @brief 土豆雷死亡事件
 	/// @note 这一事件之所以和DyingEvent独立，是因为S7DyingEvent用于亡语触发，而土豆雷爆炸死亡不应当算作亡语
-	/// @param 土豆雷
-	/// @return 是否结算原版爆炸。
-	class PotatoDieFromExplosionEvent : public BoolDLLEventTemplate<0x466AAD, 10, 0x466AD1, REG_EBX>
+	/// @note 这个事件刚好发生在产生粒子效果后，因此粒子处理也发生在这里。
+	/// @note 实际上樱桃炸弹和毁灭菇也会经过这个位置，其中樱桃炸弹在此处EAX也是粒子系统，毁灭菇则不是
+	/// @param 土豆雷，爆炸的粒子特效
+	/// @return 土豆雷是否死亡。
+	class PotatoDieFromExplosionEvent : public BoolDLLEventTemplate<0x466AAA, 13, 0x466AD1, REG_EAX, REG_EBX>
 	{
 	public:
 		PotatoDieFromExplosionEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
