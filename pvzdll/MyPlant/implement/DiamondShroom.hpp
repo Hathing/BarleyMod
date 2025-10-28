@@ -21,5 +21,9 @@ namespace PlantAbility
 		{
 			plant.Heal(25);
 		}
+		ProjectileType::ProjectileType OverrideProjectileType(MyPlant plant, int plantweapon)
+		{
+			return ProjectileType::Diamond;
+		}
 	};
 }
