@@ -239,7 +239,7 @@ void onBoardDrawImage(int Graphics, MyBoard board)
 	//设置字体
 	PVZ::Memory::WriteMemory<DWORD>(new_graphics + 0x40, PVZ::Memory::ReadMemory<DWORD>(0x6A74B0));
 
-	MyDrawString(200, 300, "120English Chinese\xD1\xAA\xCC\xF5\xB5\xD7", new_graphics);
+	//MyDrawString(200, 300, "120English Chinese\xD1\xAA\xCC\xF5\xB5\xD7", new_graphics);
 
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
