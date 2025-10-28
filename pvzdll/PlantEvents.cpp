@@ -664,14 +664,20 @@ bool onSquashSetJumpState(MyPlant plant)
 	return false;
 }
 
-bool onPotatoDieFromExplosion(MyPlant plant)
+
+const float potato_particle_scale[6] = { 1.0f,1.0f,1.3f,1.3f,1.7f,1.7f };
+bool onPotatoDieFromExplosion(MyPlant plant, PVZ::TodParticleSystem particle)
 {
-	if (plant.Type == SeedType::PotatoMine && plant.OwnerID == 0)
+	if (plant.Type == SeedType::PotatoMine)
 	{
-		plant.AttributeCountdown = 1;
-		plant.State = PlantState::IDLE;
-		plant.PlayIdleAnim(12.0f);
-		return false;
+		particle.OverrideScale(potato_particle_scale[plant.Level]);
+		if (plant.OwnerID == 0)
+		{
+			plant.AttributeCountdown = 1;
+			plant.State = PlantState::IDLE;
+			plant.PlayIdleAnim(12.0f);
+			return false;
+		}
 	}
 	return true;
 }
