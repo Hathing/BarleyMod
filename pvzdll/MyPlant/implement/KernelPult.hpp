@@ -36,6 +36,15 @@ namespace PlantAbility
 			*/
 			return true;
 		}
+		ProjectileType::ProjectileType OverrideProjectileType(MyPlant plant, int plantweapon)
+		{
+			if (plant.KernelPreparingCannon)
+			{
+				plant.KernelPreparingCannon = false;
+				return ProjectileType::CobCannon;
+			}
+			return (ProjectileType::ProjectileType)-1;
+		}
 		int GetDamageRangeFlags(MyPlant plant, int weapon_type)
 		{
 			return int(PVZ::DRF_FLYING | PVZ::DRF_GROUND | PVZ::DRF_SUBMERGED);

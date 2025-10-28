@@ -531,14 +531,9 @@ bool IsKernelPultCastButter(MyPlant plant)
 	return Creator::Rand(KernelPultProcPartition[plant.Level]) == 0;
 }
 
-int onKernelPultSetProjectileType(MyPlant plant, int PlantWeapon)
+ProjectileType::ProjectileType OverrideProjectileType(MyPlant plant, int PlantWeapon)
 {
-	if (plant.KernelPreparingCannon)
-	{
-		plant.KernelPreparingCannon = false;
-		return 11;
-	}
-	return -1;
+	return PlantAbility::GetAbility(plant.Type)->OverrideProjectileType(plant, PlantWeapon);
 }
 
 bool onPlantDying(MyPlant plant, PlantDyingType dying_type)
@@ -794,6 +789,7 @@ void InitPlantEvents()
 	PVZEvent::PlantPultSkipEvent((int)onPlantPultSkip);
 	PVZEvent::PlantPultMultipleEvent((int)onPlantPultMultiple);
 	PVZEvent::PlantDamageZombieEvent((int)onPlantDamageZombie);
+	PVZEvent::OverridePlantProjectileTypeEvent((int)OverrideProjectileType);
 
 	// 植物受击死亡相关
 	PVZEvent::PlantDyingEvent((int)onPlantDying);
@@ -818,7 +814,6 @@ void InitPlantEvents()
 	// 玉米投手
 	PVZEvent::KernelPult::JudgeButterEvent((int)IsKernelPultCastButter);
 	PVZEvent::PlantPultSetSpeedAfterEvent((int)onPlantPultSetSpeedAfter);
-	PVZEvent::KernelPultSetProjectileTypeEvent((int)onKernelPultSetProjectileType);
 	// 胆小菇
 	PVZEvent::ScardyShroomScaredEvent((int)onScaredyShroomScared);
 	PVZEvent::ScardyShroomGrowEvent((int)onScaredyShroomGrow);

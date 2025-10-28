@@ -159,6 +159,14 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 重载植物发射子弹的类型
+		/// @param plant 植物
+		/// @param plantweapon 武器类型
+		/// @return 子弹类型。若为负数，则不重载。
+		virtual ProjectileType::ProjectileType OverrideProjectileType(MyPlant plant, int plantweapon)
+		{
+			return (ProjectileType::ProjectileType)-1;
+		}
 		/// @brief 获取植物索敌标签
 		/// @param plant 植物
 		/// @param weapon_type 武器类型

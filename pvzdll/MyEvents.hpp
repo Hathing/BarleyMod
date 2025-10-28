@@ -1739,20 +1739,20 @@ namespace PVZEvent
 		}
 	};
 
-	/// @brief 修改玉米投手发射子弹类型的事件
+	/// @brief 重载植物发射子弹类型的事件
 	/// @param 植物、PlantWeapon
 	/// @return 负数则调用原版（由PlantWeapon决定是玉米或者黄油），非负数表示子弹类型编号
-	class KernelPultSetProjectileTypeEvent : public DLLEventTemplate<0x466EE5, 8, REG_EBX, REG_EBP>
+	class OverridePlantProjectileTypeEvent : public DLLEventTemplate<0x466F2D, 5, REG_EBX, REG_EBP>
 	{
 	public:
-		KernelPultSetProjectileTypeEvent() : DLLEventTemplate() { Init("onKernelPultSetProjectileType"); };
-		KernelPultSetProjectileTypeEvent(const char* str) : DLLEventTemplate() { Init(str); };
-		KernelPultSetProjectileTypeEvent(int address) : DLLEventTemplate() { Init(address); };
+		OverridePlantProjectileTypeEvent() : DLLEventTemplate() { Init("OverridePlantProjectileType"); };
+		OverridePlantProjectileTypeEvent(const char* str) : DLLEventTemplate() { Init(str); };
+		OverridePlantProjectileTypeEvent(int address) : DLLEventTemplate() { Init(address); };
 	protected:
 		void InitExtra(AsmBuilder& builder)
 		{
-			builder.test_reg_reg(REG_EAX, REG_EAX).js_rel(11)
-				.mov_mem_esp_add_imm8_reg(0x30, REG_EAX).popad().push_imm32(0x466F2D).ret();
+			builder.cmp_reg_imm(REG_EAX, 0).jl_rel(7);
+			builder.mov_mem_esp_add_imm8_reg(0x30, REG_EAX).popad();
 		}
 	};
 
