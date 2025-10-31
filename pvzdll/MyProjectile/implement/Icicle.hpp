@@ -17,8 +17,7 @@ namespace ProjectileAbility
 		}
 		int GetImage(MyProjectile proj)
 		{
-			//return NewImage::ICICLE.GetBaseAddress();
-			return PVZ::Memory::ReadMemory<int>(0x6FF000);
+			return NewImage::ICICLE.GetBaseAddress();
 		}
 		bool GetRect(MyProjectile proj, PVZ::Rect* rect)
 		{
