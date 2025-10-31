@@ -219,6 +219,12 @@
     <ClInclude Include="MyProjectile\implement\GoldMelon.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+	<ClInclude Include="MyProjectile\implement\Icicle.hpp">
+		<Filter>头文件</Filter>
+	</ClInclude>
+	<ClInclude Include="MyProjectile\implement\SnowPea.hpp">
+		<Filter>头文件</Filter>
+	</ClInclude>
     <ClInclude Include="MyPlant\implement\Barley.hpp">
       <Filter>头文件</Filter>
     </ClInclude>

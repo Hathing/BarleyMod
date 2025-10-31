@@ -57,6 +57,13 @@ namespace ProjectileAbility
 		{
 			return true;
 		}
+		/// @brief 子弹获取判定范围的Rect的事件
+		/// @param 子弹，Rect*
+		/// @return True则使用原版范围，False则不使用原版范围。
+		virtual bool GetRect(MyProjectile proj, PVZ::Rect* rect)
+		{
+			return true;
+		}
 	};
 	typedef BaseProjectile* ProjectilePTR;
 	ProjectilePTR GetAbility(ProjectileType::ProjectileType type);

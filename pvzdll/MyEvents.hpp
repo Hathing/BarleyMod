@@ -1793,4 +1793,15 @@ namespace PVZEvent
 		AppInitAfterEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		AppInitAfterEvent(int address) : DLLEventTemplate() { Init(address); };
 	};
+
+	/// @brief 子弹获取判定范围的Rect的事件
+	/// @param 子弹，Rect*
+	/// @return True则使用原版范围，False则不使用原版范围。
+	class ProjectileGetRectEvent : public BoolDLLEventTemplate<0x46EBC0, 5, 0x46EC12, REG_ECX, REG_ESI>
+	{
+	public:
+		ProjectileGetRectEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileGetRectEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileGetRectEvent() : ProjectileGetRectEvent("onProjectileGetRect") {};
+	};
 };
