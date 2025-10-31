@@ -158,20 +158,22 @@ ThreeState::ThreeState onZombieSkipEatPlant(MyZombie zombie, MyPlant plant)
 }
 
 /// @todo 检查此函数的击退是否要换为函数形式
+/// @todo 检查此函数排斥非主植物的行为是否有必要
 bool onZombieSquishPlant(MyZombie zombie, int row, int column, int attack_type, MyPlant plant)
 {
 	if (plant.OwnerID != 0)
 		return false;
 
-	bool plant_squished = PlantAbility::GetAbility(plant.Type)->onSquishedByZombie(plant, zombie);
-	auto zombietype = zombie.Type;
-	auto planttype = plant.Type;
-
+	bool plant_squished = true;
 	if (plant.DamageAbsorption)
 	{
 		plant.DamageAbsorption = 0;
-		return false;
+		plant_squished = false;
 	}
+	else
+		plant_squished = PlantAbility::GetAbility(plant.Type)->onSquishedByZombie(plant, zombie);
+
+	auto zombietype = zombie.Type;
 
 	if (!plant_squished)
 	{
@@ -865,8 +867,7 @@ bool onGargantaurSquishPlant(MyZombie attacker)
 		auto zombies = attacker.GetBoard().GetAllZombies<MyZombie>();
 		for (auto myzombie : zombies)
 		{
-			//为什么是不等于 而不是等于？
-			if (attacker.Hypnotized != myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
+			if (attacker.Hypnotized == myzombie.Hypnotized || attacker.Row != myzombie.Row || attacker.Id == myzombie.Id)
 				continue;
 			auto rect = myzombie.GetActualRect();
 			if (PVZ::GetXOverlap(atk_rect, rect) >= -30)

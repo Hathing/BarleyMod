@@ -24,5 +24,9 @@ namespace PlantAbility
 				plant.FindTargetAndFire(plant.Row, 0);
 			return true;
 		}
+		ProjectileType::ProjectileType OverrideProjectileType(MyPlant plant, int plantweapon)
+		{
+			return ProjectileType::FirePea;
+		}
 	};
 }

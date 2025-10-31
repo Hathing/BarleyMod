@@ -159,6 +159,14 @@ namespace PlantAbility
 		{
 			return;
 		}
+		/// @brief 重载植物发射子弹的类型
+		/// @param plant 植物
+		/// @param plantweapon 武器类型
+		/// @return 子弹类型。若为负数，则不重载。
+		virtual ProjectileType::ProjectileType OverrideProjectileType(MyPlant plant, int plantweapon)
+		{
+			return (ProjectileType::ProjectileType)-1;
+		}
 		/// @brief 获取植物索敌标签
 		/// @param plant 植物
 		/// @param weapon_type 武器类型
@@ -166,14 +174,6 @@ namespace PlantAbility
 		virtual int GetDamageRangeFlags(MyPlant plant, int weapon_type)
 		{
 			return -1;
-		}
-		/// @brief 植物被碾压时触发的事件
-		/// @param plant 植物
-		/// @return false则植物不被压扁
-		/// @deprecated 请使用onSquishedByZombie
-		virtual bool onSquished(MyPlant plant, MyZombie zombie)
-		{
-			return true;
 		}
 		/// @brief 植物在游戏内触发亡语的事件
 		/// @note 对于碾压消失事件，如果涉及复活或无敌，注意重置植物的消失倒计时，避免持续触发亡语。
