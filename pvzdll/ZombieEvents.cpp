@@ -137,6 +137,20 @@ int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::Game
 	if (plant.Type == SeedType::Spikerock && source_type == GameObjectType::OBJECT_TYPE_NONE && damage == 50)
 		damage = 200;
 
+	if (plant.DamageAbsorption)
+	{
+		if (plant.DamageAbsorption > damage)
+		{
+			plant.DamageAbsorption -= damage;
+			damage = 0;
+		}
+		else
+		{
+			damage -= plant.DamageAbsorption;
+			plant.DamageAbsorption = 0;
+		}
+	}
+
 	return damage;
 }
 
