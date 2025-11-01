@@ -25,7 +25,7 @@ namespace PVZEvent
 			ImgRow(const char* str) : IntDLLEventTemplate() { Init(str); };
 			ImgRow(int address) : IntDLLEventTemplate() { Init(address); };
 		};
-		class Img : public IntDLLEventTemplate<0x46E6C7, 5, 0, 0,
+		class Img : public IntDLLEventTemplate<0x46E6C3, 9, 0, 0,
 			0, MEM_ESP_ADD(0x2C), false, CONST_VAL(PROJECTILE_IMAGE), REG_ESI>
 		{
 		public:

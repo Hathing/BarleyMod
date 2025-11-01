@@ -160,6 +160,8 @@
     <ClInclude Include="MyProjectile\implement\WinterMelon.hpp" />
     <ClInclude Include="MyProjectile\implement\Star.hpp" />
     <ClInclude Include="MyProjectile\implement\Fireball.hpp" />
+	<ClInclude Include="MyProjectile\implement\Icicle.hpp" />
+	<ClInclude Include="MyProjectile\implement\SnowPea.hpp" />
     <ClInclude Include="MyProjectile\MyProjectile.hpp" />
     <ClInclude Include="MyProjectile\ProjectileAbility.hpp" />
     <ClInclude Include="MyZombie\implement\BalloonZombie.hpp" />
