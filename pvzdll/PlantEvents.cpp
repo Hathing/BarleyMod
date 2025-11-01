@@ -761,8 +761,7 @@ void InitPlantEvents()
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::PlantUpdateShooterEvent((int)onPlantUpdateShooter);
-	//PlantReloadEvent((int)onPlantReload);
-	PVZEvent::PlantNewReloadEvent((int)onPlantReload);
+	PlantReloadEvent((int)onPlantReload);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
 	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
 	PVZEvent::PlantFindTargetResultEvent((int)onPlantFindTargetResult);
