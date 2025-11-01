@@ -50,7 +50,7 @@ namespace PVZ
 	/// @brief 植物对僵尸造成伤害
 	void ApplyPZDamage(MyPlant plant, MyZombie zombie, int damage, PVZ::DamageFlags flags = PVZ::DAMAGEF_NONE);
 	/// @brief 僵尸对植物造成伤害
-	void ApplyZPDamage(MyZombie zombie, MyPlant plant, int damage);
+	bool ApplyZPDamage(MyZombie zombie, MyPlant plant, int damage);
 
 	class ZombieDrawPosition
 	{
