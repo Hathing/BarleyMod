@@ -345,10 +345,18 @@ doxygen/
 testA.bat
 *.lnk
 *.CT
+*.dll
 *.exe
+*.dat
 
 compiled/
 data/
 fonts/
 images/
 newimages/
+particles/
+properties/
+reanim/
+savedata/
+sounds/
+test_data/
