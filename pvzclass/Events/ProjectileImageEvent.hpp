@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "DLLEvent.h"
 
 namespace PVZEvent
@@ -25,12 +25,17 @@ namespace PVZEvent
 			ImgRow(const char* str) : IntDLLEventTemplate() { Init(str); };
 			ImgRow(int address) : IntDLLEventTemplate() { Init(address); };
 		};
-		class Img : public IntDLLEventTemplate<0x46E6C7, 5, 0, 0,
-			0, MEM_ESP_ADD(0x2C), false, CONST_VAL(PROJECTILE_IMAGE), REG_ESI>
+		class Img : public DLLEventTemplate<0x46E6C3, 9, CONST_VAL(PROJECTILE_IMAGE), REG_ESI>
 		{
 		public:
-			Img(const char* str) : IntDLLEventTemplate() { Init(str); };
-			Img(int address) : IntDLLEventTemplate() { Init(address); };
+			Img(const char* str) : DLLEventTemplate() { Init(str); };
+			Img(int address) : DLLEventTemplate() { Init(address); };
+		protected:
+			virtual void InitExtra(AsmBuilder& builder)
+			{
+				builder.cmp_reg_imm(REG_EAX, 0).jl_rel(4);
+				builder.mov_mem_esp_add_imm8_reg(0x2C, REG_EAX);
+			}
 		};
 		ImgRow* img_row;
 		Img* image;
