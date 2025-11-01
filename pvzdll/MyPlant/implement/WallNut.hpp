@@ -53,6 +53,10 @@ namespace PlantAbility
 			}
 			return false;
 		}
+		bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
+		{
+			return PVZ::ApplyZPDamage(zombie, plant, 2000);
+		}
 		bool onAnimate(MyPlant plant)
 		{
 			if (plant.Level >= MyPlant::MAX_LEVEL)

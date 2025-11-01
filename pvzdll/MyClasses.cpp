@@ -1,4 +1,4 @@
-﻿#include "MyClasses.hpp"
+#include "MyClasses.hpp"
 
 void PVZ::ApplyPZDamage(MyPlant plant, MyZombie zombie, int damage, PVZ::DamageFlags flags)
 {
@@ -8,11 +8,13 @@ void PVZ::ApplyPZDamage(MyPlant plant, MyZombie zombie, int damage, PVZ::DamageF
 }
 
 
-void PVZ::ApplyZPDamage(MyZombie zombie, MyPlant plant, int damage)
+bool PVZ::ApplyZPDamage(MyZombie zombie, MyPlant plant, int damage)
 {
 	int mydmg = onPlantTakeDamage(plant, zombie, GameObjectType::OBJECT_TYPE_NONE, damage);
 	plant.Hp -= mydmg;
 	//这里可以增加死亡判断，自定义死亡类型，否则植物会在原版总更新中因HP < 0 而死。
+
+	return plant.Hp >= 0;
 }
 
 void DestroyPString(Draw::PString string)

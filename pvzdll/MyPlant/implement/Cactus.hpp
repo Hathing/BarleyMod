@@ -27,5 +27,9 @@ namespace PlantAbility
 			}
 			return false;
 		}
+		bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
+		{
+			return PVZ::ApplyZPDamage(zombie, plant, 800);
+		}
 	};
 }

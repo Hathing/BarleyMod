@@ -26,6 +26,10 @@ namespace PlantAbility
 				BasePlant::SelfHeal(plant);
 			}
 		}
+		bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
+		{
+			return PVZ::ApplyZPDamage(zombie, plant, 1000);
+		}
 		bool TickAbility(MyPlant plant)
 		{
 			if (!plant.AttributeCountdown)
