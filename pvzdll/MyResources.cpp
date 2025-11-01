@@ -22,6 +22,7 @@ namespace NewImage
 	MyImage PLANT_LEVELS[6]{ {NULL},{NULL},{NULL},{NULL},{NULL},{NULL} };
 	MyImage HP_BAR_BASE{ NULL };
 	MyImage HP_BAR_BORDER{ NULL };
+	MyImage ICICLE{ NULL };
 }
 
 // 导入新资源总函数
@@ -37,4 +38,5 @@ void ImportNewResources(PVZ::PVZApp& app)
 	NewImage::PLANT_LEVELS[5].ImportImage("./newimages/18-5.png", app); 
 	NewImage::HP_BAR_BASE.ImportImage("./newimages/20-\xD1\xAA\xCC\xF5\xB5\xD7.png", app);
 	NewImage::HP_BAR_BORDER.ImportImage("./newimages/21-\xD1\xAA\xCC\xF5\xBF\xF2.png", app);
+	NewImage::ICICLE.ImportImage("./newimages/01-\xBA\xAE\xB1\xF9\xB1\xF9\xD7\xB6.png", app);
 }

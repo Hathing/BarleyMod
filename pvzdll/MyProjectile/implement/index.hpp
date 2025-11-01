@@ -13,3 +13,5 @@
 #include "Fireball.hpp"
 #include "Puff.hpp"
 #include "Pea.hpp"
+#include "Icicle.hpp"
+#include "SnowPea.hpp"

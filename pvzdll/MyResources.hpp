@@ -20,4 +20,5 @@ namespace NewImage
 	extern MyImage PLANT_LEVELS[6];
 	extern MyImage HP_BAR_BASE;
 	extern MyImage HP_BAR_BORDER;
+	extern MyImage ICICLE;// 冰锥
 }

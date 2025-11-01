@@ -24,6 +24,7 @@ namespace ZombieType
 namespace ProjectileType
 {
 	typedef ProjectileType Type2;
+	const Type2 Icicle = (Type2)14;
 	const Type2 GoldSpike = (Type2)15;
 	const Type2 Diamond = (Type2)18;
 	const Type2 GoldMelon = (Type2)22;
