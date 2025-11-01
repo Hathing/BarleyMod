@@ -1804,4 +1804,32 @@ namespace PVZEvent
 		ProjectileGetRectEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ProjectileGetRectEvent() : ProjectileGetRectEvent("onProjectileGetRect") {};
 	};
+
+	/// @brief 植物重新装填的新事件，与PVZClass的PlantReloadEvent有冲突。区别在于，新事件将重置倒计时以及该事件移到了植物索敌开火之后。
+	/// @param 触发事件的植物，生效倒计时
+	/// @return 修改后的倒计时
+	/// @note 因为特殊需求，对DLLEvent进行了修改
+	/// @note 植物每隔一段时间就重新装填，此时如果发现僵尸则射击\n
+	/// 生效倒计时默认为生效间隔减去一个[0,14]的随机数
+	class PlantNewReloadEvent
+	{
+	public:
+		PlantNewReloadEvent() : PlantNewReloadEvent("onPlantReload") {};
+		PlantNewReloadEvent(const char* str) : PlantNewReloadEvent(PVZ::Memory::GetProcAddress(str)) {};
+		PlantNewReloadEvent(int address)
+		{
+			static constexpr byte asm_new_reload_1[] = { 0x0F,0x8F,0xDF,0x00,0x00,0x00,0x8B,0x46,0x24,0x83,0xF8,0x12,0x75,0x17,0xEB,0x0C };
+			PVZ::Memory::WriteArray<const byte>(0x45F8B3, STRING(asm_new_reload_1));
+			static constexpr byte asm_new_reload_2[] = { 0x83,0x7E,0x58,0x32,0x75,0x97,0xEB,0x82 };
+			PVZ::Memory::WriteArray<const byte>(0x45F998, STRING(asm_new_reload_2));
+			//与DLLEvent的start()类似
+			BYTE code[] = { MOV_EAX(15),INVOKE(0x5AF400),0x8B,0x4E,0x5C,0x2B,0xC8,PUSH_ECX,PUSH_ESI,INVOKE(address),ADD_ESP(8),0x89,0x46,0x58,0x5F,0x5E,0x8B,0xE5,0x5D,0xC3 };
+			int code_len = sizeof(code);
+			int newAddress = PVZ::Memory::AllocMemory(1, code_len+0x10);
+			constexpr int hookAddress = 0x45F91C;
+			BYTE jmpto[] = { JMPFAR(newAddress - (hookAddress + 5)),NOP };
+			PVZ::Memory::WriteArray<BYTE>(hookAddress, jmpto, 6);
+			PVZ::Memory::WriteArray<BYTE>(newAddress, code,code_len);
+		}
+	};
 };

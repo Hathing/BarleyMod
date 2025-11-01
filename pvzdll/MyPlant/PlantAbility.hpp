@@ -211,6 +211,14 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		/// @brief 射手植物重置CD时事件
+		/// @param plant 植物
+		/// @param shoot_cd 即将设置的CD
+		/// @return 修改后的CD
+		virtual int Reload(MyPlant plant, int shoot_cd)
+		{
+			return shoot_cd;
+		}
 	};
 	typedef BasePlant* PlantPTR;
 	PlantPTR GetAbility(SeedType::SeedType type);

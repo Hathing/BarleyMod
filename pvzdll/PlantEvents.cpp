@@ -551,29 +551,7 @@ bool onPlantDying(MyPlant plant, PlantDyingType dying_type)
 
 int onPlantReload(MyPlant plant, int shoot_cd)
 {
-	switch (plant.Type)
-	{
-	case SeedType::SplitPea:
-		plant.FindTargetCount = 0;
-		break;
-	case SeedType::Puffshroom:
-	{
-		if (plant.Level == 5 && plant.PuffShroomSizeCount < 0)
-		{
-			return shoot_cd + plant.PuffShroomSizeCount * 14;//初始200，最低60-14=46
-		}
-	}
-		break;
-	case SeedType::Scaredyshroom:
-	{
-		plant.ShootOrProductInterval -= 5;
-		if (plant.ShootOrProductInterval < 50)
-			plant.ShootOrProductInterval = 50;
-	}
-	default:
-		break;
-	}
-	return shoot_cd;
+	return PlantAbility::GetAbility(plant.Type)->Reload(plant, shoot_cd);
 }
 
 bool onScaredyShroomScared(MyPlant plant)
@@ -783,7 +761,8 @@ void InitPlantEvents()
 	GetPlantAttackRectEvent((int)OverwritePlantAttackRect);
 	PVZEvent::PlantGetDamageRangeFlagsEvent((int)GetPlantDamageRangeFlags);
 	PVZEvent::PlantUpdateShooterEvent((int)onPlantUpdateShooter);
-	PlantReloadEvent((int)onPlantReload);
+	//PlantReloadEvent((int)onPlantReload);
+	PVZEvent::PlantNewReloadEvent((int)onPlantReload);
 	PVZEvent::PlantFindTargetRTEvent((int)onPlantFindTargetRT);
 	PVZEvent::StarfruitFindTargetEvent((int)onStarFruitFindTarget);
 	PVZEvent::PlantFindTargetResultEvent((int)onPlantFindTargetResult);
