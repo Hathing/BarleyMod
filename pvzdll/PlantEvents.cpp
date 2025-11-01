@@ -699,11 +699,8 @@ bool onPotatoExplode(MyPlant plant)
 
 bool onPotatoFindTargetAfter(MyPlant plant, MyZombie zombie)
 {
-	if (plant.OwnerID == 0)
-	{
-		return false;
-	}
-	return true;
+	// 无论是大雷还是小雷，不再依靠原版索敌引爆，而是主动调用4666A0引爆
+	return false;
 }
 
 bool onTorchwoodFindProjectileBefore(MyPlant plant)
