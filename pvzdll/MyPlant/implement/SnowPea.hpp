@@ -45,6 +45,15 @@ namespace PlantAbility
 			if (proj.Type == ProjectileType::Icicle)
 			{
 				proj.MakePiercing(6, 10.0f, 0.0f);
+				auto particle = PVZ::CreateParticleSystem(proj.X, proj.Y, 0x61A80, (EffectType::EffectType)0x2D);
+				particle.OverrideScale(1.5f);
+				PVZ::Memory::Execute(AsmBuilder()
+					.push_float(13.0f).push_float(8.0f)
+					.mov_reg_imm(REG_EDI, proj.GetBaseAddress()+0x7C)
+					.mov_reg_imm(REG_ESI, particle.GetBaseAddress())
+					.invoke(0x405600).add_reg_imm(REG_ESP,8)
+					.ret()
+				);
 			}
 
 			return true;
