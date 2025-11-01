@@ -85,5 +85,10 @@ namespace PlantAbility
 		{
 			return true;
 		}
+		int Reload(MyPlant plant, int shoot_cd)
+		{
+			plant.FindTargetCount = 0;
+			return shoot_cd;
+		}
 	};
 }

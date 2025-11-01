@@ -14,5 +14,12 @@ namespace PlantAbility
 		{
 			plant.ScaredyShroomKillCount++;
 		}
+		int Reload(MyPlant plant, int shoot_cd)
+		{
+			plant.ShootOrProductInterval -= 5;
+			if (plant.ShootOrProductInterval < 50)
+				plant.ShootOrProductInterval = 50;
+			return shoot_cd;
+		}
 	};
 }

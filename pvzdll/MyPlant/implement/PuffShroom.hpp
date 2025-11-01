@@ -63,5 +63,13 @@ namespace PlantAbility
 
 			return true;
 		}
+		int Reload(MyPlant plant, int shoot_cd)
+		{
+			if (plant.Level == 5 && plant.PuffShroomSizeCount < 0)
+			{
+				return shoot_cd + plant.PuffShroomSizeCount * 14;//初始200，最低60-14=46
+			}
+			return shoot_cd;
+		}
 	};
 }
