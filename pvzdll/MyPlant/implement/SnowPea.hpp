@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../PlantAbility.hpp"
 
 namespace PlantAbility
@@ -21,16 +21,27 @@ namespace PlantAbility
 				plant.FindTargetAndFire(plant.Row, 0);
 			return true;
 		}
+		int Reload(MyPlant plant, int shoot_cd)
+		{
+			plant.FireCount = 0;
+			return shoot_cd;
+		}
 		ProjectileType::ProjectileType OverrideProjectileType(MyPlant plant, int plantweapon)
 		{
-			if (Creator::RandFloat(1.0f) < icicle_probability[plant.Level])
+			if (plant.FireCount == 1)//第一发子弹
 			{
-				return ProjectileType::Icicle;
+				if (Creator::RandFloat(1.0f) < icicle_probability[plant.Level])
+				{
+					plant.ShootOrProductCountdown = Reload(plant, plant.ShootOrProductInterval);
+
+					return ProjectileType::Icicle;
+				}
 			}
 			return (ProjectileType::ProjectileType)-1;
 		}
 		bool onAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int PlantWeapon)
 		{
+			plant.FireCount++;
 			if (proj.Type == ProjectileType::Icicle)
 			{
 				proj.MakePiercing(6, 10.0f, 0.0f);
