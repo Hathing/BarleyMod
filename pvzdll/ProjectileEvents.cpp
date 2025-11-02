@@ -49,7 +49,7 @@ bool onProjectileGetRect(MyProjectile proj, PVZ::Rect* rect)
 
 bool onProjectileUpdateLayer(MyProjectile proj)
 {
-	if (proj.Type == ProjectileType::Icicle && proj.SpecialType == PST_ULTRA_ICICLE)
+	if (proj.Type == ProjectileType::Icicle && proj.SpecialType != PST_NONE)
 		return false;
 	return true;
 }
@@ -304,9 +304,9 @@ bool onProjectileUpdatePiercingMotion(MyProjectile proj)
 {
 	if (proj.Motion == MotionType::Piercing)
 	{
-		if (proj.Type == ProjectileType::Icicle && proj.SpecialType == PST_ULTRA_ICICLE && proj.ExistedTime >= 10)
+		if (proj.Type == ProjectileType::Icicle && proj.SpecialType == PST_ULTRA_ICICLE && proj.ExistedTime >= 50)
 		{
-			proj.SpecialType = 0;
+			proj.SpecialType = PST_ULTRA_END_ICICLE;
 			proj.XSpeed = 10.0f;
 			proj.YSpeed = 0.0f;
 		}

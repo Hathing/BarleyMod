@@ -309,7 +309,7 @@ void onPlantFindTargetResult(MyPlant plant, MyZombie zombie)
 			}
 		}
 		//寒冰索敌成功后判定开大
-		if (plant.Type == SeedType::SnowPea && plant.AnotherCounter <= 0)
+		if (plant.Type == SeedType::SnowPea && plant.AnotherCounter <= 0 && plant.Level >= 5 && plant.FireCount == 1)
 		{
 			constexpr float ultra_rate = 0.2f;
 			if (Creator::RandFloat(1.0f) < ultra_rate)

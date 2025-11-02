@@ -68,6 +68,14 @@ namespace PlantAbility
 				if (plant.AnotherCounter <= 0)
 				{
 					plant.ShootingCountdown = 0;
+					//设置头部动画
+					auto anim1 = plant.GetAnimationPart1();
+					auto anim2 = plant.GetAnimationPart2();
+					StartBlend(20, anim2);
+					anim2.SetFramesForLayer("anim_head_idle");
+					anim2.LoopType = 0;
+					anim2.CycleRate = anim1.CycleRate;
+					anim2.Speed = anim1.Speed;
 					plant.ShootOrProductCountdown = Reload(plant, plant.ShootOrProductInterval);
 				}
 			}
@@ -90,12 +98,15 @@ namespace PlantAbility
 
 					constexpr int offset_x = 20;
 					constexpr int offset_y = 20;
-					constexpr float t = 10.0f;
-					constexpr float v = 10.0f;
+					constexpr float t = 50.0f;//直射前运动的时间
+					constexpr float t0 = 10.0f;//每发冰锥之间的间隔
+					constexpr float v = 10.0f;//直射后运动的速度
+					constexpr float start = 100.0f;
+					constexpr float stride = 60.0f;
 					constexpr float base_offset_v_x = offset_x / t;
 					constexpr float base_offset_v_y = offset_y / t;
 
-					float base_v_x = (60.0f - wave_order * 60.0f) / t + v * wave_order;
+					float base_v_x = (start - wave_order * stride + v * wave_order * t0) / t;
 
 					MyProjectile newproj_center{ MyCreateProjectile(ProjectileType::Icicle,row,layer,x,y) };
 					plant.InitAddProjectile(newproj_center);
