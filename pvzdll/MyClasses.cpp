@@ -32,3 +32,15 @@ MyPlant NoiselessCreatePlant(SeedType::SeedType type, int row, int col, SeedType
 	);
 	return MyPlant{ addr };
 }
+
+MyProjectile MyCreateProjectile(ProjectileType::ProjectileType type, int row, int layer, int x, int y)
+{
+	int addr = PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32(ProjectileType::Icicle).push_imm32(row).push_imm32(layer)
+		.push_imm32(y).push_imm32(x)
+		.mov_reg_imm(REG_EAX, PVZ::GetBoard().GetBaseAddress())
+		.invoke(0x40D620).mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret()
+	);
+	return MyProjectile{ addr };
+}

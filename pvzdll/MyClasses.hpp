@@ -15,6 +15,7 @@ void onFireballInitColor(MyProjectile proj, PVZ::Animation anim);
 void DestroyPString(Draw::PString string);
 
 MyPlant NoiselessCreatePlant(SeedType::SeedType type, int row, int col, SeedType::SeedType ImitaterType = SeedType::None);
+MyProjectile MyCreateProjectile(ProjectileType::ProjectileType type, int row, int layer, int x, int y);
 
 namespace PVZ
 {
