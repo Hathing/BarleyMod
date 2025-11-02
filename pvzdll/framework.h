@@ -47,6 +47,8 @@ constexpr ProjSpecialType PST_SCATTER_WINTERMELON = 1;
 constexpr ProjSpecialType PST_CANNON_WINTERMELON = 2;
 /// @brief 扶梯僵尸丢出去的梯子
 constexpr ProjSpecialType PST_LADDER_ZOMBIEPEA = 8;
+/// @brief 寒冰射手大招射出的冰锥
+constexpr ProjSpecialType PST_ULTRA_ICICLE = 1;
 
 enum PlantDyingType
 {

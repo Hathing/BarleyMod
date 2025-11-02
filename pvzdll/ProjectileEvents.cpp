@@ -47,6 +47,13 @@ bool onProjectileGetRect(MyProjectile proj, PVZ::Rect* rect)
 	return ProjectileAbility::GetAbility(proj.Type)->GetRect(proj, rect);
 }
 
+bool onProjectileUpdateLayer(MyProjectile proj)
+{
+	if (proj.Type == ProjectileType::Icicle)
+		return false;
+	return true;
+}
+
 int GetProjectileImage(MyProjectile proj, PVZEvent::ProjectileImgParam param)
 {
 	if (param == PVZEvent::PROJECTILE_IMAGEROW)
@@ -297,6 +304,12 @@ bool onProjectileUpdatePiercingMotion(MyProjectile proj)
 {
 	if (proj.Motion == MotionType::Piercing)
 	{
+		if (proj.Type == ProjectileType::Icicle && proj.SpecialType == PST_ULTRA_ICICLE && proj.ExistedTime >= 10)
+		{
+			proj.SpecialType = 0;
+			proj.XSpeed = 10.0f;
+			proj.YSpeed = 0.0f;
+		}
 		return false;
 	}
 	return true;
@@ -337,7 +350,7 @@ void InitProjectileEvents()
 	// 子弹总更新与绘制相关
 	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
 	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
-	/// @FIXME: 这一事件存在漏洞，新类型子弹（冰锥）莫名会反向，而使用S6 CT的绘制没有此类问题
+	PVZEvent::ProjectileUpdateLayerEvent((int)onProjectileUpdateLayer);
 	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);
 	PVZEvent::ProjectileImageSizeEvent((int)GetProjectileImageSize);
 	PVZEvent::FireballInitColorEvent((int)onFireballInitColor);
