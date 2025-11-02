@@ -51,7 +51,7 @@ namespace PlantAbility
 		}
 		bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
 		{
-			return PVZ::ApplyZPDamage(zombie, plant, 1000);
+			return PVZ::ApplyZPDamage(zombie, plant, 100);
 		}
 	};
 }

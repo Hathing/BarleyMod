@@ -14,7 +14,7 @@ bool PVZ::ApplyZPDamage(MyZombie zombie, MyPlant plant, int damage)
 	plant.Hp -= mydmg;
 	//这里可以增加死亡判断，自定义死亡类型，否则植物会在原版总更新中因HP < 0 而死。
 
-	return plant.Hp >= 0;
+	return plant.Hp < 0;
 }
 
 void DestroyPString(Draw::PString string)

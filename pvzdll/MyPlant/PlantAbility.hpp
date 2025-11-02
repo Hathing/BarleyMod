@@ -199,7 +199,7 @@ namespace PlantAbility
 		/// @return 是否被碾压
 		virtual bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
 		{
-			return PVZ::ApplyZPDamage(zombie, plant, plant.Hp);
+			return PVZ::ApplyZPDamage(zombie, plant, plant.MaxHp + 1);
 		}
 		/// @brief 有同行植物即将死亡时，先结算此事件
 		/// @note 此函数才是应该结算亡语的函数。
