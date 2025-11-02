@@ -49,7 +49,7 @@ bool onProjectileGetRect(MyProjectile proj, PVZ::Rect* rect)
 
 bool onProjectileUpdateLayer(MyProjectile proj)
 {
-	if (proj.Type == ProjectileType::Icicle)
+	if (proj.Type == ProjectileType::Icicle && proj.SpecialType == PST_ULTRA_ICICLE)
 		return false;
 	return true;
 }
