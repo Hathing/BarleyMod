@@ -55,25 +55,38 @@ namespace PlantAbility
 		}
 		bool TickAbility(MyPlant plant)
 		{
+			if (plant.UltraCount != 0)
+			{
+				plant.UltraCount = 0;
+				plant.AnotherCounter = 205;
+				plant.ShootingCountdown = 9999;
+				plant.ShootOrProductCountdown = 9999;
+			}
 			if (plant.AnotherCounter > 0)
+			{
 				plant.AnotherCounter -= 1;
+				if (plant.AnotherCounter <= 0)
+				{
+					plant.ShootingCountdown = 0;
+					plant.ShootOrProductCountdown = Reload(plant, plant.ShootOrProductInterval);
+				}
+			}
 			return true;
 		}
 		bool onUpdateShooting(MyPlant plant)
 		{
-			int shootingcd = plant.ShootingCountdown;
-			if (shootingcd > 1 && plant.AnotherCounter > 0)
+			if (plant.ShootingCountdown > 1 && plant.AnotherCounter > 0)
 			{
 				//锁血、高亮
 				plant.Hp = plant.MaxHp;
 				plant.Light();
 				//生成子弹
-				if (shootingcd % 10 == 0)
+				int ultra_time = plant.AnotherCounter - 1;
+				if (ultra_time % 10 == 0)
 				{
-					int wave = (shootingcd % 30) / 10;
+					int wave = (ultra_time % 30) / 10;
 					int wave_order = 2 - wave;
 					int x = plant.ImageX + 60, y = plant.ImageY + 40, row = plant.Row, layer = 0x4A768 + 10000 * row + 100 * wave_order;
-					///*
 
 					constexpr int offset_x = 20;
 					constexpr int offset_y = 20;
@@ -106,11 +119,7 @@ namespace PlantAbility
 
 						layer -= 0x10;
 					}
-					//*/
 				}
-				//关闭大招状态
-				if (shootingcd < 10)
-					plant.AnotherCounter = 0;
 			}
 			return true;
 		}

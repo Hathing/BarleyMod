@@ -308,6 +308,15 @@ void onPlantFindTargetResult(MyPlant plant, MyZombie zombie)
 				plant.UltraCount = 1;
 			}
 		}
+		//寒冰索敌成功后判定开大
+		if (plant.Type == SeedType::SnowPea && plant.AnotherCounter <= 0)
+		{
+			constexpr float ultra_rate = 0.2f;
+			if (Creator::RandFloat(1.0f) < ultra_rate)
+			{
+				plant.UltraCount = 1;
+			}
+		}
 		if (plant.Type==SeedType::SplitPea)
 		{
 			if (plant.AnotherCounter <= 0)
