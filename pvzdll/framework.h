@@ -50,7 +50,9 @@ constexpr ProjSpecialType PST_LADDER_ZOMBIEPEA = 8;
 /// @brief 寒冰射手大招射出的冰锥
 constexpr ProjSpecialType PST_ULTRA_ICICLE = 1;
 /// @brief 寒冰射手大招射出的冰锥直射的状态
-constexpr ProjSpecialType PST_ULTRA_END_ICICLE = 1;
+constexpr ProjSpecialType PST_ULTRA_END_ICICLE = 2;
+/// @brief 灵魂孢子
+constexpr ProjSpecialType PST_SOUL_PUFF = 1;
 
 enum PlantDyingType
 {

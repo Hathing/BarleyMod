@@ -26,11 +26,32 @@ namespace PlantAbility
 		}
 		void OverwritePZDamage(PZDamageEvent* info)
 		{
-			int distance = info->zombie.X - info->plant.ImageX - 60;
+			auto plant = info->plant;
+			int distance = info->zombie.X - plant.ImageX - 60;
 			distance = min(500, max(0, distance));
-			float multi = 1.0f + extra_multiplier[info->plant.Level] * distance / 500.0f;
+			float multi = 1.0f + extra_multiplier[plant.Level] * distance / 500.0f;
 			info->damage *= multi;
-			return;
+
+			if (plant.Level >= 5)
+			{
+				float prob = 0.5f - 0.001f * distance;
+				if (Creator::RandFloat(1.0f) < prob)
+				{
+					auto proj = MyCreateProjectile(ProjectileType::Puff, plant.Row, 0x4A768, info->zombie.ImageX + 20, info->zombie.ImageY + 40);
+					plant.InitAddProjectile(proj);
+					proj.SpecialType = PST_SOUL_PUFF;
+					proj.Motion = MotionType::Float;
+					float v = Creator::RandFloat(8.0f) + 8.0f, theta = Creator::RandFloat(PI * 2);
+					proj.XSpeed = v * cosf(theta);
+					proj.YSpeed = v * sinf(theta);
+					proj.SoulPuffOffsetX = Creator::Rand(20);
+					proj.SoulPuffOffsetY = Creator::Rand(20);
+				}
+			}
+		}
+		bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
+		{
+			return PVZ::ApplyZPDamage(zombie, plant, 1000);
 		}
 	};
 }

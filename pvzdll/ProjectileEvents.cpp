@@ -69,7 +69,38 @@ float GetProjectileImageSize(MyProjectile proj, float original_val)
 
 void onProjectileUpdate(MyProjectile proj)
 {
-	return;
+	if (proj.Type == ProjectileType::Puff)
+	{
+		if (proj.SpecialType == PST_SOUL_PUFF && proj.Motion == MotionType::Float)
+		{
+			MyPlant caster = PVZ::GetByID<MyPlant>(proj.ParentID);
+			bool has_caster = caster.isValid();
+			if (has_caster && proj.ExistedTime <= 100)
+			{
+				proj.X = proj.X * 0.95f + (caster.ImageX + proj.SoulPuffOffsetX) * 0.05f;
+				float h = proj.ShadowY - proj.Y;
+				proj.Y = proj.Y * 0.95f + (caster.ImageY + proj.SoulPuffOffsetY) * 0.05f;
+				proj.ShadowY = proj.Y + h;
+				proj.XSpeed *= 0.92f;
+				proj.YSpeed *= 0.92f;
+			}
+			else
+			{
+				if (has_caster)
+				{
+					if (caster.Hp < caster.MaxHp)
+					{
+						caster.Heal(10);
+						proj.Remove();
+						return;
+					}
+					proj.Row = caster.Row;
+				}
+				proj.Motion = MotionType::Direct;
+				proj.DamageAbility = PVZ::DRF_GROUND | PVZ::DRF_FLYING;
+			}
+		}
+	}
 }
 
 bool onProjectileRemove(MyProjectile proj)
