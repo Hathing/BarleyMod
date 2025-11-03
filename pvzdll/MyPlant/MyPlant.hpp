@@ -38,6 +38,9 @@ public:
 	T_PROPERTY(byte, UltraCount, __get_UltraCount, __set_UltraCount, 0xEC);
 	/// @brief 植物每次重置+58后，在下一次重置+58之前FindTarget的次数，用于处理多连发植物开大概率的判断，目前只有裂荚在用
 	T_PROPERTY(byte, FindTargetCount, __get_FindTargetCount, __set_FindTargetCount, 0xED);
+	/// @brief 植物记录当前子弹为连发中的第N发，每次自增发生在子弹创建之后，目前只有寒冰在用
+	/// @note 0表示最后一发；当植物连发数>1时，正数N表示第N发（最后一发除外）
+	T_PROPERTY(byte, FireCount, __get_FireCount, __set_FireCount, 0xEE);
 	/// @brief 路灯花复活植物类型
 	/// @deprecated 路灯花复活已重做，不再使用该成员
 	T_PROPERTY(SeedType::SeedType, RespawnType, __get_ReT, __set_ReT, 0x0E0);

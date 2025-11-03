@@ -14,6 +14,7 @@ namespace ProjectileAbility
 		void onDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
 			zombie.AddFrost(5);
+			zombie.Froze(50);
 		}
 		int GetImage(MyProjectile proj)
 		{

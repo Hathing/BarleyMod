@@ -14,7 +14,7 @@ bool PVZ::ApplyZPDamage(MyZombie zombie, MyPlant plant, int damage)
 	plant.Hp -= mydmg;
 	//这里可以增加死亡判断，自定义死亡类型，否则植物会在原版总更新中因HP < 0 而死。
 
-	return plant.Hp >= 0;
+	return plant.Hp < 0;
 }
 
 void DestroyPString(Draw::PString string)
@@ -31,4 +31,16 @@ MyPlant NoiselessCreatePlant(SeedType::SeedType type, int row, int col, SeedType
 		.invoke(0x40CE20).mov_mem_reg(PVZ::Memory::Variable,REG_EAX).ret()
 	);
 	return MyPlant{ addr };
+}
+
+MyProjectile MyCreateProjectile(ProjectileType::ProjectileType type, int row, int layer, int x, int y)
+{
+	int addr = PVZ::Memory::Execute(AsmBuilder()
+		.push_imm32(type).push_imm32(row).push_imm32(layer)
+		.push_imm32(y).push_imm32(x)
+		.mov_reg_imm(REG_EAX, PVZ::GetBoard().GetBaseAddress())
+		.invoke(0x40D620).mov_mem_reg(PVZ::Memory::Variable, REG_EAX)
+		.ret()
+	);
+	return MyProjectile{ addr };
 }

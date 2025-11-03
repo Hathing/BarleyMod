@@ -199,7 +199,7 @@ namespace PlantAbility
 		/// @return 是否被碾压
 		virtual bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
 		{
-			return PVZ::ApplyZPDamage(zombie, plant, plant.Hp);
+			return PVZ::ApplyZPDamage(zombie, plant, plant.MaxHp + 1);
 		}
 		/// @brief 有同行植物即将死亡时，先结算此事件
 		/// @note 此函数才是应该结算亡语的函数。
@@ -210,6 +210,14 @@ namespace PlantAbility
 		virtual bool onPlantDying(MyPlant caster, MyPlant dying_plant, PlantDyingType dying_reason)
 		{
 			return true;
+		}
+		/// @brief 射手植物重置CD时事件
+		/// @param plant 植物
+		/// @param shoot_cd 即将设置的CD
+		/// @return 修改后的CD
+		virtual int Reload(MyPlant plant, int shoot_cd)
+		{
+			return shoot_cd;
 		}
 	};
 	typedef BasePlant* PlantPTR;

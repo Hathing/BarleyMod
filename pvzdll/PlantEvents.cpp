@@ -308,6 +308,15 @@ void onPlantFindTargetResult(MyPlant plant, MyZombie zombie)
 				plant.UltraCount = 1;
 			}
 		}
+		//寒冰索敌成功后判定开大
+		if (plant.Type == SeedType::SnowPea && plant.AnotherCounter <= 0 && plant.Level >= 5 && plant.FireCount == 1)
+		{
+			constexpr float ultra_rate = 0.2f;
+			if (Creator::RandFloat(1.0f) < ultra_rate)
+			{
+				plant.UltraCount = 1;
+			}
+		}
 		if (plant.Type==SeedType::SplitPea)
 		{
 			if (plant.AnotherCounter <= 0)
@@ -551,29 +560,7 @@ bool onPlantDying(MyPlant plant, PlantDyingType dying_type)
 
 int onPlantReload(MyPlant plant, int shoot_cd)
 {
-	switch (plant.Type)
-	{
-	case SeedType::SplitPea:
-		plant.FindTargetCount = 0;
-		break;
-	case SeedType::Puffshroom:
-	{
-		if (plant.Level == 5 && plant.PuffShroomSizeCount < 0)
-		{
-			return shoot_cd + plant.PuffShroomSizeCount * 14;//初始200，最低60-14=46
-		}
-	}
-		break;
-	case SeedType::Scaredyshroom:
-	{
-		plant.ShootOrProductInterval -= 5;
-		if (plant.ShootOrProductInterval < 50)
-			plant.ShootOrProductInterval = 50;
-	}
-	default:
-		break;
-	}
-	return shoot_cd;
+	return PlantAbility::GetAbility(plant.Type)->Reload(plant, shoot_cd);
 }
 
 bool onScaredyShroomScared(MyPlant plant)
@@ -699,11 +686,8 @@ bool onPotatoExplode(MyPlant plant)
 
 bool onPotatoFindTargetAfter(MyPlant plant, MyZombie zombie)
 {
-	if (plant.OwnerID == 0)
-	{
-		return false;
-	}
-	return true;
+	// 无论是大雷还是小雷，不再依靠原版索敌引爆，而是主动调用4666A0引爆
+	return false;
 }
 
 bool onTorchwoodFindProjectileBefore(MyPlant plant)

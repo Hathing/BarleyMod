@@ -1804,4 +1804,16 @@ namespace PVZEvent
 		ProjectileGetRectEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 		ProjectileGetRectEvent() : ProjectileGetRectEvent("onProjectileGetRect") {};
 	};
+
+	/// @brief 子弹更新图层的事件
+	/// @param 子弹
+	/// @return True则使用原版更新，False则不使用原版更新。
+	class ProjectileUpdateLayerEvent : public BoolDLLEventTemplate<0x46E4A5, 5, 0x46E4F1, REG_ESI>
+	{
+	public:
+		ProjectileUpdateLayerEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ProjectileUpdateLayerEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ProjectileUpdateLayerEvent() : ProjectileUpdateLayerEvent("onProjectileUpdateLayer") {};
+	};
+
 };
