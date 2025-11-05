@@ -554,6 +554,14 @@ bool onPlantDying(MyPlant plant, PlantDyingType dying_type)
 		for (auto& myplant : plants)
 			if (myplant.Row == plant.Row && myplant.Id != plant.Id)
 				dying = PlantAbility::GetAbility(myplant.Type)->onPlantDying(myplant, plant, dying_type);
+
+		if (dying)
+		{
+			PlantAbility::GetAbility(plant.Type)->onPlantDeath(plant, plant, dying_type);
+			for (auto& myplant : plants)
+				if (myplant.Row == plant.Row && myplant.Id != plant.Id)
+					PlantAbility::GetAbility(myplant.Type)->onPlantDeath(myplant, plant, dying_type);
+		}
 	}
 	return dying;
 }
