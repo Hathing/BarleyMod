@@ -72,15 +72,9 @@ namespace PlantAbility
 					board.GetIcetrace().SetDisappearCountdown(plant.Row, 20);
 				}
 
-				//回满血
-				PlantAbility::GetAbility(plant.Type)->onCreated(plant);
-				plant.HpDisplayCounter = 100;
-				//重置状态
-				//plant.BloverDisappearCountdown = 200;
-				//plant.Squash = false;
-				//等级降低
-				plant.Level--;
-				plant.Experience = (plant.Level <= 0 ? 0 : PlantAbility::PLANT_LEVEL_EXP[plant.Type][plant.Level]);
+				MyPlant new_plant = Creator::CreatePlant(plant.Type, plant.Row, plant.Column);
+				new_plant.Level = plant.Level - 1;
+				new_plant.Experience = (plant.Level <= 0 ? 0 : PlantAbility::PLANT_LEVEL_EXP[new_plant.Type][new_plant.Level - 1]);
 			}
 		}
 	};

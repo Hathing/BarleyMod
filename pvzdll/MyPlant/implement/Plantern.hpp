@@ -56,7 +56,7 @@ namespace PlantAbility
 			if (caster.Id == dying_plant.Id)
 				return true;
 
-			if (caster.Level >= MyPlant::MAX_LEVEL)
+			if (caster.Level >= MyPlant::MAX_LEVEL && dying_plant.IsPrime())
 			{
 				caster.Hp -= 4;
 				caster.Light(50);
