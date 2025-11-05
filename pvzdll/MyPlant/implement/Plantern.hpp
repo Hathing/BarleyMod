@@ -56,7 +56,7 @@ namespace PlantAbility
 			if (caster.Id == dying_plant.Id)
 				return true;
 
-			if (caster.Level >= MyPlant::MAX_LEVEL)
+			if (caster.Level >= MyPlant::MAX_LEVEL && dying_plant.IsPrime())
 			{
 				caster.Hp -= 4;
 				caster.Light(50);
@@ -64,14 +64,20 @@ namespace PlantAbility
 				return false;
 			}
 
-			if (caster.Hp > 0)
+			return true;
+		}
+		void onPlantDeath(MyPlant caster, MyPlant dying_plant, PlantDyingType dying_reason)
+		{
+			if (caster.Id == dying_plant.Id)
+				return;
+
+			if (!caster.AnotherCounter)
 			{
 				caster.Hp = 0;
 				caster.AnotherCounter = respawn_cooldown;
-				return false;
-			}
 
-			return true;
+				Creator::CreatePlant(dying_plant.Type, dying_plant.Row, dying_plant.Column);
+			}
 		}
 	};
 }

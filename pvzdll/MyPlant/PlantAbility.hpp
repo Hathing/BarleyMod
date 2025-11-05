@@ -175,14 +175,33 @@ namespace PlantAbility
 		{
 			return -1;
 		}
-		/// @brief 植物在游戏内触发亡语的事件
-		/// @note 对于碾压消失事件，如果涉及复活或无敌，注意重置植物的消失倒计时，避免持续触发亡语。
+		/// @brief 植物濒死时判断是否死亡事件
+		/// @note 这个函数只处理免死，不处理亡语
 		/// @param plant 植物
 		/// @param dyingtype 死因
 		/// @return false则植物不死亡
 		virtual bool onDying(MyPlant plant, PlantDyingType dyingtype)
 		{
 			return true;
+		}
+		/// @brief 有同行植物即将死亡时，先结算此事件
+		/// @note 这个函数只处理免死，不处理亡语。
+		/// @param caster 植物
+		/// @param dying_plant 即将死亡的植物，可能与 caster 不同 
+		/// @param dying_reason 死因
+		/// @return 植物是否死亡
+		virtual bool onPlantDying(MyPlant caster, MyPlant dying_plant, PlantDyingType dying_reason)
+		{
+			return true;
+		}
+		/// @brief 有同行植物死亡时，结算此事件
+		/// @note 此函数才是亡语结算函数。
+		/// @param caster 植物
+		/// @param dying_plant 死亡的植物，可能与 caster 不同 
+		/// @param dying_reason 死因
+		virtual void onPlantDeath(MyPlant caster, MyPlant dying_plant, PlantDyingType dying_reason)
+		{
+			return;
 		}
 		/// @brief 获取植物索敌优先级
 		/// @param plant 植物
@@ -200,16 +219,6 @@ namespace PlantAbility
 		virtual bool onSquishedByZombie(MyPlant plant, MyZombie zombie)
 		{
 			return PVZ::ApplyZPDamage(zombie, plant, plant.MaxHp + 1);
-		}
-		/// @brief 有同行植物即将死亡时，先结算此事件
-		/// @note 此函数才是应该结算亡语的函数。
-		/// @param caster 植物
-		/// @param dying_plant 即将死亡的植物，可能与 caster 不同 
-		/// @param dying_reason 死因
-		/// @return 植物是否死亡
-		virtual bool onPlantDying(MyPlant caster, MyPlant dying_plant, PlantDyingType dying_reason)
-		{
-			return true;
 		}
 		/// @brief 射手植物重置CD时事件
 		/// @param plant 植物

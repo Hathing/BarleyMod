@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../PlantAbility.hpp"
 
 static byte __asm_animate[]
@@ -44,37 +44,16 @@ namespace PlantAbility
 		{
 			return int(PVZ::DRF_ALL);
 		}
-		/*
-		bool onSquished(MyPlant plant, MyZombie zombie)
-		{
-			bool disappear = onDying(plant, DYING_DISAPPEARING);
-			if (disappear)
-			{
-				plant.Remove();
-			}
-			return false;
-		}
-		*/
-		bool onDying(MyPlant plant, PlantDyingType dyingtype)
+		void onDeath(MyPlant plant, PlantDyingType dyingtype)
 		{
 			//创建爆炸
 			Creator::CreateLowerSound(LowerSoundType::CherryExplode);
 			Creator::CreateLowerSound(LowerSoundType::Juice);
 			PVZ::CreateParticleSystem(plant.ImageX + 40, plant.ImageY + 50, 0x61A80, EffectType::CHERRY_BOMB_EXPLODED);
 			MyBoard board = plant.GetBoard();
-			PVZ::Rect explode_rect{ plant.ImageX - 80,plant.ImageY,200,plant.Height };
-			auto zombies = board.GetAllZombies<MyZombie>();
-			for (auto& zombie : zombies)
-			{
-				if (zombie.Row == plant.Row && !zombie.Hypnotized)
-				{
-					auto zombie_rect = zombie.GetActualRect();
-					if (PVZ::GetXOverlap(zombie_rect, explode_rect) > 0)
-					{
-						zombie.Blast();
-					}
-				}
-			}
+			
+			Creator::CreateExplosion(plant.ImageX, plant.ImageY, 115, 1, 0);
+
 			if (plant.Level > 0)
 			{
 				if (plant.Level >= 5 && plant.AttributeCountdown <= 0)
@@ -82,7 +61,6 @@ namespace PlantAbility
 					plant.AttributeCountdown = 18000;//3分钟CD
 					//辣椒爆炸
 					Creator::CreateLowerSound(LowerSoundType::JalapenoExplode);
-					Creator::CreateLowerSound(LowerSoundType::Juice);
 					PVZ::Memory::Execute(AsmBuilder()
 						.push_imm32(plant.Row)
 						.mov_reg_imm(REG_EBX, board.GetBaseAddress())
@@ -94,25 +72,10 @@ namespace PlantAbility
 					board.GetIcetrace().SetDisappearCountdown(plant.Row, 20);
 				}
 
-				//回满血
-				PlantAbility::GetAbility(plant.Type)->onCreated(plant);
-				plant.HpDisplayCounter = 100;
-				//重置状态
-				//plant.BloverDisappearCountdown = 200;
-				//plant.Squash = false;
-				//等级降低
-				plant.Level--;
-				plant.Experience = (plant.Level <= 0 ? 0 : PlantAbility::PLANT_LEVEL_EXP[plant.Type][plant.Level]);
-				return false;
+				MyPlant new_plant = Creator::CreatePlant(plant.Type, plant.Row, plant.Column);
+				new_plant.Level = plant.Level - 1;
+				new_plant.Experience = (plant.Level <= 0 ? 0 : PlantAbility::PLANT_LEVEL_EXP[new_plant.Type][new_plant.Level - 1]);
 			}
-			//如果是被压扁而死，不设置压扁状态，而是直接消失
-			if (dyingtype == DYING_SQUISHED)
-			{
-				plant.Remove();
-				return false;
-			}
-
-			return true;
 		}
 	};
 }
