@@ -60,6 +60,7 @@ namespace PlantAbility
 			{
 				caster.Hp -= 4;
 				caster.Light(50);
+				dying_plant.Hp = 0;
 				dying_plant.Light(50);
 				return false;
 			}
