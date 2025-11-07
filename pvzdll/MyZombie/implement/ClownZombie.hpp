@@ -8,6 +8,7 @@ namespace ZombieAbility
 		void onCreated(MyZombie zombie)
 		{
 			zombie.IsWalkingBackwards = 1;
+			zombie.AttributeCountdown = 6666666;
 		}
 		bool TickAbility(MyZombie zombie)
 		{
