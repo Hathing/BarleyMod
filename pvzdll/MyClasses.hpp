@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "MyBoard.hpp"
 #include "MyPlant/MyPlant.hpp"
 #include "MyProjectile/MyProjectile.hpp"
@@ -7,6 +8,8 @@
 typedef PVZEvent::PlantDamageZombieEvent::PZDamageInfo<MyPlant, MyZombie> PZDamageEvent;
 
 // 需要在不同Class的Events.cpp中相互调用的函数，在此处声明。
+
+/// @brief 植物对僵尸造成伤害前的事件触发函数，在此修改伤害。
 void onPlantDamageZombie(PZDamageEvent* info);
 int onPlantTakeDamage(MyPlant plant, PVZ::BaseClass source, GameObjectType::GameObjectType source_type, int damage);
 /// @todo 将此函数改为 MyProjectile 的成员函数
@@ -82,3 +85,117 @@ public:
 
 	INT_PROPERTY(mNumEffects, __get_mNumEffects, __set_mNumEffects, 0x300);
 };
+
+
+namespace Debug
+{
+	/// @brief 浮动数字类信息容器模板
+	template<typename T,std::size_t N>
+	class DebugPopDigitVector
+	{
+	public:
+		void Add(const T& newdata)
+		{
+			std::vector<T>& data = this->Data;
+			//管理Data的大小，不定期清理死亡的info
+			if (data.size() >= this->DataRefreshSize && this->DataRefreshCount <= 0)
+			{
+				this->Refresh();
+				this->DataRefreshCount = this->DataRefreshSize + 1;
+			}
+
+			data.push_back(newdata);
+
+			//刷新周期减少
+			if (this->DataRefreshCount > 0)
+				this->DataRefreshCount--;
+		}
+		auto begin() { return Data.begin(); }
+		auto end() { return Data.end(); }
+		virtual void Refresh() = 0;
+		virtual ~DebugPopDigitVector() = default;
+	protected:
+		std::vector<T> Data;
+	private:
+		/// @brief 刷新周期，为0时新增数据才刷新
+		std::size_t DataRefreshCount = 0;
+		/// @brief 容器刷新大小
+		std::size_t DataRefreshSize = N;
+	};
+
+
+	struct PZDamageDigit
+	{
+		int ExistedTime;
+		bool isAlive;
+		int X;
+		int Y;
+		int Damage;
+	};
+
+	class PZDamageDigitVector : public DebugPopDigitVector<PZDamageDigit, 1024>
+	{
+	public:
+		virtual void Refresh()
+		{
+			auto& data = this->Data;
+			data.erase(
+				std::remove_if(data.begin(), data.end(),
+					[](const PZDamageDigit& digit) {
+						return !digit.isAlive;   // 删除 isAlive == false 的元素
+					}),
+				data.end()
+						);
+		}
+	};
+
+	struct PlantGetExpDigit
+	{
+		int ExistedTime;
+		bool isAlive;
+		int X;
+		int Y;
+		int Exp;
+	};
+
+	class PlantGetExpDigitVector : public DebugPopDigitVector<PlantGetExpDigit, 256>
+	{
+	public:
+		virtual void Refresh()
+		{
+			auto& data = this->Data;
+			data.erase(
+				std::remove_if(data.begin(), data.end(),
+					[](const PlantGetExpDigit& digit) {
+						return !digit.isAlive;   // 删除 isAlive == false 的元素
+					}),
+				data.end()
+						);
+		}
+	};
+
+	class DebugInfo
+	{
+	public:
+		PZDamageDigitVector m_PZDamageDigitVector;
+		PlantGetExpDigitVector m_PlantGetExpDigitVector;
+	};
+
+	extern DebugInfo * MyDebugInfo;
+}
+
+namespace MyRand
+{
+	// 静态种子，只占用 4 字节
+	inline static unsigned int s_seed = 123456789u;
+
+	/// @brief 快速随机，范围为[inf,sup)
+	/// @param sup 上限
+	/// @param inf 下限
+	inline int FastRand(int inf,int sup) {
+		// 经典 ANSI C 标准 LCG 常量
+		s_seed = s_seed * 1103515245u + 12345u;
+		// 取模得到 [0,sup-inf)，再+inf得到[inf,sup)
+		return static_cast<int>(s_seed % (sup - inf)) + inf;
+	}
+}

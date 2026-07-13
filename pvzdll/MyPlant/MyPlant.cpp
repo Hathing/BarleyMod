@@ -199,6 +199,9 @@ void MyPlant::AddExperience(int val, bool kill_credit)
 
 	if (!this->IsToolPlant())
 		while (this->CheckUpgrade()) {};
+
+	//debug模式绘制经验值增加数字
+	Debug::MyDebugInfo->m_PlantGetExpDigitVector.Add({ 0,true,this->ImageX + 30 + MyRand::FastRand(0,21),this->ImageY + 40 + MyRand::FastRand(0,21),val});
 }
 
 void MyPlant::EnableEasterSkin()

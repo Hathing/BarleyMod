@@ -114,6 +114,9 @@ void onPlantDamageZombie(PZDamageEvent* info)
 	if (info->zombie.NotDying && info->damage > 0)
 	{
 		info->zombie.LastDamageSourceID = info->plant.GetOwner().Id;
+
+		//debug模式绘制伤害数字
+		Debug::MyDebugInfo->m_PZDamageDigitVector.Add({ 0,true,info->zombie.ImageX + MyRand::FastRand(0, 41) , info->zombie.ImageY + MyRand::FastRand(0, 41) , info->damage });
 	}
 }
 

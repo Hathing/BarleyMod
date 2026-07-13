@@ -1,5 +1,6 @@
 #include "MyClasses.hpp"
 
+
 void PVZ::ApplyPZDamage(MyPlant plant, MyZombie zombie, int damage, PVZ::DamageFlags flags)
 {
 	PZDamageEvent event{ zombie, plant, flags, damage, PVZEvent::PLANTDAMAGETYPE_CUSTOM};
@@ -43,4 +44,9 @@ MyProjectile MyCreateProjectile(ProjectileType::ProjectileType type, int row, in
 		.ret()
 	);
 	return MyProjectile{ addr };
+}
+
+namespace Debug
+{
+	DebugInfo* MyDebugInfo = new Debug::DebugInfo();
 }
