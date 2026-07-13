@@ -778,8 +778,8 @@ namespace PVZ
 		INT_PROPERTY(DisappearCountdown, __get_DisappearCountdown, __set_DisappearCountdown, 0x74);
 		/// @brief 蹦极僵尸目标列
 		INT_PROPERTY(BungeeColumn, __get_BungeeColumn, __set_BungeeColumn, 0x80);
-		/// @brief 高度
-		T_PROPERTY(FLOAT, Height, __get_Height, __set_Height, 0x84);
+		/// @brief 僵尸距离地面的高度
+		T_PROPERTY(FLOAT, FlyingHeight, __get_FlyingHeight, __set_FlyingHeight, 0x84);
 		void GetCollision(CollisionBox* collbox);
 		void SetCollision(CollisionBox* collbox);
 		/// @brief 获取僵尸的基础攻击判定范围。

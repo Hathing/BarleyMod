@@ -560,7 +560,7 @@ bool onZombieUpdateFalling(MyZombie zombie)
 {
 	if (zombie.IsLaunched)
 	{
-		zombie.Height += zombie.FallSpeed;
+		zombie.FlyingHeight += zombie.FallSpeed;
 		zombie.FallSpeed -= 0.05f;//原版小鬼使用的加速度
 		return false;
 	}
@@ -692,7 +692,7 @@ int onZombieFindTargetInterval(MyZombie zombie)
 
 int onZombieEffectedByDamageRange(MyZombie zombie, PVZ::DamageRangeFlags drf)
 {
-	float height = zombie.Height;
+	float height = zombie.FlyingHeight;
 	if (zombie.Type == ZombieType::BalloonZombie)
 		height += 10.0f;
 	//高空僵尸会被视为飞行范围内
