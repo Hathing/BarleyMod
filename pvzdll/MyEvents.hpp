@@ -1349,10 +1349,10 @@ namespace PVZEvent
 	};
 
 
-	/// @brief 用于跳过幽灵子弹更新和绘制的事件
+	/// @brief 用于跳过幽灵子弹更新和绘制和遍历的事件
 	/// @param 子弹
 	/// @return False则跳过更新和绘制
-	class ProjectileSkipUpdateAndDrawEvent
+	class ProjectileSkipUpdateAndDrawAndIterateEvent
 	{
 	private:
 		class ProjectileSkipUpdateEvent : public BoolDLLEventTemplate<0x46E462, 6, 0x46E533, REG_EAX>
@@ -1376,25 +1376,38 @@ namespace PVZEvent
 			ProjectileSkipDrawShadowEvent(int address) : BoolDLLEventTemplate() { Init(address); };
 			ProjectileSkipDrawShadowEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipDrawShadow"); };
 		};
+		/// @deprecated 原版遍历函数涉及到游戏总更新、绘制总更新、debug子弹框总更新、传送门更新和火炬过火更新，建议对每个部分特殊处理而不是无脑跳过
+		/*
+		class ProjectileSkipIterateEvent : public BoolDLLEventTemplate<0x41C9B0, 6, 0x41CA06, REG_ESI>
+		{
+		public:
+			ProjectileSkipIterateEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ProjectileSkipIterateEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ProjectileSkipIterateEvent() : BoolDLLEventTemplate() { Init("onProjectileSkipIterate"); };
+		};
+		*/
 		ProjectileSkipUpdateEvent* part1;
 		ProjectileSkipDrawEvent* part2;
 		ProjectileSkipDrawShadowEvent* part3;
+		//ProjectileSkipIterateEvent* part4;
 	public:
-		ProjectileSkipUpdateAndDrawEvent()
+		ProjectileSkipUpdateAndDrawAndIterateEvent()
 		{
-			ProjectileSkipUpdateAndDrawEvent(PVZ::Memory::GetProcAddress("onProjectileSkipUpdateAndDraw"));
+			ProjectileSkipUpdateAndDrawAndIterateEvent(PVZ::Memory::GetProcAddress("onProjectileSkipUpdateAndDrawAndIterate"));
 		}
-		ProjectileSkipUpdateAndDrawEvent(int address)
+		ProjectileSkipUpdateAndDrawAndIterateEvent(int address)
 		{
 			part1 = new ProjectileSkipUpdateEvent(address);
 			part2 = new ProjectileSkipDrawEvent(address);
 			part3 = new ProjectileSkipDrawShadowEvent(address);
+			//part4 = new ProjectileSkipIterateEvent(address);
 		}
 		void end()
 		{
 			part1->end();
 			part2->end();
 			part3->end();
+			//part4->end();
 		}
 	};
 

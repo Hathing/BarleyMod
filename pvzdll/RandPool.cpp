@@ -85,7 +85,7 @@ void onRandomZombieDropHelm(MyZombie zombie)
 	{
 		if (child_zombie.X > 280.0f)
 		{
-			child_zombie.Height = 5.0f;
+			child_zombie.FlyingHeight = 5.0f;
 			child_zombie.State = ZombieState::IMP_FLYING;
 
 			float flyingtime = 0.8f + Creator::RandFloat(0.4f);//单位为秒

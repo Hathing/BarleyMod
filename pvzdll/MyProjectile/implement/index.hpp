@@ -15,3 +15,4 @@
 #include "Pea.hpp"
 #include "Icicle.hpp"
 #include "SnowPea.hpp"
+#include "Spike.hpp"

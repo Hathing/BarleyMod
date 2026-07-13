@@ -6,7 +6,7 @@ namespace ProjectileAbility
 	ProjectilePTR pt_factory[] =
 	{
 		new Pea(),			  new SnowPea(), new Cabbage(),		  new Melon(),			new Puff(),
-		new WinterMelon(),	  new Fireball(),		new Star(),			  new BaseProjectile(), new BaseProjectile(),
+		new WinterMelon(),	  new Fireball(),		new Star(),			  new Spike(), new BaseProjectile(),
 		new Kernel(),		  new Cobbig(),			new Butter(),		  new ZombiePea(),		new Icicle(),
 		new GoldSpike(),	  new BaseProjectile(), new BaseProjectile(), new Diamond(),		new BaseProjectile(),
 		new BaseProjectile(), new BaseProjectile(), new GoldMelon(),	  new BaseProjectile(),	new BaseProjectile(),

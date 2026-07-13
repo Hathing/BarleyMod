@@ -202,7 +202,7 @@ void MyZombie::Launch(float xspeed, float yspeed, float startheight)
 			this->StopEating();
 		this->IsLaunched = 1;
 		this->ZombieHeight = 7;
-		this->Height = startheight;
+		this->FlyingHeight = startheight;
 		this->Speed = xspeed;
 		this->FallSpeed = yspeed;
 	}

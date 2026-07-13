@@ -13,8 +13,6 @@ bool onPlantAddProjectile(MyPlant plant, MyProjectile proj, MyZombie zombie, int
 int onProjDamageZombie(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType type, int subtarget_num, int damage)
 {
 	int mydamage = ProjectileAbility::GetAbility(proj.Type)->OverrideDamage(proj, zombie, type, subtarget_num, damage);
-	if (mydamage == 0)
-		return 0;
 
 	if (!zombie.NotExist)
 	{
@@ -290,7 +288,7 @@ bool onProjectileImpact(MyProjectile proj, MyZombie zombie)
 }
 
 
-bool onProjectileSkipUpdateAndDraw(MyProjectile proj)
+bool onProjectileSkipUpdateAndDrawAndIterate(MyProjectile proj)
 {
 	if (proj.IsGhost)
 		return false;
@@ -379,7 +377,7 @@ void InitProjectileEvents()
 	ProjectileRemoveEvent((int)onProjectileRemove);
 
 	// 子弹总更新与绘制相关
-	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
+	PVZEvent::ProjectileSkipUpdateAndDrawAndIterateEvent((int)onProjectileSkipUpdateAndDrawAndIterate);
 	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
 	PVZEvent::ProjectileUpdateLayerEvent((int)onProjectileUpdateLayer);
 	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);

@@ -241,9 +241,11 @@ void onBoardDrawImage(int Graphics, MyBoard board)
 
 	//MyDrawString(200, 300, "120English Chinese\xD1\xAA\xCC\xF5\xB5\xD7", new_graphics);
 
+	//植物血条、等级图标绘制
 	auto plants = board.GetAllPlants<MyPlant>();
 	for (auto& plant : plants)
 	{
+		//派生植物，例如海蘑菇分身、小土豆雷等，不绘制图标
 		if (plant.OwnerID == 0)
 		{
 			int row = plant.Row, col = plant.Column, hp = plant.Hp, max_hp = plant.MaxHp;
@@ -271,6 +273,48 @@ void onBoardDrawImage(int Graphics, MyBoard board)
 			MyDrawImage(ix, iy, new_graphics, NewImage::PLANT_LEVELS[plant.Level]);
 		}
 	}
+
+	//绘制debug相关
+	//绘制并更新植物对僵尸伤害数字
+	for (auto& digit : Debug::MyDebugInfo->m_PZDamageDigitVector)
+	{
+		if (digit.isAlive)
+		{
+			std::string str = std::to_string(digit.Damage);
+			const char* cstr = str.c_str();
+			MyDrawString(digit.X, digit.Y, cstr, new_graphics);
+			digit.ExistedTime++;
+			if (digit.ExistedTime >= 50)
+			{
+				digit.isAlive = false;
+			}
+			else
+			{
+				digit.Y--;
+			}
+		}
+	}
+	//绘制并更新植物获得经验数字
+	for (auto& digit : Debug::MyDebugInfo->m_PlantGetExpDigitVector)
+	{
+		if (digit.isAlive)
+		{
+			std::string str = std::to_string(digit.Exp);
+			const char* cstr = str.c_str();
+			MyDrawString(digit.X, digit.Y, cstr, new_graphics);
+			digit.ExistedTime++;
+			if (digit.ExistedTime >= 200)
+			{
+				digit.isAlive = false;
+			}
+			else
+			{
+				if (digit.ExistedTime % 4 == 0)
+					digit.Y--;
+			}
+		}
+	}
+
 	//释放Graphics
 	PVZ::Memory::Execute(AsmBuilder()
 		.mov_reg_imm(REG_ECX, new_graphics)
@@ -373,4 +417,9 @@ void InitBoardEvents()
 	PVZ::Memory::WriteMemory<byte>(0x413B82, 0x00);
 	//自由种植
 	PVZ::Memory::WriteMemory<byte>(0x40FE30, 0x81);
+
+	//绘制DEBUG框
+	PVZ::Memory::WriteMemory<byte>(0x419AF6, 0x75);
+	PVZ::Memory::WriteMemory<byte>(0x419AF7, 0x04);
+	PVZ::Memory::WriteMemory<int>(0x419AF8, 0x0);
 }

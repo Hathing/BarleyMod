@@ -6,6 +6,10 @@ namespace ProjectileAbility
 	class Butter : public BaseProjectile
 	{
 	public:
+		int OverrideDamage(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
+		{
+			return 40;
+		}
 		float GetImageSize(MyProjectile proj, float original_val)
 		{
 			if (proj.SpecialFlags == 1)
