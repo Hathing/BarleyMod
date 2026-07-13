@@ -13,6 +13,7 @@ void onZombieDropLoot(MyZombie zombie)
 		return;
 	
 	// 毒层扩散
+	/*
 	if (zombie.PoisonStack >= 10)
 	{
 		int spread_stack = zombie.PoisonStack >> 2;
@@ -22,6 +23,7 @@ void onZombieDropLoot(MyZombie zombie)
 					&& myzombie.Type != ZombieType::DrZomboss)
 				myzombie.PoisonStack += spread_stack;
 	}
+	*/
 
 	// 击杀植物的经验分配
 	if (!zombie.Hypnotized)
@@ -44,11 +46,15 @@ void onZombieDropLoot(MyZombie zombie)
 		}
 		// 吸金磁倍率
 		bounty_xp = bounty_xp * MyBoard::GoldMagnetFactors[row];
+		// 击杀者奖励经验
+		int attacker_bonus = 0;
 		// 击杀者获得80%经验
 		if (has_source)
 		{
-			attacker.AddExperience(bounty_xp * 4 / 5, true);
-			bounty_xp -= (bounty_xp * 4 / 5);
+			//已移至下方平分经验处，避免触发两次加经验
+			//attacker.AddExperience(bounty_xp * 4 / 5, true);
+			attacker_bonus = bounty_xp * 4 / 5;
+			bounty_xp -= attacker_bonus;
 		}
 		// 经验平分给本行其他植物
 		auto plants = board.GetAllPlants<MyPlant>();
@@ -74,7 +80,16 @@ void onZombieDropLoot(MyZombie zombie)
 			if (plant.Row == row)
 			{
 				if (plant.IsXPRecipient())
-					plant.AddExperience(bounty_xp);
+				{
+					if (has_source && plant.Id == attacker.Id)
+					{
+						plant.AddExperience(bounty_xp + attacker_bonus);
+					}
+					else
+					{
+						plant.AddExperience(bounty_xp);
+					}
+				}
 				// 即使满级植物也能吃到五阶吸金磁的治疗
 				if (heal_val > 0)
 				{
