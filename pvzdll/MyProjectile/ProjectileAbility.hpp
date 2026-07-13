@@ -13,9 +13,10 @@ namespace ProjectileAbility
 		/// @param subtarget_count 溅射伤害溅射目标数
 		/// @param ori_dmg 溅射伤害数值
 		/// @return 若为负数，则不重载伤害，否则为重载的伤害数值
+		/// @attention 由于修改了onProjDamageZombie的逻辑，现版本不建议直接返回负数！
 		virtual int OverrideDamage(MyProjectile proj, MyZombie zombie, PVZEvent::ProjDmgType damage_type, int subtarget_count, int ori_dmg)
 		{
-			return -1;
+			return ori_dmg;
 		}
 		/// @brief 子弹对僵尸造成伤害前，先结算的函数
 		/// @note 触发时机比标记伤害来源晚。
