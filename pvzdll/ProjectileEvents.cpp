@@ -290,7 +290,7 @@ bool onProjectileImpact(MyProjectile proj, MyZombie zombie)
 }
 
 
-bool onProjectileSkipUpdateAndDraw(MyProjectile proj)
+bool onProjectileSkipUpdateAndDrawAndIterate(MyProjectile proj)
 {
 	if (proj.IsGhost)
 		return false;
@@ -379,7 +379,7 @@ void InitProjectileEvents()
 	ProjectileRemoveEvent((int)onProjectileRemove);
 
 	// 子弹总更新与绘制相关
-	PVZEvent::ProjectileSkipUpdateAndDrawEvent((int)onProjectileSkipUpdateAndDraw);
+	PVZEvent::ProjectileSkipUpdateAndDrawAndIterateEvent((int)onProjectileSkipUpdateAndDrawAndIterate);
 	PVZEvent::ProjectileUpdateEvent((int)onProjectileUpdate);
 	PVZEvent::ProjectileUpdateLayerEvent((int)onProjectileUpdateLayer);
 	PVZEvent::ProjectileImageEvent((int)GetProjectileImage);
