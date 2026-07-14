@@ -100,6 +100,7 @@
     <ClInclude Include="MyPlant\implement\CabbagePult.hpp" />
     <ClInclude Include="MyPlant\implement\Cactus.hpp" />
     <ClInclude Include="MyPlant\implement\Cattail.hpp" />
+	<ClInclude Include="MyPlant\implement\Chomper.hpp" />
     <ClInclude Include="MyPlant\implement\KernelPult.hpp" />
     <ClInclude Include="MyPlant\implement\DarkShroom.hpp" />
     <ClInclude Include="MyPlant\implement\DiamondShroom.hpp" />

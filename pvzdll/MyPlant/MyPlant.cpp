@@ -7,7 +7,7 @@ namespace PlantAbility
 	PlantAbility::PlantPTR pt_factory[] =
 	{
 		new PeaShooter(),			new Barley(),				new NilPlant(),				new WallNut(),
-		new PotatoMine(),			new SnowPea(),				new BasePlant(),			new Repeater(),
+		new PotatoMine(),			new SnowPea(),				new Chomper(),			new Repeater(),
 
 		new PuffShroom(),			new SunShroom(),			new FumeShroom(),			new NilPlant(),
 		new HypnoShroom(),			new ScaredyShroom(),		new IceShroom(),			new NilPlant(),
