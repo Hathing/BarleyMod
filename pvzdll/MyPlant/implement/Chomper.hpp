@@ -22,5 +22,17 @@ namespace PlantAbility
 				info->damage = 600;
 			}
 		}
+		void SelfHeal(MyPlant plant)
+		{
+			if (plant.State == PlantState::CHOMPER_CHEW)
+			{
+				plant.Heal(300);
+			}
+			else
+			{
+				//大部分植物每秒回复1点HP
+				plant.Heal(1);
+			}
+		}
 	};
 }
