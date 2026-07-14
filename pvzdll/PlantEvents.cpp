@@ -834,6 +834,9 @@ void InitPlantEvents()
 	PVZ::Memory::WriteArray<const byte>(0x45F40C, STRING(asm_revert_threepeater1));
 	static constexpr byte asm_revert_threepeater2[] = { 0xEB,0x21,0x90 };
 	PVZ::Memory::WriteArray<const byte>(0x45F383, STRING(asm_revert_threepeater2));
+	//大嘴花下咽速度翻倍
+	static const float chomper_swallow_speed = 24.0f;
+	PVZ::Memory::WriteMemory<int>(0x461571, (unsigned int)((void*)&chomper_swallow_speed));
 	//水草可以拉陆地僵尸
 	PVZ::Memory::WriteMemory<byte>(0x4677A6, 0xEB);
 	//倭瓜不会二次索敌
