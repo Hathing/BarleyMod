@@ -775,11 +775,54 @@ ThreeState::ThreeState onChomperJudgeSwallowingTarget(MyPlant plant, MyZombie zo
 }
 bool onChomperDevour(MyPlant plant, MyZombie zombie)
 {
-	// 触发植物伤害僵尸事件，标记伤害来源，但并不实际造成伤害，而是直接使僵尸死亡，因此此处Overwrite无用。
+	// 触发吞僵尸时植物伤害僵尸事件，标记伤害来源，但并不实际造成伤害，而是直接使僵尸死亡，因此此处Overwrite无用。
 	// 理论来说对防具僵尸不会造成伤害，因此只记本体的伤害值。
 	auto info = PZDamageEvent{ zombie,plant,PVZ::DAMAGEF_NONE,zombie.BodyHealth,PVZEvent::PLANTDAMAGETYPE_NULL};
 	onPlantDamageZombie(&info);
+
+	// 增加大嘴的单次群吞计数
+	plant.ChomperDevourCount += zombie.BodyHealth;
+
 	return true;
+}
+
+bool onChomperBiteIterate(MyPlant plant, MyZombie zombie)
+{
+	//如果僵尸存在
+	if (zombie.GetBaseAddress())
+	{
+		zombie.ChomperSkip = 1;
+		// 继续寻找范围内是否还有僵尸
+		return false;
+	}
+	//如果僵尸不存在，清空所有僵尸的chomperskip标记，结束遍历
+	auto zombies = plant.GetBoard().GetAllZombies<MyZombie>();
+	for (auto& _zombie : zombies)
+	{
+		_zombie.ChomperSkip = 0;
+	}
+	//由于最后一次索敌目标为空，原代码会判定为大嘴咬空，状态进入12，不进入咀嚼状态
+	//因此需要特殊处理：如果大嘴本轮群吞计数>600，则需要进入咀嚼状态
+	if (plant.ChomperDevourCount >= 600)
+	{
+		plant.State = PlantState::CHOMPER_BITE_SUCCESS;
+	}
+	return true;
+}
+
+bool onChomperSkipTarget(MyPlant plant, MyZombie zombie)
+{
+	if (zombie.ChomperSkip)
+		return false;
+	return true;
+}
+
+void onChomperChewStart(MyPlant plant)
+{
+	//基于群吞计数，重新设置+54消化时间
+	plant.AttributeCountdown = plant.ChomperDevourCount / 6;
+	//重置群吞计数
+	plant.ChomperDevourCount = 0;
 }
 
 void InitPlantEvents()
@@ -853,6 +896,9 @@ void InitPlantEvents()
 	// 大嘴花
 	PVZEvent::ChomperJudgeSwallowingTargetEvent((int)onChomperJudgeSwallowingTarget);
 	PVZEvent::ChomperDevourEvent((int)onChomperDevour);
+	PVZEvent::ChomperBiteIterateEvent((int)onChomperBiteIterate);
+	PVZEvent::ChomperSkipTargetEvent((int)onChomperSkipTarget);
+	PVZEvent::ChomperChewStartEvent((int)onChomperChewStart);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 

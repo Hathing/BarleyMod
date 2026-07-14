@@ -32,6 +32,8 @@ public:
 	T_PROPERTY(byte, PultSkip, __get_PultSkip, __set_PultSkip, 0x105);
 	/// @brief 是否被冰封
 	T_PROPERTY(mybool, IceBounded, __get_IcB, __set_IcB, 0x105);
+	/// @brief 僵尸被大嘴群吞索敌过的标记
+	T_PROPERTY(byte, ChomperSkip, __get_ChomperSkip, __set_ChomperSkip, 0x105);
 	/// @brief 魅惑菇鬼火标记
 	T_PROPERTY(byte, GhostFlameMark, __get_GhFM, __set_GhFM, 0x106);
 	/// @brief 盲盒僵尸被魅惑菇召唤时，魅惑菇的等级

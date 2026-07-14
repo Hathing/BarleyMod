@@ -419,7 +419,7 @@ void InitBoardEvents()
 	PVZ::Memory::WriteMemory<byte>(0x40FE30, 0x81);
 
 	//绘制DEBUG框
-	PVZ::Memory::WriteMemory<byte>(0x419AF6, 0x75);
-	PVZ::Memory::WriteMemory<byte>(0x419AF7, 0x04);
-	PVZ::Memory::WriteMemory<int>(0x419AF8, 0x0);
+	//PVZ::Memory::WriteMemory<byte>(0x419AF6, 0x75);
+	//PVZ::Memory::WriteMemory<byte>(0x419AF7, 0x04);
+	//PVZ::Memory::WriteMemory<int>(0x419AF8, 0x0);
 }
