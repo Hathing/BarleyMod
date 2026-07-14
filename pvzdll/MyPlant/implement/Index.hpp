@@ -46,5 +46,6 @@
 #include "PeaShooter.hpp"
 #include "GatlingPea.hpp"
 #include "PotatoMine.hpp"
+#include "Chomper.hpp"
 
 #include "SpecialPlants.hpp"

@@ -26,16 +26,78 @@ namespace PVZEvent
 		ChomperChewStartEvent() : ChomperChewStartEvent("onChomperChewStart") {};
 	};
 
-	/// @brief 大嘴花完成咀嚼事件。\n
+	/// @brief 大嘴花完成咀嚼或吞噬失败后，变回IDLE状态前一瞬间的事件。\n
 	///		时机上落后于原版的设置。
 	/// @note 大嘴花吞噬失败也会触发这个事件。
 	/// @param 触发事件的植物
+	/// @deprecated 未启用
 	class ChomperChewFinishEvent : public DLLEventTemplate<0x4615BF, 7, REG_EDI>
 	{
 	public:
 		ChomperChewFinishEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		ChomperChewFinishEvent(int address) : DLLEventTemplate() { Init(address); };
 		ChomperChewFinishEvent() : ChomperChewFinishEvent("onChomperChewFinish") {};
+	};
+
+	/// @brief 判断大嘴花对目标僵尸使用啃咬还是吞噬事件
+	/// @param 大嘴花、僵尸
+	/// @return 正数则强制啃咬，零则强制吞噬，负数使用原版判断（巨人和僵王被啃咬，其他僵尸吞咽）
+	class ChomperJudgeSwallowingTargetEvent : public ThreeStateEventTemplate<0x461444, 6, 0x461456, 0x461458, REG_ESI, REG_EDI>
+	{
+	public:
+		ChomperJudgeSwallowingTargetEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		ChomperJudgeSwallowingTargetEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+		ChomperJudgeSwallowingTargetEvent() : ThreeStateEventTemplate() { Init("onChomperJudgeSwallowingTarget"); };
+	};
+
+	/// @brief 大嘴花群吞遍历僵尸事件
+	/// @param 大嘴花、当前遍历的僵尸
+	/// @return true则结束遍历，false则寻找下一个符合条件的目标（注意循环！）
+	class ChomperBiteIterateEvent
+	{
+	private:
+		class ChomperBiteAfterEvent : public BoolDLLEventTemplate<0x4614EC, 5, 0x461430, REG_ESI, REG_EDI>
+		{
+		public:
+			ChomperBiteAfterEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ChomperBiteAfterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ChomperBiteAfterEvent() : BoolDLLEventTemplate() { Init("onChomperBiteAfter"); };
+		};
+		class ChomperSwallowAfterEvent : public BoolDLLEventTemplate<0x461505, 5, 0x461430, REG_ESI, REG_EDI>
+		{
+		public:
+			ChomperSwallowAfterEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+			ChomperSwallowAfterEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+			ChomperSwallowAfterEvent() : BoolDLLEventTemplate() { Init("onChomperSwallowAfter"); };
+		};
+		ChomperBiteAfterEvent* part1;
+		ChomperSwallowAfterEvent* part2;
+	public:
+		ChomperBiteIterateEvent()
+		{
+			ChomperBiteIterateEvent(PVZ::Memory::GetProcAddress("onChomperBiteIterate"));
+		}
+		ChomperBiteIterateEvent(int address)
+		{
+			part1 = new ChomperBiteAfterEvent(address);
+			part2 = new ChomperSwallowAfterEvent(address);
+		}
+		void end()
+		{
+			part1->end();
+			part2->end();
+		}
+	};
+
+	/// @brief 大嘴花寻找目标遍历僵尸事件
+	/// @param 大嘴花、当前遍历的僵尸
+	/// @return true则继续，false则跳过该目标
+	class ChomperSkipTargetEvent : public BoolDLLEventTemplate<0x4676EA, 6, 0x467884, REG_ESI, REG_EDI>
+	{
+	public:
+		ChomperSkipTargetEvent(const char* str) : BoolDLLEventTemplate() { Init(str); };
+		ChomperSkipTargetEvent(int address) : BoolDLLEventTemplate() { Init(address); };
+		ChomperSkipTargetEvent() : BoolDLLEventTemplate() { Init("onChomperSkipTarget"); };
 	};
 
 	/// @brief 植物更新特殊外观事件
@@ -278,6 +340,7 @@ namespace PVZEvent
 
 	/// @brief 大嘴花判定是否秒杀僵尸的事件
 	/// @param 依次为：触发事件的植物，植物攻击的僵尸
+	/// @deprecated
 	class ChomperInstantJudgeEvent : public IntDLLEventTemplate<0x461444, 6, 0, 0, 0, REG_EDX, false, REG_ESI, REG_EDI>
 	{
 	public:

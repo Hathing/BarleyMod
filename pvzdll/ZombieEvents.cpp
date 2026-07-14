@@ -83,7 +83,7 @@ void onZombieDropLoot(MyZombie zombie)
 				{
 					if (has_source && plant.Id == attacker.Id)
 					{
-						plant.AddExperience(bounty_xp + attacker_bonus);
+						plant.AddExperience(bounty_xp + attacker_bonus,true);
 					}
 					else
 					{
