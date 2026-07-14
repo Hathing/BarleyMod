@@ -755,6 +755,25 @@ bool onTorchwoodConvertProjectile(MyPlant plant, MyProjectile proj)
 	return true;
 }
 
+ThreeState::ThreeState onChomperJudgeSwallowingTarget(MyPlant plant, MyZombie zombie)
+{
+	//有防具的僵尸、两类车和巨人不可被吞噬
+	if (zombie.HelmType != 0 || zombie.ShieldType != 0)
+		return ThreeState::Enable;
+	switch (zombie.Type)
+	{
+	case ZombieType::CatapultZombie:
+	case ZombieType::Zomboin:
+	case ZombieType::Gargantuar:
+	case ZombieType::Gigagargantuar:
+	case ZombieType::DrZomboss:
+		return ThreeState::Enable;
+	default:
+		break;
+	}
+	return ThreeState::None;
+}
+
 void InitPlantEvents()
 {
 	// 植物初始化与销毁相关
@@ -823,6 +842,8 @@ void InitPlantEvents()
 	// 火炬树桩
 	PVZEvent::TorchwoodFindProjectileBeforeEvent((int)onTorchwoodFindProjectileBefore);
 	PVZEvent::TorchwoodFindProjectileEvent((int)onTorchwoodFindProjectile);
+	// 大嘴花
+	PVZEvent::ChomperJudgeSwallowingTargetEvent((int)onChomperJudgeSwallowingTarget);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 

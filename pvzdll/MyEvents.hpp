@@ -7,6 +7,7 @@ namespace PVZEvent
 	///		取消该事件将不会结算啃咬伤害。若希望结算伤害，请使用其他事件。
 	/// @param 依次为：触发事件的植物、该植物啃食的僵尸。
 	/// @return 是否吞噬此僵尸。
+	/// @deprecated 未启用
 	class ChomperDevourEvent : public BoolDLLEventTemplate<0x4614F9, 5, 0x4614E5, REG_ESI, REG_EDI>
 	{
 	public:
@@ -18,6 +19,7 @@ namespace PVZEvent
 	/// @brief 大嘴花开始咀嚼事件。\n
 	///		时机上落后于原版的设置。
 	/// @param 触发事件的植物
+	/// @deprecated 未启用
 	class ChomperChewStartEvent : public DLLEventTemplate<0x461555, 5, REG_EDI>
 	{
 	public:
@@ -30,12 +32,24 @@ namespace PVZEvent
 	///		时机上落后于原版的设置。
 	/// @note 大嘴花吞噬失败也会触发这个事件。
 	/// @param 触发事件的植物
+	/// @deprecated 未启用
 	class ChomperChewFinishEvent : public DLLEventTemplate<0x4615BF, 7, REG_EDI>
 	{
 	public:
 		ChomperChewFinishEvent(const char* str) : DLLEventTemplate() { Init(str); };
 		ChomperChewFinishEvent(int address) : DLLEventTemplate() { Init(address); };
 		ChomperChewFinishEvent() : ChomperChewFinishEvent("onChomperChewFinish") {};
+	};
+
+	/// @brief 判断大嘴花对目标僵尸使用啃咬还是吞噬事件
+	/// @param 大嘴花、僵尸
+	/// @return 正数则强制啃咬，零则强制吞噬，负数使用原版判断（巨人和僵王被啃咬，其他僵尸吞咽）
+	class ChomperJudgeSwallowingTargetEvent : public ThreeStateEventTemplate<0x461444, 6, 0x461456, 0x461458, REG_ESI, REG_EDI>
+	{
+	public:
+		ChomperJudgeSwallowingTargetEvent(const char* str) : ThreeStateEventTemplate() { Init(str); };
+		ChomperJudgeSwallowingTargetEvent(int address) : ThreeStateEventTemplate() { Init(address); };
+		ChomperJudgeSwallowingTargetEvent() : ThreeStateEventTemplate() { Init("onChomperJudgeSwallowingTarget"); };
 	};
 
 	/// @brief 植物更新特殊外观事件
@@ -278,6 +292,7 @@ namespace PVZEvent
 
 	/// @brief 大嘴花判定是否秒杀僵尸的事件
 	/// @param 依次为：触发事件的植物，植物攻击的僵尸
+	/// @deprecated
 	class ChomperInstantJudgeEvent : public IntDLLEventTemplate<0x461444, 6, 0, 0, 0, REG_EDX, false, REG_ESI, REG_EDI>
 	{
 	public:
