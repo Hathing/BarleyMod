@@ -773,6 +773,14 @@ ThreeState::ThreeState onChomperJudgeSwallowingTarget(MyPlant plant, MyZombie zo
 	}
 	return ThreeState::None;
 }
+bool onChomperDevour(MyPlant plant, MyZombie zombie)
+{
+	// 触发植物伤害僵尸事件，标记伤害来源，但并不实际造成伤害，而是直接使僵尸死亡，因此此处Overwrite无用。
+	// 理论来说对防具僵尸不会造成伤害，因此只记本体的伤害值。
+	auto info = PZDamageEvent{ zombie,plant,PVZ::DAMAGEF_NONE,zombie.BodyHealth,PVZEvent::PLANTDAMAGETYPE_NULL};
+	onPlantDamageZombie(&info);
+	return true;
+}
 
 void InitPlantEvents()
 {
@@ -844,6 +852,7 @@ void InitPlantEvents()
 	PVZEvent::TorchwoodFindProjectileEvent((int)onTorchwoodFindProjectile);
 	// 大嘴花
 	PVZEvent::ChomperJudgeSwallowingTargetEvent((int)onChomperJudgeSwallowingTarget);
+	PVZEvent::ChomperDevourEvent((int)onChomperDevour);
 
 	//PVZEvent::PlantFindTargetZombiePriorityEvent((int)GetPlantFindTargetZombiePriority);
 

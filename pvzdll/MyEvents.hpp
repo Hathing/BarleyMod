@@ -7,7 +7,6 @@ namespace PVZEvent
 	///		取消该事件将不会结算啃咬伤害。若希望结算伤害，请使用其他事件。
 	/// @param 依次为：触发事件的植物、该植物啃食的僵尸。
 	/// @return 是否吞噬此僵尸。
-	/// @deprecated 未启用
 	class ChomperDevourEvent : public BoolDLLEventTemplate<0x4614F9, 5, 0x4614E5, REG_ESI, REG_EDI>
 	{
 	public:

@@ -16,8 +16,11 @@ namespace PlantAbility
 		}
 		void OverwritePZDamage(PZDamageEvent* info)
 		{
-			//啃咬伤害，原版为40/70cs
-			info->damage = 600;
+			if (info->type == PVZEvent::PLANTDAMAGETYPE_CHOMPER)
+			{
+				//啃咬伤害，原版为40/70cs
+				info->damage = 600;
+			}
 		}
 	};
 }
